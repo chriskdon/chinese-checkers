@@ -1,4 +1,4 @@
-# Naming Conventions #
+# Naming & Styling Conventions #
 
 ### Classes ###
 
