@@ -30,11 +30,19 @@
   - prepend with "get" and "set", respectively (ex: getNumberOfPlayers)
 
 
+### Comments ###
+- create using Javadoc/Javadoc standards
+- *crash course*: [Wikipedia article](http://en.wikipedia.org/wiki/Javadoc#Overview_of_Javadoc)
+- *example*: [code](http://www.docjar.net/html/api/java/util/Collections.java.html) (focus on the styling of the comments)
+
+
 ### Layout ID Values ###
 - prepend with general usage location
 - append with tag type
 - *examples*: hotSeatMoveResetButton, settingsSoundFxSeekBar
 
+### Colours ###
+- rgba values only
 
 #### Other Notes ####
 - treat acronyms as words (ex: xmlHttpRequest)
