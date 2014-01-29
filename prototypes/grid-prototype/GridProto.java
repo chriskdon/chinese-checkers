@@ -14,8 +14,16 @@ public class GridProto {
     public GridProto() {
     	int[][] grid;
     	grid = createBoard();
-    	int x = 5;
-    	int y = 5;
+    	for(int i=0; i<grid.length; i++) {
+    		for(int j=0; j<grid[i].length; j++) {
+    			testPosition(i, j, grid);
+    		}
+    	}
+    }
+    /* Creates the board, this code can probably be better optimized to save space if necessary
+     */
+    public void testPosition(int y, int x, int[][] grid) {
+    	System.out.println("Testing: "+y+", "+x);
     	System.out.println("Immediate Neighbours:");
     	possiblePositions(y,x,grid);
     	System.out.println("Jumping Upper Left:");
@@ -28,9 +36,8 @@ public class GridProto {
     	downRight(y,x,grid);
     	System.out.println("Jumping Purely Left or Purely Right:");
     	leftAndRight(y,x,grid);
+    	System.out.println("-------------------");
     }
-    /* Creates the board, this code can probably be better optimized to save space if necessary
-     */
     public int[][] createBoard () {
     	int [][] board = new int[17][];
     	board[0]=new int[1];
@@ -57,10 +64,10 @@ public class GridProto {
     public void placePiece (int y, int x, int[][] board) {
     	try {
     	 board[y][x] = 1;
-    	 System.out.println("Able to place piece at: "+y+", "+x);
+    	 System.out.println(y+", "+x);
     	}
     	catch (ArrayIndexOutOfBoundsException e) {
-    		System.out.println("Invalid location");
+    		//System.out.println("Invalid location");
     	}
     }
     /* This function takes a co-ordinate on the board and returns neighbours according to rules statically established through ifs
@@ -189,7 +196,7 @@ public class GridProto {
 				placePiece(y-2, x-5, board);
 			}
 			else {
-				placePiece(y+2, x-2, board);	
+				placePiece(y-2, x-2, board);	
 			}
     	}
     }
@@ -215,7 +222,7 @@ public class GridProto {
 				placePiece(y-2, x-3, board);
 			}
 			else {
-				placePiece(y+2, x, board);	
+				placePiece(y-2, x, board);	
 			}
     	}
     }
