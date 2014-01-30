@@ -42,7 +42,7 @@
 - *examples*: hotSeatMoveResetButton, settingsSoundFxSeekBar
 
 ### Colours ###
-- rgba values only
+- hex rgba values (android color resource must be hex)
 
 #### Other Notes ####
 - treat acronyms as words (ex: xmlHttpRequest)
