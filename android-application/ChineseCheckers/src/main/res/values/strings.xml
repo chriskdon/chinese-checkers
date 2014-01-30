@@ -2,7 +2,13 @@
 <resources>
 
     <string name="app_name">Chinese Checkers</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="hotseat_start_game">Start Game</string>
+    <string name="title_activity_hotseat_configuration">HotseatConfigurationActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="hotseat">Hotseat</string>
+    <string name="title_activity_hotseat_game">HotseatGameActivity</string>
+    <string name="hotseat_move_done">Done</string>
+    <string name="hotseat_move_reset">Reset</string>
 
 </resources>
