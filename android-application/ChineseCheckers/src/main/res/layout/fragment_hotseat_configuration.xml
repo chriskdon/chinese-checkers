@@ -192,7 +192,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="10dp" />
+        android:layout_height="20dp" />
 
     <Button
         android:layout_width="250dp"
