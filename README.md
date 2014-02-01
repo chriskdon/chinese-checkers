@@ -7,6 +7,7 @@ These are the rules that all game logic will be based off of: http://www.masters
 
 **Software Used**
   - Android Studio for Android application creation.
+  - Photoshop/Illustrator for design files.
   - OmniGraffle 6 (Mac) for UML/Diagramming
     - I'll try and export the diagrams to PDF as we need them.
     - But if you have a Mac you can open the .graffle file with OmniGraffle to see the non exported components.
