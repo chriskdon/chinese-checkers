@@ -11,9 +11,7 @@ public abstract class GameBoard {
     /**
      * The number of available positions in each row.
      */
-    protected final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10,
-            9,
-            10, 11, 12, 13, 4, 3, 2, 1};
+    public final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1};
 
     /**
      * Move a piece from one position to another.
