@@ -17,6 +17,12 @@
         android:text="Waiting for :player_name (OR) Your Turn"
         android:id="@+id/hotseatCurrentPlayerTextView" />
 
+    <!--
+        Uncomment next section and comment out the
+        SurfaceView to see demo image used in mackups
+    -->
+
+    <!--
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,15 +32,13 @@
         android:id="@+id/logo"
         android:layout_below="@+id/hotseatCurrentPlayerTextView"
         android:layout_above="@+id/hotseatPlayerControlsLayout" />
+    -->
 
-        <!--
     <SurfaceView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/red"
         android:layout_below="@+id/hotseatCurrentPlayerTextView"
         android:layout_above="@+id/hotseatPlayerControlsLayout" />
-        -->
 
     <LinearLayout
         android:layout_width="match_parent"
