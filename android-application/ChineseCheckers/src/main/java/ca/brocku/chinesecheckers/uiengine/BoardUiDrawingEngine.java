@@ -65,4 +65,13 @@ public interface BoardUiDrawingEngine {
      * @param positions The positions to draw the hints on.
      */
     public void showHintPositions(Position[] positions);
+
+    /**
+     * TODO: Possibly put this in constructor
+     *
+     * Initialize the board with the current piece positions.
+     *
+     * @param pieces    The pieces that represent the initial state of the board.
+     */
+    public void initializeBoard(Piece[] pieces);
 }

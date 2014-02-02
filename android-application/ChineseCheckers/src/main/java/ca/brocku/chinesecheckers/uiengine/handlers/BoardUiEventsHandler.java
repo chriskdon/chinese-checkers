@@ -10,6 +10,6 @@ import ca.brocku.chinesecheckers.gameboard.Piece;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public interface BoardUiEvents {
+public interface BoardUiEventsHandler {
     public void pieceTouched(Piece piece);
 }
