@@ -8,21 +8,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:gravity="center"
         android:background="@color/red"
-        android:textSize="40sp"
-        android:text="Test's Turn"
-        android:id="@+id/hotseatCurrentPlayerTextView"/>
+        android:textSize="@dimen/activity_large_text_size"
+        android:singleLine="true"
+        android:text="Waiting for :player_name (OR) Your Turn"
+        android:id="@+id/hotseatCurrentPlayerTextView" />
+
+    <!--
+        Uncomment next section and comment out the
+        SurfaceView to see demo image used in mackups
+    -->
+
+    <!--
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="40dp"
+        android:src="@drawable/demo_game"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/logo"
+        android:layout_below="@+id/hotseatCurrentPlayerTextView"
+        android:layout_above="@+id/hotseatPlayerControlsLayout" />
+    -->
 
     <ca.brocku.chinesecheckers.uiengine.GameBoardUiView
         android:id="@+id/gameBoardSurface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/hotseatCurrentPlayerTextView"
-        android:layout_above="@+id/hotseatPlayerControlsLayout"
-        android:background="@color/charcoal_hotseat_background"/>
+        android:layout_above="@+id/hotseatPlayerControlsLayout" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,6 +49,12 @@
         android:id="@+id/hotseatPlayerControlsLayout">
 
         <Button
+            android:padding="15dp"
+            android:background="@color/red"
+            android:textSize="@dimen/activity_xlarge_text_size"
+            android:textAllCaps="true"
+            android:gravity="right|center_horizontal"
+            android:drawableLeft="@drawable/ic_action_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,6 +62,12 @@
             android:id="@+id/hotseatMoveResetButton"/>
 
         <Button
+            android:padding="15dp"
+            android:background="@color/green"
+            android:textSize="@dimen/activity_xlarge_text_size"
+            android:textAllCaps="true"
+            android:gravity="right|center_horizontal"
+            android:drawableLeft="@drawable/ic_action_accept"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

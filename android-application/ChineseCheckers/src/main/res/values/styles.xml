@@ -2,7 +2,26 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:windowFullscreen">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowBackground">@color/app_background</item>
+        <item name="android:textColor">@color/app_text</item>
+        <item name="android:textSize">@dimen/activity_normal_text_size</item>
+
+        <item name="android:buttonStyle">@style/Button</item>
+        <item name="android:editTextStyle">@style/EditText</item>
+    </style>
+
+    <style name="Button" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:textColor">@color/app_button_text</item>
+        <item name="android:background">@drawable/chch_button</item>
+    </style>
+
+    <style name="EditText" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:background">@drawable/chch_edittext</item>
+        <item name="android:gravity">center_vertical|left</item>
+        <item name="android:padding">5dp</item>
     </style>
 
 </resources>

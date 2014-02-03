@@ -2,7 +2,10 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
@@ -19,6 +22,10 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  * Date: 2/1/2014
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine {
+    {
+        setWillNotDraw(false);
+    }
+
     public GameBoardUiView(Context context) {
         super(context);
     }
@@ -31,6 +38,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine
         super(context, attrs, defStyle);
     }
 
+    int x= 0;
     /**
      * Implement this to do your drawing.
      *
@@ -38,7 +46,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine
      */
     @Override
     protected void onDraw(Canvas canvas) {
+        Paint p = new Paint();
+        p.setColor(Color.RED);
 
+        canvas.drawCircle(50,x,10, p);
+        x++;
+        invalidate();
     }
 
     /**

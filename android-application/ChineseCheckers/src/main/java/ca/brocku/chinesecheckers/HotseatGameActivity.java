@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import ca.brocku.chinesecheckers.uiengine.GameBoardUiView;
+
 public class HotseatGameActivity extends Activity {
 
     @Override
@@ -58,6 +60,11 @@ public class HotseatGameActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
+
+            GameBoardUiView board = (GameBoardUiView)rootView.findViewById(R.id.gameBoardSurface);
+
+            board.invalidate();
+
             return rootView;
         }
     }
