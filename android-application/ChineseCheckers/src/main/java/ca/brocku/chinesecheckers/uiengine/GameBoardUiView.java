@@ -5,13 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
+import android.util.Log;
 import android.view.SurfaceView;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.Player;
-import ca.brocku.chinesecheckers.uiengine.elements.BoardPositionElement;
+import ca.brocku.chinesecheckers.uiengine.elements.EmptyGameBoardElement;
 import ca.brocku.chinesecheckers.uiengine.handlers.BoardUiEventsHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -22,8 +22,14 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  * Date: 2/1/2014
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine {
+    EmptyGameBoardElement emptyBoard = new EmptyGameBoardElement(this.getContext());
+
+
+    /**
+     * Instance Block -> Added to all constructors
+     */
     {
-        setWillNotDraw(false);
+        setWillNotDraw(false); // Allow invalidate() to work on surface for onDraw().
     }
 
     public GameBoardUiView(Context context) {
@@ -39,6 +45,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine
     }
 
     int x= 0;
+    long start = 0;
     /**
      * Implement this to do your drawing.
      *
@@ -46,12 +53,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        Paint p = new Paint();
-        p.setColor(Color.RED);
-
-        canvas.drawCircle(50,x,10, p);
-        x++;
-        invalidate();
+        emptyBoard.draw(canvas);
     }
 
     /**
