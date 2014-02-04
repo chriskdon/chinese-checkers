@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ToggleButton;
 
 public class HotseatConfigurationActivity extends Activity {
-    private Button twoPlayerButton;
-    private Button threePlayerButton;
-    private Button fourPlayerButton;
-    private Button sixPlayerButton;
+    private ToggleButton twoPlayerButton;
+    private ToggleButton threePlayerButton;
+    private ToggleButton fourPlayerButton;
+    private ToggleButton sixPlayerButton;
     private EditText redPlayerEditText;
     private EditText orangePlayerEditText;
     private EditText yellowPlayerEditText;
@@ -25,10 +26,10 @@ public class HotseatConfigurationActivity extends Activity {
         setContentView(R.layout.activity_hotseat_configuration);
 
         //Bind Controls
-        twoPlayerButton = (Button) findViewById(R.id.hotseatTwoPlayerButton);
-        threePlayerButton = (Button) findViewById(R.id.hotseatThreePlayerButton);
-        fourPlayerButton = (Button) findViewById(R.id.hotseatFourPlayerButton);
-        sixPlayerButton = (Button) findViewById(R.id.hotseatSixPlayerButton);
+        twoPlayerButton = (ToggleButton) findViewById(R.id.hotseatTwoPlayerButton);
+        threePlayerButton = (ToggleButton) findViewById(R.id.hotseatThreePlayerButton);
+        fourPlayerButton = (ToggleButton) findViewById(R.id.hotseatFourPlayerButton);
+        sixPlayerButton = (ToggleButton) findViewById(R.id.hotseatSixPlayerButton);
         redPlayerEditText = (EditText) findViewById(R.id.hotseatRedPlayerNameEditText);
         orangePlayerEditText = (EditText) findViewById(R.id.hotseatOrangePlayerNameEditText);
         yellowPlayerEditText = (EditText) findViewById(R.id.hotseatYellowPlayerNameEditText);
@@ -50,8 +51,22 @@ public class HotseatConfigurationActivity extends Activity {
 
         @Override
         public void onClick(View view) {
-            Button numberOfPlayersButton = (Button)view;
+            twoPlayerButton.setChecked(false);
+            threePlayerButton.setChecked(false);
+            fourPlayerButton.setChecked(false);
+            sixPlayerButton.setChecked(false);
+            ((ToggleButton)view).setChecked(true);
 
+            switch(view.getId()) {
+                case R.id.hotseatTwoPlayerButton:
+                    break;
+                case R.id.hotseatThreePlayerButton:
+                    break;
+                case R.id.hotseatFourPlayerButton:
+                    break;
+                case R.id.hotseatSixPlayerButton:
+                    break;
+            }
         }
     }
 
