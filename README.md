@@ -9,8 +9,9 @@ These are the rules that all game logic will be based off of: http://www.masters
 
 You can build the project from terminal using gradle.
   - [Tutorial](http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Build-Tasks)
-  - Build: gradle build
-  - Install: gradle installDebug
+  - Build: $ gradle build
+  - Install: $ gradle installDebug
+  - Run: $ adb shell am start -n yourpackagename/.activityname
 
 
 **Software Used**
