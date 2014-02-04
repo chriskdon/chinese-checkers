@@ -5,6 +5,14 @@ COSC 3F00 Group Project
 
 These are the rules that all game logic will be based off of: http://www.mastersgames.com/rules/chinese-checkers-rules.htm
 
+**Alternative for people who can't get Android Studio/Eclipse Working**
+
+You can build the project from terminal using gradle.
+  - [Tutorial](http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Build-Tasks)
+  - Build: gradle build
+  - Install: gradle installDebug
+
+
 **Software Used**
   - Android Studio for Android application creation.
   - Photoshop/Illustrator for design files.
