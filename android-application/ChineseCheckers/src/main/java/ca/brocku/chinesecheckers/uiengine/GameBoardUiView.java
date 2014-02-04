@@ -5,13 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.Player;
-import ca.brocku.chinesecheckers.uiengine.elements.EmptyGameBoardElement;
+import ca.brocku.chinesecheckers.uiengine.visuals.EmptyGameBoardVisual;
 import ca.brocku.chinesecheckers.uiengine.handlers.BoardUiEventsHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -22,15 +22,8 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  * Date: 2/1/2014
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine {
-    EmptyGameBoardElement emptyBoard = new EmptyGameBoardElement(this.getContext());
-
-
-    /**
-     * Instance Block -> Added to all constructors
-     */
-    {
-        setWillNotDraw(false); // Allow invalidate() to work on surface for onDraw().
-    }
+    Compositor compositor = new Compositor();
+    EmptyGameBoardVisual emptyBoard = new EmptyGameBoardVisual(this.getContext());
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -44,16 +37,32 @@ public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine
         super(context, attrs, defStyle);
     }
 
-    int x= 0;
-    long start = 0;
-    /**
-     * Implement this to do your drawing.
-     *
-     * @param canvas the canvas on which the background will be drawn
-     */
-    @Override
-    protected void onDraw(Canvas canvas) {
-        emptyBoard.draw(canvas);
+    {
+        compositor.pushVisual(emptyBoard);
+
+        getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(final SurfaceHolder holder) {
+                final Paint p = new Paint();
+                p.setColor(Color.RED);
+
+                Canvas canvas = holder.lockCanvas();
+
+                compositor.composite(canvas);
+
+                holder.unlockCanvasAndPost(canvas);
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+
+            }
+        });
     }
 
     /**

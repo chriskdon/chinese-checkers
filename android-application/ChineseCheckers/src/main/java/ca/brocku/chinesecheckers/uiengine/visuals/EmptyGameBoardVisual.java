@@ -1,11 +1,10 @@
-package ca.brocku.chinesecheckers.uiengine.elements;
+package ca.brocku.chinesecheckers.uiengine.visuals;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 
 /**
@@ -15,11 +14,13 @@ import ca.brocku.chinesecheckers.gameboard.GameBoard;
  * Student #: 4810800
  * Date: 2/2/2014
  */
-public class EmptyGameBoardElement implements BoardElement {
+public class EmptyGameBoardVisual extends Visual {
     private Context context;
 
-    public EmptyGameBoardElement(Context context) {
+    public EmptyGameBoardVisual(Context context) {
         this.context = context;
+
+        redraw(); // It's static only needs to be redrawn once
     }
 
     /**
