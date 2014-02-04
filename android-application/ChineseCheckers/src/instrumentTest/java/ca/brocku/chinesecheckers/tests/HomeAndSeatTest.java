@@ -1,10 +1,11 @@
-import android.test.ActivityInstrumentationTestCase2;
+package ca.brocku.chinesecheckers.tests;
 
+import android.test.ActivityInstrumentationTestCase2;
 import ca.brocku.chinesecheckers.MainActivity;
 
 /**
- * Created by Main on 2/3/14.
- */
+* Created by Main on 2/3/14.
+*/
 
 public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -17,6 +18,6 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
         super.setUp();
         setActivityInitialTouchMode(false);
         thisTest = getActivity();
+        assertEquals(1,2);
     }
 }
-initializiation
