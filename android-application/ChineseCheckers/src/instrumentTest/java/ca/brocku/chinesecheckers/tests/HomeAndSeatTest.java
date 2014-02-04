@@ -14,10 +14,19 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
     public HomeAndSeatTest(){
         super(MainActivity.class);
     }
+
     protected void setUp() throws Exception{
         super.setUp();
         setActivityInitialTouchMode(false);
         thisTest = getActivity();
-        assertEquals(1,2);
     }
+
+    public void testPreConditions(){
+        assertEquals(1,1);
+    }
+
+    public void testIt(){
+        assertEquals(true,false);
+    }
+
 }

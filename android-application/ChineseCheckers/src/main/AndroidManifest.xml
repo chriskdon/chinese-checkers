@@ -7,6 +7,9 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+    <!--<instrumentation-->
+        <!--android:targetPackage="ca.brocku.chinesecheckers"-->
+        <!--android:name="android.test.InstrumentationTestRunner" />-->
 
     <application
         android:allowBackup="true"
