@@ -4,24 +4,29 @@
  *
  * @author Peter Pobojewski
  * @course COSC3F00
- * @version 1.00 2014/1/20
+ * @version 1.20 2014/2/2
  *
- * This class is a basic version of the chinese checkers board grid that current considers immediate neighbours for possible moves only
- * There is nothing done on possible hops.
+ * This class is a basic version of the chinese checkers board grid that considers all possible moves from a specific location.
+ * For testing or reasoning please visit the testing board or position checking PDF.
  */
 
 public class GridProto {
     public GridProto() {
     	int[][] grid;
     	grid = createBoard();
-    	for(int i=0; i<grid.length; i++) {
+    /*	for(int i=0; i<grid.length; i++) {
     		for(int j=0; j<grid[i].length; j++) {
-    			testPosition(i, j, grid);
+    			
     		}
-    	}
+    	} */
+    	testPosition(13, 3,grid);
     }
-    /* Creates the board, this code can probably be better optimized to save space if necessary
-     */
+	/* Prints a list of availible positions to the console.
+	 * If a positon is unavailable, it will be skipped in printing it out
+	 * The function accepts co-ordinates in a y,x fashion meaning [3,1] referring to the 3rd row and 2nd column
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void testPosition(int y, int x, int[][] grid) {
     	System.out.println("Testing: "+y+", "+x);
     	System.out.println("Immediate Neighbours:");
@@ -38,6 +43,8 @@ public class GridProto {
     	leftAndRight(y,x,grid);
     	System.out.println("-------------------");
     }
+   /* creates a ragged array to represent the chinese checkers board
+	 * @return board	a new chinese checkers board  */
     public int[][] createBoard () {
     	int [][] board = new int[17][];
     	board[0]=new int[1];
@@ -59,8 +66,12 @@ public class GridProto {
     	board[9]=new int[10];
     	return board;
     }
-    /* Attempts to place an int at position y,x
-     */
+	/* Attempts to place an int at target location defined as y, x
+	 * If the attempt to place a int in that location fails because of out of bounds, an exception is caught
+	 * and the function continues. 
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void placePiece (int y, int x, int[][] board) {
     	try {
     	 board[y][x] = 1;
@@ -70,9 +81,10 @@ public class GridProto {
     		//System.out.println("Invalid location");
     	}
     }
-    /* This function takes a co-ordinate on the board and returns neighbours according to rules statically established through ifs
-     * See the grid supporting documentation for more information on how the array is formed
-     */
+	/* Defined as immediate neighbours function, it looks up the immediate places (within 1 space) that the piece can move to
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void possiblePositions (int y, int x, int[][] board) {
 		if (y>12 || (y>3 && y<8)) { // if y is between 4 and 8 and greater than 12
 			//System.out.println("Case1");
@@ -81,8 +93,8 @@ public class GridProto {
 				placePiece(y-1, x-5+1, board);
 			}
 			else if(y==13) {
-				placePiece(y-1, x+5, board);
-				placePiece(y-1, x+5+1, board);
+				placePiece(y-1, x+4, board);
+				placePiece(y-1, x+4+1, board);
 			}
 			else {
 				placePiece(y-1, x, board);
@@ -109,12 +121,12 @@ public class GridProto {
 			placePiece(y, x-1, board);
 			placePiece(y, x+1, board);
 			if(y==3) {
-				placePiece(y-1, x+4, board);
-				placePiece(y-1, x+4+1, board);
+				placePiece(y+1, x+4, board);
+				placePiece(y+1, x+4+1, board);
 			}
 			else if(y==12) {
-				placePiece(y-1, x-5, board);
-				placePiece(y-1, x-5+1, board);
+				placePiece(y+1, x-5, board);
+				placePiece(y+1, x-5+1, board);
 			}
 			else {
 				placePiece(y+1, x, board);
@@ -122,6 +134,10 @@ public class GridProto {
 			}
 		}
     }
+	/* Determines the down-diagonal-left position that a piece has the possibility of moving to
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void downLeft (int y, int x, int[][] board) {
 		if (y>10 || (y>3 && y<8)) { // if y is between 4 and 8 and greater than 10
 			//System.out.println("Case1");
@@ -131,6 +147,9 @@ public class GridProto {
 			else if(y==12) {
 				placePiece(y+2, x-6, board);
 			}
+			else if(y==7) {
+				placePiece(y+2, x-1, board);
+			}
 			else {
 				placePiece(y+2, x-2, board);	
 			}
@@ -138,16 +157,20 @@ public class GridProto {
 		else { // if y is between 9 and 10 or less than 4
 		//	System.out.println("Case3");
 			if(y==3) {
-				placePiece(y+2, x+4, board);
-			}
-			else if(y==4) {
 				placePiece(y+2, x+3, board);
+			}
+			else if(y==2) {
+				placePiece(y+2, x+4, board);
 			}
 			else {
 				placePiece(y+2, x, board);	
 			}
     	}
     }
+	/* Determines the down-diagonal-right position that a piece has the possibility of moving to
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void downRight (int y, int x, int[][] board) {
 		if (y>10 || (y>3 && y<8)) { // if y is between 4 and 8 and greater than 10
 			//System.out.println("Case1");
@@ -157,16 +180,19 @@ public class GridProto {
 			else if(y==12) {
 				placePiece(y+2, x-4, board);
 			}
+			else if(y==7) {
+				placePiece(y+2, x+1, board);
+			}
 			else {
 				placePiece(y+2, x, board);	
 			}
 		}
 		else { // if y is between 9 and 10 or less than 4
 		//	System.out.println("Case3");
-			if(y==3) {
+			if(y==2) {
 				placePiece(y+2, x+6, board);
 			}
-			else if(y==4) {
+			else if(y==3) {
 				placePiece(y+2, x+5, board);
 			}
 			else {
@@ -174,6 +200,10 @@ public class GridProto {
 			}
     	}
     }
+	/* Determines the up-diagonal-left position that a piece has the possibility of moving to
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void upperLeft (int y, int x, int[][] board) {
 		if (y>12 || (y>5 && y<9)) { // if y is between 4 and 8 and greater than 10
 			//System.out.println("Case1");
@@ -192,6 +222,9 @@ public class GridProto {
 			if(y==4) {
 				placePiece(y-2, x-6, board);
 			}
+			if(y==9) {
+				placePiece(y-2, x-1, board);
+			}
 			else if(y==5) {
 				placePiece(y-2, x-5, board);
 			}
@@ -200,6 +233,10 @@ public class GridProto {
 			}
     	}
     }
+	/* Determines the up-diagonal-right position that a piece has the possibility of moving to
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void upperRight (int y, int x, int[][] board) {
 		if (y>12 || (y>5 && y<9)) { // if y is between 4 and 8 and greater than 10
 			//System.out.println("Case1");
@@ -207,7 +244,7 @@ public class GridProto {
 				placePiece(y-2, x+6, board);
 			}
 			else if(y==13) {
-				placePiece(y-2, x+6, board);
+				placePiece(y-2, x+5, board);
 			}
 			else {
 				placePiece(y-2, x+2, board);	
@@ -218,6 +255,9 @@ public class GridProto {
 			if(y==4) {
 				placePiece(y-2, x-4, board);
 			}
+			if(y==9) {
+				placePiece(y-2, x+1, board);
+			}
 			else if(y==5) {
 				placePiece(y-2, x-3, board);
 			}
@@ -226,18 +266,13 @@ public class GridProto {
 			}
     	}
     }
+	/* Determines the 2 space hop that a piece can possibly move by hopping left or right only
+	 * @param y	the row of the location
+	 * @param x	the col of the location
+	 * @param grid	the chinese checkers board  */
     public void leftAndRight (int y, int x, int[][] board) {
     	placePiece(y, x-2, board);
     	placePiece(y, x+2, board);
-    }
-    public void printBoard (int[][] board) {
-    	
-    	for(int i=0; i<board.length; i++) {
-    		for(int j=0; j<board[i].length; j++) {
-    			System.out.print(board[i][j]);
-    		}
-    		System.out.println();
-    	}
     }
     /**
      * @param args the command line arguments
