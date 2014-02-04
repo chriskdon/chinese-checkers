@@ -21,7 +21,9 @@ android {
         targetSdkVersion 19
         testPackageName "ca.brocku.chinesecheckers.tests"
     }
+
 }
 
 dependencies {
+    compile files('libs/android-support-v4.jar')
 }
