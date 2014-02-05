@@ -16,6 +16,8 @@ public class HotseatConfigurationActivity extends Activity {
             greenPlayerNameContainer, bluePlayerNameContainer, purplePlayerNameContainer;
     private Button startHotseatGameButton;
 
+    private ToggleButton currentSelection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class HotseatConfigurationActivity extends Activity {
         fourPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         sixPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         startHotseatGameButton.setOnClickListener(new StartGameHandler());
+
+        currentSelection = twoPlayerButton;
     }
 
 
@@ -57,61 +61,61 @@ public class HotseatConfigurationActivity extends Activity {
         @Override
         public void onClick(View view) {
 
+            if(currentSelection.getId() != view.getId()) { //if the current button was not pressed
 
-            redPlayerEditText.setText("");
-            orangePlayerEditText.setText("");
-            yellowPlayerEditText.setText("");
-            greenPlayerEditText.setText("");
-            bluePlayerEditText.setText("");
-            purplePlayerEditText.setText("");
+                redPlayerEditText.setText("");
+                orangePlayerEditText.setText("");
+                yellowPlayerEditText.setText("");
+                greenPlayerEditText.setText("");
+                bluePlayerEditText.setText("");
+                purplePlayerEditText.setText("");
 
-            switch(view.getId()) {
-                case R.id.hotseatTwoPlayerButton:
-                    //if(twoPlayerButton.isChecked())
-                    orangePlayerNameContainer.setVisibility(View.GONE);
-                    yellowPlayerNameContainer.setVisibility(View.GONE);
-                    greenPlayerEditText.setHint("Player 2");
-                    greenPlayerNameContainer.setVisibility(View.VISIBLE);
-                    bluePlayerNameContainer.setVisibility(View.GONE);
-                    purplePlayerNameContainer.setVisibility(View.GONE);
-                    break;
-                case R.id.hotseatThreePlayerButton:
-                    orangePlayerNameContainer.setVisibility(View.GONE);
-                    yellowPlayerEditText.setHint("Player 2");
-                    yellowPlayerNameContainer.setVisibility(View.VISIBLE);
-                    greenPlayerNameContainer.setVisibility(View.GONE);
-                    bluePlayerEditText.setHint("Player 3");
-                    bluePlayerNameContainer.setVisibility(View.VISIBLE);
-                    purplePlayerNameContainer.setVisibility(View.GONE);
-                    break;
-                case R.id.hotseatFourPlayerButton:
-                    orangePlayerEditText.setHint("Player 2");
-                    orangePlayerNameContainer.setVisibility(View.VISIBLE);
-                    yellowPlayerNameContainer.setVisibility(View.GONE);
-                    greenPlayerEditText.setHint("Player 3");
-                    greenPlayerNameContainer.setVisibility(View.VISIBLE);
-                    bluePlayerEditText.setHint("Player 4");
-                    bluePlayerNameContainer.setVisibility(View.VISIBLE);
-                    purplePlayerNameContainer.setVisibility(View.GONE);
-                    break;
-                case R.id.hotseatSixPlayerButton:
-                    orangePlayerEditText.setHint("Player 2");
-                    orangePlayerNameContainer.setVisibility(View.VISIBLE);
-                    yellowPlayerEditText.setHint("Player 3");
-                    yellowPlayerNameContainer.setVisibility(View.VISIBLE);
-                    greenPlayerEditText.setHint("Player 4");
-                    greenPlayerNameContainer.setVisibility(View.VISIBLE);
-                    bluePlayerEditText.setHint("Player 5");
-                    bluePlayerNameContainer.setVisibility(View.VISIBLE);
-                    purplePlayerEditText.setHint("Player 6");
-                    purplePlayerNameContainer.setVisibility(View.VISIBLE);
-                    break;
+                switch(view.getId()) {
+                    case R.id.hotseatTwoPlayerButton:
+                        orangePlayerNameContainer.setVisibility(View.GONE);
+                        yellowPlayerNameContainer.setVisibility(View.GONE);
+                        greenPlayerEditText.setHint("Player 2");
+                        greenPlayerNameContainer.setVisibility(View.VISIBLE);
+                        bluePlayerNameContainer.setVisibility(View.GONE);
+                        purplePlayerNameContainer.setVisibility(View.GONE);
+                        break;
+                    case R.id.hotseatThreePlayerButton:
+                        orangePlayerNameContainer.setVisibility(View.GONE);
+                        yellowPlayerEditText.setHint("Player 2");
+                        yellowPlayerNameContainer.setVisibility(View.VISIBLE);
+                        greenPlayerNameContainer.setVisibility(View.GONE);
+                        bluePlayerEditText.setHint("Player 3");
+                        bluePlayerNameContainer.setVisibility(View.VISIBLE);
+                        purplePlayerNameContainer.setVisibility(View.GONE);
+                        break;
+                    case R.id.hotseatFourPlayerButton:
+                        orangePlayerEditText.setHint("Player 2");
+                        orangePlayerNameContainer.setVisibility(View.VISIBLE);
+                        yellowPlayerNameContainer.setVisibility(View.GONE);
+                        greenPlayerEditText.setHint("Player 3");
+                        greenPlayerNameContainer.setVisibility(View.VISIBLE);
+                        bluePlayerEditText.setHint("Player 4");
+                        bluePlayerNameContainer.setVisibility(View.VISIBLE);
+                        purplePlayerNameContainer.setVisibility(View.GONE);
+                        break;
+                    case R.id.hotseatSixPlayerButton:
+                        orangePlayerEditText.setHint("Player 2");
+                        orangePlayerNameContainer.setVisibility(View.VISIBLE);
+                        yellowPlayerEditText.setHint("Player 3");
+                        yellowPlayerNameContainer.setVisibility(View.VISIBLE);
+                        greenPlayerEditText.setHint("Player 4");
+                        greenPlayerNameContainer.setVisibility(View.VISIBLE);
+                        bluePlayerEditText.setHint("Player 5");
+                        bluePlayerNameContainer.setVisibility(View.VISIBLE);
+                        purplePlayerEditText.setHint("Player 6");
+                        purplePlayerNameContainer.setVisibility(View.VISIBLE);
+                        break;
+                }
+
+                //un-checks previous option and updates the current selection
+                currentSelection.setChecked(false);
+                currentSelection = (ToggleButton)view;
             }
-
-            twoPlayerButton.setChecked(false);
-            threePlayerButton.setChecked(false);
-            fourPlayerButton.setChecked(false);
-            sixPlayerButton.setChecked(false);
             ((ToggleButton)view).setChecked(true);
         }
     }
