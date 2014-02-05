@@ -20,6 +20,7 @@
 
     <style name="EditText" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:background">@drawable/chch_edittext</item>
+        <item name="android:textColorHint">@color/app_hint_text</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:padding">5dp</item>
     </style>

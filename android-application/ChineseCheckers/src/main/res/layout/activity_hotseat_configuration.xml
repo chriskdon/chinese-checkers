@@ -57,6 +57,7 @@
             android:textColor="@color/app_button_text"
             android:textOn="2 Players"
             android:textOff="2 Players"
+            android:checked="true"
             android:id="@+id/hotseatTwoPlayerButton"
             android:singleLine="false" />
 
@@ -136,14 +137,23 @@
         android:layout_height="32dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/hotseatRedPlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/hotseatRedPlayerError"/>
 
         <EditText
-            android:text="Player 1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="left"
-            android:layout_marginLeft="40dp"
+            android:inputType="text"
+            android:hint="Player 1"
             android:layout_marginRight="40dp"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_red"
@@ -151,123 +161,145 @@
             android:id="@+id/hotseatRedPlayerNameEditText" />
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
+        android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/hotseatOrangePlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
             android:layout_marginRight="8dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_action_warning"/>
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/hotseatOrangePlayerError"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
             android:singleLine="true"
+            android:inputType="text"
             android:background="@drawable/chch_edittext_orange"
             android:textColor="@color/app_background"
             android:id="@+id/hotseatOrangePlayerNameEditText"/>
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
+        android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/hotseatYellowPlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
             android:layout_marginRight="8dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_action_warning"/>
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/hotseatYellowPlayerError"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
             android:singleLine="true"
+            android:inputType="text"
             android:background="@drawable/chch_edittext_yellow"
             android:textColor="@color/app_background"
             android:id="@+id/hotseatYellowPlayerNameEditText"/>
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
+        android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/hotseatGreenPlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/hotseatGreenPlayerError"/>
 
         <EditText
-            android:text="Player 4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
+            android:inputType="text"
+            android:hint="Player 2"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_green"
             android:textColor="@color/app_background"
             android:id="@+id/hotseatGreenPlayerNameEditText"/>
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
+        android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/hotseatBluePlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/hotseatBluePlayerError"/>
 
         <EditText
-            android:text="Player 5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
+            android:inputType="text"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_blue"
             android:textColor="@color/app_background"
             android:id="@+id/hotseatBluePlayerNameEditText"/>
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
+        android:layout_marginTop="15dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/hotseatPurplePlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/hotseatPurplePlayerError"/>
 
         <EditText
-            android:text="Player 6"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
+            android:inputType="text"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_purple"
             android:textColor="@color/app_background"
