@@ -15,10 +15,16 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="red">#ED2C31</color>
+    <color name="dark_red">#C50409</color>
     <color name="blue">#1780C1</color>
+    <color name="dark_blue">#005899</color>
     <color name="green">#15A850</color>
+    <color name="dark_green">#008028</color>
     <color name="yellow">#F8E816</color>
+    <color name="dark_yellow">#D0C000</color>
     <color name="purple">#8601AF</color>
+    <color name="dark_purple">#5E0087</color>
     <color name="orange">#F89230</color>
+    <color name="dark_orange">#D06A08</color>
 
 </resources>
