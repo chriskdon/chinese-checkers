@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.Player;
@@ -15,6 +16,7 @@ import ca.brocku.chinesecheckers.uiengine.handlers.BoardUiEventsHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
+import ca.brocku.chinesecheckers.uiengine.visuals.PieceVisual;
 
 /**
  * Author: Chris Kellendonk
@@ -23,7 +25,7 @@ import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine {
     Compositor compositor = new Compositor();
-    GameBoardVisual emptyBoard = new GameBoardVisual();
+    GameBoardVisual emptyBoard = new GameBoardVisual(getContext());
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -63,6 +65,121 @@ public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine
 
             }
         });
+    }
+
+    /**
+     * TODO: Remove and replace with board initialization
+     * <p/>
+     * Set the number of players to draw initial board state.
+     *
+     * @param playerCount The number of player playing.
+     */
+    @Override
+    public void setPlayerCount(int playerCount) {
+        if(playerCount == 2 || playerCount == 3 || playerCount == 4 || playerCount == 6) {
+            // Draw Red Pieces
+            int color = getResources().getColor(R.color.red);
+            compositor.pushVisual(drawPiece(0, 0, color));
+            compositor.pushVisual(drawPiece(1, 0, color));
+            compositor.pushVisual(drawPiece(1, 1, color));
+            compositor.pushVisual(drawPiece(2, 0, color));
+            compositor.pushVisual(drawPiece(2, 1, color));
+            compositor.pushVisual(drawPiece(2, 2, color));
+            compositor.pushVisual(drawPiece(3, 0, color));
+            compositor.pushVisual(drawPiece(3, 1, color));
+            compositor.pushVisual(drawPiece(3, 2, color));
+            compositor.pushVisual(drawPiece(3, 3, color));
+        }
+
+        if(playerCount == 2 || playerCount == 4 || playerCount == 6) {
+            // Draw Green Pieces
+            int color = getResources().getColor(R.color.green);
+            compositor.pushVisual(drawPiece(13, 3, color));
+            compositor.pushVisual(drawPiece(13, 2, color));
+            compositor.pushVisual(drawPiece(13, 1, color));
+            compositor.pushVisual(drawPiece(13, 0, color));
+            compositor.pushVisual(drawPiece(14, 2, color));
+            compositor.pushVisual(drawPiece(14, 1, color));
+            compositor.pushVisual(drawPiece(14, 0, color));
+            compositor.pushVisual(drawPiece(15, 1, color));
+            compositor.pushVisual(drawPiece(15, 0, color));
+            compositor.pushVisual(drawPiece(16, 0, color));
+        }
+
+        if(playerCount == 3 || playerCount == 6) {
+            // Draw Yellow Pieces
+            int color = getResources().getColor(R.color.yellow);
+            compositor.pushVisual(drawPiece(12, 12, color));
+            compositor.pushVisual(drawPiece(12, 11, color));
+            compositor.pushVisual(drawPiece(12, 10, color));
+            compositor.pushVisual(drawPiece(12, 9, color));
+            compositor.pushVisual(drawPiece(11, 11, color));
+            compositor.pushVisual(drawPiece(11, 10, color));
+            compositor.pushVisual(drawPiece(11, 9, color));
+            compositor.pushVisual(drawPiece(10, 10, color));
+            compositor.pushVisual(drawPiece(10, 9, color));
+            compositor.pushVisual(drawPiece(9, 9, color));
+        }
+
+        if(playerCount == 3 || playerCount == 4 || playerCount == 6) {
+            // Draw Blue Pieces
+            int color = getResources().getColor(R.color.blue);
+            compositor.pushVisual(drawPiece(12, 3, color));
+            compositor.pushVisual(drawPiece(12, 2, color));
+            compositor.pushVisual(drawPiece(12, 1, color));
+            compositor.pushVisual(drawPiece(12, 0, color));
+            compositor.pushVisual(drawPiece(11, 2, color));
+            compositor.pushVisual(drawPiece(11, 1, color));
+            compositor.pushVisual(drawPiece(11, 0, color));
+            compositor.pushVisual(drawPiece(10, 1, color));
+            compositor.pushVisual(drawPiece(10, 0, color));
+            compositor.pushVisual(drawPiece(9, 0, color));
+        }
+
+        if(playerCount == 6) {
+            // Draw Purple Pieces
+            int color = getResources().getColor(R.color.purple);
+            compositor.pushVisual(drawPiece(4, 0, color));
+            compositor.pushVisual(drawPiece(4, 1, color));
+            compositor.pushVisual(drawPiece(4, 2, color));
+            compositor.pushVisual(drawPiece(4, 3, color));
+            compositor.pushVisual(drawPiece(5, 0, color));
+            compositor.pushVisual(drawPiece(5, 1, color));
+            compositor.pushVisual(drawPiece(5, 2, color));
+            compositor.pushVisual(drawPiece(6, 0, color));
+            compositor.pushVisual(drawPiece(6, 1, color));
+            compositor.pushVisual(drawPiece(7, 0, color));
+        }
+
+        if(playerCount == 6 || playerCount == 4) {
+            // Draw Orange Pieces
+            int color = getResources().getColor(R.color.orange);
+            compositor.pushVisual(drawPiece(4, 9, color));
+            compositor.pushVisual(drawPiece(4, 10, color));
+            compositor.pushVisual(drawPiece(4, 11, color));
+            compositor.pushVisual(drawPiece(4, 12, color));
+            compositor.pushVisual(drawPiece(5, 9, color));
+            compositor.pushVisual(drawPiece(5, 10, color));
+            compositor.pushVisual(drawPiece(5, 11, color));
+            compositor.pushVisual(drawPiece(6, 9, color));
+            compositor.pushVisual(drawPiece(6, 10, color));
+            compositor.pushVisual(drawPiece(7, 9, color));
+        }
+    }
+
+    // TODO: Utility function for display testing --> REMOVE
+    private PieceVisual drawPiece(final int row, final int index, int color) {
+        return new PieceVisual(new Position() {
+            @Override
+            public int getRow() {
+                return row;
+            }
+
+            @Override
+            public int getIndex() {
+                return index;
+            }
+        }, color);
     }
 
     /**
@@ -163,4 +280,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine
     private int getLargestSquareSide() {
         return (this.getWidth() < this.getHeight() ? this.getWidth() : this.getHeight());
     }
+
+
 }

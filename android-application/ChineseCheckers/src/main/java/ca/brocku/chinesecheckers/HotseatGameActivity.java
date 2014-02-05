@@ -13,22 +13,25 @@ import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ca.brocku.chinesecheckers.uiengine.BoardUiDrawingEngine;
+
 public class HotseatGameActivity extends Activity {
-    String[] players; //an array of the players' names
+    private String[] players; //an array of the players' names
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotseat_game);
 
+        // Make sure variables are setup before creating fragment
+        players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
+
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-
-        players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
-
     }
 
 
@@ -67,6 +70,12 @@ public class HotseatGameActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
+
+            // Setup Game Board
+            BoardUiDrawingEngine gameBoardUi = (BoardUiDrawingEngine)
+                    rootView.findViewById(R.id.gameBoardSurface);
+
+            gameBoardUi.setPlayerCount(players.length);
 
             //Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.hotseatCurrentPlayerTextView);
