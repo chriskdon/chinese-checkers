@@ -32,14 +32,15 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
         curInstruments = getInstrumentation();
     }
 
-    public void testTransition() {
+    public void testTransition() throws Exception {
         new MainActivityUnitTest(curAct,curInstruments).testActivity();
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
         monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(), null, false);
         TouchUtils.clickView(this, hotseatConfigurationActivityButton);
-        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 1);//Performance Testing
+        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
         assertNotNull("Transition to HotseatConfigurationActivity Failed", curAct);
-//        new HotseatConfigurationActivityUnitTest(curAct,curInstruments).testActivity();
+        curInstruments = getInstrumentation();
+        new HotseatConfigurationActivityUnitTest(curAct,curInstruments).testActivity();
     }
 
     public void tearDown() throws Exception {
