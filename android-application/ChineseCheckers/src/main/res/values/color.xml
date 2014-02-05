@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="black">#000000</color>
-    <color name="charcoal_hotseat_background">#161717</color>
-    <color name="red">#ED2C31</color>
-    <color name="blue">#1780C1</color>
-    <color name="green">#15A850</color>
-    <color name="yellow">#F8E816</color>
-    <color name="purple">#8601AF</color>
-    <color name="orange">#F89230</color>
+    <color name="app_background">#161717</color>
+    <color name="app_text">#F2F4F7</color>
+    <color name="app_hint_text">#88292B2B</color>
 
+    <color name="app_button">#292B2B</color>
+    <color name="app_button_text">#F2F4F7</color>
+
+    <color name="app_button_pressed">#111111</color>
+    <color name="app_button_text_pressed">#F2F4F7</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="red">#ED2C31</color>
+    <color name="dark_red">#C50409</color>
+    <color name="blue">#1780C1</color>
+    <color name="dark_blue">#005899</color>
+    <color name="green">#15A850</color>
+    <color name="dark_green">#008028</color>
+    <color name="yellow">#F8E816</color>
+    <color name="dark_yellow">#D0C000</color>
+    <color name="purple">#8601AF</color>
+    <color name="dark_purple">#5E0087</color>
+    <color name="orange">#F89230</color>
+    <color name="dark_orange">#D06A08</color>
+    <color name="gray">#3E3F3F</color>
 </resources>

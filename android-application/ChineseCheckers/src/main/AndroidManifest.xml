@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="ca.brocku.chinesecheckers.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +29,8 @@
         <activity
             android:name="ca.brocku.chinesecheckers.HotseatConfigurationActivity"
             android:label="@string/title_activity_hotseat_configuration"
-            android:parentActivityName="ca.brocku.chinesecheckers.MainActivity" >
+            android:parentActivityName="ca.brocku.chinesecheckers.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -36,7 +38,8 @@
         <activity
             android:name="ca.brocku.chinesecheckers.HotseatGameActivity"
             android:label="@string/title_activity_hotseat_game"
-            android:parentActivityName="ca.brocku.chinesecheckers.HotseatConfigurationActivity" >
+            android:parentActivityName="ca.brocku.chinesecheckers.HotseatConfigurationActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="HotseatConfigurationActivity" />

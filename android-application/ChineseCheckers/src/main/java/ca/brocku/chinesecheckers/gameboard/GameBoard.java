@@ -30,6 +30,14 @@ public interface GameBoard {
     public void movePiece(Piece piece, Position to);
 
     /**
+     * Returns all the pieces on the board in no specified order.
+     * Blank positions are not returned.
+     *
+     * @return All the pieces.
+     */
+    public Piece[] getAllPieces();
+
+    /**
      * Get the piece that is at a position on the board.
      *
      * @param at    The position the piece is at.

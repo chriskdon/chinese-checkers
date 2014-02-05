@@ -10,13 +10,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
+import android.widget.TextView;
+
+import ca.brocku.chinesecheckers.uiengine.BoardUiDrawingEngine;
 
 public class HotseatGameActivity extends Activity {
+    private String[] players; //an array of the players' names
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotseat_game);
+
+        // Make sure variables are setup before creating fragment
+        players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
+
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -49,7 +58,10 @@ public class HotseatGameActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public class PlaceholderFragment extends Fragment {
+        private TextView currentPlayerName;
+        private Button resetMove;
+        private Button doneMove;
 
         public PlaceholderFragment() {
         }
@@ -58,7 +70,40 @@ public class HotseatGameActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
+
+            // Setup Game Board
+            BoardUiDrawingEngine gameBoardUi = (BoardUiDrawingEngine)
+                    rootView.findViewById(R.id.gameBoardSurface);
+
+            gameBoardUi.setPlayerCount(players.length);
+
+            //Bind Controls
+            currentPlayerName = (TextView)rootView.findViewById(R.id.hotseatCurrentPlayerTextView);
+            resetMove = (Button)rootView.findViewById(R.id.hotseatMoveResetButton);
+            doneMove = (Button)rootView.findViewById(R.id.hotseatMoveDoneButton);
+
+            //Bind Handlers
+            resetMove.setOnClickListener(new ResetMoveHanlder());
+            doneMove.setOnClickListener(new DoneMoveHandler());
+
+            currentPlayerName.setText(HotseatGameActivity.this.players[0]);
+
             return rootView;
+        }
+
+        private class ResetMoveHanlder implements View.OnClickListener {
+            @Override
+            public void onClick(View view) {
+
+            }
+        }
+
+        private class DoneMoveHandler implements View.OnClickListener {
+
+            @Override
+            public void onClick(View view) {
+
+            }
         }
     }
 
