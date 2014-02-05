@@ -56,14 +56,18 @@ public class HotseatConfigurationActivity extends Activity {
 
         @Override
         public void onClick(View view) {
-            twoPlayerButton.setChecked(false);
-            threePlayerButton.setChecked(false);
-            fourPlayerButton.setChecked(false);
-            sixPlayerButton.setChecked(false);
-            ((ToggleButton)view).setChecked(true);
+
+
+            redPlayerEditText.setText("");
+            orangePlayerEditText.setText("");
+            yellowPlayerEditText.setText("");
+            greenPlayerEditText.setText("");
+            bluePlayerEditText.setText("");
+            purplePlayerEditText.setText("");
 
             switch(view.getId()) {
                 case R.id.hotseatTwoPlayerButton:
+                    //if(twoPlayerButton.isChecked())
                     orangePlayerNameContainer.setVisibility(View.GONE);
                     yellowPlayerNameContainer.setVisibility(View.GONE);
                     greenPlayerEditText.setHint("Player 2");
@@ -103,6 +107,12 @@ public class HotseatConfigurationActivity extends Activity {
                     purplePlayerNameContainer.setVisibility(View.VISIBLE);
                     break;
             }
+
+            twoPlayerButton.setChecked(false);
+            threePlayerButton.setChecked(false);
+            fourPlayerButton.setChecked(false);
+            sixPlayerButton.setChecked(false);
+            ((ToggleButton)view).setChecked(true);
         }
     }
 
