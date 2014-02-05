@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowBackground">@color/app_background</item>
@@ -10,7 +10,9 @@
         <item name="android:textSize">@dimen/activity_normal_text_size</item>
 
         <item name="android:buttonStyle">@style/Button</item>
-        <item name="android:editTextStyle">@style/EditText</item>
+
+        <!-- TODO bug: the following breaks the keyboard; it doesn't pop up -->
+        <!--<item name="android:editTextStyle">@style/EditText</item>-->
     </style>
 
     <style name="Button" parent="android:Theme.Holo.Light.DarkActionBar">
@@ -18,8 +20,10 @@
         <item name="android:background">@drawable/chch_button</item>
     </style>
 
+    <!-- TODO the following is manually entered for each EditText due to above bug -->
     <style name="EditText" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:background">@drawable/chch_edittext</item>
+        <item name="android:textColorHint">@color/app_hint_text</item>
         <item name="android:gravity">center_vertical|left</item>
         <item name="android:padding">5dp</item>
     </style>

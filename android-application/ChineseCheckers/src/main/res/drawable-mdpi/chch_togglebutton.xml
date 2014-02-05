@@ -2,24 +2,24 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_pressed="true">
+    <item android:state_checked="true">
         <shape android:shape="rectangle">
             <corners android:radius="5dip" />
-            <solid  android:color="@color/dark_purple"/>
+            <solid  android:color="@color/black"/>
         </shape>
     </item>
 
-    <item android:state_focused="true">
+    <item android:state_checked="false">
         <shape android:shape="rectangle">
             <corners android:radius="5dip" />
-            <solid  android:color="@color/purple"/>
+            <solid  android:color="@color/app_background"/>
         </shape>
     </item>
 
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="5dip" />
-            <solid  android:color="@color/purple"/>
+            <solid  android:color="@color/app_button"/>
         </shape>
     </item>
 

@@ -11,10 +11,10 @@ import android.view.SurfaceView;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.Player;
-import ca.brocku.chinesecheckers.uiengine.visuals.EmptyGameBoardVisual;
 import ca.brocku.chinesecheckers.uiengine.handlers.BoardUiEventsHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
+import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
 
 /**
  * Author: Chris Kellendonk
@@ -23,7 +23,7 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine {
     Compositor compositor = new Compositor();
-    EmptyGameBoardVisual emptyBoard = new EmptyGameBoardVisual(this.getContext());
+    GameBoardVisual emptyBoard = new GameBoardVisual();
 
     public GameBoardUiView(Context context) {
         super(context);

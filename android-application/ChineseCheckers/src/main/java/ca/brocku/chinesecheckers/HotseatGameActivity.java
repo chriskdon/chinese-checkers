@@ -10,10 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
-import ca.brocku.chinesecheckers.uiengine.GameBoardUiView;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class HotseatGameActivity extends Activity {
+    String[] players; //an array of the players' names
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,9 @@ public class HotseatGameActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
+
     }
 
 
@@ -51,7 +55,10 @@ public class HotseatGameActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public class PlaceholderFragment extends Fragment {
+        private TextView currentPlayerName;
+        private Button resetMove;
+        private Button doneMove;
 
         public PlaceholderFragment() {
         }
@@ -61,11 +68,33 @@ public class HotseatGameActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
 
-            GameBoardUiView board = (GameBoardUiView)rootView.findViewById(R.id.gameBoardSurface);
+            //Bind Controls
+            currentPlayerName = (TextView)rootView.findViewById(R.id.hotseatCurrentPlayerTextView);
+            resetMove = (Button)rootView.findViewById(R.id.hotseatMoveResetButton);
+            doneMove = (Button)rootView.findViewById(R.id.hotseatMoveDoneButton);
 
-            board.invalidate();
+            //Bind Handlers
+            resetMove.setOnClickListener(new ResetMoveHanlder());
+            doneMove.setOnClickListener(new DoneMoveHandler());
+
+            currentPlayerName.setText(HotseatGameActivity.this.players[0]);
 
             return rootView;
+        }
+
+        private class ResetMoveHanlder implements View.OnClickListener {
+            @Override
+            public void onClick(View view) {
+
+            }
+        }
+
+        private class DoneMoveHandler implements View.OnClickListener {
+
+            @Override
+            public void onClick(View view) {
+
+            }
         }
     }
 
