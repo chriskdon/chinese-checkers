@@ -1,65 +1,80 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ToggleButton;
 
 public class HotseatConfigurationActivity extends Activity {
+    private ToggleButton twoPlayerButton;
+    private ToggleButton threePlayerButton;
+    private ToggleButton fourPlayerButton;
+    private ToggleButton sixPlayerButton;
+    private EditText redPlayerEditText;
+    private EditText orangePlayerEditText;
+    private EditText yellowPlayerEditText;
+    private EditText greenPlayerEditText;
+    private EditText bluePlayerEditText;
+    private EditText purplePlayerEditText;
+    private Button startHotseatGameButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotseat_configuration);
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        //Bind Controls
+        twoPlayerButton = (ToggleButton) findViewById(R.id.hotseatTwoPlayerButton);
+        threePlayerButton = (ToggleButton) findViewById(R.id.hotseatThreePlayerButton);
+        fourPlayerButton = (ToggleButton) findViewById(R.id.hotseatFourPlayerButton);
+        sixPlayerButton = (ToggleButton) findViewById(R.id.hotseatSixPlayerButton);
+        redPlayerEditText = (EditText) findViewById(R.id.hotseatRedPlayerNameEditText);
+        orangePlayerEditText = (EditText) findViewById(R.id.hotseatOrangePlayerNameEditText);
+        yellowPlayerEditText = (EditText) findViewById(R.id.hotseatYellowPlayerNameEditText);
+        greenPlayerEditText = (EditText) findViewById(R.id.hotseatGreenPlayerNameEditText);
+        bluePlayerEditText = (EditText) findViewById(R.id.hotseatBluePlayerNameEditText);
+        purplePlayerEditText = (EditText) findViewById(R.id.hotseatPurplePlayerNameEditText);
+        startHotseatGameButton = (Button) findViewById(R.id.hotseatGameActivityButton);
+
+        //Bind Handlers
+        twoPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
+        threePlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
+        fourPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
+        sixPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
+        startHotseatGameButton.setOnClickListener(new StartGameHandler());
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.hotseat_configuration, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
+    private class NumberOfPlayerSelectionHandler implements Button.OnClickListener {
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_hotseat_configuration, container, false);
-            return rootView;
+        public void onClick(View view) {
+            twoPlayerButton.setChecked(false);
+            threePlayerButton.setChecked(false);
+            fourPlayerButton.setChecked(false);
+            sixPlayerButton.setChecked(false);
+            ((ToggleButton)view).setChecked(true);
+
+            switch(view.getId()) {
+                case R.id.hotseatTwoPlayerButton:
+                    break;
+                case R.id.hotseatThreePlayerButton:
+                    break;
+                case R.id.hotseatFourPlayerButton:
+                    break;
+                case R.id.hotseatSixPlayerButton:
+                    break;
+            }
         }
     }
 
+    private class StartGameHandler implements Button.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+
+        }
+    }
 }

@@ -2,7 +2,8 @@ package ca.brocku.chinesecheckers.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.test.ActivityInstrumentationTestCase2;
+import android.content.Intent;
+import android.test.InstrumentationTestCase;
 import android.test.TouchUtils;
 import android.widget.Button;
 
@@ -14,20 +15,22 @@ import ca.brocku.chinesecheckers.R;
  * Created by Main on 2/3/14.
  */
 
-public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class HomeAndSeatTest extends InstrumentationTestCase {
 
     private Activity curAct;
     private Instrumentation curInstruments;
     private Instrumentation.ActivityMonitor monitor;
-    public HomeAndSeatTest() {
-        super(MainActivity.class);
-    }
+
 
     protected void setUp() throws Exception {
-        super.setUp();
-        setActivityInitialTouchMode(false);
-        curAct = (MainActivity)getActivity();
         curInstruments = getInstrumentation();
+        monitor = curInstruments.addMonitor(MainActivity.class.getName(),null,false);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName(curInstruments.getTargetContext(),MainActivity.class.getName());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        curInstruments.startActivitySync(intent);
+        curInstruments = getInstrumentation();
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,3);
     }
 
     public void testPreConditions() {
@@ -38,9 +41,9 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
     public void testButton() {
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
         monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(),null,false);
-        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click",hotseatConfigurationActivityButton.isClickable());
+        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click", hotseatConfigurationActivityButton.isClickable());
         TouchUtils.clickView(this, hotseatConfigurationActivityButton);
-        tTransitionToConfigAct();
+//        transitionTestingToConfigActivity();
 //        curAct.runOnUiThread(
 //                new Runnable() {
 //                    public void run() {
@@ -51,8 +54,8 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
 //        );
     }
 
-    public void tTransitionToConfigAct(){
-        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor,1);
+    public void transitionTestingToConfigActivity(){
+        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor,3); //
         assertNotNull("Transition to HotseatConfigurationActivity Failed",curAct);
 //        new HotseatConfigurationActivityUnitTest();
     }

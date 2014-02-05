@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="app_background">#161717</color>
+    <color name="app_text">#F2F4F7</color>
+
+    <color name="app_button">#292B2B</color>
+    <color name="app_button_text">#F2F4F7</color>
+
+    <color name="app_button_pressed">#111111</color>
+    <color name="app_button_text_pressed">#F2F4F7</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="charcoal_hotseat_background">#161717</color>
     <color name="red">#ED2C31</color>
     <color name="blue">#1780C1</color>
     <color name="green">#15A850</color>

@@ -10,5 +10,6 @@ import ca.brocku.chinesecheckers.MainActivity;
 public class HomeSeatAndGameTest extends ActivityInstrumentationTestCase2<MainActivity> {
     public HomeSeatAndGameTest() {
         super(MainActivity.class);
+
     }
 }
