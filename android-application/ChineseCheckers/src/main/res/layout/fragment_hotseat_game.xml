@@ -34,7 +34,8 @@
         android:layout_above="@+id/hotseatPlayerControlsLayout" />
     -->
 
-    <SurfaceView
+    <ca.brocku.chinesecheckers.uiengine.GameBoardUiView
+        android:id="@+id/gameBoardSurface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/hotseatCurrentPlayerTextView"
