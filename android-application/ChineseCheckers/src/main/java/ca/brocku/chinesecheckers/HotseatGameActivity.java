@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ public class HotseatGameActivity extends Activity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new PlaceholderFragment(players))
                     .commit();
         }
     }
@@ -35,7 +37,7 @@ public class HotseatGameActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.hotseat_game, menu);
         return true;
@@ -56,25 +58,26 @@ public class HotseatGameActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment {
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
+        private String[] playerNames;
 
-        public PlaceholderFragment() {
+        public PlaceholderFragment(String[] playerNames) {
+            this.playerNames = playerNames;
         }
-
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
 
             // Setup Game Board
             BoardUiEngine gameBoardUi = (BoardUiEngine)
                     rootView.findViewById(R.id.gameBoardSurface);
 
-            gameBoardUi.setPlayerCount(players.length);
+            gameBoardUi.setPlayerCount(playerNames.length);
 
             //Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.hotseatCurrentPlayerTextView);
@@ -85,7 +88,7 @@ public class HotseatGameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHanlder());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            currentPlayerName.setText(HotseatGameActivity.this.players[0]);
+            currentPlayerName.setText(playerNames[0]);
 
             return rootView;
         }
