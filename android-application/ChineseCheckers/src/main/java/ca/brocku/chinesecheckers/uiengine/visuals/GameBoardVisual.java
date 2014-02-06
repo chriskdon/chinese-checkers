@@ -37,7 +37,7 @@ public class GameBoardVisual extends Visual {
      */
     @Override
     public void draw(Canvas canvas) {
-        for(PieceInformation pos : new GameBoardPositionsCalculator().calculatePiecePositions(canvas.getWidth())) {
+        for(PieceInformation pos : new GameBoardPositionsCalculator().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
             canvas.drawCircle(pos.x, pos.y, pos.radius, p);
         }
     }

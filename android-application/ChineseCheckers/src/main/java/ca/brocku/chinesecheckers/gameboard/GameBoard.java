@@ -15,6 +15,11 @@ public interface GameBoard {
 
 
     /**
+     * Total number of spaces on the board
+     */
+    public static final int TOTAL_PIECE_COUNT = 121;
+
+    /**
      * Return all the pieces that are on the board in no specific order.
      *
      * @return  All the pieces on the board.

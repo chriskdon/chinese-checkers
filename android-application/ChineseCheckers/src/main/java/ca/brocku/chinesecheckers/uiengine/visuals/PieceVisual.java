@@ -37,7 +37,7 @@ public class PieceVisual extends Visual {
         p.setColor(color);
 
         if(info == null) {
-            for(PieceInformation pos : new GameBoardPositionsCalculator().calculatePiecePositions(canvas.getWidth())) {
+            for(PieceInformation pos : new GameBoardPositionsCalculator().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
                 if(pos.index == this.p.getIndex() && pos.row == this.p.getRow()) {
                     this.info = pos;
                     break;
