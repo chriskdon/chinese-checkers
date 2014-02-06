@@ -2,14 +2,11 @@ package ca.brocku.chinesecheckers.uiengine.visuals;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.uiengine.Compositor;
 import ca.brocku.chinesecheckers.uiengine.PieceInformation;
-import ca.brocku.chinesecheckers.uiengine.utils.GameBoardPositionsCalculator;
+import ca.brocku.chinesecheckers.uiengine.BoardPositionSystem;
 
 /**
  * Game board with blank positions
@@ -37,7 +34,7 @@ public class GameBoardVisual extends Visual {
      */
     @Override
     public void draw(Canvas canvas) {
-        for(PieceInformation pos : new GameBoardPositionsCalculator().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
+        for(PieceInformation pos : new BoardPositionSystem().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
             canvas.drawCircle(pos.x, pos.y, pos.radius, p);
         }
     }
