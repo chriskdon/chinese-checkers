@@ -59,7 +59,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                 }
         );
         synchronized (this){
-            Thread.sleep(500);
+            Thread.sleep(2000);
         }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
@@ -115,7 +115,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                 }
         );
         synchronized (this){
-            Thread.sleep(500);
+            Thread.sleep(2000);
         }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
@@ -207,7 +207,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                 }
         );
         synchronized (this){
-            Thread.sleep(500);
+            Thread.sleep(2000);
         }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
@@ -390,7 +390,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                 }
         );
         synchronized (this){
-            Thread.sleep(500);
+            Thread.sleep(2000);
         }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
