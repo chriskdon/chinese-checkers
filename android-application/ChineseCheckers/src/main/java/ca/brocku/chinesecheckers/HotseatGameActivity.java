@@ -63,8 +63,6 @@ public class HotseatGameActivity extends Activity {
         private Button resetMove;
         private Button doneMove;
 
-        public PlaceholderFragment() {
-        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
