@@ -1,7 +1,5 @@
 package ca.brocku.chinesecheckers.uiengine.utils;
 
-import android.util.Log;
-
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.uiengine.PieceInformation;
 
