@@ -58,9 +58,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                     }
                 }
         );
-        synchronized (this){
-            Thread.sleep(2000);
-        }
+        synchronized (this){Thread.sleep(5000);}
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
         assertNotNull("hotseatRedPlayerNameEditText Not Found", hotseatRedPlayerNameEditText);
@@ -115,7 +113,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                 }
         );
         synchronized (this){
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
@@ -207,7 +205,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                 }
         );
         synchronized (this){
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
@@ -227,7 +225,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
         final ImageView hotseatOrangePlayerError = (ImageView) curAct.findViewById(R.id.hotseatOrangePlayerError);
         final ImageView hotseatGreenPlayerError = (ImageView) curAct.findViewById(R.id.hotseatGreenPlayerError);
         final ImageView hotseatBluePlayerError = (ImageView) curAct.findViewById(R.id.hotseatBluePlayerError);
-        
+
         final Button hotseatGameActivityButton = (Button) curAct.findViewById(R.id.hotseatGameActivityButton);
         assertNotNull("hotseatGameActivityButton Not Found", hotseatGameActivityButton);
         assertTrue("hotseatGameActivityButton Not Clickable", hotseatGameActivityButton.isClickable());
@@ -390,7 +388,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                 }
         );
         synchronized (this){
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
