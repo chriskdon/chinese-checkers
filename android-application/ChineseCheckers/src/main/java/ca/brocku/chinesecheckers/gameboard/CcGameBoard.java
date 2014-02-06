@@ -3,7 +3,7 @@ package ca.brocku.chinesecheckers.gameboard;
 /**
  * Created by zz on 2/5/14.
  */
-public class CcGameBoard implements GameBoard{
+public abstract class CcGameBoard implements GameBoard{
     /**
      * The number of available positions in each row.
      */
@@ -28,10 +28,16 @@ public class CcGameBoard implements GameBoard{
      */
     public GridPiece[] getAllPiece() {
         GridPiece[] allPieces = new GridPiece[60];
+        int allPiecesIndex = 0;
         for(int i=0; i<board.length;i++) {
             for(int j=0; j<board[i].length; j++) {
+                if(board[i][j]!=null) {
+                    allPieces[allPiecesIndex]=board[i][j];
+                    allPiecesIndex=allPiecesIndex+1;
+                }
             }
         }
+        return allPieces;
     }
 
     /**
@@ -83,7 +89,7 @@ public class CcGameBoard implements GameBoard{
         int row = forPiece.getPosition().getRow();
         int index = forPiece.getPosition().getIndex();
         int posindex = 0;
-        {
+        { // immediateNeighbours
             if (row>12 || (row>3 && row<8)) { // if y is between 4 and 8 and greater than 12
                 if(row==4) {
                     possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index-5));
@@ -91,7 +97,7 @@ public class CcGameBoard implements GameBoard{
                     possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index-5+1));
                     posindex=posindex+1;
                 }
-                else if(y==13) {
+                else if(row==13) {
                     possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index+4));
                     posindex=posindex+1;
                     possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index+4+1));
@@ -136,13 +142,13 @@ public class CcGameBoard implements GameBoard{
                 posindex=posindex+1;
                 possibleMoves[posindex] = checkPosition(new GridPosition(row, index+1));
                 posindex=posindex+1;
-                if(y==3) {
+                if(row==3) {
                     possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index+4));
                     posindex=posindex+1;
                     possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index+4+1));
                     posindex=posindex+1;
                 }
-                else if(y==12) {
+                else if(row==12) {
                     possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index-5));
                     posindex=posindex+1;
                     possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index-5+1));
@@ -158,7 +164,6 @@ public class CcGameBoard implements GameBoard{
         }
             {
                 if (row>10 || (row>3 && row<8)) { // if y is between 4 and 8 and greater than 10
-                    //System.out.println("Case1");
                     if(row==11) {
                         if(isOccupied(new GridPosition(row+1, index+1))) {
                             possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-5));
@@ -185,7 +190,6 @@ public class CcGameBoard implements GameBoard{
                     }
                 }
                 else { // if y is between 9 and 10 or less than 4
-                    //	System.out.println("Case3");
                     if(row==3) {
                         if(isOccupied(new GridPosition(row+1, index+4))) {
                             possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+3));
@@ -208,7 +212,6 @@ public class CcGameBoard implements GameBoard{
             }
             { // down right
                 if (row>10 || (row>3 && row<8)) { // if row is between 4 and 8 and greater than 10
-                    //Srowstem.out.println("Case1");
                     if(row==11) {
                         if(isOccupied(new GridPosition(row+1, index+1))) {
                             possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-3));
@@ -235,7 +238,6 @@ public class CcGameBoard implements GameBoard{
                     }
                 }
                 else { // if row is between 9 and 10 or less than 4
-                    //	Srowstem.out.println("Case3");
                     if(row==2) {
                         if(isOccupied(new GridPosition(row+1, index+1))) {
                             possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+6));
@@ -258,7 +260,6 @@ public class CcGameBoard implements GameBoard{
             } // end downRight
             { // upperLeft
                 if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
-                    //Srowstem.out.println("Case1");
                     if(row==14) {
                         if(isOccupied(new GridPosition(row-1, index+1))) {
                             possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+4));
@@ -279,7 +280,6 @@ public class CcGameBoard implements GameBoard{
                     }
                 }
                 else { // if row is between 9 and 10 or less than 4
-                    //Srowstem.out.println("Case3");
                     if(row==4) {
                         if(isOccupied(new GridPosition(row-1, index-5))) {
                             possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-6));
@@ -308,7 +308,6 @@ public class CcGameBoard implements GameBoard{
             } // end upperLeft
             { // upperRight
                 if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
-                    //Srowstem.out.println("Case1");
                     if(row==14) {
                         if(isOccupied(new GridPosition(row-1, index+1))) {
                             possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+6));
@@ -363,7 +362,6 @@ public class CcGameBoard implements GameBoard{
                 }
                 if(isOccupied(new GridPosition(row, index+1))) {
                     possibleMoves[posindex] = checkPosition(new GridPosition(row, index+1));
-                    posindex=posindex+1;
                 }
             } // end leftAndRight
         return possibleMoves;
@@ -377,31 +375,23 @@ public class CcGameBoard implements GameBoard{
      * @return      True if the move is valid, false otherwise.
      */
     public boolean isValidMove(GridPiece piece, GridPosition to) {
-        int row = to.getRow();
-        int index = to.getIndex();
-        if(isOccupied(to)) {
-            return false;
+        GridPosition[] possibleMoves = getPossibleMoves(piece);
+        for(int i=0; i<possibleMoves.length; i++) {
+            if (possibleMoves[i]==null) {
+                continue;
+            }
+            if(possibleMoves[i].getRow() == to.getRow() && possibleMoves[i].getIndex() == to.getIndex()) {
+                return true;
+            }
         }
-        try {
-            board[row][index]=piece;
-            board[row][index]=null;
-            return true;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
+        return false;
     }
     private boolean isOccupied (GridPosition at) {
         int row = at.getRow();
         int index = at.getIndex();
 
         try {
-            if(board[row][index]!=null) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return board[row][index]!=null;
 
         }
         catch (ArrayIndexOutOfBoundsException e) {
@@ -409,22 +399,9 @@ public class CcGameBoard implements GameBoard{
         }
     }
     private GridPosition checkPosition (GridPosition at) {
-        int row = at.getRow();
-        int index = at.getIndex();
-        Piece temp;
         if(isOccupied(at)) {
             return null;
         }
-        try {
-            if(board[row][index]!=null) {
-                return null;
-            }
-            else {
-                return at;
-            }
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
+        return at;
     }
 }

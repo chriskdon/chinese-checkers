@@ -44,15 +44,6 @@ public interface GameBoard {
      *
      * @return All the pieces.
      */
-    public Piece[] getAllPieces();
-
-    /**
-     * Get the piece that is at a position on the board.
-     *
-     * @param at    The position the piece is at.
-     *
-     * @return      The piece that was at the position specified.
-     */
     public Piece getPiece(Position at);
 
     /**

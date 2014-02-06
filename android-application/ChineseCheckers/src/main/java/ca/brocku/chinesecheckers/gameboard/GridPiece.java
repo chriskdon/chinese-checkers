@@ -4,7 +4,7 @@ import ca.brocku.chinesecheckers.gamestate.CcPlayer;
 /**
  * Created by zz on 2/5/14.
  */
-public class GridPiece implements Piece {
+public abstract class GridPiece implements Piece {
     GridPosition position;
     CcPlayer player;
     public GridPiece (GridPosition pos, CcPlayer pl) {
