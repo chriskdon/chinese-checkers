@@ -3,12 +3,19 @@ package ca.brocku.chinesecheckers.gameboard;
 /**
  * Created by zz on 2/5/14.
  */
-public class CcGameBoard {
+public class CcGameBoard implements GameBoard{
     /**
      * The number of available positions in each row.
      */
     public static final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1};
+    GridPiece[][] board;
 
+    public CcGameBoard() {
+        GridPiece[][] board = new GridPiece[17][];
+        for(int i=0; i<board.length;i++) {
+            board[i] = new GridPiece[ROW_POSITION_COUNT[i]];
+        }
+    }
 
     /**
      * Total number of spaces on the board
