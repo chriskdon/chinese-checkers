@@ -7,7 +7,7 @@ package ca.brocku.chinesecheckers.gameboard;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public interface GameBoard {
+public interface TempBoard {
     /**
      * The number of available positions in each row.
      */
@@ -30,7 +30,7 @@ public interface GameBoard {
      * @param piece The piece to move.
      * @param to    The new position of the piece.
      */
-    public void movePiece(Piece piece, Position to);
+    public void movePiece(GridPiece piece, GridPosition to);
 
     /**
      * Returns all the pieces on the board in no specified order.
@@ -38,7 +38,7 @@ public interface GameBoard {
      *
      * @return All the pieces.
      */
-    public Piece[] getAllPieces();
+    public GridPiece[] getAllPieces();
 
     /**
      * Get the piece that is at a position on the board.
@@ -47,7 +47,7 @@ public interface GameBoard {
      *
      * @return      The piece that was at the position specified.
      */
-    public Piece getPiece(Position at);
+    public GridPiece getPiece(GridPosition at);
 
     /**
      * A list of valid positions that the specified piece could move to.
@@ -57,7 +57,7 @@ public interface GameBoard {
      * @return          The list of positions the piece can move to. Or <code>null</code> if there
      *                  is nowhere to move.
      */
-    public Position[] getPossibleMoves(Piece forPiece);
+    public GridPosition[] getPossibleMoves(GridPiece forPiece);
 
     /**
      * Check if a move is valid for a specified piece.
@@ -66,5 +66,5 @@ public interface GameBoard {
      * @param to    The position the piece is trying to move to.
      * @return      True if the move is valid, false otherwise.
      */
-    public boolean isValidMove(Piece piece, Position to);
+    public boolean isValidMove(GridPiece piece, GridPosition to);
 }

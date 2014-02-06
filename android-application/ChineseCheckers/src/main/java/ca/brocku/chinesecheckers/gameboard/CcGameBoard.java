@@ -3,7 +3,7 @@ package ca.brocku.chinesecheckers.gameboard;
 /**
  * Created by zz on 2/5/14.
  */
-public abstract class CcGameBoard implements GameBoard{
+public class CcGameBoard implements TempBoard{
     /**
      * The number of available positions in each row.
      */
@@ -26,7 +26,7 @@ public abstract class CcGameBoard implements GameBoard{
      *
      * @return  All the pieces on the board.
      */
-    public GridPiece[] getAllPiece() {
+    public GridPiece[] getAllPieces() {
         GridPiece[] allPieces = new GridPiece[60];
         int allPiecesIndex = 0;
         for(int i=0; i<board.length;i++) {
