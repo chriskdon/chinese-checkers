@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.uiengine.utils;
 
+import android.util.Log;
+
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.uiengine.PieceInformation;
 
@@ -9,30 +11,38 @@ import ca.brocku.chinesecheckers.uiengine.PieceInformation;
  * Date: 2/3/2014
  */
 public class GameBoardPositionsCalculator {
-    public PieceInformation[] calculatePiecePositions(int width) {
-        int numPositions = 0;
-        for(int count : GameBoard.ROW_POSITION_COUNT) {
-            numPositions += count;
-        }
+    public PieceInformation[] calculatePiecePositions(int width, int height) {
+        PieceInformation[] positions = new PieceInformation[GameBoard.TOTAL_PIECE_COUNT];
+        final int rows = GameBoard.ROW_POSITION_COUNT.length;
 
-        int spacing = 2;
-        int scale = 5;
+        // Settings
+        int shrink = 5;
+        int scale = 0;
 
-        PieceInformation[] positions = new PieceInformation[numPositions];
+        // Radius without shrink
+        int squareSide = (width < height ? width : height);
+        int radiusArea = (squareSide/(13+scale))/2;
 
-        int radius = (width/(13+scale))/2;
-        int topOffset = (width - (radius*GameBoard.ROW_POSITION_COUNT.length))/3;
+        // Calculate Gap
+        double length = radiusArea*2;
+        double a = - ((length/2)*(length/2));
+        double h = length*length;
+        double gap = Math.sqrt(a + h);
 
+        // Center the board
+        int topOffset = (int)((height - (int)(gap * rows))/1.5);
+
+        // Calculate positions
         int pos = 0;
-        for(int row = 0; row < GameBoard.ROW_POSITION_COUNT.length; row++) {
+        for(int row = 0; row < rows; row++) {
             int indexCount = GameBoard.ROW_POSITION_COUNT[row];
 
-            int x = radius + (width/2) - (radius*indexCount);
-            int y = topOffset + (radius*row*2) + radius;
+            int x = radiusArea + (squareSide/2) - (radiusArea*indexCount);
+            int y = topOffset + (int)(gap*row);
             for(int i = 0; i < indexCount; i++) {
-                positions[pos++] = new PieceInformation(x, y, row, i, radius - spacing);
+                positions[pos++] = new PieceInformation(x, y, row, i, radiusArea - shrink);
 
-                x += radius*2;
+                x += radiusArea*2;
             }
         }
 
