@@ -3,10 +3,9 @@ package ca.brocku.chinesecheckers.uiengine.visuals;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.uiengine.PieceInformation;
-import ca.brocku.chinesecheckers.uiengine.BoardPositionSystem;
+import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
+import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
 
 /**
  * Author: Chris Kellendonk
@@ -14,14 +13,16 @@ import ca.brocku.chinesecheckers.uiengine.BoardPositionSystem;
  * Date: 2/3/2014
  */
 public class PieceVisual extends Visual {
-    Position p;
-    PieceInformation info;
-    int color;
+    private PieceDrawingDetails position;
+    private int color;
 
-    public PieceVisual(Position p, int color) {
+    public PieceVisual(PieceDrawingDetails position, int color) {
+        this.position = position;
         this.color = color;
+    }
 
-        this.p = p;
+    public PieceVisual(PiecePositionSystem positionSystem, Position pos, int color) {
+        this(positionSystem.get(pos), color);
     }
 
     /**
@@ -35,15 +36,6 @@ public class PieceVisual extends Visual {
         p.setFlags(Paint.ANTI_ALIAS_FLAG);
         p.setColor(color);
 
-        if(info == null) {
-            for(PieceInformation pos : new BoardPositionSystem().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
-                if(pos.index == this.p.getIndex() && pos.row == this.p.getRow()) {
-                    this.info = pos;
-                    break;
-                }
-            }
-        }
-
-        canvas.drawCircle(info.x, info.y, info.radius, p);
+        canvas.drawCircle(position.x, position.y, position.getRadius(), p);
     }
 }

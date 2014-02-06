@@ -13,6 +13,7 @@ public interface GameBoard {
      */
     public static final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1};
 
+
     /**
      * Total number of spaces on the board
      */
@@ -22,13 +23,6 @@ public interface GameBoard {
      * Maximum number of pieces on a row
      */
     public static final int MAXIMUM_PIECES_PER_ROW = 13;
-
-    /**
-     * Return all the pieces that are on the board in no specific order.
-     *
-     * @return  All the pieces on the board.
-     */
-    public Piece[] getAllPiece();
 
     /**
      * Move a piece from one position to another.
