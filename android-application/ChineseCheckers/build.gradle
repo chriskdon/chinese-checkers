@@ -22,9 +22,6 @@ android {
         testPackageName "ca.brocku.chinesecheckers.tests"
     }
 
-    lintOptions {
-        checkReleaseBuilds false
-    }
 }
 
 dependencies {
