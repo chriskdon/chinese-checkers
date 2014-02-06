@@ -64,6 +64,10 @@ public class HotseatGameActivity extends Activity {
         private Button doneMove;
         private String[] playerNames;
 
+        public PlaceholderFragment() {
+
+        }
+
         public PlaceholderFragment(String[] playerNames) {
             this.playerNames = playerNames;
         }
