@@ -23,7 +23,7 @@ import ca.brocku.chinesecheckers.uiengine.visuals.PieceVisual;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public class GameBoardUiView extends SurfaceView implements BoardUiDrawingEngine {
+public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     Compositor compositor = new Compositor();
     GameBoardVisual emptyBoard = new GameBoardVisual(getContext());
 

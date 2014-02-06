@@ -13,7 +13,7 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public interface BoardUiDrawingEngine {
+public interface BoardUiEngine {
     /**
      * TODO: Remove and replace with board initialization
      *

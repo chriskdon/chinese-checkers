@@ -1,7 +1,6 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
 
-import ca.brocku.chinesecheckers.uiengine.BoardUiDrawingEngine;
+import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class HotseatGameActivity extends Activity {
     private String[] players; //an array of the players' names
@@ -73,7 +71,7 @@ public class HotseatGameActivity extends Activity {
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
 
             // Setup Game Board
-            BoardUiDrawingEngine gameBoardUi = (BoardUiDrawingEngine)
+            BoardUiEngine gameBoardUi = (BoardUiEngine)
                     rootView.findViewById(R.id.gameBoardSurface);
 
             gameBoardUi.setPlayerCount(players.length);

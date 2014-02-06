@@ -3,11 +3,10 @@ package ca.brocku.chinesecheckers.uiengine.visuals;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import ca.brocku.chinesecheckers.gameboard.Piece;
+import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.uiengine.Compositor;
 import ca.brocku.chinesecheckers.uiengine.PieceInformation;
-import ca.brocku.chinesecheckers.uiengine.utils.GameBoardPositionsCalculator;
+import ca.brocku.chinesecheckers.uiengine.BoardPositionSystem;
 
 /**
  * Author: Chris Kellendonk
@@ -37,7 +36,7 @@ public class PieceVisual extends Visual {
         p.setColor(color);
 
         if(info == null) {
-            for(PieceInformation pos : new GameBoardPositionsCalculator().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
+            for(PieceInformation pos : new BoardPositionSystem().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
                 if(pos.index == this.p.getIndex() && pos.row == this.p.getRow()) {
                     this.info = pos;
                     break;
