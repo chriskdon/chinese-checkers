@@ -30,7 +30,6 @@ public class CcGameBoard implements GameBoard{
         GridPiece[] allPieces = new GridPiece[60];
         for(int i=0; i<board.length;i++) {
             for(int j=0; j<board[i].length; j++) {
-
             }
         }
     }
@@ -41,15 +40,19 @@ public class CcGameBoard implements GameBoard{
      * @param piece The piece to move.
      * @param to    The new position of the piece.
      */
-    public void movePiece(GridPiece piece, GridPosition to);
-
-    /**
-     * Returns all the pieces on the board in no specified order.
-     * Blank positions are not returned.
-     *
-     * @return All the pieces.
-     */
-    public GridPiece[] getAllPieces();
+    public void movePiece(GridPiece piece, GridPosition to) {
+        if(isValidMove(piece, to)) {
+            int oldRow = piece.getPosition().getRow();
+            int oldIndex = piece.getPosition().getIndex();
+            int newRow = to.getRow();
+            int newIndex = to.getIndex();
+            board[newRow][newIndex] = piece;
+            board[oldRow][oldIndex] = null;
+        }
+        else {
+            System.out.println("invalid move command");
+        }
+    }
 
     /**
      * Get the piece that is at a position on the board.
@@ -58,7 +61,14 @@ public class CcGameBoard implements GameBoard{
      *
      * @return      The piece that was at the position specified.
      */
-    public GridPiece getPiece(Position at);
+    public GridPiece getPiece(GridPosition at) {
+        int row = at.getRow();
+        int index = at.getIndex();
+        if(isOccupied(at)) {
+            return board[row][index];
+        }
+        else return null;
+    }
 
     /**
      * A list of valid positions that the specified piece could move to.
@@ -69,7 +79,8 @@ public class CcGameBoard implements GameBoard{
      *                  is nowhere to move.
      */
     public GridPosition[] getPossibleMoves(GridPiece forPiece) {
-
+        GridPosition[] possibleMoves = new GridPosition[12];
+        return possibleMoves;
     }
 
     /**
