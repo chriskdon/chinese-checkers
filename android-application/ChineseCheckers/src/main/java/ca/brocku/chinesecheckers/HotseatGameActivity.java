@@ -26,10 +26,15 @@ public class HotseatGameActivity extends Activity {
         // Make sure variables are setup before creating fragment
         players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
 
+        //passes player array to the hotseat game fragment
+        Fragment hotseatGameFragment = new PlaceholderFragment();
+        Bundle hotseatGameFragmentBundle = new Bundle();
+        hotseatGameFragmentBundle.putStringArray("PLAYER_NAMES", players);
+        hotseatGameFragment.setArguments(hotseatGameFragmentBundle);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment(players))
+                    .add(R.id.container, hotseatGameFragment)
                     .commit();
         }
     }
@@ -65,11 +70,7 @@ public class HotseatGameActivity extends Activity {
         private String[] playerNames;
 
         public PlaceholderFragment() {
-
-        }
-
-        public PlaceholderFragment(String[] playerNames) {
-            this.playerNames = playerNames;
+            playerNames = getArguments().getStringArray("PLAYER_NAMES");
         }
 
         @Override
