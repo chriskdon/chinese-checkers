@@ -70,13 +70,14 @@ public class HotseatGameActivity extends Activity {
         private String[] playerNames;
 
         public PlaceholderFragment() {
-            playerNames = getArguments().getStringArray("PLAYER_NAMES");
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
+
+            playerNames = getArguments().getStringArray("PLAYER_NAMES");
 
             // Setup Game Board
             BoardUiEngine gameBoardUi = (BoardUiEngine)
