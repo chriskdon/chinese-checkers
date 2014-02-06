@@ -10,4 +10,15 @@ package ca.brocku.chinesecheckers.uiengine;
 public class PixelPosition {
     public float x; // The x coordinate
     public float y; // The y coordinate
+
+    /**
+     * Initialize pixel position.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     */
+    public PixelPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
 }

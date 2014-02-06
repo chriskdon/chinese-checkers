@@ -5,8 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.uiengine.PieceInformation;
-import ca.brocku.chinesecheckers.uiengine.BoardPositionSystem;
+import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
+import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
 
 /**
  * Game board with blank positions
@@ -16,10 +16,13 @@ import ca.brocku.chinesecheckers.uiengine.BoardPositionSystem;
  * Date: 2/2/2014
  */
 public class GameBoardVisual extends Visual {
-    PieceInformation[] positions;
+    PiecePositionSystem piecePositionSystem;
     Paint p;
 
-    public GameBoardVisual(Context context) {
+    public GameBoardVisual(Context context, PiecePositionSystem piecePositionSystem) {
+        this.piecePositionSystem = piecePositionSystem;
+
+        // Paint
         p = new Paint();
         p.setFlags(Paint.ANTI_ALIAS_FLAG);
         p.setColor(context.getResources().getColor(R.color.gray)); // TODO: Replace with resource color
@@ -34,8 +37,8 @@ public class GameBoardVisual extends Visual {
      */
     @Override
     public void draw(Canvas canvas) {
-        for(PieceInformation pos : new BoardPositionSystem().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
-            canvas.drawCircle(pos.x, pos.y, pos.radius, p);
+        for(PieceDrawingDetails pos : piecePositionSystem.getPositionDetails()) {
+            canvas.drawCircle(pos.x, pos.y, pos.getRadius(), p);
         }
     }
 }
