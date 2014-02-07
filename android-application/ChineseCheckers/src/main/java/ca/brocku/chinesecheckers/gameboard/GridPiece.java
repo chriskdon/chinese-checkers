@@ -1,26 +1,27 @@
 package ca.brocku.chinesecheckers.gameboard;
 
 import ca.brocku.chinesecheckers.gamestate.CcPlayer;
+import ca.brocku.chinesecheckers.gamestate.Player;
 /**
  * Created by zz on 2/5/14.
  */
 public class GridPiece implements Piece {
-    GridPosition position;
-    CcPlayer player;
+    Position position;
+    Player player;
     public GridPiece (GridPosition pos, CcPlayer pl) {
         position = pos;
         player = pl;
     }
-    public GridPosition getPosition() {
+    public Position getPosition() {
         return position;
     }
-    public CcPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
-    public void setPosition(GridPosition at) {
+    public void setPosition(Position at) {
         position=at;
     }
-    public void setPlayer(CcPlayer np) {
+    public void setPlayer(Player np) {
         player = np;
     }
 }

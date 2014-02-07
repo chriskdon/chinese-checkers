@@ -3,7 +3,7 @@ package ca.brocku.chinesecheckers.gameboard;
 /**
  * Created by zz on 2/5/14.
  */
-public class CcGameBoard implements TempBoard{
+public class CcGameBoard implements GameBoard{
     /**
      * The number of available positions in each row.
      */
@@ -12,22 +12,26 @@ public class CcGameBoard implements TempBoard{
      * Total number of spaces on the board
      */
     public static final int TOTAL_PIECE_COUNT = 121;
-    GridPiece[][] board;
+    Piece[][] board;
 
     public CcGameBoard() {
-        GridPiece[][] board = new GridPiece[17][];
-        for(int i=0; i<board.length;i++) {
-            board[i] = new GridPiece[ROW_POSITION_COUNT[i]];
-        }
+        board = constructBoard();
     }
 
+    private Piece[][] constructBoard() {
+        Piece[][] board = new GridPiece[17][];
+        for(int i=0; i<board.length;i++) {
+            board[i] = new Piece[ROW_POSITION_COUNT[i]];
+        }
+        return board;
+    }
     /**
      * Return all the pieces that are on the board in no specific order.
      *
      * @return  All the pieces on the board.
      */
-    public GridPiece[] getAllPieces() {
-        GridPiece[] allPieces = new GridPiece[60];
+    public Piece[] getAllPieces() {
+        Piece[] allPieces = new GridPiece[60];
         int allPiecesIndex = 0;
         for(int i=0; i<board.length;i++) {
             for(int j=0; j<board[i].length; j++) {
@@ -46,7 +50,7 @@ public class CcGameBoard implements TempBoard{
      * @param piece The piece to move.
      * @param to    The new position of the piece.
      */
-    public void movePiece(GridPiece piece, GridPosition to) {
+    public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
             int oldRow = piece.getPosition().getRow();
             int oldIndex = piece.getPosition().getIndex();
@@ -67,7 +71,7 @@ public class CcGameBoard implements TempBoard{
      *
      * @return      The piece that was at the position specified.
      */
-    public GridPiece getPiece(GridPosition at) {
+    public Piece getPiece(Position at) {
         int row = at.getRow();
         int index = at.getIndex();
         if(isOccupied(at)) {
@@ -84,8 +88,8 @@ public class CcGameBoard implements TempBoard{
      * @return          The list of positions the piece can move to. Or <code>null</code> if there
      *                  is nowhere to move.
      */
-    public GridPosition[] getPossibleMoves(GridPiece forPiece) {
-        GridPosition[] possibleMoves = new GridPosition[12];
+    public Position[] getPossibleMoves(Piece forPiece) {
+        Position[] possibleMoves = new GridPosition[12];
         int row = forPiece.getPosition().getRow();
         int index = forPiece.getPosition().getIndex();
         int posindex = 0;
@@ -374,8 +378,8 @@ public class CcGameBoard implements TempBoard{
      * @param to    The position the piece is trying to move to.
      * @return      True if the move is valid, false otherwise.
      */
-    public boolean isValidMove(GridPiece piece, GridPosition to) {
-        GridPosition[] possibleMoves = getPossibleMoves(piece);
+    public boolean isValidMove(Piece piece, Position to) {
+        Position[] possibleMoves = getPossibleMoves(piece);
         for(int i=0; i<possibleMoves.length; i++) {
             if (possibleMoves[i]==null) {
                 continue;
@@ -386,7 +390,7 @@ public class CcGameBoard implements TempBoard{
         }
         return false;
     }
-    private boolean isOccupied (GridPosition at) {
+    private boolean isOccupied (Position at) {
         int row = at.getRow();
         int index = at.getIndex();
 
@@ -398,7 +402,7 @@ public class CcGameBoard implements TempBoard{
             return false;
         }
     }
-    private GridPosition checkPosition (GridPosition at) {
+    private Position checkPosition (Position at) {
         if(isOccupied(at)) {
             return null;
         }
