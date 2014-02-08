@@ -31,7 +31,7 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
         curInstruments = getInstrumentation();
     }
 
-    public void runTest() throws Exception {
+    public void testActivity() throws Exception {
         new MainActivityUnitTest(curAct,curInstruments).runTest();
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
         monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(), null, false);
