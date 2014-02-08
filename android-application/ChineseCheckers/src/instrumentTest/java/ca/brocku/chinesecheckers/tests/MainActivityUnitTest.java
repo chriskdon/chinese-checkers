@@ -35,7 +35,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         curInstruments = getInstrumentation();
     }
 
-    public void testActivity() {
+    public void runTest() {
         assertNotNull("MainActivity Not Started", curAct);
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
         assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click", hotseatConfigurationActivityButton.isClickable());

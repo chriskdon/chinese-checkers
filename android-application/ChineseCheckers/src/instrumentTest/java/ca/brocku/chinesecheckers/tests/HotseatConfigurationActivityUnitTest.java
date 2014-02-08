@@ -3,15 +3,12 @@ package ca.brocku.chinesecheckers.tests;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 import ca.brocku.chinesecheckers.HotseatConfigurationActivity;
-import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
 /**
@@ -19,6 +16,7 @@ import ca.brocku.chinesecheckers.R;
  */
 public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentationTestCase2<HotseatConfigurationActivity> {
 
+    private static final long sleepTime = 10000;
     private Activity curAct;
     private Instrumentation curInstruments;
     private Instrumentation.ActivityMonitor monitor;
@@ -40,15 +38,15 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
         curInstruments = getInstrumentation();
     }
 
-    public void testActivity() throws Exception {
+    public void runTest() throws Exception {
         assertNotNull("HotseatConfigurationActivity Not Started", curAct);
-        testTwoPlayerConfig();
-        testThreePlayerConfig();
-        testFourPlayerConfig();
-        testSixPlayerConfig();
+        twoPlayerConfigTests();
+        threePlayerConfigTests();
+        fourPlayerConfigTests();
+        sixPlayerConfigTests();
     }
 
-    public void testTwoPlayerConfig() throws Exception {
+    public void twoPlayerConfigTests() throws Exception {
         final ToggleButton hotseatTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.hotseatTwoPlayerButton);
         assertNotNull("hotseatTwoPlayerButton Not Found", hotseatTwoPlayerButton);
         curAct.runOnUiThread(
@@ -58,7 +56,6 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                     }
                 }
         );
-        synchronized (this){Thread.sleep(5000);}
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
         assertNotNull("hotseatRedPlayerNameEditText Not Found", hotseatRedPlayerNameEditText);
@@ -102,7 +99,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
 
     }
 
-    public void testThreePlayerConfig() throws Exception {
+    public void threePlayerConfigTests() throws Exception {
         final ToggleButton hotseatThreePlayerButton = (ToggleButton) curAct.findViewById(R.id.hotseatThreePlayerButton);
         assertNotNull("hotseatThreePlayerButton Not Found", hotseatThreePlayerButton);
         curAct.runOnUiThread(
@@ -112,9 +109,6 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                     }
                 }
         );
-        synchronized (this){
-            Thread.sleep(5000);
-        }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
         assertNotNull("hotseatRedPlayerNameEditText Not Found", hotseatRedPlayerNameEditText);
@@ -194,7 +188,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
         );
     }
 
-    public void testFourPlayerConfig() throws Exception {
+    public void fourPlayerConfigTests() throws Exception {
         final ToggleButton hotseatFourPlayerButton = (ToggleButton) curAct.findViewById(R.id.hotseatFourPlayerButton);
         assertNotNull("hotseatFourPlayerButton Not Found", hotseatFourPlayerButton);
         curAct.runOnUiThread(
@@ -204,9 +198,6 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                     }
                 }
         );
-        synchronized (this){
-            Thread.sleep(5000);
-        }
 
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
         assertNotNull("hotseatRedPlayerNameEditText Not Found", hotseatRedPlayerNameEditText);
@@ -377,7 +368,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
         );
     }
 
-    public void testSixPlayerConfig() throws Exception {
+    public void sixPlayerConfigTests() throws Exception {
         final ToggleButton hotseatSixPlayerButton = (ToggleButton) curAct.findViewById(R.id.hotseatSixPlayerButton);
         assertNotNull("hotseatSixPlayerButton Not Found", hotseatSixPlayerButton);
         curAct.runOnUiThread(
@@ -387,10 +378,8 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
                     }
                 }
         );
-        synchronized (this){
-            Thread.sleep(5000);
-        }
 
+        synchronized (this) { Thread.sleep(sleepTime); }
         final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
         assertNotNull("hotseatRedPlayerNameEditText Not Found", hotseatRedPlayerNameEditText);
         assertTrue("hotseatRedPlayerNameEditText Not Enabled", hotseatRedPlayerNameEditText.isEnabled());
