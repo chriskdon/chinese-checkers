@@ -33,14 +33,14 @@ public class HomeSeatAndGameTest extends ActivityInstrumentationTestCase2<MainAc
     }
 
     public void testActivity() throws Exception {
-        new MainActivityUnitTest(curAct, curInstruments).runTest();
+        //new MainActivityUnitTest(curAct, curInstruments).runTest();
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
         monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(), null, false);
         TouchUtils.clickView(this, hotseatConfigurationActivityButton);
         curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
         assertNotNull("Transition to HotseatConfigurationActivity Failed", curAct);
         curInstruments = getInstrumentation();
-        new HotseatConfigurationActivityUnitTest(curAct, curInstruments).runTest();
+//        new HotseatConfigurationActivityUnitTest(curAct, curInstruments).runTest();
         curInstruments.removeMonitor(monitor);
         monitor = curInstruments.addMonitor(HotseatGameActivity.class.getName(), null, false);
         final ToggleButton hotseatTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.hotseatTwoPlayerButton);
@@ -82,7 +82,7 @@ public class HomeSeatAndGameTest extends ActivityInstrumentationTestCase2<MainAc
         curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
         assertNotNull("Transition to HotseatGameActivity Failed", curAct);
         curInstruments = getInstrumentation();
-        new HotseatGameActivityUnitTest(curAct, curInstruments).runTest();
+       // new HotseatGameActivityUnitTest(curAct, curInstruments).runTest();
     }
 
     public void tearDown() throws Exception {

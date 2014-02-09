@@ -38,7 +38,7 @@ public class HotseatConfigurationActivityUnitTest extends ActivityInstrumentatio
         curInstruments = getInstrumentation();
     }
 
-    public void runTest() throws Exception {
+    public void testActivity() throws Exception {
         assertNotNull("HotseatConfigurationActivity Not Started", curAct);
         twoPlayerConfigTests();
         threePlayerConfigTests();

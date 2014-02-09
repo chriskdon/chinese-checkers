@@ -47,7 +47,7 @@ public class HotseatGameActivityUnitTest extends ActivityInstrumentationTestCase
         curInstruments = getInstrumentation();
     }
 
-    public void runTest() throws Exception {
+    public void testActivity() throws Exception {
 
         TextView hotseatCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.hotseatCurrentPlayerTextView);
         assertNotNull("hotseatCurrentPlayerTextView Not Found", hotseatCurrentPlayerTextView);
