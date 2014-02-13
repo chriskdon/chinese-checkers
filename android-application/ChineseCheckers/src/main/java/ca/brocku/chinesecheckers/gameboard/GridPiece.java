@@ -8,7 +8,7 @@ import ca.brocku.chinesecheckers.gamestate.Player;
 public class GridPiece implements Piece {
     Position position;
     Player player;
-    public GridPiece (GridPosition pos, CcPlayer pl) {
+    public GridPiece (Position pos, Player pl) {
         position = pos;
         player = pl;
     }
