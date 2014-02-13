@@ -3,8 +3,12 @@ package ca.brocku.chinesecheckers.gameboard;
 import ca.brocku.chinesecheckers.gamestate.Player;
 
 /**
- * Created by zz on 2/5/14.
- */
+* The implementation of GameBoard - This board being specifically for chinese checkers.
+        *
+        * Author: Peter Pobojewski
+        * Student #: 4528311
+        * Date: 2/13/2014
+        */
 public class CcGameBoard implements GameBoard{
     /**
      * The number of available positions in each row.
@@ -19,7 +23,11 @@ public class CcGameBoard implements GameBoard{
     public CcGameBoard() {
         board = constructBoard();
     }
-
+    /**
+     * Returns a constructed chinese checks board in the form of a ragged two dimensional Piece array
+     *
+     * @return  A ragged two dimensional Piece array representing a chinese checkers board
+     */
     private Piece[][] constructBoard() {
         Piece[][] board = new Piece[17][];
         for(int i=0; i<board.length;i++) {
@@ -47,7 +55,8 @@ public class CcGameBoard implements GameBoard{
     }
 
     /**
-     * Move a piece from one position to another.
+     * Move a piece from one position to another. Prints a statement if the move is invalid for any
+     * reason.
      *
      * @param piece The piece to move.
      * @param to    The new position of the piece.
@@ -71,7 +80,8 @@ public class CcGameBoard implements GameBoard{
      *
      * @param at    The position the piece is at.
      *
-     * @return      The piece that was at the position specified.
+     * @return      The piece that was at the position specified, returns null if the position is
+     *               empty or out of bounds.
      */
     public Piece getPiece(Position at) {
         int row = at.getRow();
@@ -81,7 +91,14 @@ public class CcGameBoard implements GameBoard{
         }
         else return null;
     }
-
+    /**
+     * Sets a piece at a given position for a given player. This method will mostly be used for
+     * unit testing, and once unit testing is complete, for assistance in setting up the board.
+     *
+     * @param at    The Position that the player wishes to set the piece.
+     * @param pl    The player that has ownership of the Piece.
+     * @return      The piece that was at the position specified.
+     */
     public void setPiece(Position at, Player pl) {
         int row = at.getRow();
         int index = at.getIndex();
@@ -94,11 +111,12 @@ public class CcGameBoard implements GameBoard{
     }
 
     /**
-     * A list of valid positions that the specified piece could move to.
+     * Checks a given piece for any possible openings for that piece to move to. The process is
+     * static and done almost on a case basis.
      *
      * @param forPiece  The piece to check positions for.
      *
-     * @return          The list of positions the piece can move to. Or <code>null</code> if there
+     * @return          The list of positions the piece can move to. Or an empty array if there
      *                  is nowhere to move.
      */
     public Position[] getPossibleMoves(Piece forPiece) {
@@ -150,7 +168,6 @@ public class CcGameBoard implements GameBoard{
                 posindex=posindex+1;
             }
             else { // if y is between 9 and 11 or less than 4
-                //System.out.println("Case3");
                 possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index-1));
                 posindex=posindex+1;
                 possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index));
@@ -345,7 +362,6 @@ public class CcGameBoard implements GameBoard{
                 }
             }
             else { // if row is between 9 and 10 or less than 4
-                //Srowstem.out.println("Case3");
                 if(row==4) {
                     if(isOccupied(new GridPosition(row-1, index-4))) {
                         possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-4));
@@ -385,7 +401,9 @@ public class CcGameBoard implements GameBoard{
     }
 
     /**
-     * Check if a move is valid for a specified piece.
+     * Checks if a move is valid by verifying the possible moves for the given piece and evaluating
+     * the given position against those positions. If the piece is within the possibleMoves array,
+     * the move is valid. Otherwise it is invalid.
      *
      * @param piece The piece making the move.
      * @param to    The position the piece is trying to move to.
@@ -394,15 +412,21 @@ public class CcGameBoard implements GameBoard{
     public boolean isValidMove(Piece piece, Position to) {
         Position[] possibleMoves = getPossibleMoves(piece);
         for(int i=0; i<possibleMoves.length; i++) {
-            if (possibleMoves[i]==null) {
-                continue;
-            }
-            if(possibleMoves[i].getRow() == to.getRow() && possibleMoves[i].getIndex() == to.getIndex()) {
-                return true;
+            if (possibleMoves[i]!=null) {
+                if(possibleMoves[i].getRow() == to.getRow() && possibleMoves[i].getIndex() == to.getIndex()) {
+                    return true;
+                }
             }
         }
         return false;
     }
+    /**
+     * Checks if a position on the game board is occupied or out of bounds.
+     *
+     * @param at    The position to be checked
+     * @return      True if the position is out of bounds or occupied by another piece, false
+     * otherwise
+     */
     private boolean isOccupied (Position at) {
         int row = at.getRow();
         int index = at.getIndex();
@@ -415,6 +439,13 @@ public class CcGameBoard implements GameBoard{
             return true;
         }
     }
+    /**
+     * Assistant method for getPossibleMoves(), implements an easier way of checking if a position
+     * is valid and simply returning the position if it is.
+     *
+     * @param at    The position to be checked
+     * @return      Returns null if the position is occupied, returns "at" if the position is open
+     */
     private Position checkPosition (Position at) {
         if(isOccupied(at)) {
             return null;
