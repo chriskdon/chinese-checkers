@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import ca.brocku.chinesecheckers.gamestate.Player;
+
 /**
  * Created by zz on 2/5/14.
  */
@@ -19,7 +21,7 @@ public class CcGameBoard implements GameBoard{
     }
 
     private Piece[][] constructBoard() {
-        Piece[][] board = new GridPiece[17][];
+        Piece[][] board = new Piece[17][];
         for(int i=0; i<board.length;i++) {
             board[i] = new Piece[ROW_POSITION_COUNT[i]];
         }
@@ -78,6 +80,17 @@ public class CcGameBoard implements GameBoard{
             return board[row][index];
         }
         else return null;
+    }
+
+    public void setPiece(Position at, Player pl) {
+        int row = at.getRow();
+        int index = at.getIndex();
+        if(!isOccupied(at)) {
+            board[row][index] = new GridPiece(at, pl);
+        }
+        else {
+            System.out.println("Invalid location for placement");
+        }
     }
 
     /**
@@ -166,208 +179,208 @@ public class CcGameBoard implements GameBoard{
                 }
             }
         }
-            {
-                if (row>10 || (row>3 && row<8)) { // if y is between 4 and 8 and greater than 10
-                    if(row==11) {
-                        if(isOccupied(new GridPosition(row+1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-5));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==12) {
-                        if(isOccupied(new GridPosition(row+1, index-4))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-6));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==7) {
-                        if(isOccupied(new GridPosition(row+1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-1));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else {
-                        if(isOccupied(new GridPosition(row+1, index-1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-2));
-                            posindex=posindex+1;
-                        }
+        {
+            if (row>10 || (row>3 && row<8)) { // if y is between 4 and 8 and greater than 10
+                if(row==11) {
+                    if(isOccupied(new GridPosition(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-5));
+                        posindex=posindex+1;
                     }
                 }
-                else { // if y is between 9 and 10 or less than 4
-                    if(row==3) {
-                        if(isOccupied(new GridPosition(row+1, index+4))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+3));
-                            posindex=posindex+1;
-                        }
+                else if(row==12) {
+                    if(isOccupied(new GridPosition(row+1, index-4))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-6));
+                        posindex=posindex+1;
                     }
-                    else if(row==2) {
-                        if(isOccupied(new GridPosition(row+1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+4));
-                            posindex=posindex+1;
-                        }
+                }
+                else if(row==7) {
+                    if(isOccupied(new GridPosition(row+1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-1));
+                        posindex=posindex+1;
                     }
-                    else {
-                        if(isOccupied(new GridPosition(row+1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index));
-                            posindex=posindex+1;
-                        }
+                }
+                else {
+                    if(isOccupied(new GridPosition(row+1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-2));
+                        posindex=posindex+1;
                     }
                 }
             }
-            { // down right
-                if (row>10 || (row>3 && row<8)) { // if row is between 4 and 8 and greater than 10
-                    if(row==11) {
-                        if(isOccupied(new GridPosition(row+1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-3));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==12) {
-                        if(isOccupied(new GridPosition(row+1, index-4))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-4));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==7) {
-                        if(isOccupied(new GridPosition(row+1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+1));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else {
-                        if(isOccupied(new GridPosition(row+1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index));
-                            posindex=posindex+1;
-                        }
+            else { // if y is between 9 and 10 or less than 4
+                if(row==3) {
+                    if(isOccupied(new GridPosition(row+1, index+4))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+3));
+                        posindex=posindex+1;
                     }
                 }
-                else { // if row is between 9 and 10 or less than 4
-                    if(row==2) {
-                        if(isOccupied(new GridPosition(row+1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+6));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==3) {
-                        if(isOccupied(new GridPosition(row+1, index+5))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+5));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else {
-                        if(isOccupied(new GridPosition(row+1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+2));
-                            posindex=posindex+1;
-                        }
+                else if(row==2) {
+                    if(isOccupied(new GridPosition(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+4));
+                        posindex=posindex+1;
                     }
                 }
-            } // end downRight
-            { // upperLeft
-                if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
-                    if(row==14) {
-                        if(isOccupied(new GridPosition(row-1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+4));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==13) {
-                        if(isOccupied(new GridPosition(row-1, index+4))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+3));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else {
-                        if(isOccupied(new GridPosition(row-1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index));
-                            posindex=posindex+1;
-                        }
+                else {
+                    if(isOccupied(new GridPosition(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index));
+                        posindex=posindex+1;
                     }
                 }
-                else { // if row is between 9 and 10 or less than 4
-                    if(row==4) {
-                        if(isOccupied(new GridPosition(row-1, index-5))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-6));
-                            posindex=posindex+1;
-                        }
-                    }
-                    if(row==9) {
-                        if(isOccupied(new GridPosition(row-1, index-1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-1));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==5) {
-                        if(isOccupied(new GridPosition(row-1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-5));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else {
-                        if(isOccupied(new GridPosition(row-1, index-1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-2));
-                            posindex=posindex+1;
-                        }
+            }
+        }
+        { // down right
+            if (row>10 || (row>3 && row<8)) { // if row is between 4 and 8 and greater than 10
+                if(row==11) {
+                    if(isOccupied(new GridPosition(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-3));
+                        posindex=posindex+1;
                     }
                 }
-            } // end upperLeft
-            { // upperRight
-                if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
-                    if(row==14) {
-                        if(isOccupied(new GridPosition(row-1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+6));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==13) {
-                        if(isOccupied(new GridPosition(row-1, index+5))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+5));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else {
-                        if(isOccupied(new GridPosition(row-1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+2));
-                            posindex=posindex+1;
-                        }
+                else if(row==12) {
+                    if(isOccupied(new GridPosition(row+1, index-4))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-4));
+                        posindex=posindex+1;
                     }
                 }
-                else { // if row is between 9 and 10 or less than 4
-                    //Srowstem.out.println("Case3");
-                    if(row==4) {
-                        if(isOccupied(new GridPosition(row-1, index-4))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-4));
-                            posindex=posindex+1;
-                        }
-                    }
-                    if(row==9) {
-                        if(isOccupied(new GridPosition(row-1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+1));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else if(row==5) {
-                        if(isOccupied(new GridPosition(row-1, index+1))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-3));
-                            posindex=posindex+1;
-                        }
-                    }
-                    else {
-                        if(isOccupied(new GridPosition(row-1, index))) {
-                            possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index));
-                            posindex=posindex+1;
-                        }
+                else if(row==7) {
+                    if(isOccupied(new GridPosition(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+1));
+                        posindex=posindex+1;
                     }
                 }
-            } // end upperRight
-            { // leftAndRight
-                if(isOccupied(new GridPosition(row, index-1))) {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row, index-2));
-                    posindex=posindex+1;
+                else {
+                    if(isOccupied(new GridPosition(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index));
+                        posindex=posindex+1;
+                    }
                 }
-                if(isOccupied(new GridPosition(row, index+1))) {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row, index+1));
+            }
+            else { // if row is between 9 and 10 or less than 4
+                if(row==2) {
+                    if(isOccupied(new GridPosition(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+6));
+                        posindex=posindex+1;
+                    }
                 }
-            } // end leftAndRight
+                else if(row==3) {
+                    if(isOccupied(new GridPosition(row+1, index+5))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+5));
+                        posindex=posindex+1;
+                    }
+                }
+                else {
+                    if(isOccupied(new GridPosition(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+2));
+                        posindex=posindex+1;
+                    }
+                }
+            }
+        } // end downRight
+        { // upperLeft
+            if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
+                if(row==14) {
+                    if(isOccupied(new GridPosition(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+4));
+                        posindex=posindex+1;
+                    }
+                }
+                else if(row==13) {
+                    if(isOccupied(new GridPosition(row-1, index+4))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+3));
+                        posindex=posindex+1;
+                    }
+                }
+                else {
+                    if(isOccupied(new GridPosition(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index));
+                        posindex=posindex+1;
+                    }
+                }
+            }
+            else { // if row is between 9 and 10 or less than 4
+                if(row==4) {
+                    if(isOccupied(new GridPosition(row-1, index-5))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-6));
+                        posindex=posindex+1;
+                    }
+                }
+                if(row==9) {
+                    if(isOccupied(new GridPosition(row-1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-1));
+                        posindex=posindex+1;
+                    }
+                }
+                else if(row==5) {
+                    if(isOccupied(new GridPosition(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-5));
+                        posindex=posindex+1;
+                    }
+                }
+                else {
+                    if(isOccupied(new GridPosition(row-1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-2));
+                        posindex=posindex+1;
+                    }
+                }
+            }
+        } // end upperLeft
+        { // upperRight
+            if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
+                if(row==14) {
+                    if(isOccupied(new GridPosition(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+6));
+                        posindex=posindex+1;
+                    }
+                }
+                else if(row==13) {
+                    if(isOccupied(new GridPosition(row-1, index+5))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+5));
+                        posindex=posindex+1;
+                    }
+                }
+                else {
+                    if(isOccupied(new GridPosition(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+2));
+                        posindex=posindex+1;
+                    }
+                }
+            }
+            else { // if row is between 9 and 10 or less than 4
+                //Srowstem.out.println("Case3");
+                if(row==4) {
+                    if(isOccupied(new GridPosition(row-1, index-4))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-4));
+                        posindex=posindex+1;
+                    }
+                }
+                if(row==9) {
+                    if(isOccupied(new GridPosition(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+1));
+                        posindex=posindex+1;
+                    }
+                }
+                else if(row==5) {
+                    if(isOccupied(new GridPosition(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-3));
+                        posindex=posindex+1;
+                    }
+                }
+                else {
+                    if(isOccupied(new GridPosition(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index));
+                        posindex=posindex+1;
+                    }
+                }
+            }
+        } // end upperRight
+        { // leftAndRight
+            if(isOccupied(new GridPosition(row, index-1))) {
+                possibleMoves[posindex] = checkPosition(new GridPosition(row, index-2));
+                posindex=posindex+1;
+            }
+            if(isOccupied(new GridPosition(row, index+1))) {
+                possibleMoves[posindex] = checkPosition(new GridPosition(row, index+2));
+            }
+        } // end leftAndRight
         return possibleMoves;
     }
 
@@ -399,7 +412,7 @@ public class CcGameBoard implements GameBoard{
 
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return false;
+            return true;
         }
     }
     private Position checkPosition (Position at) {
@@ -409,3 +422,4 @@ public class CcGameBoard implements GameBoard{
         return at;
     }
 }
+

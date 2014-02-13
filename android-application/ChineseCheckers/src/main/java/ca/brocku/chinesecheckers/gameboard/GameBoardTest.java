@@ -7,21 +7,29 @@ import ca.brocku.chinesecheckers.gamestate.CcPlayer;
  */
 public class GameBoardTest {
     public GameBoardTest() {
-        CcGameBoard board = new CcGameBoard();
+        CcGameBoard bo = new CcGameBoard();
         CcPlayer p1 = new CcPlayer("Peter");
-        GridPosition test = new GridPosition(5,6);
-        GridPosition[] testr = board.getPossibleMoves(new GridPiece(test, p1));
-        printArray(testr);
+        bo.setPiece(new GridPosition(9,1), p1);
+        bo.setPiece(new GridPosition(8,0), p1);
+        bo.setPiece(new GridPosition(10,0), p1);
+        bo.setPiece(new GridPosition(10,1), p1);
+        bo.setPiece(new GridPosition(3,0), p1);
+        Position testCenter = new GridPosition(9,0); // the position to be tested
+        Position validMove = new GridPosition(3,2); // a position to be tested for a valid move
+        Piece centerPiece = new GridPiece(testCenter, p1); // position to be tested converted into a Piece
+        Position[] possibleMoves = bo.getPossibleMoves(centerPiece); // possible moves generated
+        printArray(possibleMoves); // output possible moves
+        System.out.println(bo.isValidMove(centerPiece, validMove)); // check if move is valid
     }
-    public void printArray (GridPosition[] thing) {
+    public void printArray (Position[] thing) {
         System.out.println("Possible Moves:");
         for(int i=0; i<thing.length; i++) {
-            if (thing[i]==null) {
-                continue;
+            if (thing[i]!=null) {
+                System.out.println(thing[i].getRow()+ ", " + thing[i].getIndex());
             }
-            System.out.println(thing[i].getRow()+ ", " + thing[i].getIndex());
         }
     }
+
     public static void main(String[] args) {
         new GameBoardTest();
     }
