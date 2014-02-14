@@ -54,7 +54,8 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
                 // TODO: Clean up
                 PiecePositionSystem piecePositionSystem = new PiecePositionSystem(canvas);
-                GameBoardVisual emptyBoard = new GameBoardVisual(getContext(), piecePositionSystem);
+                GameBoardVisual emptyBoard = new GameBoardVisual(getContext(),
+                        piecePositionSystem, canvas.getWidth(), canvas.getHeight());
 
                 compositor.pushVisual(emptyBoard);
                 drawPlayer(piecePositionSystem);
@@ -183,7 +184,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
     // TODO: Utility function for display testing --> REMOVE
     private PieceVisual drawPiece(PiecePositionSystem pos, final int row, final int index, int color) {
-        return new PieceVisual(pos, new Position() {
+        Position p = new Position() {
             @Override
             public int getRow() {
                 return row;
@@ -193,7 +194,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
             public int getIndex() {
                 return index;
             }
-        }, color);
+        };
+
+        return new PieceVisual(pos.get(p), color);
     }
 
     /**

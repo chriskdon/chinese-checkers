@@ -19,6 +19,7 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
     private Activity curAct;
     private Instrumentation curInstruments;
     private Instrumentation.ActivityMonitor monitor;
+
     public HomeAndSeatTest() {
         super(MainActivity.class);
     }
@@ -26,35 +27,24 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
     protected void setUp() throws Exception {
         super.setUp();
         setActivityInitialTouchMode(false);
-        curAct = (MainActivity)getActivity();
+        curAct = getActivity();
         curInstruments = getInstrumentation();
     }
 
-    public void testPreConditions() {
-        assertNotNull("MainActivity Not Started", curAct);
-//        new MainActivityUnitTest();
-    }
-
-    public void testButton() {
+    public void testActivity() throws Exception {
+        //new MainActivityUnitTest(curAct,curInstruments).runTest();
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
-        monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(),null,false);
-        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click",hotseatConfigurationActivityButton.isClickable());
+        monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(), null, false);
         TouchUtils.clickView(this, hotseatConfigurationActivityButton);
-        tTransitionToConfigAct();
-//        curAct.runOnUiThread(
-//                new Runnable() {
-//                    public void run() {
-//                        assertNotNull("hotseatConfigurationActivityButton Not Available", hotseatConfigurationActivityButton);
-//                        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click ",hotseatConfigurationActivityButton.performClick());
-//                    }
-//                }
-//        );
+        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
+        assertNotNull("Transition to HotseatConfigurationActivity Failed", curAct);
+        curInstruments = getInstrumentation();
+        //new HotseatConfigurationActivityUnitTest(curAct,curInstruments).runTest();
     }
 
-    public void tTransitionToConfigAct(){
-        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor,1);
-        assertNotNull("Transition to HotseatConfigurationActivity Failed",curAct);
-//        new HotseatConfigurationActivityUnitTest();
+    public void tearDown() throws Exception {
+        curAct.finish();
+        super.tearDown();
     }
 
 }

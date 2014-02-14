@@ -3,9 +3,8 @@ package ca.brocku.chinesecheckers.uiengine.visuals;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.uiengine.Dimensions;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
-import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
 
 /**
  * Author: Chris Kellendonk
@@ -13,16 +12,21 @@ import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
  * Date: 2/3/2014
  */
 public class PieceVisual extends Visual {
-    private PieceDrawingDetails position;
+    private PieceDrawingDetails pieceDrawingDetails;
     private int color;
 
-    public PieceVisual(PieceDrawingDetails position, int color) {
-        this.position = position;
-        this.color = color;
-    }
+    /**
+     * Create a new piece.
+     * @param pieceDrawingDetails   Details for drawing the piece.
+     * @param color                 The color of the piece.
+     */
+    public PieceVisual(PieceDrawingDetails pieceDrawingDetails, int color) {
+        super(pieceDrawingDetails,
+                new Dimensions(pieceDrawingDetails.getRadius()*2,
+                        pieceDrawingDetails.getRadius()*2));
 
-    public PieceVisual(PiecePositionSystem positionSystem, Position pos, int color) {
-        this(positionSystem.get(pos), color);
+        this.pieceDrawingDetails = pieceDrawingDetails;
+        this.color = color;
     }
 
     /**
@@ -31,11 +35,11 @@ public class PieceVisual extends Visual {
      * @param canvas The canvas to draw to.
      */
     @Override
-    public void draw(Canvas canvas) {
+    public void onDraw(Canvas canvas) {
         Paint p = new Paint();
         p.setFlags(Paint.ANTI_ALIAS_FLAG);
         p.setColor(color);
 
-        canvas.drawCircle(position.x, position.y, position.getRadius(), p);
+        canvas.drawCircle(position.getX(), position.getY(), pieceDrawingDetails.getRadius(), p);
     }
 }
