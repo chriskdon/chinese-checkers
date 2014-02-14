@@ -134,7 +134,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="36dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -156,7 +156,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="left"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:hint="Player 1"
             android:layout_marginRight="40dp"
             android:singleLine="true"
@@ -167,8 +167,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -192,7 +192,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
             android:singleLine="true"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:background="@drawable/chch_edittext_orange"
             android:textColor="@color/app_background"
             android:id="@+id/hotseatOrangePlayerNameEditText"/>
@@ -200,8 +200,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -225,7 +225,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
             android:singleLine="true"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:background="@drawable/chch_edittext_yellow"
             android:textColor="@color/app_background"
             android:id="@+id/hotseatYellowPlayerNameEditText"/>
@@ -233,8 +233,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -256,7 +256,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:hint="Player 2"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_green"
@@ -266,8 +266,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -290,7 +290,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_blue"
             android:textColor="@color/app_background"
@@ -299,8 +299,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -323,7 +323,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="40dp"
-            android:inputType="text"
+            android:inputType="text|textNoSuggestions"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_purple"
             android:textColor="@color/app_background"
