@@ -68,6 +68,7 @@ public class CcGameBoard implements GameBoard{
             int oldIndex = piece.getPosition().getIndex();
             board[oldRow][oldIndex] = null;
         }
+    }
     /**
      * Get the piece that is at a position on the board.
      *
