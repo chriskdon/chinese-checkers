@@ -42,4 +42,9 @@ public class PixelPosition {
         this.x += position.x;
         this.y += position.y;
     }
+
+    @Override
+    public String toString() {
+        return "(" + getX() + ", " + getY() + ")";
+    }
 }

@@ -14,12 +14,12 @@ import ca.brocku.chinesecheckers.uiengine.PixelPosition;
  * Student #: 4810800
  * Date: 2/2/2014
  */
-public abstract class Visual {
+public class Visual {
     protected Visual parent;
     private ArrayList<Visual> visuals = new ArrayList<Visual>(); 		// Order matters
     protected TouchEventHandler handler = null;
-    protected Dimensions dimensions;
-    protected PixelPosition position;
+    public Dimensions dimensions;   // TODO: Make private
+    public PixelPosition position; // TODO: make private
 
     public Visual(float x, float y, float w, float h) {
         this(new PixelPosition(x, y), new Dimensions(w, h));
@@ -64,8 +64,10 @@ public abstract class Visual {
      * @return  True if it intersects, False otherwise.
      */
     protected boolean didIntersect(float x, float y) {
-        return !(x < this.position.getX() || x > this.dimensions.getWidth() ||
-                 y < this.position.getY() || y > this.dimensions.getWidth());
+        return ( x >= this.position.getX() &&
+                 x <= this.position.getX() + this.dimensions.getWidth() &&
+                 y >= this.position.getY() &&
+                 y <= this.position.getY() + this.dimensions.getHeight());
     }
 
     /**
@@ -90,7 +92,7 @@ public abstract class Visual {
      * Set the touch event handler for this visual element.
      * @param handler   The handler to fire.
      */
-    public void setTouchEventHandler(TouchEventHandler handler) {
+    public final void setTouchEventHandler(TouchEventHandler handler) {
         this.handler = handler;
     }
 
@@ -102,7 +104,7 @@ public abstract class Visual {
      *                         	It won't stop bubbling when it reaches itself again.
      */
     public void sendTouchEvent(MotionEvent e, boolean sendToAncestors) {
-        if(didIntersect(e.getRawX(), e.getRawY())) {
+        if(didIntersect(e.getX(), e.getY())) {
             pushEventDown((sendToAncestors ? null : this), e);
         }
     }
@@ -156,7 +158,7 @@ public abstract class Visual {
         while(li.hasPrevious()) {
             v = li.previous();
 
-            if(v.didIntersect(e.getRawX(), e.getRawY())) {
+            if(v.didIntersect(e.getX(), e.getY())) {
                 break;
             } else {
                 v = null;

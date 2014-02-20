@@ -28,4 +28,9 @@ public class Dimensions {
     public void setHeight(float height) {
         this.height = height;
     }
+
+    @Override
+    public String toString() {
+        return "Width: " + getWidth() + " Height: " + getHeight();
+    }
 }
