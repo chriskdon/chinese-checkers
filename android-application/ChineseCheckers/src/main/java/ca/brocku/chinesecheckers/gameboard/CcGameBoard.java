@@ -63,18 +63,11 @@ public class CcGameBoard implements GameBoard{
      */
     public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
+            setPiece(to, piece.getPlayer());
             int oldRow = piece.getPosition().getRow();
             int oldIndex = piece.getPosition().getIndex();
-            int newRow = to.getRow();
-            int newIndex = to.getIndex();
-            board[newRow][newIndex] = piece;
             board[oldRow][oldIndex] = null;
         }
-        else {
-            System.out.println("invalid move command");
-        }
-    }
-
     /**
      * Get the piece that is at a position on the board.
      *
@@ -104,9 +97,6 @@ public class CcGameBoard implements GameBoard{
         int index = at.getIndex();
         if(!isOccupied(at)) {
             board[row][index] = new GridPiece(at, pl);
-        }
-        else {
-            System.out.println("Invalid location for placement");
         }
     }
 
