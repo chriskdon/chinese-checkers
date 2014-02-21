@@ -3,12 +3,15 @@ package ca.brocku.chinesecheckers;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
+
+import static android.view.View.OnFocusChangeListener;
 
 /** This is the Activity associated with the offline configuration screen.
  *
@@ -68,6 +71,14 @@ public class OfflineConfigurationActivity extends Activity {
         fourPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         sixPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         startOfflineGameButton.setOnClickListener(new StartGameHandler());
+
+        redPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        orangePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        yellowPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        greenPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        bluePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        purplePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+
 
         currentSelection = twoPlayerButton;
     }
@@ -166,25 +177,25 @@ public class OfflineConfigurationActivity extends Activity {
             hideWarnings();
 
             //if any of the visible input fields are empty, don't submit
-            if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().equals("") ||
-                    orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().equals("") ||
-                    yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().equals("") ||
-                    greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().equals("") ||
-                    bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().equals("") ||
-                    purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().equals("")) {
+            if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().trim().equals("") ||
+                    orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().trim().equals("") ||
+                    yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().trim().equals("") ||
+                    greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().trim().equals("") ||
+                    bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().trim().equals("") ||
+                    purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().trim().equals("")) {
 
                 //for each visible input field which is empty, display its warning symbol
-                if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().equals(""))
+                if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().trim().equals(""))
                     redPlayerError.setVisibility(View.VISIBLE);
-                if(orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().equals(""))
+                if(orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().trim().equals(""))
                     orangePlayerError.setVisibility(View.VISIBLE);
-                if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().equals(""))
+                if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().trim().equals(""))
                     yellowPlayerError.setVisibility(View.VISIBLE);
-                if(greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().equals(""))
+                if(greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().trim().equals(""))
                     greenPlayerError.setVisibility(View.VISIBLE);
-                if(bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().equals(""))
+                if(bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().trim().equals(""))
                     bluePlayerError.setVisibility(View.VISIBLE);
-                if(purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().equals(""))
+                if(purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().trim().equals(""))
                     purplePlayerError.setVisibility(View.VISIBLE);
 
             } else {
@@ -224,6 +235,26 @@ public class OfflineConfigurationActivity extends Activity {
                 startActivity(intent);
             }
 
+        }
+    }
+
+    /** Trims whitespace from the name input field as focus is lost to ensure a name with spaces is
+     * not accepted.
+     *
+     */
+    private class PlayerNameHandler implements OnFocusChangeListener {
+        @Override
+        public void onFocusChange(View view, boolean b) {
+
+            if(!b) { //If focus was lost
+
+                //Trim whitespace from player's name input field
+                EditText nameInput = (EditText)view;
+                Editable inputText = nameInput.getText();
+                if(inputText != null) {
+                    nameInput.setText(inputText.toString().trim());
+                }
+            }
         }
     }
 }
