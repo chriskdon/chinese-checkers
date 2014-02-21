@@ -74,7 +74,7 @@ public class Visual {
      * Executed when drawing the onto the canvas.
      * @param c The canvas to draw to.
      */
-    public void onDraw(Canvas c) {}
+    protected void onDraw(Canvas c) {}
 
     /**
      * Call when you want to draw to the canvas.

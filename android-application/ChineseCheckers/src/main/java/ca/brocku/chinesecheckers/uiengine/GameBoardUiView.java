@@ -31,8 +31,8 @@ import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
  * Date: 2/1/2014
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
-    private Visual compositor;
-    private SurfaceHolder holder;
+    private Visual gameBoard;
+    private SurfaceHolder surfaceolder;
     private  PiecePositionSystem piecePositionSystem;
 
     private int playerCount;
@@ -56,22 +56,24 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
         getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(final SurfaceHolder holder) {
-                GameBoardUiView.this.holder = holder;
+                GameBoardUiView.this.surfaceolder = holder;
 
-                Canvas canvas = holder.lockCanvas();
+                // Get the width and height of the canvas
+                int width, height; {
+                    Canvas canvas = holder.lockCanvas();
+                    width = canvas.getWidth();
+                    height = canvas.getHeight();
+                    holder.unlockCanvasAndPost(canvas);
+                }
 
-                // TODO: Clean up
-                piecePositionSystem = new PiecePositionSystem(canvas);
-                GameBoardVisual emptyBoard = new GameBoardVisual(getContext(),
-                        piecePositionSystem, canvas.getWidth(), canvas.getHeight());
-
-                compositor = emptyBoard;
+                piecePositionSystem = new PiecePositionSystem(width, height);
+                gameBoard = new GameBoardVisual(getContext(),
+                                                piecePositionSystem,
+                                                width, height);
 
                 drawPlayer(piecePositionSystem);
 
-                compositor.draw(canvas);
-
-                holder.unlockCanvasAndPost(canvas);
+                redraw();
             }
 
             @Override
@@ -90,8 +92,8 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            if(compositor != null) {
-                compositor.sendTouchEvent(event);
+            if(gameBoard != null) {
+                gameBoard.sendTouchEvent(event);
             }
         }
 
@@ -115,91 +117,91 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
         if(playerCount == 2 || playerCount == 3 || playerCount == 4 || playerCount == 6) {
             // Draw Red Pieces
             int color = getResources().getColor(R.color.red);
-            compositor.addChild(drawPiece(pos, 0, 0, color));
-            compositor.addChild(drawPiece(pos, 1, 0, color));
-            compositor.addChild(drawPiece(pos, 1, 1, color));
-            compositor.addChild(drawPiece(pos, 2, 0, color));
-            compositor.addChild(drawPiece(pos, 2, 1, color));
-            compositor.addChild(drawPiece(pos, 2, 2, color));
-            compositor.addChild(drawPiece(pos, 3, 0, color));
-            compositor.addChild(drawPiece(pos, 3, 1, color));
-            compositor.addChild(drawPiece(pos, 3, 2, color));
-            compositor.addChild(drawPiece(pos, 3, 3, color));
+            gameBoard.addChild(drawPiece(pos, 0, 0, color));
+            gameBoard.addChild(drawPiece(pos, 1, 0, color));
+            gameBoard.addChild(drawPiece(pos, 1, 1, color));
+            gameBoard.addChild(drawPiece(pos, 2, 0, color));
+            gameBoard.addChild(drawPiece(pos, 2, 1, color));
+            gameBoard.addChild(drawPiece(pos, 2, 2, color));
+            gameBoard.addChild(drawPiece(pos, 3, 0, color));
+            gameBoard.addChild(drawPiece(pos, 3, 1, color));
+            gameBoard.addChild(drawPiece(pos, 3, 2, color));
+            gameBoard.addChild(drawPiece(pos, 3, 3, color));
         }
 
         if(playerCount == 2 || playerCount == 4 || playerCount == 6) {
             // Draw Green Pieces
             int color = getResources().getColor(R.color.green);
-            compositor.addChild(drawPiece(pos, 13, 3, color));
-            compositor.addChild(drawPiece(pos, 13, 2, color));
-            compositor.addChild(drawPiece(pos, 13, 1, color));
-            compositor.addChild(drawPiece(pos, 13, 0, color));
-            compositor.addChild(drawPiece(pos, 14, 2, color));
-            compositor.addChild(drawPiece(pos, 14, 1, color));
-            compositor.addChild(drawPiece(pos, 14, 0, color));
-            compositor.addChild(drawPiece(pos, 15, 1, color));
-            compositor.addChild(drawPiece(pos, 15, 0, color));
-            compositor.addChild(drawPiece(pos, 16, 0, color));
+            gameBoard.addChild(drawPiece(pos, 13, 3, color));
+            gameBoard.addChild(drawPiece(pos, 13, 2, color));
+            gameBoard.addChild(drawPiece(pos, 13, 1, color));
+            gameBoard.addChild(drawPiece(pos, 13, 0, color));
+            gameBoard.addChild(drawPiece(pos, 14, 2, color));
+            gameBoard.addChild(drawPiece(pos, 14, 1, color));
+            gameBoard.addChild(drawPiece(pos, 14, 0, color));
+            gameBoard.addChild(drawPiece(pos, 15, 1, color));
+            gameBoard.addChild(drawPiece(pos, 15, 0, color));
+            gameBoard.addChild(drawPiece(pos, 16, 0, color));
         }
 
         if(playerCount == 3 || playerCount == 6) {
             // Draw Yellow Pieces
             int color = getResources().getColor(R.color.yellow);
-            compositor.addChild(drawPiece(pos, 12, 12, color));
-            compositor.addChild(drawPiece(pos, 12, 11, color));
-            compositor.addChild(drawPiece(pos, 12, 10, color));
-            compositor.addChild(drawPiece(pos, 12, 9, color));
-            compositor.addChild(drawPiece(pos, 11, 11, color));
-            compositor.addChild(drawPiece(pos, 11, 10, color));
-            compositor.addChild(drawPiece(pos, 11, 9, color));
-            compositor.addChild(drawPiece(pos, 10, 10, color));
-            compositor.addChild(drawPiece(pos, 10, 9, color));
-            compositor.addChild(drawPiece(pos, 9, 9, color));
+            gameBoard.addChild(drawPiece(pos, 12, 12, color));
+            gameBoard.addChild(drawPiece(pos, 12, 11, color));
+            gameBoard.addChild(drawPiece(pos, 12, 10, color));
+            gameBoard.addChild(drawPiece(pos, 12, 9, color));
+            gameBoard.addChild(drawPiece(pos, 11, 11, color));
+            gameBoard.addChild(drawPiece(pos, 11, 10, color));
+            gameBoard.addChild(drawPiece(pos, 11, 9, color));
+            gameBoard.addChild(drawPiece(pos, 10, 10, color));
+            gameBoard.addChild(drawPiece(pos, 10, 9, color));
+            gameBoard.addChild(drawPiece(pos, 9, 9, color));
         }
 
         if(playerCount == 3 || playerCount == 4 || playerCount == 6) {
             // Draw Blue Pieces
             int color = getResources().getColor(R.color.blue);
-            compositor.addChild(drawPiece(pos, 12, 3, color));
-            compositor.addChild(drawPiece(pos, 12, 2, color));
-            compositor.addChild(drawPiece(pos, 12, 1, color));
-            compositor.addChild(drawPiece(pos, 12, 0, color));
-            compositor.addChild(drawPiece(pos, 11, 2, color));
-            compositor.addChild(drawPiece(pos, 11, 1, color));
-            compositor.addChild(drawPiece(pos, 11, 0, color));
-            compositor.addChild(drawPiece(pos, 10, 1, color));
-            compositor.addChild(drawPiece(pos, 10, 0, color));
-            compositor.addChild(drawPiece(pos, 9, 0, color));
+            gameBoard.addChild(drawPiece(pos, 12, 3, color));
+            gameBoard.addChild(drawPiece(pos, 12, 2, color));
+            gameBoard.addChild(drawPiece(pos, 12, 1, color));
+            gameBoard.addChild(drawPiece(pos, 12, 0, color));
+            gameBoard.addChild(drawPiece(pos, 11, 2, color));
+            gameBoard.addChild(drawPiece(pos, 11, 1, color));
+            gameBoard.addChild(drawPiece(pos, 11, 0, color));
+            gameBoard.addChild(drawPiece(pos, 10, 1, color));
+            gameBoard.addChild(drawPiece(pos, 10, 0, color));
+            gameBoard.addChild(drawPiece(pos, 9, 0, color));
         }
 
         if(playerCount == 6) {
             // Draw Purple Pieces
             int color = getResources().getColor(R.color.purple);
-            compositor.addChild(drawPiece(pos, 4, 0, color));
-            compositor.addChild(drawPiece(pos, 4, 1, color));
-            compositor.addChild(drawPiece(pos, 4, 2, color));
-            compositor.addChild(drawPiece(pos, 4, 3, color));
-            compositor.addChild(drawPiece(pos, 5, 0, color));
-            compositor.addChild(drawPiece(pos, 5, 1, color));
-            compositor.addChild(drawPiece(pos, 5, 2, color));
-            compositor.addChild(drawPiece(pos, 6, 0, color));
-            compositor.addChild(drawPiece(pos, 6, 1, color));
-            compositor.addChild(drawPiece(pos, 7, 0, color));
+            gameBoard.addChild(drawPiece(pos, 4, 0, color));
+            gameBoard.addChild(drawPiece(pos, 4, 1, color));
+            gameBoard.addChild(drawPiece(pos, 4, 2, color));
+            gameBoard.addChild(drawPiece(pos, 4, 3, color));
+            gameBoard.addChild(drawPiece(pos, 5, 0, color));
+            gameBoard.addChild(drawPiece(pos, 5, 1, color));
+            gameBoard.addChild(drawPiece(pos, 5, 2, color));
+            gameBoard.addChild(drawPiece(pos, 6, 0, color));
+            gameBoard.addChild(drawPiece(pos, 6, 1, color));
+            gameBoard.addChild(drawPiece(pos, 7, 0, color));
         }
 
         if(playerCount == 6 || playerCount == 4) {
             // Draw Orange Pieces
             int color = getResources().getColor(R.color.orange);
-            compositor.addChild(drawPiece(pos, 4, 9, color));
-            compositor.addChild(drawPiece(pos, 4, 10, color));
-            compositor.addChild(drawPiece(pos, 4, 11, color));
-            compositor.addChild(drawPiece(pos, 4, 12, color));
-            compositor.addChild(drawPiece(pos, 5, 9, color));
-            compositor.addChild(drawPiece(pos, 5, 10, color));
-            compositor.addChild(drawPiece(pos, 5, 11, color));
-            compositor.addChild(drawPiece(pos, 6, 9, color));
-            compositor.addChild(drawPiece(pos, 6, 10, color));
-            compositor.addChild(drawPiece(pos, 7, 9, color));
+            gameBoard.addChild(drawPiece(pos, 4, 9, color));
+            gameBoard.addChild(drawPiece(pos, 4, 10, color));
+            gameBoard.addChild(drawPiece(pos, 4, 11, color));
+            gameBoard.addChild(drawPiece(pos, 4, 12, color));
+            gameBoard.addChild(drawPiece(pos, 5, 9, color));
+            gameBoard.addChild(drawPiece(pos, 5, 10, color));
+            gameBoard.addChild(drawPiece(pos, 5, 11, color));
+            gameBoard.addChild(drawPiece(pos, 6, 9, color));
+            gameBoard.addChild(drawPiece(pos, 6, 10, color));
+            gameBoard.addChild(drawPiece(pos, 7, 9, color));
         }
     }
 
@@ -218,23 +220,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
         };
 
         PieceVisual pv = new PieceVisual(pos.get(p), color);
-
-        pv.setTouchEventHandler(new Visual.TouchEventHandler() {
-            @Override
-            public boolean onTouch(Visual v, MotionEvent e) {
-                PieceVisual vp = (PieceVisual)v;
-
-                vp.setColor(Color.YELLOW);
-
-                Canvas c = GameBoardUiView.this.holder.lockCanvas();
-
-                GameBoardUiView.this.compositor.draw(c);
-
-                GameBoardUiView.this.holder.unlockCanvasAndPost(c);
-
-                return true;
-            }
-        });
 
         return pv;
     }
@@ -338,5 +323,19 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
         return (this.getWidth() < this.getHeight() ? this.getWidth() : this.getHeight());
     }
 
+    /**
+     * Redraw the game board.
+     */
+    private void redraw() {
+        if(this.surfaceolder == null) {
+            throw new IllegalStateException("The surface is not ready.");
+        }
+
+        Canvas c = this.surfaceolder.lockCanvas();
+
+        gameBoard.draw(c);
+
+        this.surfaceolder.unlockCanvasAndPost(c);
+    }
 
 }
