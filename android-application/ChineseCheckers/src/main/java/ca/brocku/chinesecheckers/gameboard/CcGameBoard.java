@@ -3,12 +3,12 @@ package ca.brocku.chinesecheckers.gameboard;
 import ca.brocku.chinesecheckers.gamestate.Player;
 
 /**
-* The implementation of GameBoard - This board being specifically for chinese checkers.
-        *
-        * Author: Peter Pobojewski
-        * Student #: 4528311
-        * Date: 2/13/2014
-        */
+ * The implementation of GameBoard - This board being specifically for chinese checkers.
+ *
+ * Author: Peter Pobojewski
+ * Student #: 4528311
+ * Date: 2/13/2014
+ */
 public class CcGameBoard implements GameBoard{
     /**
      * The number of available positions in each row.
@@ -22,6 +22,87 @@ public class CcGameBoard implements GameBoard{
 
     public CcGameBoard() {
         board = constructBoard();
+    }
+    /**
+     * Populates the board with pieces in the starting location for each player.
+     *
+     * @param  playerList The list of players that are participating in the game.
+     */
+    public void populateBoard(Player[] playerList) {
+        int k, h, start;
+        for(int x = 0; x<playerList.length; x++) {
+            start = playerList[x].getStart();
+            for(int i=0; i<4;i++) {
+                for(int j=0; j<i+1; j++) {
+                    k = getOffsetRow(start, i);
+                    h = getOffsetIndex(start, j);
+                    setPiece(new GridPosition(k, h), playerList[x]);
+                }
+            }
+        }
+    }
+    /**
+     * Checks to see if a player satisfies the win condition by checking that all positions in their
+     * goal area have one of their pieces in that position.
+     *
+     * @param  p The player for which checking of win condition is required.
+     *
+     * @return returns true if the player has met the conditions, false otherwise.
+     */
+    public boolean checkWinCondition(Player p) {
+        int k, h;
+        int winArea;
+        if(p.getStart() < 4) {
+            winArea = p.getStart() + 3;
+        }
+        else {
+            winArea = p.getStart() + 3 - 6;
+        }
+        for(int i=0; i<4;i++) {
+            for(int j=0; j<i+1; j++) {
+                k = getOffsetRow(winArea, i);
+                h = getOffsetIndex(winArea, j);
+                if(board[k][h]==null || board[k][h].getPlayer().getName()!=p.getName()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    /**
+     * An assisting function for checkWinCondition and populateBoard that returns an offset row value
+     * based on the location of the targeted area and the current iteration of the loop.
+     *
+     * @param  location The targeted area, see supporting location documentation.
+     * @param  i The iteration of the loop
+     * @return returns the offset of the row.
+     */
+    private int getOffsetRow(int location, int i) {
+        switch (location) {
+            case 1: return 16-i;
+            case 2: return 9+i;
+            case 3: return 7-i;
+            case 4: return i;
+            case 5: return 7-i;
+            case 6: return 9+i;
+            default: return -1;
+        }
+    }
+    /**
+     * An assisting function for checkWinCondition and populateBoard that returns an offset column or index value
+     * based on the location of the targeted area and the current iteration of the loop.
+     *
+     * @param  location The targeted area, see supporting location documentation.
+     * @param  j The iteration of the loop
+     * @return returns the offset of the index.
+     */
+    private int getOffsetIndex(int location, int j) {
+        if(location < 5) {
+            return j;
+        }
+        else {
+            return j+9;
+        }
     }
     /**
      * Returns a constructed chinese checks board in the form of a ragged two dimensional Piece array
@@ -80,10 +161,14 @@ public class CcGameBoard implements GameBoard{
     public Piece getPiece(Position at) {
         int row = at.getRow();
         int index = at.getIndex();
-        if(isOccupied(at)) {
+
+        try {
             return board[row][index];
+
         }
-        else return null;
+        catch (ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
     }
     /**
      * Sets a piece at a given position for a given player. This method will mostly be used for
@@ -444,4 +529,5 @@ public class CcGameBoard implements GameBoard{
         return at;
     }
 }
+
 

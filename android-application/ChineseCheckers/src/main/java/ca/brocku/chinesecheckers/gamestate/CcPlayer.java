@@ -9,8 +9,10 @@ package ca.brocku.chinesecheckers.gamestate;
  */
 public class CcPlayer implements Player {
     String name;
-    public CcPlayer(String n) {
+    int location;
+    public CcPlayer(String n, int l) {
         name = n;
+        location = l;
     }
     /**
      * Returns the name of a player
@@ -20,4 +22,5 @@ public class CcPlayer implements Player {
     public String getName() {
         return name;
     }
+    public int getStart() { return location;}
 }

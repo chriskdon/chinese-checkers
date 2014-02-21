@@ -9,4 +9,5 @@ package ca.brocku.chinesecheckers.gamestate;
  */
 public interface Player {
     public String getName();
+    public int getStart();
 }
