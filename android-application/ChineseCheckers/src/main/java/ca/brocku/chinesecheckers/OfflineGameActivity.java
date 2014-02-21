@@ -1,7 +1,6 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,32 +8,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
 
 import ca.brocku.chinesecheckers.uiengine.BoardUiDrawingEngine;
 
-public class HotseatGameActivity extends Activity {
+public class OfflineGameActivity extends Activity {
     private String[] players; //an array of the players' names
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hotseat_game);
+        setContentView(R.layout.activity_offline_game);
 
         // Make sure variables are setup before creating fragment
         players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
 
-        //passes player array to the hotseat game fragment
-        Fragment hotseatGameFragment = new PlaceholderFragment();
-        Bundle hotseatGameFragmentBundle = new Bundle();
-        hotseatGameFragmentBundle.putStringArray("PLAYER_NAMES", players);
-        hotseatGameFragment.setArguments(hotseatGameFragmentBundle);
+        //passes player array to the offline game fragment
+        Fragment offlineGameFragment = new PlaceholderFragment();
+        Bundle offlineGameFragmentBundle = new Bundle();
+        offlineGameFragmentBundle.putStringArray("PLAYER_NAMES", players);
+        offlineGameFragment.setArguments(offlineGameFragmentBundle);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, hotseatGameFragment)
+                    .add(R.id.container, offlineGameFragment)
                     .commit();
         }
     }
@@ -44,7 +42,7 @@ public class HotseatGameActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.hotseat_game, menu);
+        getMenuInflater().inflate(R.menu.offline_game, menu);
         return true;
     }
 
@@ -75,7 +73,7 @@ public class HotseatGameActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
             playerNames = getArguments().getStringArray("PLAYER_NAMES");
 
@@ -86,9 +84,9 @@ public class HotseatGameActivity extends Activity {
             gameBoardUi.setPlayerCount(playerNames.length);
 
             //Bind Controls
-            currentPlayerName = (TextView)rootView.findViewById(R.id.hotseatCurrentPlayerTextView);
-            resetMove = (Button)rootView.findViewById(R.id.hotseatMoveResetButton);
-            doneMove = (Button)rootView.findViewById(R.id.hotseatMoveDoneButton);
+            currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
+            resetMove = (Button)rootView.findViewById(R.id.offlineMoveResetButton);
+            doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
 
             //Bind Handlers
             resetMove.setOnClickListener(new ResetMoveHanlder());

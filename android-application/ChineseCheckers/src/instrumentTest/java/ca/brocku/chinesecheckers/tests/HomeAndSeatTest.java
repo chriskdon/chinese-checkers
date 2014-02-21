@@ -6,7 +6,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.widget.Button;
 
-import ca.brocku.chinesecheckers.HotseatConfigurationActivity;
+import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -37,7 +37,7 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
 
     public void testButton() {
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
-        monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(),null,false);
+        monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(),null,false);
         assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click",hotseatConfigurationActivityButton.isClickable());
         TouchUtils.clickView(this, hotseatConfigurationActivityButton);
         tTransitionToConfigAct();
