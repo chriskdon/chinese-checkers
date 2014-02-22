@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 
@@ -12,20 +13,53 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  * Date: 2/22/2014
  */
 public class GameStateManager {
-
+    private GameBoard gameBoard;
+    private GameStateEvents gameStateEventsHandler;
 
     /**
-     * Events that the GameStateManager will throw throughout the lifecycle of the game.
+     * Constructor
+     * @param gameBoard The game board to use to manage the rules and state of the game.
+     */
+    public GameStateManager(GameBoard gameBoard) {
+        if(gameBoard == null) {
+            throw new IllegalArgumentException("GameBoard cannot be null.");
+        }
+
+        this.gameBoard = gameBoard;
+        this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler());
+    }
+
+    /**
+     * Set the event handler for the various game state events.
+     * @param handler   The handler to register
+     */
+    public void setGameStateEventsHandler(GameStateEvents handler) {
+        this.gameStateEventsHandler = handler;
+    }
+
+    /**
+     * Handles the events coming directly from the game board.
+     */
+    private class GameBoardEventsHandler implements GameBoard.GameBoardEvents {
+        @Override
+        public void onPlayerWon(int playerNumber) {
+            // TODO: Add real player
+            if(GameStateManager.this.gameStateEventsHandler != null) {
+                GameStateManager.this.gameStateEventsHandler.onPlayerWon(null, playerNumber);
+            }
+        }
+    }
+
+    /**
+     * Events that the GameStateManager will throw throughout
+     * the lifecycle of the game.
      */
     public static interface GameStateEvents {
         /**
          * Fired when a piece on the board is moved from one position to another.
-         * @param from      The piece that was moved (with its starting position still intact)
-         * @param pathTo    The path taken by the piece to get to the final resting position.
-         *                  Order of the positions added to this array matters. 0..n, 0 is the
-         *                  first position moved to and n is the final resting spot.
+         * @param move  The path describing the move.
          */
-        public void onPieceMoved(Piece from, Position[] pathTo);
+        public void onPieceMoved(Move move);
 
         /**
          * Occurs when a player forfeit the game.

@@ -15,6 +15,7 @@ import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -321,15 +322,14 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
     /**
      * TODO: Possibly unneeded could be done with movePiece.
-     * <paint/>
+     * <p/>
      * Return a piece back to it's original position.
      *
-     * @param piece            The piece to move.
-     * @param originalPosition The original position to move the piece back to.
-     * @param onFinished       Callback to fire when the animation has completed.
+     * @param move       The piece and path taken.
+     * @param onFinished Callback to fire when the animation has completed.
      */
     @Override
-    public void cancelMove(Piece piece, Position originalPosition, FinishedMovingPieceHandler onFinished) {
+    public void cancelMove(Move move, FinishedMovingPieceHandler onFinished) {
 
     }
 
