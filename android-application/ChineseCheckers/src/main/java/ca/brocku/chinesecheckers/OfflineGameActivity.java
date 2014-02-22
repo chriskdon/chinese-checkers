@@ -147,7 +147,7 @@ public class OfflineGameActivity extends Activity {
                     OfflineGameFragment.this.boardUiEngine.movePiece(new Piece() {
                         @Override
                         public Position getPosition() {
-                            return position;
+                            return lastPosition;
                         }
 
                         @Override

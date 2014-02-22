@@ -258,7 +258,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     @Override
     public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished) {
         // Make sure it is not modified before we get the start position
-        Position fromPosition;
+        final Position fromPosition;
         synchronized (from) {
             fromPosition = from.getPosition();
         }
