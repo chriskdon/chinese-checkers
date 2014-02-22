@@ -3,7 +3,7 @@ import org.junit.Test;
 import org.junit.Ignore;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.*;
-import ca.brocku.chinesecheckers.gameboard.;
+import ca.brocku.chinesecheckers.gameboard.*;
 
 public class GridUnitTest {
 
@@ -28,7 +28,7 @@ public class GridUnitTest {
     public void testSetandGetPiece() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
-    	board.setPiece(temp, new CcPlayer("TEST", 1));
+    	board.setPiece(temp, 1);
     	assertEquals(board.getPiece(temp).getPlayer().getName(), "TEST");
     	assertEquals(board.getPiece(temp).getPosition().getRow(), 5);
     	assertEquals(board.getPiece(temp).getPosition().getIndex(), 5);
@@ -37,7 +37,7 @@ public class GridUnitTest {
     public void testSetOutOfBounds() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(20,5);
-    	board.setPiece(temp, new CcPlayer("TEST", 1));
+    	board.setPiece(temp, 1);
     	Piece[] tt = board.getAllPieces();
     	for(int i=0; i<tt.length; i++) {
     		assertEquals(tt[i], null);
@@ -47,16 +47,16 @@ public class GridUnitTest {
     public void testDoubleSet() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
-    	board.setPiece(temp, new CcPlayer("TEST1", 1));
-    	board.setPiece(temp, new CcPlayer("TEST2", 2));
+        board.setPiece(temp, 1);
+        board.setPiece(temp, 2);
     	Piece t = board.getPiece(temp);
-    	assertEquals(t.getPlayer().getName(), "TEST1");
+    	assertEquals(t.getPlayer(), 1);
     }
     @Test
     public void testValidMoves() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
-    	Piece t = new GridPiece(temp, new CcPlayer("TEST", 1));
+    	Piece t = new GridPiece(temp, 1);
     	Position[] possibleMoves = board.getPossibleMoves(t);
     	for(int i=0; i<possibleMoves.length; i++) {
     		if(possibleMoves[i]==null){
@@ -69,7 +69,7 @@ public class GridUnitTest {
     public void testInvalidMove() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
-    	Piece t = new GridPiece(temp, new CcPlayer("TEST", 1));
+    	Piece t = new GridPiece(temp, 1);
     	Position m = new GridPosition(9,9);
     	assertEquals(board.isValidMove(t, m), false);
     }
@@ -78,8 +78,8 @@ public class GridUnitTest {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	Position temp2 = new GridPosition(5,6);
-    	board.setPiece(temp2, new CcPlayer("TEST", 1));
-    	Piece t = new GridPiece(temp, new CcPlayer("TEST", 1));
+    	board.setPiece(temp2, 1);
+    	Piece t = new GridPiece(temp, 1);
     	assertEquals(board.isValidMove(t, temp2), false);
     }
     @Test
@@ -90,8 +90,8 @@ public class GridUnitTest {
     public void testGetPiecesValid() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
-    	Piece t = new GridPiece(temp, new CcPlayer("TEST", 1));
-    	board.setPiece(temp, new CcPlayer("TEST", 1));
+    	Piece t = new GridPiece(temp, 1);
+    	board.setPiece(temp, 1);
     	Piece[] tt = board.getAllPieces();
     	for(int i=0;i<tt.length;i++) {
     		if(tt[i]!=null) {
@@ -103,8 +103,8 @@ public class GridUnitTest {
     public void testMovePieceValid() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
-    	Piece t = new GridPiece(temp, new CcPlayer("TEST", 1));
-    	board.setPiece(temp, new CcPlayer("TEST", 1));
+    	Piece t = new GridPiece(temp, 1);
+    	board.setPiece(temp, 1);
     	board.movePiece(t, new GridPosition(5,6));
     	Piece m = board.getPiece(new GridPosition(5,6));
     	assertEquals(m.getPosition().getRow(), 5);
@@ -114,12 +114,12 @@ public class GridUnitTest {
     @Test
     public void testWinCondition() {
     	CcGameBoard board = new CcGameBoard();
-    	CcPlayer p1 = new CcPlayer("PLAYER1", 1);
-    	CcPlayer p2 = new CcPlayer("PLAYER2", 2);
-    	CcPlayer p3 = new CcPlayer("PLAYER3", 3);
-    	CcPlayer p4 = new CcPlayer("PLAYER4", 4);
-    	CcPlayer p5 = new CcPlayer("PLAYER5", 5);
-    	CcPlayer p6 = new CcPlayer("PLAYER6", 6);
+    	int p1 = 1;
+    	int p2 = 2;
+    	int p3 = 3;
+    	int p4 = 4;
+    	int p5 = 5;
+    	int p6 = 6;
     	for(int i=0; i<4; i++) {
     		for(int j=0; j<i+1; j++) {
     			board.setPiece(new GridPosition(i, j), p1);
