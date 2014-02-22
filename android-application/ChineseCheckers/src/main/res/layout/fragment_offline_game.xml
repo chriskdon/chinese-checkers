@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.brocku.chinesecheckers.HotseatGameActivity$PlaceholderFragment">
+    tools:context="ca.brocku.chinesecheckers.OfflineGameActivity$PlaceholderFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:textSize="@dimen/activity_large_text_size"
         android:singleLine="true"
         android:text="Waiting for :player_name (OR) Your Turn"
-        android:id="@+id/hotseatCurrentPlayerTextView" />
+        android:id="@+id/offlineCurrentPlayerTextView" />
 
     <!--
         Uncomment next section and comment out the
@@ -30,23 +30,23 @@
         android:src="@drawable/demo_game"
         android:layout_gravity="center_horizontal"
         android:id="@+id/logo"
-        android:layout_below="@+id/hotseatCurrentPlayerTextView"
-        android:layout_above="@+id/hotseatPlayerControlsLayout" />
+        android:layout_below="@+id/offlineCurrentPlayerTextView"
+        android:layout_above="@+id/offlinePlayerControlsLayout" />
     -->
 
     <ca.brocku.chinesecheckers.uiengine.GameBoardUiView
         android:id="@+id/gameBoardSurface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/hotseatCurrentPlayerTextView"
-        android:layout_above="@+id/hotseatPlayerControlsLayout" />
+        android:layout_below="@+id/offlineCurrentPlayerTextView"
+        android:layout_above="@+id/offlinePlayerControlsLayout" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:id="@+id/hotseatPlayerControlsLayout">
+        android:id="@+id/offlinePlayerControlsLayout">
 
         <Button
             android:padding="15dp"
@@ -58,8 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/hotseat_move_reset"
-            android:id="@+id/hotseatMoveResetButton"/>
+            android:text="@string/offline_move_reset"
+            android:id="@+id/offlineMoveResetButton"/>
 
         <Button
             android:padding="15dp"
@@ -71,8 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/hotseat_move_done"
-            android:id="@+id/hotseatMoveDoneButton"/>
+            android:text="@string/offline_move_done"
+            android:id="@+id/offlineMoveDoneButton"/>
 
     </LinearLayout>
 

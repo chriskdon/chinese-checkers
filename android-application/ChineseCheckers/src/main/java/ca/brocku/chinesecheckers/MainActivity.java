@@ -1,14 +1,11 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 
 /** This is the activity for the home screen of Chinese Checkers.
@@ -18,7 +15,7 @@ import android.widget.Button;
  *
  */
 public class MainActivity extends Activity {
-    private Button hotseatActivityButton;
+    private Button offlineActivityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,25 +23,42 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //Bind Controls
-        hotseatActivityButton = (Button)findViewById(R.id.hotseatConfigurationActivityButton);
+        offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
 
-        //Bing Handlers
-        hotseatActivityButton.setOnClickListener(new HotseatActivityButtonHandler());
+        //Bind Handlers
+        offlineActivityButton.setOnClickListener(new OfflineActivityButtonHandler());
 
     }
 
-    /** Handles clicking on the "Hotseat" game button.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if(id == R.id.action_help) {
+            startActivity(new Intent(MainActivity.this, HelpActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /** Handles clicking on the "Offline" game button.
      *
      */
-    private class HotseatActivityButtonHandler implements Button.OnClickListener {
+    private class OfflineActivityButtonHandler implements Button.OnClickListener {
 
-        /** OnClick event which starts the HotseatConfigurationActivity activity.
+        /** OnClick event which starts the OfflineConfigurationActivity activity.
          *
-         * @param view the Hotseat button
+         * @param view the Offline button
          */
         @Override
         public void onClick(View view) {
-            startActivity(new Intent(MainActivity.this, HotseatConfigurationActivity.class));
+            startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
         }
     }
 }

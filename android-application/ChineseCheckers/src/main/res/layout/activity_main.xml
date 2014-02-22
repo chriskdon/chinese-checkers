@@ -32,7 +32,7 @@
         android:textColor="@color/app_background"
         android:textAllCaps="true"
         android:textStyle="bold"
-        android:text="@string/hotseat"
-        android:id="@+id/hotseatConfigurationActivityButton" />
+        android:text="@string/offline"
+        android:id="@+id/offlineConfigurationActivityButton" />
 
 </LinearLayout>

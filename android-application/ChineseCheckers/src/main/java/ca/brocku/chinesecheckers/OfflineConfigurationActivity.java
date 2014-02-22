@@ -3,6 +3,9 @@ package ca.brocku.chinesecheckers;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,13 +13,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
-/** This is the Activity associated with the hotseat configuration screen.
+import static android.view.View.OnFocusChangeListener;
+
+/** This is the Activity associated with the offline configuration screen.
  *
  * The user must choose how many people are to play and their names. After validation, this activity
- * starts the hotseat game activity.
+ * starts the offline game activity.
  *
  */
-public class HotseatConfigurationActivity extends Activity {
+public class OfflineConfigurationActivity extends Activity {
     private ToggleButton twoPlayerButton, threePlayerButton, fourPlayerButton, sixPlayerButton;
     private LinearLayout redPlayerNameContainer, orangePlayerNameContainer, yellowPlayerNameContainer,
             greenPlayerNameContainer, bluePlayerNameContainer, purplePlayerNameContainer;
@@ -24,52 +29,77 @@ public class HotseatConfigurationActivity extends Activity {
             greenPlayerError, bluePlayerError, purplePlayerError;
     private EditText redPlayerEditText, orangePlayerEditText, yellowPlayerEditText,
             greenPlayerEditText, bluePlayerEditText, purplePlayerEditText;
-    private Button startHotseatGameButton;
+    private Button startOfflineGameButton;
 
     private ToggleButton currentSelection; //the current selection for number of players
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hotseat_configuration);
+        setContentView(R.layout.activity_offline_configuration);
 
         //Bind Controls
-        twoPlayerButton = (ToggleButton) findViewById(R.id.hotseatTwoPlayerButton);
-        threePlayerButton = (ToggleButton) findViewById(R.id.hotseatThreePlayerButton);
-        fourPlayerButton = (ToggleButton) findViewById(R.id.hotseatFourPlayerButton);
-        sixPlayerButton = (ToggleButton) findViewById(R.id.hotseatSixPlayerButton);
+        twoPlayerButton = (ToggleButton) findViewById(R.id.offlineTwoPlayerButton);
+        threePlayerButton = (ToggleButton) findViewById(R.id.offlineThreePlayerButton);
+        fourPlayerButton = (ToggleButton) findViewById(R.id.offlineFourPlayerButton);
+        sixPlayerButton = (ToggleButton) findViewById(R.id.offlineSixPlayerButton);
 
-        redPlayerNameContainer = (LinearLayout)findViewById(R.id.hotseatRedPlayerNameContainer);
-        orangePlayerNameContainer = (LinearLayout)findViewById(R.id.hotseatOrangePlayerNameContainer);
-        yellowPlayerNameContainer = (LinearLayout)findViewById(R.id.hotseatYellowPlayerNameContainer);
-        greenPlayerNameContainer = (LinearLayout)findViewById(R.id.hotseatGreenPlayerNameContainer);
-        bluePlayerNameContainer = (LinearLayout)findViewById(R.id.hotseatBluePlayerNameContainer);
-        purplePlayerNameContainer = (LinearLayout)findViewById(R.id.hotseatPurplePlayerNameContainer);
+        redPlayerNameContainer = (LinearLayout)findViewById(R.id.offlineRedPlayerNameContainer);
+        orangePlayerNameContainer = (LinearLayout)findViewById(R.id.offlineOrangePlayerNameContainer);
+        yellowPlayerNameContainer = (LinearLayout)findViewById(R.id.offlineYellowPlayerNameContainer);
+        greenPlayerNameContainer = (LinearLayout)findViewById(R.id.offlineGreenPlayerNameContainer);
+        bluePlayerNameContainer = (LinearLayout)findViewById(R.id.offlineBluePlayerNameContainer);
+        purplePlayerNameContainer = (LinearLayout)findViewById(R.id.offlinePurplePlayerNameContainer);
 
-        redPlayerError = (ImageView) findViewById(R.id.hotseatRedPlayerError);
-        orangePlayerError = (ImageView) findViewById(R.id.hotseatOrangePlayerError);
-        yellowPlayerError = (ImageView) findViewById(R.id.hotseatYellowPlayerError);
-        greenPlayerError = (ImageView) findViewById(R.id.hotseatGreenPlayerError);
-        bluePlayerError = (ImageView) findViewById(R.id.hotseatBluePlayerError);
-        purplePlayerError = (ImageView) findViewById(R.id.hotseatPurplePlayerError);
+        redPlayerError = (ImageView) findViewById(R.id.offlineRedPlayerError);
+        orangePlayerError = (ImageView) findViewById(R.id.offlineOrangePlayerError);
+        yellowPlayerError = (ImageView) findViewById(R.id.offlineYellowPlayerError);
+        greenPlayerError = (ImageView) findViewById(R.id.offlineGreenPlayerError);
+        bluePlayerError = (ImageView) findViewById(R.id.offlineBluePlayerError);
+        purplePlayerError = (ImageView) findViewById(R.id.offlinePurplePlayerError);
 
-        redPlayerEditText = (EditText) findViewById(R.id.hotseatRedPlayerNameEditText);
-        orangePlayerEditText = (EditText) findViewById(R.id.hotseatOrangePlayerNameEditText);
-        yellowPlayerEditText = (EditText) findViewById(R.id.hotseatYellowPlayerNameEditText);
-        greenPlayerEditText = (EditText) findViewById(R.id.hotseatGreenPlayerNameEditText);
-        bluePlayerEditText = (EditText) findViewById(R.id.hotseatBluePlayerNameEditText);
-        purplePlayerEditText = (EditText) findViewById(R.id.hotseatPurplePlayerNameEditText);
+        redPlayerEditText = (EditText) findViewById(R.id.offlineRedPlayerNameEditText);
+        orangePlayerEditText = (EditText) findViewById(R.id.offlineOrangePlayerNameEditText);
+        yellowPlayerEditText = (EditText) findViewById(R.id.offlineYellowPlayerNameEditText);
+        greenPlayerEditText = (EditText) findViewById(R.id.offlineGreenPlayerNameEditText);
+        bluePlayerEditText = (EditText) findViewById(R.id.offlineBluePlayerNameEditText);
+        purplePlayerEditText = (EditText) findViewById(R.id.offlinePurplePlayerNameEditText);
 
-        startHotseatGameButton = (Button) findViewById(R.id.hotseatGameActivityButton);
+        startOfflineGameButton = (Button) findViewById(R.id.offlineGameActivityButton);
 
         //Bind Handlers
         twoPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         threePlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         fourPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         sixPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
-        startHotseatGameButton.setOnClickListener(new StartGameHandler());
+        startOfflineGameButton.setOnClickListener(new StartGameHandler());
+
+        redPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        orangePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        yellowPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        greenPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        bluePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        purplePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+
 
         currentSelection = twoPlayerButton;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if(id == R.id.action_help) {
+            startActivity(new Intent(OfflineConfigurationActivity.this, HelpActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /** Hides all of the warning symbols associated with required input.
@@ -106,7 +136,7 @@ public class HotseatConfigurationActivity extends Activity {
 
                 //shows and labels the name fields based on the number of players option
                 switch(view.getId()) {
-                    case R.id.hotseatTwoPlayerButton:
+                    case R.id.offlineTwoPlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
                         greenPlayerEditText.setHint("Player 2");
@@ -114,7 +144,7 @@ public class HotseatConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.GONE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.hotseatThreePlayerButton:
+                    case R.id.offlineThreePlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerEditText.setHint("Player 2");
                         yellowPlayerNameContainer.setVisibility(View.VISIBLE);
@@ -123,7 +153,7 @@ public class HotseatConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.hotseatFourPlayerButton:
+                    case R.id.offlineFourPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
@@ -133,7 +163,7 @@ public class HotseatConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.hotseatSixPlayerButton:
+                    case R.id.offlineSixPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerEditText.setHint("Player 3");
@@ -155,7 +185,7 @@ public class HotseatConfigurationActivity extends Activity {
         }
     }
 
-    /** Handles validation of inputted configuration and starting the hotseat game activity.
+    /** Handles validation of inputted configuration and starting the offline game activity.
      *
      */
     private class StartGameHandler implements Button.OnClickListener {
@@ -166,51 +196,51 @@ public class HotseatConfigurationActivity extends Activity {
             hideWarnings();
 
             //if any of the visible input fields are empty, don't submit
-            if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().equals("") ||
-                    orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().equals("") ||
-                    yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().equals("") ||
-                    greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().equals("") ||
-                    bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().equals("") ||
-                    purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().equals("")) {
+            if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().trim().equals("") ||
+                    orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().trim().equals("") ||
+                    yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().trim().equals("") ||
+                    greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().trim().equals("") ||
+                    bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().trim().equals("") ||
+                    purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().trim().equals("")) {
 
                 //for each visible input field which is empty, display its warning symbol
-                if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().equals(""))
+                if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerEditText.getText().toString().trim().equals(""))
                     redPlayerError.setVisibility(View.VISIBLE);
-                if(orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().equals(""))
+                if(orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerEditText.getText().toString().trim().equals(""))
                     orangePlayerError.setVisibility(View.VISIBLE);
-                if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().equals(""))
+                if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerEditText.getText().toString().trim().equals(""))
                     yellowPlayerError.setVisibility(View.VISIBLE);
-                if(greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().equals(""))
+                if(greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerEditText.getText().toString().trim().equals(""))
                     greenPlayerError.setVisibility(View.VISIBLE);
-                if(bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().equals(""))
+                if(bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerEditText.getText().toString().trim().equals(""))
                     bluePlayerError.setVisibility(View.VISIBLE);
-                if(purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().equals(""))
+                if(purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerEditText.getText().toString().trim().equals(""))
                     purplePlayerError.setVisibility(View.VISIBLE);
 
             } else {
-                String[] players; //to be passed to HotseatGameActivity
-                Intent intent = new Intent(HotseatConfigurationActivity.this, HotseatGameActivity.class);
+                String[] players; //to be passed to OfflineGameActivity
+                Intent intent = new Intent(OfflineConfigurationActivity.this, OfflineGameActivity.class);
 
                 switch(currentSelection.getId()) {
-                    case R.id.hotseatTwoPlayerButton:
+                    case R.id.offlineTwoPlayerButton:
                         players = new String[]{redPlayerEditText.getText().toString(),
                                 greenPlayerEditText.getText().toString()};
                         intent.putExtra("PLAYER_NAMES", players);
                         break;
-                    case R.id.hotseatThreePlayerButton:
+                    case R.id.offlineThreePlayerButton:
                         players = new String[]{redPlayerEditText.getText().toString(),
                                 yellowPlayerEditText.getText().toString(),
                                 bluePlayerEditText.getText().toString()};
                         intent.putExtra("PLAYER_NAMES", players);
                         break;
-                    case R.id.hotseatFourPlayerButton:
+                    case R.id.offlineFourPlayerButton:
                         players = new String[]{redPlayerEditText.getText().toString(),
                                 orangePlayerEditText.getText().toString(),
                                 greenPlayerEditText.getText().toString(),
                                 bluePlayerEditText.getText().toString()};
                         intent.putExtra("PLAYER_NAMES", players);
                         break;
-                    case R.id.hotseatSixPlayerButton:
+                    case R.id.offlineSixPlayerButton:
                         players = new String[]{redPlayerEditText.getText().toString(),
                                 orangePlayerEditText.getText().toString(),
                                 yellowPlayerEditText.getText().toString(),
@@ -220,10 +250,30 @@ public class HotseatConfigurationActivity extends Activity {
                         intent.putExtra("PLAYER_NAMES", players);
                         break;
                 }
-                HotseatConfigurationActivity.this.finish();
+                OfflineConfigurationActivity.this.finish();
                 startActivity(intent);
             }
 
+        }
+    }
+
+    /** Trims whitespace from the name input field as focus is lost to ensure a name with spaces is
+     * not accepted.
+     *
+     */
+    private class PlayerNameHandler implements OnFocusChangeListener {
+        @Override
+        public void onFocusChange(View view, boolean b) {
+
+            if(!b) { //If focus was lost
+
+                //Trim whitespace from player's name input field
+                EditText nameInput = (EditText)view;
+                Editable inputText = nameInput.getText();
+                if(inputText != null) {
+                    nameInput.setText(inputText.toString().trim());
+                }
+            }
         }
     }
 }
