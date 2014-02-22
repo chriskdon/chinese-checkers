@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+
 /**
  * Represent a player on the board.
  *
@@ -7,6 +9,24 @@ package ca.brocku.chinesecheckers.gamestate;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public interface Player {
-    public String getName();
+public abstract class Player {
+    /**
+     * Executed when it is this players turn to act.
+     * @param gameBoard The current game board.
+     * @param handler   This must be called when the player has finished making their turn.
+     */
+    public abstract void onTurn(ReadOnlyGameBoard gameBoard, PlayerTurnHandler handler);
+
+    /**
+     * Get the name of this player.
+     * @return  Return the name.
+     */
+    public abstract String getName();
+
+    /**
+     * Handles a player making a move.
+     */
+    public interface PlayerTurnHandler {
+        public void onMoveMade(Move move);
+    }
 }

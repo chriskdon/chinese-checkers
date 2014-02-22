@@ -2,6 +2,7 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -61,12 +62,10 @@ public interface BoardUiEngine {
      *
      * Return a piece back to it's original position.
      *
-     * @param piece             The piece to move.
-     * @param originalPosition  The original position to move the piece back to.
+     * @param move              The piece and path taken.
      * @param onFinished        Callback to fire when the animation has completed.
      */
-    public void cancelMove(Piece piece, Position originalPosition,
-                           FinishedMovingPieceHandler onFinished);
+    public void cancelMove(Move move, FinishedMovingPieceHandler onFinished);
 
     /**
      * Show hints on the board for positions the player could potentially move to.
