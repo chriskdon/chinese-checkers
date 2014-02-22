@@ -26,13 +26,12 @@ public interface BoardUiEngine {
     /**
      * Animate moving a piece on the board.
      *
-     * @param from          The position to move from.
+     * @param from          The Piece to move.
      * @param to            The position to move to.
-     * @param jumps         @Nullable, The piece that is jumped in this move if any.
      * @param onFinished    Callback to fire when the animation has completed.
      * @return              Returns true if a piece could be successfully moved.
      */
-    public boolean movePiece(Position from, Position to, Piece jumps, FinishedMovingPieceHandler onFinished);
+    public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished);
 
     /**
      * Highlight a position on the board so that the player

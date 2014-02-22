@@ -250,18 +250,27 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      * This does not guarantee a check to see if the user is trying to place pieces on top of
      * each other. All it is doing is moving pieces around. That should be checked elsewhere.
      *
-     * @param from       The position of the piece to move.
+     * @param from       The Piece to move.
      * @param to         The position to move to.
-     * @param jumps      @Nullable, The piece that is jumped in this move if any.
      * @param onFinished Callback to fire when the animation has completed.
      * @return           Returns true if a piece could be successfully moved.
      */
     @Override
-    public boolean movePiece(Position from, Position to, Piece jumps, FinishedMovingPieceHandler onFinished) {
-        PieceVisual p = pieces.remove(from);
+    public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished) {
+        // Make sure it is not modified before we get the start position
+        Position fromPosition;
+        synchronized (from) {
+            fromPosition = from.getPosition();
+        }
+
+        PieceVisual p = pieces.remove(fromPosition);
         if(p != null) {
             p.setPieceDrawingDetails(piecePositionSystem.get(to));
             redraw();
+
+            if(onFinished != null) {
+                onFinished.onPieceFinishedMovingAnimation(from, fromPosition);
+            }
 
             if(pieces.get(to) == null) { // Make sure we aren't overwriting piece.
                 pieces.put(to, p);
