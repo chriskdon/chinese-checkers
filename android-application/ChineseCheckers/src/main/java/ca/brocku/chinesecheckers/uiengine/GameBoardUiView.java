@@ -238,7 +238,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
             }
         };
 
-        PieceVisual pv = new PieceVisual("COLOR", pos.get(p), color);
+        PieceVisual pv = new PieceVisual(pos.get(p), color);
 
         pieces.put(p, pv);
 
