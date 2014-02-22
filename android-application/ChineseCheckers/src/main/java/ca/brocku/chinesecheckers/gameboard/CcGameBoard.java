@@ -10,6 +10,7 @@ import ca.brocku.chinesecheckers.gamestate.Player;
  * Date: 2/13/2014
  */
 public class CcGameBoard implements GameBoard{
+
     /**
      * The number of available positions in each row.
      */
@@ -19,9 +20,14 @@ public class CcGameBoard implements GameBoard{
      */
     public static final int TOTAL_PIECE_COUNT = 121;
     Piece[][] board;
+    WinHandler handler;
 
-    public CcGameBoard() {
+    public CcGameBoard(WinHandler handler) {
         board = constructBoard();
+        this.handler = handler;
+    }
+    public void setWindHandler(WinHandler handler) {
+        this.handler = handler;
     }
     /**
      * Populates the board with pieces in the starting location for each player.
@@ -45,11 +51,12 @@ public class CcGameBoard implements GameBoard{
      * Checks to see if a player satisfies the win condition by checking that all positions in their
      * goal area have one of their pieces in that position.
      *
-     * @param  p The player for which checking of win condition is required.
+     * @param  playerNumber The player for which checking of win condition is required.
      *
      * @return returns true if the player has met the conditions, false otherwise.
      */
-    public boolean checkWinCondition(int playerNumber) {
+    public void checkWinCondition(int playerNumber) {
+        boolean winCheck = true;
         int k, h;
         int winArea;
         if(playerNumber < 4) {
@@ -63,11 +70,14 @@ public class CcGameBoard implements GameBoard{
                 k = getOffsetRow(winArea, i);
                 h = getOffsetIndex(winArea, j);
                 if(board[k][h]==null || board[k][h].getPlayer()!=playerNumber){
-                    return false;
+                    winCheck = false;
+                    break;
                 }
             }
         }
-        return true;
+        if(winCheck == true && this.handler != null) {
+            this.handler.onWin(playerNumber);
+        }
     }
     /**
      * An assisting function for checkWinCondition and populateBoard that returns an offset row value
@@ -148,6 +158,7 @@ public class CcGameBoard implements GameBoard{
             int oldRow = piece.getPosition().getRow();
             int oldIndex = piece.getPosition().getIndex();
             board[oldRow][oldIndex] = null;
+            this.checkWinCondition(piece.getPlayer());
         }
     }
     /**
@@ -527,6 +538,9 @@ public class CcGameBoard implements GameBoard{
             return null;
         }
         return at;
+    }
+    public interface WinHandler {
+        public void onWin(int playerNumWhoWon);
     }
 }
 
