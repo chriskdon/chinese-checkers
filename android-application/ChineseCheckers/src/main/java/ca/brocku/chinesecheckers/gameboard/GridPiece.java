@@ -12,8 +12,8 @@ import ca.brocku.chinesecheckers.gamestate.Player;
  */
 public class GridPiece implements Piece {
     Position position;
-    Player player;
-    public GridPiece (Position pos, Player pl) {
+    int player;
+    public GridPiece (Position pos, int pl) {
         position = pos;
         player = pl;
     }
@@ -30,7 +30,7 @@ public class GridPiece implements Piece {
      *
      * @return  Player that owns the piece.
      */
-    public Player getPlayer() {
+    public int getPlayer() {
         return player;
     }
     /**
@@ -44,7 +44,7 @@ public class GridPiece implements Piece {
      * Sets a new player for a piece (May not be needed).
      *
      */
-    public void setPlayer(Player np) {
+    public void setPlayer(int np) {
         player = np;
     }
 }

@@ -28,10 +28,10 @@ public class CcGameBoard implements GameBoard{
      *
      * @param  playerList The list of players that are participating in the game.
      */
-    public void populateBoard(Player[] playerList) {
+    public void populateBoard(int[] playerList) {
         int k, h, start;
         for(int x = 0; x<playerList.length; x++) {
-            start = playerList[x].getStart();
+            start = playerList[x];
             for(int i=0; i<4;i++) {
                 for(int j=0; j<i+1; j++) {
                     k = getOffsetRow(start, i);
@@ -49,20 +49,20 @@ public class CcGameBoard implements GameBoard{
      *
      * @return returns true if the player has met the conditions, false otherwise.
      */
-    public boolean checkWinCondition(Player p) {
+    public boolean checkWinCondition(int playerNumber) {
         int k, h;
         int winArea;
-        if(p.getStart() < 4) {
-            winArea = p.getStart() + 3;
+        if(playerNumber < 4) {
+            winArea = playerNumber + 3;
         }
         else {
-            winArea = p.getStart() + 3 - 6;
+            winArea = playerNumber + 3 - 6;
         }
         for(int i=0; i<4;i++) {
             for(int j=0; j<i+1; j++) {
                 k = getOffsetRow(winArea, i);
                 h = getOffsetIndex(winArea, j);
-                if(board[k][h]==null || board[k][h].getPlayer().getName()!=p.getName()){
+                if(board[k][h]==null || board[k][h].getPlayer()!=playerNumber){
                     return false;
                 }
             }
@@ -178,7 +178,7 @@ public class CcGameBoard implements GameBoard{
      * @param pl    The player that has ownership of the Piece.
      * @return      The piece that was at the position specified.
      */
-    public void setPiece(Position at, Player pl) {
+    public void setPiece(Position at, int pl) {
         int row = at.getRow();
         int index = at.getIndex();
         if(!isOccupied(at)) {
