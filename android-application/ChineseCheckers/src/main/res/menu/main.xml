@@ -1,7 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ca.brocku.chinesecheckers.HotseatConfigurationActivity" >
-    
+    tools:context="ca.brocku.chinesecheckers.MainActivity">
+
+    <item android:id="@+id/action_help"
+        android:title="@string/action_help"
+        android:orderInCategory="90"
+        android:showAsAction="never" />
+
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

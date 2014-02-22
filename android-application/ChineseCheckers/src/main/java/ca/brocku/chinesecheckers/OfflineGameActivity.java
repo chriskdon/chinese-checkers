@@ -1,8 +1,9 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
-import android.app.ActionBar;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,26 +17,26 @@ import android.widget.TextView;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
-public class HotseatGameActivity extends Activity {
+public class OfflineGameActivity extends Activity {
     private String[] players; //an array of the players' names
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hotseat_game);
+        setContentView(R.layout.activity_offline_game);
 
         // Make sure variables are setup before creating fragment
         players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
 
-        //passes player array to the hotseat game fragment
-        Fragment hotseatGameFragment = new PlaceholderFragment();
-        Bundle hotseatGameFragmentBundle = new Bundle();
-        hotseatGameFragmentBundle.putStringArray("PLAYER_NAMES", players);
-        hotseatGameFragment.setArguments(hotseatGameFragmentBundle);
+        //passes player array to the offline game fragment
+        Fragment offlineGameFragment = new OfflineGameFragment();
+        Bundle offlineGameFragmentBundle = new Bundle();
+        offlineGameFragmentBundle.putStringArray("PLAYER_NAMES", players);
+        offlineGameFragment.setArguments(offlineGameFragmentBundle);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, hotseatGameFragment)
+                    .add(R.id.container, offlineGameFragment)
                     .commit();
         }
     }
@@ -44,19 +45,16 @@ public class HotseatGameActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.hotseat_game, menu);
+        getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        if(id == R.id.action_help) {
+            startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -64,19 +62,22 @@ public class HotseatGameActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class OfflineGameFragment extends Fragment {
         private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
         private String[] playerNames;
 
+        public OfflineGameFragment() {
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
             playerNames = getArguments().getStringArray("PLAYER_NAMES");
 
@@ -93,20 +94,31 @@ public class HotseatGameActivity extends Activity {
 
 
             //Bind Controls
-            currentPlayerName = (TextView)rootView.findViewById(R.id.hotseatCurrentPlayerTextView);
-            resetMove = (Button)rootView.findViewById(R.id.hotseatMoveResetButton);
-            doneMove = (Button)rootView.findViewById(R.id.hotseatMoveDoneButton);
+            currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
+            resetMove = (Button)rootView.findViewById(R.id.offlineMoveResetButton);
+            doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
 
             //Bind Handlers
-            resetMove.setOnClickListener(new ResetMoveHanlder());
+            resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
             currentPlayerName.setText(playerNames[0]);
 
+            if(true) { //TODO change to: if there is a saved game using passed info from main or something local
+                new OfflineGameResumeDialog().show(getFragmentManager(), "resumeDialog");
+            }
+
             return rootView;
         }
 
-        private class ResetMoveHanlder implements View.OnClickListener {
+        public Boolean onEndGame() {
+            new OfflineGameEndDialog().show(getFragmentManager(), "endDialog");
+
+            return true;
+        }
+
+
+        private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
 
@@ -117,7 +129,7 @@ public class HotseatGameActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-
+                onEndGame(); //TODO move this to class which checks for end game; prob. Game State
             }
         }
 
@@ -130,8 +142,8 @@ public class HotseatGameActivity extends Activity {
                 Log.d("TOUCHED", "(" + position.getRow() + ", " + position.getIndex() + ")");
 
                 if(lastPosition != null) {
-                    PlaceholderFragment.this.boardUiEngine.movePiece(lastPosition, position,
-                                                                     null, null);
+                    OfflineGameFragment.this.boardUiEngine.movePiece(lastPosition, position,
+                            null, null);
 
                     lastPosition = null;
                 } else {
@@ -141,5 +153,4 @@ public class HotseatGameActivity extends Activity {
             }
         }
     }
-
 }

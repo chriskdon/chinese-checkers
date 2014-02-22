@@ -21,7 +21,7 @@
             android:textSize="@dimen/activity_xxlarge_text_size"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:text="@string/hotseat" />
+            android:text="@string/offline" />
 
         <ImageView
             android:layout_width="24dp"
@@ -58,7 +58,7 @@
             android:textOn="2 Players"
             android:textOff="2 Players"
             android:checked="true"
-            android:id="@+id/hotseatTwoPlayerButton"
+            android:id="@+id/offlineTwoPlayerButton"
             android:singleLine="false" />
 
         <Space
@@ -79,7 +79,7 @@
             android:textColor="@color/app_button_text"
             android:textOn="3 Players"
             android:textOff="3 Players"
-            android:id="@+id/hotseatThreePlayerButton"/>
+            android:id="@+id/offlineThreePlayerButton"/>
 
         <Space
             android:layout_weight="1"
@@ -99,7 +99,7 @@
             android:textColor="@color/app_button_text"
             android:textOn="4 Players"
             android:textOff="4 Players"
-            android:id="@+id/hotseatFourPlayerButton"/>
+            android:id="@+id/offlineFourPlayerButton"/>
 
         <Space
             android:layout_weight="1"
@@ -119,7 +119,7 @@
             android:textColor="@color/app_button_text"
             android:textOn="6 Players"
             android:textOff="6 Players"
-            android:id="@+id/hotseatSixPlayerButton"/>
+            android:id="@+id/offlineSixPlayerButton"/>
 
         <Space
             android:layout_weight="1"
@@ -138,7 +138,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
-        android:id="@+id/hotseatRedPlayerNameContainer">
+        android:id="@+id/offlineRedPlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
@@ -146,7 +146,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_action_warning"
             android:visibility="invisible"
-            android:id="@+id/hotseatRedPlayerError"/>
+            android:id="@+id/offlineRedPlayerError"/>
 
         <EditText
             android:textColorHint="@color/app_hint_text"
@@ -162,7 +162,7 @@
             android:singleLine="true"
             android:background="@drawable/chch_edittext_red"
             android:textColor="@color/app_background"
-            android:id="@+id/hotseatRedPlayerNameEditText" />
+            android:id="@+id/offlineRedPlayerNameEditText" />
     </LinearLayout>
 
     <LinearLayout
@@ -173,7 +173,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:id="@+id/hotseatOrangePlayerNameContainer">
+        android:id="@+id/offlineOrangePlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
@@ -181,7 +181,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_action_warning"
             android:visibility="invisible"
-            android:id="@+id/hotseatOrangePlayerError"/>
+            android:id="@+id/offlineOrangePlayerError"/>
 
         <EditText
             android:textColorHint="@color/app_hint_text"
@@ -195,7 +195,7 @@
             android:inputType="text|textNoSuggestions"
             android:background="@drawable/chch_edittext_orange"
             android:textColor="@color/app_background"
-            android:id="@+id/hotseatOrangePlayerNameEditText"/>
+            android:id="@+id/offlineOrangePlayerNameEditText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -206,7 +206,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:id="@+id/hotseatYellowPlayerNameContainer">
+        android:id="@+id/offlineYellowPlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
@@ -214,7 +214,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_action_warning"
             android:visibility="invisible"
-            android:id="@+id/hotseatYellowPlayerError"/>
+            android:id="@+id/offlineYellowPlayerError"/>
 
         <EditText
             android:textColorHint="@color/app_hint_text"
@@ -228,7 +228,7 @@
             android:inputType="text|textNoSuggestions"
             android:background="@drawable/chch_edittext_yellow"
             android:textColor="@color/app_background"
-            android:id="@+id/hotseatYellowPlayerNameEditText"/>
+            android:id="@+id/offlineYellowPlayerNameEditText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -238,7 +238,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
-        android:id="@+id/hotseatGreenPlayerNameContainer">
+        android:id="@+id/offlineGreenPlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
@@ -246,7 +246,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_action_warning"
             android:visibility="invisible"
-            android:id="@+id/hotseatGreenPlayerError"/>
+            android:id="@+id/offlineGreenPlayerError"/>
 
         <EditText
             android:textColorHint="@color/app_hint_text"
@@ -261,7 +261,7 @@
             android:singleLine="true"
             android:background="@drawable/chch_edittext_green"
             android:textColor="@color/app_background"
-            android:id="@+id/hotseatGreenPlayerNameEditText"/>
+            android:id="@+id/offlineGreenPlayerNameEditText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -272,7 +272,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:id="@+id/hotseatBluePlayerNameContainer">
+        android:id="@+id/offlineBluePlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
@@ -280,7 +280,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_action_warning"
             android:visibility="invisible"
-            android:id="@+id/hotseatBluePlayerError"/>
+            android:id="@+id/offlineBluePlayerError"/>
 
         <EditText
             android:textColorHint="@color/app_hint_text"
@@ -294,7 +294,7 @@
             android:singleLine="true"
             android:background="@drawable/chch_edittext_blue"
             android:textColor="@color/app_background"
-            android:id="@+id/hotseatBluePlayerNameEditText"/>
+            android:id="@+id/offlineBluePlayerNameEditText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -305,7 +305,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:id="@+id/hotseatPurplePlayerNameContainer">
+        android:id="@+id/offlinePurplePlayerNameContainer">
 
         <ImageView
             android:layout_width="32dp"
@@ -313,7 +313,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_action_warning"
             android:visibility="invisible"
-            android:id="@+id/hotseatPurplePlayerError"/>
+            android:id="@+id/offlinePurplePlayerError"/>
 
         <EditText
             android:textColorHint="@color/app_hint_text"
@@ -327,7 +327,7 @@
             android:singleLine="true"
             android:background="@drawable/chch_edittext_purple"
             android:textColor="@color/app_background"
-            android:id="@+id/hotseatPurplePlayerNameEditText"/>
+            android:id="@+id/offlinePurplePlayerNameEditText"/>
     </LinearLayout>
 
     <Space
@@ -350,8 +350,8 @@
             android:drawableLeft="@drawable/ic_action_accept"
             android:textSize="@dimen/activity_xlarge_text_size"
             android:textAllCaps="true"
-            android:text="@string/hotseat_start_game"
-            android:id="@+id/hotseatGameActivityButton" />
+            android:text="@string/offline_start_game"
+            android:id="@+id/offlineGameActivityButton" />
 
     </LinearLayout>
 
