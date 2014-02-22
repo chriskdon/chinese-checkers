@@ -6,27 +6,32 @@ package ca.brocku.chinesecheckers.tests;
 import android.test.AndroidTestCase;
 
 import ca.brocku.chinesecheckers.gameboard.*;
-
+/**
+ * Grid Unit Test for CcGameBoard.java
+ *
+ * Author: Peter Pobojewski
+ * Student #: 4528311
+ * Date: 2/22/2014
+ */
 public class GridUnitTest extends AndroidTestCase  {
-
-    //@Test
+    //Testing that board creation does not result in a null object
     public void testBoardCreate() {
     	CcGameBoard board = new CcGameBoard();
     	assertNotNull(board);
     }
-//    @Test
+//   Testing that retrieving a nonexistant piece results in a null
     public void testGetPieceEmpty() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	assertNull(board.getPiece(temp));
     }
-//    @Test
+//  Testing placement of a piece out of bounds and getting said piece results in a null
     public void testOutOfBoundsPiece() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(20,10);
     	assertNull(board.getPiece(temp));
     }
-//    @Test
+//  Testing the setting and getting of a valid piece
     public void testSetandGetPiece() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -35,7 +40,7 @@ public class GridUnitTest extends AndroidTestCase  {
     	assertEquals(board.getPiece(temp).getPosition().getRow(), 5);
     	assertEquals(board.getPiece(temp).getPosition().getIndex(), 5);
     }
-//    @Test
+//  Testing to see if setting a piece out of bounds is not retreived by getAllPieces
     public void testSetOutOfBounds() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(20,5);
@@ -45,7 +50,7 @@ public class GridUnitTest extends AndroidTestCase  {
     		assertEquals(tt[i], null);
     	}
     }
-//    @Test
+// Testing to see if a piece is placed where another piece already exists, the piece is not overwritten
     public void testDoubleSet() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -54,7 +59,7 @@ public class GridUnitTest extends AndroidTestCase  {
     	Piece t = board.getPiece(temp);
     	assertEquals(t.getPlayer(), 1);
     }
-//    @Test
+//  Testing to see that all moves retrieved by getPossibleMoves is valid
     public void testValidMoves() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -67,7 +72,7 @@ public class GridUnitTest extends AndroidTestCase  {
     		assertEquals(board.isValidMove(t, possibleMoves[i]), true);
     	}
     }
-//    @Test
+//  Testing to see that a move outside of possibleMoves is invalid
     public void testInvalidMove() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -75,8 +80,8 @@ public class GridUnitTest extends AndroidTestCase  {
     	Position m = new GridPosition(9,9);
     	assertEquals(board.isValidMove(t, m), false);
     }
-//    @Test
-    public void testMoveonExistingPiece() {
+//  Testing to see if moving a piece on a position that already has a piece is not valid
+    public void testMoveOnExistingPiece() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	Position temp2 = new GridPosition(5,6);
@@ -84,11 +89,12 @@ public class GridUnitTest extends AndroidTestCase  {
     	Piece t = new GridPiece(temp, 1);
     	assertEquals(board.isValidMove(t, temp2), false);
     }
-//    @Test
+//  Testing to see if the array retrieved by getAllPieces is not a null object
     public void testGetAllPiecesNotNull() {
     	CcGameBoard board = new CcGameBoard();
     	assertNotNull(board.getAllPieces());
     }
+//  Testing to see that a piece retrieved by getAllPieces is valid
     public void testGetPiecesValid() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -101,7 +107,7 @@ public class GridUnitTest extends AndroidTestCase  {
     		}
     	}
     }
-//    @Test
+//  Testing to see if movePiece changes the Position correctly
     public void testMovePieceValid() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -113,8 +119,9 @@ public class GridUnitTest extends AndroidTestCase  {
     	assertEquals(m.getPosition().getIndex(), 6);
     	assertNull(board.getPiece(temp));
     }
-//    @Test
-    public void testWinCondition() {
+//   Currently disabled. Tests to see if the win condition is triggered appropriately.
+    // Call back should be tested by GameState??
+/*    public void testWinCondition() {
     	CcGameBoard board = new CcGameBoard();
     	int p1 = 1;
     	int p2 = 2;
@@ -161,5 +168,5 @@ public class GridUnitTest extends AndroidTestCase  {
     	Position temp = new GridPosition(3,0);
     	board.movePiece(board.getPiece(temp), new GridPosition(4,4));
     	assertEquals(board.checkWinCondition(p1), false);
-    }
+    }*/
 }

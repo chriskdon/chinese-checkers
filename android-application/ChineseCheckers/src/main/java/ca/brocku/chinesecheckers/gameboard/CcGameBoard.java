@@ -26,6 +26,9 @@ public class CcGameBoard implements GameBoard{
         board = constructBoard();
         this.handler = handler;
     }
+    public CcGameBoard() {
+        board = constructBoard();
+    }
     public void setWindHandler(WinHandler handler) {
         this.handler = handler;
     }
