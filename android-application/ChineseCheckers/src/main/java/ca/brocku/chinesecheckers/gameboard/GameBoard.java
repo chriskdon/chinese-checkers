@@ -19,6 +19,10 @@ public interface GameBoard {
      */
     public static final int TOTAL_PIECE_COUNT = 121;
 
+    /**
+     * Maximum number of pieces on a row
+     */
+    public static final int MAXIMUM_PIECES_PER_ROW = 13;
 
     /**
      * Move a piece from one position to another.

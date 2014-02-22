@@ -1,6 +1,8 @@
 chinese-checkers
 ================
 
+[![Build Status](https://travis-ci.org/kubasub/chinese-checkers.png?branch=master)](https://travis-ci.org/kubasub/chinese-checkers)
+
 COSC 3F00 Group Project
 
 These are the rules that all game logic will be based off of: http://www.mastersgames.com/rules/chinese-checkers-rules.htm

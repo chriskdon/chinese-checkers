@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.MotionEvent;
 
 import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.uiengine.Compositor;
-import ca.brocku.chinesecheckers.uiengine.PieceInformation;
-import ca.brocku.chinesecheckers.uiengine.utils.GameBoardPositionsCalculator;
+import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
+import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
+import ca.brocku.chinesecheckers.uiengine.PixelPosition;
 
 /**
  * Game board with blank positions
@@ -19,26 +20,47 @@ import ca.brocku.chinesecheckers.uiengine.utils.GameBoardPositionsCalculator;
  * Date: 2/2/2014
  */
 public class GameBoardVisual extends Visual {
-    PieceInformation[] positions;
-    Paint p;
+    protected PiecePositionSystem piecePositionSystem;
+    private TouchEventHandler pieceTouchEventHandler;
+    private PositionTouchedHandler positionTouchedHandler;
 
-    public GameBoardVisual(Context context) {
-        p = new Paint();
-        p.setFlags(Paint.ANTI_ALIAS_FLAG);
-        p.setColor(context.getResources().getColor(R.color.gray)); // TODO: Replace with resource color
+    public GameBoardVisual(Context context, PiecePositionSystem piecePositionSystem,
+                           float w, float h) {
+        super(0, 0, w, h);
 
-        redraw(); // It's static only needs to be redrawn once
+        this.piecePositionSystem = piecePositionSystem;
+
+        this.pieceTouchEventHandler = new TouchEventHandler() {
+            @Override
+            public boolean onTouch(Visual v, MotionEvent e) {
+                if(GameBoardVisual.this.positionTouchedHandler != null) {
+                    Position pos = ((PieceVisual) v).getPositionOnBoard();
+                    GameBoardVisual.this.positionTouchedHandler.onPositionTouched(pos);
+                    return false;
+                }
+
+                return false;
+            }
+        };
+
+        final int color = context.getResources().getColor(R.color.gray);
+
+        // Add Pieces
+        for(PieceDrawingDetails pos : piecePositionSystem.getPositionDetails()) {
+            PieceVisual pv = new PieceVisual("BLANK", pos, color);
+            pv.setTouchEventHandler(this.pieceTouchEventHandler);
+            addChild(pv);
+        }
+    }
+
+    public void setPositionTouchedHandler(PositionTouchedHandler handler) {
+        this.positionTouchedHandler = handler;
     }
 
     /**
-     * Draw the object onto the <code>canvas</code>
-     *
-     * @param canvas The canvas to draw to.
+     * Occurs when a position on the board is touched.
      */
-    @Override
-    public void draw(Canvas canvas) {
-        for(PieceInformation pos : new GameBoardPositionsCalculator().calculatePiecePositions(canvas.getWidth(), canvas.getHeight())) {
-            canvas.drawCircle(pos.x, pos.y, pos.radius, p);
-        }
+    public static interface PositionTouchedHandler {
+        public void onPositionTouched(Position position);
     }
 }
