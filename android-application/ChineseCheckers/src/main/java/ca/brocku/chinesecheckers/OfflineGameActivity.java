@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class OfflineGameActivity extends Activity {
@@ -138,12 +140,21 @@ public class OfflineGameActivity extends Activity {
             Position lastPosition = null;
 
             @Override
-            public void positionTouched(Position position) {
+            public void positionTouched(final Position position) {
                 Log.d("TOUCHED", "(" + position.getRow() + ", " + position.getIndex() + ")");
 
                 if(lastPosition != null) {
-                    OfflineGameFragment.this.boardUiEngine.movePiece(lastPosition, position,
-                            null, null);
+                    OfflineGameFragment.this.boardUiEngine.movePiece(new Piece() {
+                        @Override
+                        public Position getPosition() {
+                            return position;
+                        }
+
+                        @Override
+                        public int getPlayerNumber() {
+                            return 0;
+                        }
+                    }, position, null);
 
                     lastPosition = null;
                 } else {
