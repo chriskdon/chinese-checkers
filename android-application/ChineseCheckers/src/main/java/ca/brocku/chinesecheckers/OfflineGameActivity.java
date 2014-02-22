@@ -118,7 +118,7 @@ public class OfflineGameActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                onEndGame(); //TODO move this to class which checks for end game; prob. Game State
+
             }
         }
     }

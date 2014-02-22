@@ -155,146 +155,62 @@
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:layout_gravity="left"
             android:inputType="text|textNoSuggestions"
             android:hint="Player 1"
-            android:layout_marginRight="40dp"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_red"
             android:textColor="@color/app_background"
-            android:id="@+id/offlineRedPlayerNameEditText" />
-    </LinearLayout>
+            android:id="@+id/offlineRedPlayerNameEditText"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="18dp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:id="@+id/offlineOrangePlayerNameContainer">
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_marginRight="8dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_action_warning"
-            android:visibility="invisible"
-            android:id="@+id/offlineOrangePlayerError"/>
-
-        <EditText
-            android:textColorHint="@color/app_hint_text"
-            android:gravity="center_vertical|left"
-            android:padding="5dp"
-
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="40dp"
-            android:singleLine="true"
-            android:inputType="text|textNoSuggestions"
-            android:background="@drawable/chch_edittext_orange"
-            android:textColor="@color/app_background"
-            android:id="@+id/offlineOrangePlayerNameEditText"/>
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:visibility="gone">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="18dp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:id="@+id/offlineYellowPlayerNameContainer">
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_right_red"
+                android:textOn="@string/ai_easy"
+                android:textOff="@string/ai_easy"
+                android:checked="true"
+                android:id="@+id/OfflineRedPlayerEasyButton"/>
 
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_marginRight="8dp"
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_red"
+                android:textOn="@string/ai_medium"
+                android:textOff="@string/ai_medium"
+                android:id="@+id/OfflineRedPlayerMediumButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_red"
+                android:textOn="@string/ai_hard"
+                android:textOff="@string/ai_hard"
+                android:id="@+id/OfflineRedPlayerHardButton"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_action_warning"
-            android:visibility="invisible"
-            android:id="@+id/offlineYellowPlayerError"/>
+            android:src="@drawable/ic_player_human"
+            android:background="@drawable/chch_button_player_type"
+            android:id="@+id/offlineRedPlayerTypeButton"/>
 
-        <EditText
-            android:textColorHint="@color/app_hint_text"
-            android:gravity="center_vertical|left"
-            android:padding="5dp"
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="40dp"
-            android:singleLine="true"
-            android:inputType="text|textNoSuggestions"
-            android:background="@drawable/chch_edittext_yellow"
-            android:textColor="@color/app_background"
-            android:id="@+id/offlineYellowPlayerNameEditText"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="18dp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal"
-        android:id="@+id/offlineGreenPlayerNameContainer">
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_marginRight="8dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_action_warning"
-            android:visibility="invisible"
-            android:id="@+id/offlineGreenPlayerError"/>
-
-        <EditText
-            android:textColorHint="@color/app_hint_text"
-            android:gravity="center_vertical|left"
-            android:padding="5dp"
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="40dp"
-            android:inputType="text|textNoSuggestions"
-            android:hint="Player 2"
-            android:singleLine="true"
-            android:background="@drawable/chch_edittext_green"
-            android:textColor="@color/app_background"
-            android:id="@+id/offlineGreenPlayerNameEditText"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="18dp"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:id="@+id/offlineBluePlayerNameContainer">
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_marginRight="8dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_action_warning"
-            android:visibility="invisible"
-            android:id="@+id/offlineBluePlayerError"/>
-
-        <EditText
-            android:textColorHint="@color/app_hint_text"
-            android:gravity="center_vertical|left"
-            android:padding="5dp"
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="40dp"
-            android:inputType="text|textNoSuggestions"
-            android:singleLine="true"
-            android:background="@drawable/chch_edittext_blue"
-            android:textColor="@color/app_background"
-            android:id="@+id/offlineBluePlayerNameEditText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -319,15 +235,391 @@
             android:textColorHint="@color/app_hint_text"
             android:gravity="center_vertical|left"
             android:padding="5dp"
-
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="40dp"
+            android:layout_weight="1"
+            android:layout_gravity="left"
             android:inputType="text|textNoSuggestions"
+            android:hint="Player 1"
             android:singleLine="true"
             android:background="@drawable/chch_edittext_purple"
             android:textColor="@color/app_background"
             android:id="@+id/offlinePurplePlayerNameEditText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_right_purple"
+                android:textOn="@string/ai_easy"
+                android:textOff="@string/ai_easy"
+                android:checked="true"
+                android:id="@+id/OfflinePurplePlayerEasyButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_purple"
+                android:textOn="@string/ai_medium"
+                android:textOff="@string/ai_medium"
+                android:id="@+id/OfflinePurplePlayerMediumButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_purple"
+                android:textOn="@string/ai_hard"
+                android:textOff="@string/ai_hard"
+                android:id="@+id/OfflinePurplePlayerHardButton"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_player_ai"
+            android:background="@drawable/chch_button_player_type"
+            android:id="@+id/offlinePurplePlayerTypeButton"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/offlineBluePlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/offlineBluePlayerError"/>
+
+        <EditText
+            android:textColorHint="@color/app_hint_text"
+            android:gravity="center_vertical|left"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:inputType="text|textNoSuggestions"
+            android:hint="Player 1"
+            android:singleLine="true"
+            android:background="@drawable/chch_edittext_blue"
+            android:textColor="@color/app_background"
+            android:id="@+id/offlineBluePlayerNameEditText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_right_blue"
+                android:textOn="@string/ai_easy"
+                android:textOff="@string/ai_easy"
+                android:checked="true"
+                android:id="@+id/OfflineBluePlayerEasyButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_blue"
+                android:textOn="@string/ai_medium"
+                android:textOff="@string/ai_medium"
+                android:id="@+id/OfflineBluePlayerMediumButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_blue"
+                android:textOn="@string/ai_hard"
+                android:textOff="@string/ai_hard"
+                android:id="@+id/OfflineBluePlayerHardButton"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_player_ai"
+            android:background="@drawable/chch_button_player_type"
+            android:id="@+id/offlineBluePlayerTypeButton"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:id="@+id/offlineGreenPlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/offlineGreenPlayerError"/>
+
+        <EditText
+            android:textColorHint="@color/app_hint_text"
+            android:gravity="center_vertical|left"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:inputType="text|textNoSuggestions"
+            android:hint="Player 1"
+            android:singleLine="true"
+            android:background="@drawable/chch_edittext_green"
+            android:textColor="@color/app_background"
+            android:id="@+id/offlineGreenPlayerNameEditText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_right_green"
+                android:textOn="@string/ai_easy"
+                android:textOff="@string/ai_easy"
+                android:checked="true"
+                android:id="@+id/OfflineGreenPlayerEasyButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_green"
+                android:textOn="@string/ai_medium"
+                android:textOff="@string/ai_medium"
+                android:id="@+id/OfflineGreenPlayerMediumButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_green"
+                android:textOn="@string/ai_hard"
+                android:textOff="@string/ai_hard"
+                android:id="@+id/OfflineGreenPlayerHardButton"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_player_ai"
+            android:background="@drawable/chch_button_player_type"
+            android:id="@+id/offlineGreenPlayerTypeButton"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/offlineYellowPlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/offlineYellowPlayerError"/>
+
+        <EditText
+            android:textColorHint="@color/app_hint_text"
+            android:gravity="center_vertical|left"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:inputType="text|textNoSuggestions"
+            android:hint="Player 1"
+            android:singleLine="true"
+            android:background="@drawable/chch_edittext_yellow"
+            android:textColor="@color/app_background"
+            android:id="@+id/offlineYellowPlayerNameEditText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_right_yellow"
+                android:textOn="@string/ai_easy"
+                android:textOff="@string/ai_easy"
+                android:checked="true"
+                android:id="@+id/OfflineYellowPlayerEasyButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_yellow"
+                android:textOn="@string/ai_medium"
+                android:textOff="@string/ai_medium"
+                android:id="@+id/OfflineYellowPlayerMediumButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_yellow"
+                android:textOn="@string/ai_hard"
+                android:textOff="@string/ai_hard"
+                android:id="@+id/OfflineYellowPlayerHardButton"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_player_ai"
+            android:background="@drawable/chch_button_player_type"
+            android:id="@+id/offlineYellowPlayerTypeButton"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="18dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:id="@+id/offlineOrangePlayerNameContainer">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_action_warning"
+            android:visibility="invisible"
+            android:id="@+id/offlineOrangePlayerError"/>
+
+        <EditText
+            android:textColorHint="@color/app_hint_text"
+            android:gravity="center_vertical|left"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:inputType="text|textNoSuggestions"
+            android:hint="Player 1"
+            android:singleLine="true"
+            android:background="@drawable/chch_edittext_orange"
+            android:textColor="@color/app_background"
+            android:id="@+id/offlineOrangePlayerNameEditText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_right_orange"
+                android:textOn="@string/ai_easy"
+                android:textOff="@string/ai_easy"
+                android:checked="true"
+                android:id="@+id/OfflineOrangePlayerEasyButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_orange"
+                android:textOn="@string/ai_medium"
+                android:textOff="@string/ai_medium"
+                android:id="@+id/OfflineOrangePlayerMediumButton"/>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                style="@style/AiDifficultyToggleButton"
+                android:background="@drawable/chch_button_square_orange"
+                android:textOn="@string/ai_hard"
+                android:textOff="@string/ai_hard"
+                android:id="@+id/OfflineOrangePlayerHardButton"/>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_player_ai"
+            android:background="@drawable/chch_button_player_type"
+            android:id="@+id/offlineOrangePlayerTypeButton"/>
+
     </LinearLayout>
 
     <Space
