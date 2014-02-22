@@ -1,39 +1,41 @@
 package ca.brocku.chinesecheckers.tests;
-import org.junit.Test;
-import org.junit.Ignore;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.*;
+//import org.junit.Test;
+//import org.junit.Ignore;
+//import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.*;
+import android.test.AndroidTestCase;
+
 import ca.brocku.chinesecheckers.gameboard.*;
 
-public class GridUnitTest {
+public class GridUnitTest extends AndroidTestCase  {
 
-    @Test
+    //@Test
     public void testBoardCreate() {
     	CcGameBoard board = new CcGameBoard();
     	assertNotNull(board);
     }
-    @Test
+//    @Test
     public void testGetPieceEmpty() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	assertNull(board.getPiece(temp));
     }
-    @Test
+//    @Test
     public void testOutOfBoundsPiece() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(20,10);
     	assertNull(board.getPiece(temp));
     }
-    @Test
+//    @Test
     public void testSetandGetPiece() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	board.setPiece(temp, 1);
-    	assertEquals(board.getPiece(temp).getPlayer().getName(), "TEST");
+    	//assertEquals(board.getPiece(temp).getPlayer().getName(), "TEST");
     	assertEquals(board.getPiece(temp).getPosition().getRow(), 5);
     	assertEquals(board.getPiece(temp).getPosition().getIndex(), 5);
     }
-    @Test
+//    @Test
     public void testSetOutOfBounds() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(20,5);
@@ -43,7 +45,7 @@ public class GridUnitTest {
     		assertEquals(tt[i], null);
     	}
     }
-    @Test
+//    @Test
     public void testDoubleSet() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -52,7 +54,7 @@ public class GridUnitTest {
     	Piece t = board.getPiece(temp);
     	assertEquals(t.getPlayer(), 1);
     }
-    @Test
+//    @Test
     public void testValidMoves() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -65,7 +67,7 @@ public class GridUnitTest {
     		assertEquals(board.isValidMove(t, possibleMoves[i]), true);
     	}
     }
-    @Test
+//    @Test
     public void testInvalidMove() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -73,7 +75,7 @@ public class GridUnitTest {
     	Position m = new GridPosition(9,9);
     	assertEquals(board.isValidMove(t, m), false);
     }
-    @Test
+//    @Test
     public void testMoveonExistingPiece() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -82,7 +84,7 @@ public class GridUnitTest {
     	Piece t = new GridPiece(temp, 1);
     	assertEquals(board.isValidMove(t, temp2), false);
     }
-    @Test
+//    @Test
     public void testGetAllPiecesNotNull() {
     	CcGameBoard board = new CcGameBoard();
     	assertNotNull(board.getAllPieces());
@@ -99,7 +101,7 @@ public class GridUnitTest {
     		}
     	}
     }
-    @Test
+//    @Test
     public void testMovePieceValid() {
     	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
@@ -111,7 +113,7 @@ public class GridUnitTest {
     	assertEquals(m.getPosition().getIndex(), 6);
     	assertNull(board.getPiece(temp));
     }
-    @Test
+//    @Test
     public void testWinCondition() {
     	CcGameBoard board = new CcGameBoard();
     	int p1 = 1;
