@@ -2,20 +2,20 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.Player;
-import ca.brocku.chinesecheckers.uiengine.handlers.BoardUiEventsHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
@@ -31,11 +31,13 @@ import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
  * Date: 2/1/2014
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
-    private Visual gameBoard;
-    private SurfaceHolder surfaceolder;
-    private  PiecePositionSystem piecePositionSystem;
+    private GameBoardVisual gameBoard;                          // Root visual element
+    private SurfaceHolder surfaceHolder;                        // Surface with canvas
+    private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
+    private Map<Position, PieceVisual> pieces;                  // Pieces
+    private BoardUiEventsHandler boardUiEventsHandlerhandler;   // Board events handler
 
-    private int playerCount;
+    private int playerCount; // The number of players in the game
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -53,10 +55,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      * Register the handler to start drawing the board.
      */
     {
+        this.pieces = new HashMap<Position, PieceVisual>();
+
         getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(final SurfaceHolder holder) {
-                GameBoardUiView.this.surfaceolder = holder;
+                GameBoardUiView.this.surfaceHolder = holder;
 
                 // Get the width and height of the canvas
                 int width, height; {
@@ -70,6 +74,16 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
                 gameBoard = new GameBoardVisual(getContext(),
                                                 piecePositionSystem,
                                                 width, height);
+
+                gameBoard.setPositionTouchedHandler(new GameBoardVisual.PositionTouchedHandler() {
+                    @Override
+                    public void onPositionTouched(Position position) {
+                        if(boardUiEventsHandlerhandler != null) {
+                            boardUiEventsHandlerhandler.positionTouched(position);
+                        }
+                    }
+                });
+
 
                 drawPlayer(piecePositionSystem);
 
@@ -88,7 +102,11 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
         });
     }
 
-
+    /**
+     * Occurrs when a user touches the surface.
+     * @param event The details of where the user touched.
+     * @return True...the event was handled.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -102,7 +120,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
     /**
      * TODO: Remove and replace with board initialization
-     * <p/>
+     * <paint/>
      * Set the number of players to draw initial board state.
      *
      * @param playerCount The number of player playing.
@@ -219,7 +237,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
             }
         };
 
-        PieceVisual pv = new PieceVisual(pos.get(p), color);
+        PieceVisual pv = new PieceVisual("COLOR", pos.get(p), color);
+
+        pieces.put(p, pv);
 
         return pv;
     }
@@ -227,14 +247,35 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     /**
      * Animate moving a piece on the board.
      *
-     * @param piece      The piece to be moved.
+     * This does not guarantee a check to see if the user is trying to place pieces on top of
+     * each other. All it is doing is moving pieces around. That should be checked elsewhere.
+     *
+     * @param from       The position of the piece to move.
      * @param to         The position to move to.
      * @param jumps      @Nullable, The piece that is jumped in this move if any.
      * @param onFinished Callback to fire when the animation has completed.
+     * @return           Returns true if a piece could be successfully moved.
      */
     @Override
-    public void movePiece(Piece piece, Position to, Piece jumps, FinishedMovingPieceHandler onFinished) {
+    public boolean movePiece(Position from, Position to, Piece jumps, FinishedMovingPieceHandler onFinished) {
+        PieceVisual p = pieces.remove(from);
+        if(p != null) {
+            p.setPieceDrawingDetails(piecePositionSystem.get(to));
+            redraw();
 
+            if(pieces.get(to) == null) { // Make sure we aren't overwriting piece.
+                pieces.put(to, p);
+            } else {
+                throw new IllegalStateException("There is already a piece at that position.")
+            }
+
+            return true;
+        }
+
+        // TODO: Handle this
+        Log.d("MOVE", "Tried to move a piece that wasn't there.");
+
+        return  false;
     }
 
     /**
@@ -245,7 +286,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      */
     @Override
     public void highlightPosition(Position position) {
-
+        // TODO
     }
 
     /**
@@ -256,7 +297,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      */
     @Override
     public void rotateBoard(int degrees, FinishedRotatingBoardHandler onFinished) {
-
+        // TODO
     }
 
     /**
@@ -271,7 +312,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
     /**
      * TODO: Possibly unneeded could be done with movePiece.
-     * <p/>
+     * <paint/>
      * Return a piece back to it's original position.
      *
      * @param piece            The piece to move.
@@ -295,7 +336,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
     /**
      * TODO: Possibly put this in constructor
-     * <p/>
+     * <paint/>
      * Initialize the board with the current piece positions.
      *
      * @param pieces The pieces that represent the initial state of the board.
@@ -303,15 +344,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     @Override
     public void initializeBoard(Piece[] pieces) {
 
-    }
-
-    /**
-     * Add a handler to receive any events that occur on the board.
-     *
-     * @param handler The handler to register for the events.
-     */
-    public void addBoardEventsHandler(BoardUiEventsHandler handler) {
-        // TODO
     }
 
     /**
@@ -324,18 +356,27 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     }
 
     /**
+     * Add a handler to receive any events that occur on the board.
+     *
+     * @param handler The handler to register for the events.
+     */
+    @Override
+    public void setBoardEventsHandler(BoardUiEventsHandler handler) {
+        this.boardUiEventsHandlerhandler = handler;
+    }
+
+    /**
      * Redraw the game board.
      */
     private void redraw() {
-        if(this.surfaceolder == null) {
+        if(this.surfaceHolder == null) {
             throw new IllegalStateException("The surface is not ready.");
         }
 
-        Canvas c = this.surfaceolder.lockCanvas();
+        Canvas c = this.surfaceHolder.lockCanvas();
 
         gameBoard.draw(c);
 
-        this.surfaceolder.unlockCanvasAndPost(c);
+        this.surfaceHolder.unlockCanvasAndPost(c);
     }
-
 }

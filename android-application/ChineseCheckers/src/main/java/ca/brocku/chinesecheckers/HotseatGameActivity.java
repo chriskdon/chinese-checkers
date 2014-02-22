@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class HotseatGameActivity extends Activity {
@@ -64,17 +65,17 @@ public class HotseatGameActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
+        private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
         private String[] playerNames;
 
-        public PlaceholderFragment() {
-        }
-
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater,
+                                 ViewGroup container,
                                  Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_hotseat_game, container, false);
 
             playerNames = getArguments().getStringArray("PLAYER_NAMES");
@@ -83,7 +84,13 @@ public class HotseatGameActivity extends Activity {
             BoardUiEngine gameBoardUi = (BoardUiEngine)
                     rootView.findViewById(R.id.gameBoardSurface);
 
+            this.boardUiEngine = gameBoardUi;
+
             gameBoardUi.setPlayerCount(playerNames.length);
+
+
+            gameBoardUi.setBoardEventsHandler(new BoardEventsHandler());
+
 
             //Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.hotseatCurrentPlayerTextView);
@@ -110,6 +117,26 @@ public class HotseatGameActivity extends Activity {
 
             @Override
             public void onClick(View view) {
+
+            }
+        }
+
+        private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
+            // TODO: This class needs to link with the grid
+            Position lastPosition = null;
+
+            @Override
+            public void positionTouched(Position position) {
+                Log.d("TOUCHED", "(" + position.getRow() + ", " + position.getIndex() + ")");
+
+                if(lastPosition != null) {
+                    PlaceholderFragment.this.boardUiEngine.movePiece(lastPosition, position,
+                                                                     null, null);
+
+                    lastPosition = null;
+                } else {
+                    lastPosition = position;
+                }
 
             }
         }
