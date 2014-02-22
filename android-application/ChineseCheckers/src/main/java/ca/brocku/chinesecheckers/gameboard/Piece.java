@@ -12,5 +12,5 @@ import ca.brocku.chinesecheckers.gamestate.Player;
  */
 public interface Piece {
     public Position getPosition();
-    public int getPlayerNumber();
+    public int getPlayer();
 }
