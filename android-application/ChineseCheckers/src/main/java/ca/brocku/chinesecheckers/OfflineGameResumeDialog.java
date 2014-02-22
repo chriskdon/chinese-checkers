@@ -3,7 +3,10 @@ package ca.brocku.chinesecheckers;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,19 +26,30 @@ public class OfflineGameResumeDialog extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_offline_game_resume, container, false);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new AlertDialog.Builder(
+                new ContextThemeWrapper(getActivity(), R.style.Dialog))
+                .setTitle("Game in Progress")
+                .setMessage("Would you like to resume the saved game?")
+                .setPositiveButton("Resume",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
 
-        // Watch for button clicks.
-        //Button button = (Button)v.findViewById(R.id.show);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // When button is clicked, call up to owning activity.
-//                //((FragmentDialog)getActivity()).showDialog();
-//            }
-//        });
+                            }
+                        }
+                )
+                .setNegativeButton("New Game",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                onClickNewGame();
+                            }
+                        }
+                )
+                .create();
+    }
 
-        return v;
+    private void onClickNewGame() {
+        getActivity().finish();
+        startActivity(new Intent(getActivity(), OfflineConfigurationActivity.class));
     }
 }

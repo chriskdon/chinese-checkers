@@ -59,10 +59,17 @@ public class MainActivity extends Activity {
          */
         @Override
         public void onClick(View view) {
-            DialogFragment newFragment = OfflineGameResumeDialog.newInstance(1);
-            newFragment.show(getFragmentManager(), "dialog");
 
-            //startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
+            if(true) { //TODO change to: if there is a saved game
+                String[] players = new String[]{"Bobby", "Robby", "Tobby", "Sobby", "Cobby", "Wobby"};
+                Intent intent = new Intent(MainActivity.this, OfflineGameActivity.class);
+                intent.putExtra("PLAYER_NAMES", players);
+
+                startActivity(intent);
+
+            } else {
+                startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
+            }
         }
     }
 }

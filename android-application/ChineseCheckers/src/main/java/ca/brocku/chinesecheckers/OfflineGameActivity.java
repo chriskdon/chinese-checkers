@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ public class OfflineGameActivity extends Activity {
         players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
 
         //passes player array to the offline game fragment
-        Fragment offlineGameFragment = new PlaceholderFragment();
+        Fragment offlineGameFragment = new OfflineGameFragment();
         Bundle offlineGameFragmentBundle = new Bundle();
         offlineGameFragmentBundle.putStringArray("PLAYER_NAMES", players);
         offlineGameFragment.setArguments(offlineGameFragmentBundle);
@@ -59,13 +60,13 @@ public class OfflineGameActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class OfflineGameFragment extends Fragment {
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
         private String[] playerNames;
 
-        public PlaceholderFragment() {
+        public OfflineGameFragment() {
         }
 
         @Override
@@ -91,6 +92,11 @@ public class OfflineGameActivity extends Activity {
             doneMove.setOnClickListener(new DoneMoveHandler());
 
             currentPlayerName.setText(playerNames[0]);
+
+            if(true) { //TODO change to: if there is a saved game using passed info from main or something local
+                DialogFragment newFragment = OfflineGameResumeDialog.newInstance(1);
+                newFragment.show(getFragmentManager(), "dialog");
+            }
 
             return rootView;
         }

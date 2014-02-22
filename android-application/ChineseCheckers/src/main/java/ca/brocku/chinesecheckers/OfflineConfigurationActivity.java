@@ -74,12 +74,12 @@ public class OfflineConfigurationActivity extends Activity {
         sixPlayerButton.setOnClickListener(new NumberOfPlayerSelectionHandler());
         startOfflineGameButton.setOnClickListener(new StartGameHandler());
 
-        redPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
-        orangePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
-        yellowPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
-        greenPlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
-        bluePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
-        purplePlayerEditText.setOnFocusChangeListener(new PlayerNameHandler());
+        redPlayerEditText.setOnFocusChangeListener(new PlayerNameFocusHandler());
+        orangePlayerEditText.setOnFocusChangeListener(new PlayerNameFocusHandler());
+        yellowPlayerEditText.setOnFocusChangeListener(new PlayerNameFocusHandler());
+        greenPlayerEditText.setOnFocusChangeListener(new PlayerNameFocusHandler());
+        bluePlayerEditText.setOnFocusChangeListener(new PlayerNameFocusHandler());
+        purplePlayerEditText.setOnFocusChangeListener(new PlayerNameFocusHandler());
 
 
         currentSelection = twoPlayerButton;
@@ -185,6 +185,26 @@ public class OfflineConfigurationActivity extends Activity {
         }
     }
 
+    /** Trims whitespace from the name input field as focus is lost to ensure a name with spaces is
+     * not accepted.
+     *
+     */
+    private class PlayerNameFocusHandler implements OnFocusChangeListener {
+        @Override
+        public void onFocusChange(View view, boolean b) {
+
+            if(!b) { //If focus was lost
+
+                //Trim whitespace from player's name input field
+                EditText nameInput = (EditText)view;
+                Editable inputText = nameInput.getText();
+                if(inputText != null) {
+                    nameInput.setText(inputText.toString().trim());
+                }
+            }
+        }
+    }
+
     /** Handles validation of inputted configuration and starting the offline game activity.
      *
      */
@@ -254,26 +274,6 @@ public class OfflineConfigurationActivity extends Activity {
                 startActivity(intent);
             }
 
-        }
-    }
-
-    /** Trims whitespace from the name input field as focus is lost to ensure a name with spaces is
-     * not accepted.
-     *
-     */
-    private class PlayerNameHandler implements OnFocusChangeListener {
-        @Override
-        public void onFocusChange(View view, boolean b) {
-
-            if(!b) { //If focus was lost
-
-                //Trim whitespace from player's name input field
-                EditText nameInput = (EditText)view;
-                Editable inputText = nameInput.getText();
-                if(inputText != null) {
-                    nameInput.setText(inputText.toString().trim());
-                }
-            }
         }
     }
 }
