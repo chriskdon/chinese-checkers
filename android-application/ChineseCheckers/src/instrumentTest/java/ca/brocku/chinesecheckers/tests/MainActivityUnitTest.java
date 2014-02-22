@@ -37,8 +37,8 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
 
     public void testActivity() {
         assertNotNull("MainActivity Not Started", curAct);
-        final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
-        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click", hotseatConfigurationActivityButton.isClickable());
+        final Button offlineConfigurationActivityButton = (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton);
+        assertTrue("offlineConfigurationActivityButton Did Not Respond To Click", offlineConfigurationActivityButton.isClickable());
     }
 
 }
