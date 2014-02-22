@@ -92,21 +92,8 @@ public class Visual {
      * Set the touch event handler for this visual element.
      * @param handler   The handler to fire.
      */
-    public final void setTouchEventHandler(TouchEventHandler handler) {
+    public void setTouchEventHandler(TouchEventHandler handler) {
         this.handler = handler;
-    }
-
-    /**
-     * Send touch event.
-     *
-     * @param e           		The event info.
-     * @param sendToAncestors 	If true the event will be sent to this instance's ancestors (e.g. parent up).
-     *                         	It won't stop bubbling when it reaches itself again.
-     */
-    public void sendTouchEvent(MotionEvent e, boolean sendToAncestors) {
-        if(didIntersect(e.getX(), e.getY())) {
-            pushEventDown((sendToAncestors ? null : this), e);
-        }
     }
 
     /**
@@ -115,61 +102,26 @@ public class Visual {
      *
      * @param e Event details.
      */
-    public void sendTouchEvent(MotionEvent e) {
-        sendTouchEvent(e, false);
-    }
+    public boolean sendTouchEvent(MotionEvent e) {
+        ListIterator<Visual> iterator = visuals.listIterator(visuals.size());
+        boolean handled = false;
 
-    // ------------------------------------------
-    // EVENT BUBBLING
-    //
-    // Push the event down to the lowest child and
-    // then start propagating the events upward
-    // through the hierarchy.
-    // ------------------------------------------
-
-    /**
-     * Bubble the event up from the lowest visual element to the parent.
-     * @param sender    The <code>Visual</code> that sent the event.
-     * @param e         The event that occurred.
-     */
-    private void bubbleEventUp(Visual sender, MotionEvent e) {
-        boolean shouldBubble = true;
-
-        if(this.handler != null) {
-            shouldBubble = !this.handler.onTouch(this, e);
-        }
-
-        if(this != sender && shouldBubble && this.parent != null) {
-            this.parent.bubbleEventUp(sender, e);
-        }
-    }
-
-    /**
-     * Push the event down to the lowest child and then start bubbling up.
-     *
-     * @param sender    The <code>Visual</code> that sent the event.
-     * @param e         The event that occurred.
-     */
-    private void pushEventDown(Visual sender, MotionEvent e) {
-        ListIterator<Visual> li = visuals.listIterator(visuals.size());
-
-        // Most recent element gets event if overlapping
-        Visual v = null;
-        while(li.hasPrevious()) {
-            v = li.previous();
+        while(iterator.hasPrevious()) {
+            Visual v = iterator.previous();
 
             if(v.didIntersect(e.getX(), e.getY())) {
-                break;
-            } else {
-                v = null;
+                handled = v.sendTouchEvent(e);
+                if(handled) {
+                    break;
+                }
             }
         }
 
-        if(v != null) {
-            v.pushEventDown(sender, e);
-        } else {
-            bubbleEventUp(sender, e);
+        if(this.handler != null) {
+            handled |= this.handler.onTouch(this, e); // Could be handled (depends on handler)
         }
+
+        return handled; // Event not handled
     }
 
     /**
