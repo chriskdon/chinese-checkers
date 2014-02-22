@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import java.util.List;
+
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -15,6 +17,7 @@ import ca.brocku.chinesecheckers.gameboard.Position;
 public class GameStateManager {
     private GameBoard gameBoard;
     private GameStateEvents gameStateEventsHandler;
+    private List<Player> players;
 
     /**
      * Constructor

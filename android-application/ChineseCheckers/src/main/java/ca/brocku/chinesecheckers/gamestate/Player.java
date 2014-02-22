@@ -27,6 +27,10 @@ public abstract class Player {
      * Handles a player making a move.
      */
     public interface PlayerTurnHandler {
+        /**
+         * Fired when the player makes a move.
+         * @param move  The move that was made.
+         */
         public void onMoveMade(Move move);
     }
 }
