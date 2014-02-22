@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 
                 startActivity(intent);
 
-            } else {
+            } else { //configure a new game
                 startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
             }
         }

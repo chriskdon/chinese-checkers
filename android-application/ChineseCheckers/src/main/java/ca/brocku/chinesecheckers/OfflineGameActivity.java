@@ -88,20 +88,26 @@ public class OfflineGameActivity extends Activity {
             doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
 
             //Bind Handlers
-            resetMove.setOnClickListener(new ResetMoveHanlder());
+            resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
             currentPlayerName.setText(playerNames[0]);
 
             if(true) { //TODO change to: if there is a saved game using passed info from main or something local
-                DialogFragment newFragment = OfflineGameResumeDialog.newInstance(1);
-                newFragment.show(getFragmentManager(), "dialog");
+                new OfflineGameResumeDialog().show(getFragmentManager(), "resumeDialog");
             }
 
             return rootView;
         }
 
-        private class ResetMoveHanlder implements View.OnClickListener {
+        public Boolean onEndGame() {
+            new OfflineGameEndDialog().show(getFragmentManager(), "endDialog");
+
+            return true;
+        }
+
+
+        private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
 
@@ -112,7 +118,7 @@ public class OfflineGameActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-
+                onEndGame(); //TODO move this to class which checks for end game; prob. Game State
             }
         }
     }

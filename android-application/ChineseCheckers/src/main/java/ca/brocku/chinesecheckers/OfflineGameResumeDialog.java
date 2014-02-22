@@ -17,14 +17,6 @@ import android.view.ViewGroup;
 public class OfflineGameResumeDialog extends DialogFragment {
 
 
-    public static OfflineGameResumeDialog newInstance(int title) {
-        OfflineGameResumeDialog dialog = new OfflineGameResumeDialog();
-        Bundle args = new Bundle();
-        args.putInt("title", title);
-        dialog.setArguments(args);
-        return dialog;
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(
