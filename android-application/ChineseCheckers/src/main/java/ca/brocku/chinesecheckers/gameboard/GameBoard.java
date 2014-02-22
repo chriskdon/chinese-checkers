@@ -7,7 +7,18 @@ package ca.brocku.chinesecheckers.gameboard;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public interface GameBoard {
+public abstract class GameBoard {
+    private GameBoardEvents gameBoardEvents;    // Various game event handlers.
+
+    /**
+     * Set the handler for the game board events callbacks.
+     *
+     * @param gameBoardEventsHandler    The handler.
+     */
+    public void setGameBoardEventsHandler(GameBoardEvents gameBoardEventsHandler) {
+        this.gameBoardEvents = gameBoardEventsHandler;
+    }
+
     /**
      * The number of available positions in each row.
      */
@@ -19,6 +30,10 @@ public interface GameBoard {
      */
     public static final int TOTAL_PIECE_COUNT = 121;
 
+    /**
+     * Maximum number of pieces on a row
+     */
+    public static final int MAXIMUM_PIECES_PER_ROW = 13;
 
     /**
      * Move a piece from one position to another.
@@ -26,7 +41,7 @@ public interface GameBoard {
      * @param piece The piece to move.
      * @param to    The new position of the piece.
      */
-    public void movePiece(Piece piece, Position to);
+    public abstract void movePiece(Piece piece, Position to);
 
     /**
      * Returns all the pieces on the board in no specified order.
@@ -34,7 +49,7 @@ public interface GameBoard {
      *
      * @return All the pieces.
      */
-    public Piece[] getAllPieces();
+    public abstract Piece[] getAllPieces();
 
     /**
      * Get the piece that is at a position on the board.
@@ -43,7 +58,7 @@ public interface GameBoard {
      *
      * @return      The piece that was at the position specified.
      */
-    public Piece getPiece(Position at);
+    public abstract Piece getPiece(Position at);
 
     /**
      * A list of valid positions that the specified piece could move to.
@@ -53,7 +68,7 @@ public interface GameBoard {
      * @return          The list of positions the piece can move to. Or <code>null</code> if there
      *                  is nowhere to move.
      */
-    public Position[] getPossibleMoves(Piece forPiece);
+    public abstract Position[] getPossibleMoves(Piece forPiece);
 
     /**
      * Check if a move is valid for a specified piece.
@@ -62,5 +77,9 @@ public interface GameBoard {
      * @param to    The position the piece is trying to move to.
      * @return      True if the move is valid, false otherwise.
      */
-    public boolean isValidMove(Piece piece, Position to);
+    public abstract boolean isValidMove(Piece piece, Position to);
+
+    public static interface GameBoardEvents {
+        public void onPlayerWon(int playerNumber);
+    }
 }

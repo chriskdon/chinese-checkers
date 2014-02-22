@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import ca.brocku.chinesecheckers.uiengine.BoardUiDrawingEngine;
+import ca.brocku.chinesecheckers.gameboard.Piece;
+import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.Player;
+import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class OfflineGameActivity extends Activity {
     private String[] players; //an array of the players' names
@@ -61,6 +65,7 @@ public class OfflineGameActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class OfflineGameFragment extends Fragment {
+        private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
@@ -70,17 +75,25 @@ public class OfflineGameActivity extends Activity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater,
+                                 ViewGroup container,
                                  Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
             playerNames = getArguments().getStringArray("PLAYER_NAMES");
 
             // Setup Game Board
-            BoardUiDrawingEngine gameBoardUi = (BoardUiDrawingEngine)
+            BoardUiEngine gameBoardUi = (BoardUiEngine)
                     rootView.findViewById(R.id.gameBoardSurface);
 
+            this.boardUiEngine = gameBoardUi;
+
             gameBoardUi.setPlayerCount(playerNames.length);
+
+
+            gameBoardUi.setBoardEventsHandler(new BoardEventsHandler());
+
 
             //Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
@@ -121,6 +134,34 @@ public class OfflineGameActivity extends Activity {
 
             }
         }
-    }
 
+        private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
+            // TODO: This class needs to link with the grid
+            Position lastPosition = null;
+
+            @Override
+            public void positionTouched(final Position position) {
+                Log.d("TOUCHED", "(" + position.getRow() + ", " + position.getIndex() + ")");
+
+                if(lastPosition != null) {
+                    OfflineGameFragment.this.boardUiEngine.movePiece(new Piece() {
+                        @Override
+                        public Position getPosition() {
+                            return lastPosition;
+                        }
+
+                        @Override
+                        public int getPlayerNumber() {
+                            return 0;
+                        }
+                    }, position, null);
+
+                    lastPosition = null;
+                } else {
+                    lastPosition = position;
+                }
+
+            }
+        }
+    }
 }

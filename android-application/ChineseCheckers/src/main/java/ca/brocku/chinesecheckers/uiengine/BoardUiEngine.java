@@ -2,6 +2,7 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -13,7 +14,7 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public interface BoardUiDrawingEngine {
+public interface BoardUiEngine {
     /**
      * TODO: Remove and replace with board initialization
      *
@@ -26,12 +27,12 @@ public interface BoardUiDrawingEngine {
     /**
      * Animate moving a piece on the board.
      *
-     * @param piece         The piece to be moved.
+     * @param from          The Piece to move.
      * @param to            The position to move to.
-     * @param jumps         @Nullable, The piece that is jumped in this move if any.
      * @param onFinished    Callback to fire when the animation has completed.
+     * @return              Returns true if a piece could be successfully moved.
      */
-    public void movePiece(Piece piece, Position to, Piece jumps, FinishedMovingPieceHandler onFinished);
+    public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished);
 
     /**
      * Highlight a position on the board so that the player
@@ -61,12 +62,10 @@ public interface BoardUiDrawingEngine {
      *
      * Return a piece back to it's original position.
      *
-     * @param piece             The piece to move.
-     * @param originalPosition  The original position to move the piece back to.
+     * @param move              The piece and path taken.
      * @param onFinished        Callback to fire when the animation has completed.
      */
-    public void cancelMove(Piece piece, Position originalPosition,
-                           FinishedMovingPieceHandler onFinished);
+    public void cancelMove(Move move, FinishedMovingPieceHandler onFinished);
 
     /**
      * Show hints on the board for positions the player could potentially move to.
@@ -83,4 +82,18 @@ public interface BoardUiDrawingEngine {
      * @param pieces    The pieces that represent the initial state of the board.
      */
     public void initializeBoard(Piece[] pieces);
+
+    /**
+     * Add a handler to receive any events that occur on the board.
+     *
+     * @param handler The handler to register for the events.
+     */
+    public void setBoardEventsHandler(BoardUiEventsHandler handler);
+
+    /**
+     * Events caused by the BoardUiEngine
+     */
+    public static interface BoardUiEventsHandler {
+        public void positionTouched(Position position);
+    }
 }
