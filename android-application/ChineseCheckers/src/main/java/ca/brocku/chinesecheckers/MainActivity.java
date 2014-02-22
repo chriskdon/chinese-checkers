@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -58,7 +59,10 @@ public class MainActivity extends Activity {
          */
         @Override
         public void onClick(View view) {
-            startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
+            DialogFragment newFragment = OfflineGameResumeDialog.newInstance(1);
+            newFragment.show(getFragmentManager(), "dialog");
+
+            //startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
         }
     }
 }
