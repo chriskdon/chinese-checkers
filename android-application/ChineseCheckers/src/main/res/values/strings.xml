@@ -13,4 +13,5 @@
     <string name="offline_move_reset">Reset</string>
     <string name="title_activity_help">HelpActivity</string>
 
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dapibus feugiat ullamcorper. Fusce lacinia tellus ac tortor dignissim molestie vel eu augue. Donec porttitor quis tellus vitae tristique. Duis aliquet laoreet fermentum. Ut vitae tempus sapien, quis pulvinar magna. Quisque congue eros at sapien sollicitudin, ut pretium ipsum placerat. Morbi euismod aliquam auctor. Nullam ac congue purus. Pellentesque ultricies mollis sollicitudin.</string>
 </resources>
