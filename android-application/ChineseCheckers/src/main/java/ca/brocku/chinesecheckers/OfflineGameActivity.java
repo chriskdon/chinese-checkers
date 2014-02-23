@@ -1,8 +1,10 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -41,6 +45,11 @@ public class OfflineGameActivity extends Activity {
                     .add(R.id.container, offlineGameFragment)
                     .commit();
         }
+
+        if(false) { //TODO change to: if there is a saved game using passed info from main or something local
+            ResumeDialog dialog = new ResumeDialog(this, R.style.CustomDialogTheme);
+            dialog.show();
+        }
     }
 
 
@@ -61,8 +70,16 @@ public class OfflineGameActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
+    public Boolean onEndGame() {
+        EndOfGameDialog dialog = new EndOfGameDialog(this, R.style.CustomDialogTheme);
+        dialog.setWinner("Kuba");
+        dialog.show();
+
+        return true;
+    }
+
+    /** Fragment containing game board, controls, and player turn indicator
+     *
      */
     public static class OfflineGameFragment extends Fragment {
         private BoardUiEngine boardUiEngine;
@@ -106,19 +123,8 @@ public class OfflineGameActivity extends Activity {
 
             currentPlayerName.setText(playerNames[0]);
 
-            if(false) { //TODO change to: if there is a saved game using passed info from main or something local
-                new OfflineGameResumeDialog().show(getFragmentManager(), "resumeDialog");
-            }
-
             return rootView;
         }
-
-        public Boolean onEndGame() {
-            new OfflineGameEndDialog().show(getFragmentManager(), "endDialog");
-
-            return true;
-        }
-
 
         private class ResetMoveHandler implements View.OnClickListener {
             @Override
@@ -128,7 +134,6 @@ public class OfflineGameActivity extends Activity {
         }
 
         private class DoneMoveHandler implements View.OnClickListener {
-
             @Override
             public void onClick(View view) {
 
@@ -162,6 +167,79 @@ public class OfflineGameActivity extends Activity {
                 }
 
             }
+        }
+    }
+
+    /** This class represents a custom dialog box which appears when there is a saved game. It
+     * prompts the user to decide whether to resume the game or quit it.
+     *
+     */
+    private class ResumeDialog extends Dialog {
+
+        public ResumeDialog(final Context context, int theme) {
+            super(context, theme);
+
+            setContentView(R.layout.fragment_offline_game_resume_dialog); //dialog layout
+
+            //Bind controls for the dialog options
+            Button resumeButton = (Button)findViewById(R.id.offlineAcceptContinuationButton);
+            Button quitButton = (Button)findViewById(R.id.offlineDeclineContinuationButton);
+
+            //Handler to close the dialog if option to resume is chosen
+            resumeButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    dismiss();
+                }
+            });
+
+            //Handler to quit the current game and go to the config screen if quit is chosen
+            quitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((Activity)context).finish();
+                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
+                }
+            });
+        }
+    }
+
+    /** This class represents a custom dialog box which appears when someone wins. It prompts the
+     * user to decide whether to play a new game or go to the home screen.
+     *
+     */
+    private class EndOfGameDialog extends Dialog {
+        private TextView title; //the title of the Dialog (i.e. "<WINNER_NAME> Wins!")
+
+        public EndOfGameDialog(final Context context, int theme) {
+            super(context, theme);
+
+            setContentView(R.layout.fragment_offline_game_end_dialog); //dialog layout
+
+            //Bind controls for the dialog options and title
+            Button newGameButton = (Button)findViewById(R.id.offlineGameEndToNewButton);
+            Button homeButton = (Button)findViewById(R.id.offlineGameEndToHomeButton);
+            title = (TextView)findViewById(R.id.offlineGameEndTitle);
+
+            //Handler to close the dialog if option to play new game is chosen
+            newGameButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    ((Activity)context).finish();
+                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
+                }
+            });
+
+            //Handler for "Home" button to quit the current game and go to the main activity
+            homeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((Activity)context).finish();
+                    startActivity(new Intent(context, MainActivity.class));
+                }
+            });
+        }
+
+        public void setWinner(String winner) {
+            title.setText(winner + " Wins!!");
         }
     }
 }

@@ -32,7 +32,7 @@
         android:textColor="@color/app_background"
         android:textAllCaps="true"
         android:textStyle="bold"
-        android:text="@string/offline"
+        android:text="@string/play_offline"
         android:id="@+id/offlineConfigurationActivityButton" />
 
 </LinearLayout>
