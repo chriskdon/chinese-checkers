@@ -9,8 +9,7 @@ import ca.brocku.chinesecheckers.gamestate.Player;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class CcGameBoard implements GameBoard{
-
+public class CcGameBoard extends GameBoard{
     /**
      * The number of available positions in each row.
      */
