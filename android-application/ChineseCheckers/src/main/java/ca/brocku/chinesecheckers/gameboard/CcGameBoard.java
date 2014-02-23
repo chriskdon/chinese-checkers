@@ -161,6 +161,7 @@ public class CcGameBoard extends GameBoard{
         }
         return allPieces;
     }
+
     private int countPieces() {
         int count = 0;
         for(int i=0; i<board.length;i++) {
