@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ListIterator;
 
 import ca.brocku.chinesecheckers.uiengine.Dimensions;
@@ -42,6 +43,22 @@ public class Visual {
         // Add it
         v.setParent(this);
         visuals.add(v);
+    }
+
+    /**
+     * Remove the child visual.
+     * @param v The child to remove.
+     */
+    public void removeChild(Visual v) {
+        visuals.remove(v);
+    }
+
+    /**
+     * Remove a collection of children.
+     * @param children  The children to remove.
+     */
+    public void removeChildren(Collection<Visual> children) {
+        visuals.removeAll(children);
     }
 
     /**

@@ -18,9 +18,10 @@ public class HintVisual extends PieceVisual {
      */
     public HintVisual(PieceDrawingDetails pieceDrawingDetails) {
         // TODO: Replace color with something from resources.
-        super(pieceDrawingDetails, Color.WHITE);
+        super(pieceDrawingDetails, Color.rgb(229, 231, 233));
 
         paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(6); // TODO: Width from resources?
     }
 
     /**
