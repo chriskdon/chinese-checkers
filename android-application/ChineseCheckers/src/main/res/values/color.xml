@@ -40,4 +40,6 @@
     <color name="purple">#8601AF</color>
     <color name="dark_purple">#5E0087</color>
     <color name="light_purple">#E7ADFF</color>
+
+    <color name="hint_color">#E5E7E9</color>
 </resources>

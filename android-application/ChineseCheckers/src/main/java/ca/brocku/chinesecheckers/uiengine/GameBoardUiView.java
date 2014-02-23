@@ -43,9 +43,10 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     private Map<Position, PieceVisual> pieces;                  // Pieces
     private BoardUiEventsHandler boardUiEventsHandlerhandler;   // Board events handler
     private Collection<Visual> hintPositions;                   // Positions of the currently
-                                                                // displayed hints.
+    private int hintColor;                                      // Displayed hint color.
+    private float hintStrokeWidth;                              // Width of the hint stroke.
 
-    private int playerCount; // The number of players in the game
+    private int playerCount;                                    // The number of players in the game.
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -63,6 +64,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      * Register the handler to start drawing the board.
      */
     {
+        this.hintColor = getResources().getColor(R.color.hint_color);
+        this.hintStrokeWidth = getResources().getInteger(R.integer.hint_stroke_width);
+
         this.pieces = new HashMap<Position, PieceVisual>();
 
         getHolder().addCallback(new SurfaceHolder.Callback() {
@@ -374,7 +378,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
         // Add Hint
         for(Position p : positions) {
-            Visual v = new HintVisual(piecePositionSystem.get(p));
+            Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
 
             this.hintPositions.add(v);
             gameBoard.addChild(v);
