@@ -1,7 +1,5 @@
 package ca.brocku.chinesecheckers.gameboard;
 
-import ca.brocku.chinesecheckers.gamestate.Player;
-
 /**
  * The implementation of GameBoard - This board being specifically for chinese checkers.
  *
@@ -17,7 +15,6 @@ public class CcGameBoard extends GameBoard{
     /**
      * Total number of spaces on the board
      */
-    public static final int TOTAL_PIECE_COUNT = 121;
     Piece[][] board;
     WinHandler handler;
 
@@ -34,10 +31,11 @@ public class CcGameBoard extends GameBoard{
     /**
      * Populates the board with pieces in the starting location for each player.
      *
-     * @param  playerList The list of players that are participating in the game.
+     * @param  playerNum Number of players playing.
      */
-    public void populateBoard(int[] playerList) {
+    public void populateBoard(int playerNum) {
         int k, h, start;
+        int[] playerList = generatePlayerList(playerNum);
         for(int x = 0; x<playerList.length; x++) {
             start = playerList[x];
             for(int i=0; i<4;i++) {
@@ -49,13 +47,21 @@ public class CcGameBoard extends GameBoard{
             }
         }
     }
+    public void populateBoard(Piece[] pieceList) {
+        if(checkEmpty()) {
+            for(int i = 0; i<pieceList.length; i++) {
+                setPiece(pieceList[i].getPosition(), pieceList[i].getPlayer());
+            }
+        }
+
+    }
+
     /**
      * Checks to see if a player satisfies the win condition by checking that all positions in their
      * goal area have one of their pieces in that position.
      *
      * @param  playerNumber The player for which checking of win condition is required.
      *
-     * @return returns true if the player has met the conditions, false otherwise.
      */
     public void checkWinCondition(int playerNumber) {
         boolean winCheck = true;
@@ -77,45 +83,11 @@ public class CcGameBoard extends GameBoard{
                 }
             }
         }
-        if(winCheck == true && this.handler != null) {
+        if(winCheck && this.handler != null) {
             this.handler.onWin(playerNumber);
         }
     }
-    /**
-     * An assisting function for checkWinCondition and populateBoard that returns an offset row value
-     * based on the location of the targeted area and the current iteration of the loop.
-     *
-     * @param  location The targeted area, see supporting location documentation.
-     * @param  i The iteration of the loop
-     * @return returns the offset of the row.
-     */
-    private int getOffsetRow(int location, int i) {
-        switch (location) {
-            case 1: return 16-i;
-            case 2: return 9+i;
-            case 3: return 7-i;
-            case 4: return i;
-            case 5: return 7-i;
-            case 6: return 9+i;
-            default: return -1;
-        }
-    }
-    /**
-     * An assisting function for checkWinCondition and populateBoard that returns an offset column or index value
-     * based on the location of the targeted area and the current iteration of the loop.
-     *
-     * @param  location The targeted area, see supporting location documentation.
-     * @param  j The iteration of the loop
-     * @return returns the offset of the index.
-     */
-    private int getOffsetIndex(int location, int j) {
-        if(location < 5) {
-            return j;
-        }
-        else {
-            return j+9;
-        }
-    }
+
     /**
      * Returns a constructed chinese checks board in the form of a ragged two dimensional Piece array
      *
@@ -189,7 +161,6 @@ public class CcGameBoard extends GameBoard{
      *
      * @param at    The Position that the player wishes to set the piece.
      * @param pl    The player that has ownership of the Piece.
-     * @return      The piece that was at the position specified.
      */
     public void setPiece(Position at, int pl) {
         int row = at.getRow();
@@ -540,6 +511,73 @@ public class CcGameBoard extends GameBoard{
             return null;
         }
         return at;
+    }
+    /**
+     * An assisting function for checkWinCondition and populateBoard that returns an offset row value
+     * based on the location of the targeted area and the current iteration of the loop.
+     *
+     * @param  location The targeted area, see supporting location documentation.
+     * @param  i The iteration of the loop
+     * @return returns the offset of the row.
+     */
+    private int getOffsetRow(int location, int i) {
+        switch (location) {
+            case 1: return 16-i;
+            case 2: return 9+i;
+            case 3: return 7-i;
+            case 4: return i;
+            case 5: return 7-i;
+            case 6: return 9+i;
+            default: return -1;
+        }
+    }
+    /**
+     * An assisting function for checkWinCondition and populateBoard that returns an offset column or index value
+     * based on the location of the targeted area and the current iteration of the loop.
+     *
+     * @param  location The targeted area, see supporting location documentation.
+     * @param  j The iteration of the loop
+     * @return returns the offset of the index.
+     */
+    private int getOffsetIndex(int location, int j) {
+        if(location < 5) {
+            return j;
+        }
+        else {
+            return j+9;
+        }
+    }
+    private boolean checkEmpty() {
+        for(int i=0; i<board.length;i++) {
+            for(int j=0; j<board[i].length; j++) {
+                if(board[i][j]!=null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private int[] generatePlayerList(int playerNum) {
+        if(playerNum==2) {
+            int[] playerList = {1,4};
+            return playerList;
+        }
+        else if(playerNum==3) {
+            int[] playerList = {1,3,5};
+            return playerList;
+        }
+        else if(playerNum==4) {
+            int[] playerList = {1,3,4,6};
+            return playerList;
+        }
+        else if(playerNum==6) {
+            int[] playerList = {1,3,4,6};
+            return playerList;
+        }
+        else {
+            throw new RuntimeException();
+        }
+
     }
     public interface WinHandler {
         public void onWin(int playerNumWhoWon);
