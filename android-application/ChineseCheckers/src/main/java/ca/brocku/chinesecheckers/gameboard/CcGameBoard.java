@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import java.util.Arrays;
+
 /**
  * The implementation of GameBoard - This board being specifically for chinese checkers.
  *
@@ -9,31 +11,64 @@ package ca.brocku.chinesecheckers.gameboard;
  */
 public class CcGameBoard extends GameBoard{
     /**
-     * The number of available positions in each row.
-     */
-    public static final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1};
-    /**
      * Total number of spaces on the board
      */
-    Piece[][] board;
-    WinHandler handler;
+    private Piece[][] board;
 
-    public CcGameBoard(WinHandler handler) {
+    /**
+     * Construct a new board for a specified number of players.
+     * @param numPlayers    The number of players in the game.
+     */
+    public CcGameBoard(int numPlayers) {
+        this(numPlayers, null);
+    }
+
+    /**
+     * Load a game that has already been started.
+     * @param pieceList The state of all the pieces from the existing games.
+     */
+    public CcGameBoard(Piece[] pieceList) {
+        this(pieceList, null);
+    }
+
+    /**
+     * Initialize a new game with the specified number of players.
+     * @param numPlayers    The number of players in the game. {2,3,4,6}
+     * @param handler       The event handler to set for the game.
+     */
+    public CcGameBoard(int numPlayers, GameBoardEvents handler) {
+        // Check to make sure the numPlayers argument is in range.
+        if(!Arrays.asList(2, 3, 4, 6).contains(numPlayers)) {
+            throw new IllegalArgumentException("The number of players must be {2,3,4,5}.");
+        }
+
         board = constructBoard();
-        this.handler = handler;
+        populateNewGame(numPlayers);
+        setGameBoardEventsHandler(handler);
     }
-    public CcGameBoard() {
+
+    /**
+     * Load a game board from an initial set of pieces.
+     * @param pieceList The list of pieces to initialize the board with.
+     * @param handler   The event handler to set for the game.
+     */
+    public CcGameBoard(Piece[] pieceList, GameBoardEvents handler) {
+        if((pieceList.length%10) != 0 || pieceList.length > 60) {
+            throw new IllegalArgumentException("The number of pieces on the board doesn't match the number of players playing.");
+        }
+
         board = constructBoard();
+        loadBoard(pieceList);
+        setGameBoardEventsHandler(handler);
     }
-    public void setWindHandler(WinHandler handler) {
-        this.handler = handler;
-    }
+
+
     /**
      * Populates the board with pieces in the starting location for each player.
      *
      * @param  playerNum Number of players playing.
      */
-    public void populateNewGame(int playerNum) {
+    private void populateNewGame(int playerNum) {
         int k, h, start;
         int[] playerList = generatePlayerList(playerNum);
         for(int x = 0; x<playerList.length; x++) {
@@ -47,10 +82,15 @@ public class CcGameBoard extends GameBoard{
             }
         }
     }
-    public void loadBoard(Piece[] pieceList) {
+
+    /**
+     * Fill the board with the specified set of pieces.
+     * @param pieceList The list of pieces to initialize the board with.
+     */
+    private void loadBoard(Piece[] pieceList) {
         if(checkEmpty()) {
             for(int i = 0; i<pieceList.length; i++) {
-                setPiece(pieceList[i].getPosition(), pieceList[i].getPlayer());
+                setPiece(pieceList[i].getPosition(), pieceList[i].getPlayerNumber());
             }
         }
 
@@ -63,7 +103,7 @@ public class CcGameBoard extends GameBoard{
      * @param  playerNumber The player for which checking of win condition is required.
      *
      */
-    public void checkWinCondition(int playerNumber) {
+    private void checkWinCondition(int playerNumber) {
         boolean winCheck = true;
         int k, h;
         int winArea;
@@ -77,14 +117,15 @@ public class CcGameBoard extends GameBoard{
             for(int j=0; j<i+1; j++) {
                 k = getOffsetRow(winArea, i);
                 h = getOffsetIndex(winArea, j);
-                if(board[k][h]==null || board[k][h].getPlayer()!=playerNumber){
+                if(board[k][h]==null || board[k][h].getPlayerNumber()!=playerNumber){
                     winCheck = false;
                     break;
                 }
             }
         }
-        if(winCheck && this.handler != null) {
-            this.handler.onWin(playerNumber);
+
+        if(winCheck && this.gameBoardEventsHandler != null) {
+            this.gameBoardEventsHandler.onPlayerWon(playerNumber);
         }
     }
 
@@ -100,11 +141,13 @@ public class CcGameBoard extends GameBoard{
         }
         return board;
     }
+
     /**
      * Return all the pieces that are on the board in no specific order.
      *
      * @return  All the pieces on the board.
      */
+    @Override
     public Piece[] getAllPieces() {
         Piece[] allPieces = new GridPiece[60];
         int allPiecesIndex = 0;
@@ -126,15 +169,17 @@ public class CcGameBoard extends GameBoard{
      * @param piece The piece to move.
      * @param to    The new position of the piece.
      */
+    @Override
     public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
-            setPiece(to, piece.getPlayer());
+            setPiece(to, piece.getPlayerNumber());
             int oldRow = piece.getPosition().getRow();
             int oldIndex = piece.getPosition().getIndex();
             board[oldRow][oldIndex] = null;
-            this.checkWinCondition(piece.getPlayer());
+            this.checkWinCondition(piece.getPlayerNumber());
         }
     }
+
     /**
      * Get the piece that is at a position on the board.
      *
@@ -143,6 +188,7 @@ public class CcGameBoard extends GameBoard{
      * @return      The piece that was at the position specified, returns null if the position is
      *               empty or out of bounds.
      */
+    @Override
     public Piece getPiece(Position at) {
         int row = at.getRow();
         int index = at.getIndex();
@@ -155,6 +201,7 @@ public class CcGameBoard extends GameBoard{
             return null;
         }
     }
+
     /**
      * Sets a piece at a given position for a given player. This method will mostly be used for
      * unit testing, and once unit testing is complete, for assistance in setting up the board.
@@ -179,6 +226,7 @@ public class CcGameBoard extends GameBoard{
      * @return          The list of positions the piece can move to. Or an empty array if there
      *                  is nowhere to move.
      */
+    @Override
     public Position[] getPossibleMoves(Piece forPiece) {
         Position[] possibleMoves = new GridPosition[12];
         int row = forPiece.getPosition().getRow();
@@ -469,6 +517,7 @@ public class CcGameBoard extends GameBoard{
      * @param to    The position the piece is trying to move to.
      * @return      True if the move is valid, false otherwise.
      */
+    @Override
     public boolean isValidMove(Piece piece, Position to) {
         Position[] possibleMoves = getPossibleMoves(piece);
         for(int i=0; i<possibleMoves.length; i++) {
@@ -480,6 +529,7 @@ public class CcGameBoard extends GameBoard{
         }
         return false;
     }
+
     /**
      * Checks if a position on the game board is occupied or out of bounds.
      *
@@ -499,6 +549,7 @@ public class CcGameBoard extends GameBoard{
             return true;
         }
     }
+
     /**
      * Assistant method for getPossibleMoves(), implements an easier way of checking if a position
      * is valid and simply returning the position if it is.
@@ -512,6 +563,7 @@ public class CcGameBoard extends GameBoard{
         }
         return at;
     }
+
     /**
      * An assisting function for checkWinCondition and populateBoard that returns an offset row value
      * based on the location of the targeted area and the current iteration of the loop.
@@ -531,6 +583,7 @@ public class CcGameBoard extends GameBoard{
             default: return -1;
         }
     }
+
     /**
      * An assisting function for checkWinCondition and populateBoard that returns an offset column or index value
      * based on the location of the targeted area and the current iteration of the loop.
@@ -578,9 +631,6 @@ public class CcGameBoard extends GameBoard{
             throw new RuntimeException();
         }
 
-    }
-    public interface WinHandler {
-        public void onWin(int playerNumWhoWon);
     }
 }
 

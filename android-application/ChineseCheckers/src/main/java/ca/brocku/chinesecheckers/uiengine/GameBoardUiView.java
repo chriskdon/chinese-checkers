@@ -2,16 +2,20 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -20,6 +24,7 @@ import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
+import ca.brocku.chinesecheckers.uiengine.visuals.HintVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.PieceVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
 
@@ -37,6 +42,8 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
     private Map<Position, PieceVisual> pieces;                  // Pieces
     private BoardUiEventsHandler boardUiEventsHandlerhandler;   // Board events handler
+    private Collection<Visual> hintPositions;                   // Positions of the currently
+                                                                // displayed hints.
 
     private int playerCount; // The number of players in the game
 
@@ -84,7 +91,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
                         }
                     }
                 });
-
 
                 drawPlayer(piecePositionSystem);
 
@@ -222,6 +228,26 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
             gameBoard.addChild(drawPiece(pos, 6, 10, color));
             gameBoard.addChild(drawPiece(pos, 7, 9, color));
         }
+
+        Position[] positions = new Position[2];
+        positions[0] = createPosition(4,5);
+        positions[1] = createPosition(4,6);
+        showHintPositions(positions);
+    }
+
+    // TODO: FOR TESTING -- REMOVE
+    private Position createPosition(final int row, final int index) {
+        return new Position() {
+            @Override
+            public int getRow() {
+                return row;
+            }
+
+            @Override
+            public int getIndex() {
+                return index;
+            }
+        };
     }
 
     // TODO: Utility function for display testing --> REMOVE
@@ -238,7 +264,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
             }
         };
 
-        PieceVisual pv = new PieceVisual("COLOR", pos.get(p), color);
+        PieceVisual pv = new PieceVisual(pos.get(p), color);
 
         pieces.put(p, pv);
 
@@ -296,7 +322,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      */
     @Override
     public void highlightPosition(Position position) {
-        // TODO
+
     }
 
     /**
@@ -340,7 +366,19 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      */
     @Override
     public void showHintPositions(Position[] positions) {
+        if(this.hintPositions != null) {
+            gameBoard.removeChildren(hintPositions);
+        }
 
+        this.hintPositions = new HashSet<Visual>(positions.length);
+
+        // Add Hint
+        for(Position p : positions) {
+            Visual v = new HintVisual(piecePositionSystem.get(p));
+
+            this.hintPositions.add(v);
+            gameBoard.addChild(v);
+        }
     }
 
     /**

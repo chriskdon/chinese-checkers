@@ -15,10 +15,8 @@ import ca.brocku.chinesecheckers.uiengine.PixelPosition;
  * Date: 2/3/2014
  */
 public class PieceVisual extends Visual {
-    private String name;
     private PieceDrawingDetails pieceDrawingDetails;    // Details about how the piece is drawn
     protected int color;                                // The color of the piece
-    protected float cX, cY;                             // Center (x,y) pixel position
     protected Paint paint;                              // Paint details for the piece
 
     /**
@@ -26,12 +24,11 @@ public class PieceVisual extends Visual {
      * @param pieceDrawingDetails   Details for drawing the piece.
      * @param color                 The color of the piece.
      */
-    public PieceVisual(String name, PieceDrawingDetails pieceDrawingDetails, int color) {
+    public PieceVisual(PieceDrawingDetails pieceDrawingDetails, int color) {
         super(0, 0, // These are set in #setPosition().
               pieceDrawingDetails.getRadius() * 2,
               pieceDrawingDetails.getRadius() * 2);
 
-        this.name = name;
         this.color = color;
         this.paint = new Paint();
 
@@ -49,9 +46,18 @@ public class PieceVisual extends Visual {
         this.pieceDrawingDetails = details;
         this.position = new PixelPosition(details.getX() - details.getRadius(),
                                           details.getY() - details.getRadius());
+    }
 
-        this.cX = pieceDrawingDetails.getX();
-        this.cY = pieceDrawingDetails.getY();
+    public float getCenterX() {
+        return pieceDrawingDetails.getX();
+    }
+
+    public  float getCenterY() {
+        return pieceDrawingDetails.getY();
+    }
+
+    public float getRadius() {
+        return pieceDrawingDetails.getRadius();
     }
 
     /**
@@ -61,7 +67,7 @@ public class PieceVisual extends Visual {
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(cX, cY, pieceDrawingDetails.getRadius(), paint);
+        canvas.drawCircle(getCenterX(), getCenterY(), pieceDrawingDetails.getRadius(), paint);
     }
 
     public Position getPositionOnBoard() {

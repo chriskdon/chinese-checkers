@@ -22,7 +22,7 @@ public class ReadOnlyGameBoard extends GameBoard {
      */
     @Override
     public void movePiece(Piece piece, Position to) {
-        throw new IllegalAccessError("You can't modify the board.");
+        throw new UnsupportedOperationException("You can't modify the board.");
     }
 
     /**
