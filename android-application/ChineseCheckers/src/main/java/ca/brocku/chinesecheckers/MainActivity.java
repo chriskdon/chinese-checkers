@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View view) {
 
-            if(true) { //TODO change to: if there is a saved game
+            if(false) { //TODO change to: if there is a saved game
                 String[] players = new String[]{"Bobby", "Robby", "Tobby", "Sobby", "Cobby", "Wobby"};
                 Intent intent = new Intent(MainActivity.this, OfflineGameActivity.class);
                 intent.putExtra("PLAYER_NAMES", players);

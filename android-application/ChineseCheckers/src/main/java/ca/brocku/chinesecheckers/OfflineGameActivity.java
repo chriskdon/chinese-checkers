@@ -28,7 +28,8 @@ public class OfflineGameActivity extends Activity {
         setContentView(R.layout.activity_offline_game);
 
         // Make sure variables are setup before creating fragment
-        players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
+        // TODO: Replace
+        players = new String[]{"Test", "Test X"};//getIntent().getExtras().getStringArray("PLAYER_NAMES");
 
         //passes player array to the offline game fragment
         Fragment offlineGameFragment = new OfflineGameFragment();
@@ -131,7 +132,7 @@ public class OfflineGameActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                onEndGame(); //TODO move this to class which checks for end game; prob. Game State
+
             }
         }
 

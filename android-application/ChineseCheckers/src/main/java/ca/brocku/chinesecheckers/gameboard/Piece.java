@@ -1,7 +1,5 @@
 package ca.brocku.chinesecheckers.gameboard;
 
-import ca.brocku.chinesecheckers.gamestate.Player;
-
 /**
  * A single piece on the board that is owned
  * by a Player.

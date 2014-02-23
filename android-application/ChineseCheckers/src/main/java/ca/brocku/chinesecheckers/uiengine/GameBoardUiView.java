@@ -2,6 +2,7 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -89,7 +91,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
                         }
                     }
                 });
-
 
                 drawPlayer(piecePositionSystem);
 
