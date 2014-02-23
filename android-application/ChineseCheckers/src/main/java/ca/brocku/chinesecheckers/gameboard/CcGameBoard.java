@@ -33,7 +33,7 @@ public class CcGameBoard extends GameBoard{
      *
      * @param  playerNum Number of players playing.
      */
-    public void populateBoard(int playerNum) {
+    public void populateNewGame(int playerNum) {
         int k, h, start;
         int[] playerList = generatePlayerList(playerNum);
         for(int x = 0; x<playerList.length; x++) {
@@ -47,7 +47,7 @@ public class CcGameBoard extends GameBoard{
             }
         }
     }
-    public void populateBoard(Piece[] pieceList) {
+    public void loadBoard(Piece[] pieceList) {
         if(checkEmpty()) {
             for(int i = 0; i<pieceList.length; i++) {
                 setPiece(pieceList[i].getPosition(), pieceList[i].getPlayer());
@@ -571,7 +571,7 @@ public class CcGameBoard extends GameBoard{
             return playerList;
         }
         else if(playerNum==6) {
-            int[] playerList = {1,3,4,6};
+            int[] playerList = {1,2,3,4,5,6};
             return playerList;
         }
         else {
