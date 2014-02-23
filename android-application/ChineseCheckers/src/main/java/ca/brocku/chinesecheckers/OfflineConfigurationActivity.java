@@ -118,11 +118,19 @@ public class OfflineConfigurationActivity extends Activity {
 
                 //clears the names if another option is selected for number of players
                 redPlayerEditText.setText("");
-                orangePlayerEditText.setText("");
-                yellowPlayerEditText.setText("");
-                greenPlayerEditText.setText("");
-                bluePlayerEditText.setText("");
                 purplePlayerEditText.setText("");
+                bluePlayerEditText.setText("");
+                greenPlayerEditText.setText("");
+                yellowPlayerEditText.setText("");
+                orangePlayerEditText.setText("");
+
+                //resets the difficulties to easy
+                redPlayerEasyButton.performClick();
+                purplePlayerEasyButton.performClick();
+                bluePlayerEasyButton.performClick();
+                greenPlayerEasyButton.performClick();
+                yellowPlayerEasyButton.performClick();
+                orangePlayerEasyButton.performClick();
 
                 //shows and labels the name fields based on the number of players option
                 switch(view.getId()) {
