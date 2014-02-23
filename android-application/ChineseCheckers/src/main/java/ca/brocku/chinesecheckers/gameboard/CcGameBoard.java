@@ -39,7 +39,7 @@ public class CcGameBoard extends GameBoard{
     public CcGameBoard(int numPlayers, GameBoardEvents handler) {
         // Check to make sure the numPlayers argument is in range.
         if(!Arrays.asList(2, 3, 4, 6).contains(numPlayers)) {
-            throw new IllegalArgumentException("The number of players must be {2,3,4,5}.");
+            throw new IllegalArgumentException("The number of players must be {2,3,4,6}.");
         }
 
         board = constructBoard();
