@@ -149,7 +149,7 @@ public class CcGameBoard extends GameBoard{
      */
     @Override
     public Piece[] getAllPieces() {
-        Piece[] allPieces = new GridPiece[60];
+        Piece[] allPieces = new GridPiece[countPieces()];
         int allPiecesIndex = 0;
         for(int i=0; i<board.length;i++) {
             for(int j=0; j<board[i].length; j++) {
@@ -161,7 +161,17 @@ public class CcGameBoard extends GameBoard{
         }
         return allPieces;
     }
-
+    private int countPieces() {
+        int count = 0;
+        for(int i=0; i<board.length;i++) {
+            for(int j=0; j<board[i].length; j++) {
+                if(board[i][j]!=null) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
     /**
      * Move a piece from one position to another. Prints a statement if the move is invalid for any
      * reason.
