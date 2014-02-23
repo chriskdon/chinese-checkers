@@ -209,6 +209,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_player_human"
             android:background="@drawable/chch_button_player_type"
+            android:tag="human"
             android:id="@+id/offlineRedPlayerTypeButton"/>
 
     </LinearLayout>
@@ -291,6 +292,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_player_ai"
             android:background="@drawable/chch_button_player_type"
+            android:tag="robot"
             android:id="@+id/offlinePurplePlayerTypeButton"/>
 
     </LinearLayout>
@@ -373,6 +375,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_player_ai"
             android:background="@drawable/chch_button_player_type"
+            android:tag="robot"
             android:id="@+id/offlineBluePlayerTypeButton"/>
 
     </LinearLayout>
@@ -454,6 +457,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_player_ai"
             android:background="@drawable/chch_button_player_type"
+            android:tag="robot"
             android:id="@+id/offlineGreenPlayerTypeButton"/>
 
     </LinearLayout>
@@ -536,6 +540,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_player_ai"
             android:background="@drawable/chch_button_player_type"
+            android:tag="robot"
             android:id="@+id/offlineYellowPlayerTypeButton"/>
 
     </LinearLayout>
@@ -618,6 +623,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_player_ai"
             android:background="@drawable/chch_button_player_type"
+            android:tag="robot"
             android:id="@+id/offlineOrangePlayerTypeButton"/>
 
     </LinearLayout>
