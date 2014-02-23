@@ -15,13 +15,14 @@ public class HintVisual extends PieceVisual {
     /**
      * Create a new hint.
      * @param pieceDrawingDetails   Details for drawing the hint at a piece location.
+     * @param color                 The color of the stroke.
+     * @param strokeWidth           The width of the stroke.
      */
-    public HintVisual(PieceDrawingDetails pieceDrawingDetails) {
-        // TODO: Replace color with something from resources.
-        super(pieceDrawingDetails, Color.rgb(229, 231, 233));
+    public HintVisual(PieceDrawingDetails pieceDrawingDetails, int color, float strokeWidth) {
+        super(pieceDrawingDetails, color);
 
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(6); // TODO: Width from resources?
+        paint.setStrokeWidth(strokeWidth);
     }
 
     /**
