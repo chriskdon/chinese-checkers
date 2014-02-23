@@ -106,7 +106,7 @@ public class OfflineGameActivity extends Activity {
 
             currentPlayerName.setText(playerNames[0]);
 
-            if(true) { //TODO change to: if there is a saved game using passed info from main or something local
+            if(false) { //TODO change to: if there is a saved game using passed info from main or something local
                 new OfflineGameResumeDialog().show(getFragmentManager(), "resumeDialog");
             }
 
