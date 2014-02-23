@@ -8,8 +8,8 @@ package ca.brocku.chinesecheckers.gamestate;
  * Date: 2/13/2014
  */
 public class CcPlayer implements Player {
-    String name;
-    int location;
+    private String name;
+    private int location;
     public CcPlayer(String n, int l) {
         name = n;
         location = l;
