@@ -1,5 +1,8 @@
 package ca.brocku.chinesecheckers.tests;
-
+//import org.junit.Test;
+//import org.junit.Ignore;
+//import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.*;
 import android.test.AndroidTestCase;
 
 import ca.brocku.chinesecheckers.gameboard.*;
@@ -13,24 +16,24 @@ import ca.brocku.chinesecheckers.gameboard.*;
 public class GridUnitTest extends AndroidTestCase  {
     //Testing that board creation does not result in a null object
     public void testBoardCreate() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	assertNotNull(board);
     }
 //   Testing that retrieving a nonexistant piece results in a null
     public void testGetPieceEmpty() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	assertNull(board.getPiece(temp));
     }
 //  Testing placement of a piece out of bounds and getting said piece results in a null
     public void testOutOfBoundsPiece() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(20,10);
     	assertNull(board.getPiece(temp));
     }
 //  Testing the setting and getting of a valid piece
     public void testSetandGetPiece() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	board.setPiece(temp, 1);
     	//assertEquals(board.getPiece(temp).getPlayer().getName(), "TEST");
@@ -39,31 +42,26 @@ public class GridUnitTest extends AndroidTestCase  {
     }
 //  Testing to see if setting a piece out of bounds is not retreived by getAllPieces
     public void testSetOutOfBounds() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(20,5);
     	board.setPiece(temp, 1);
     	Piece[] tt = board.getAllPieces();
-
-        int pieceCount = 0;
     	for(int i=0; i<tt.length; i++) {
-            if(tt[i] != null) {
-                pieceCount++;
-            }
+    		assertEquals(tt[i], null);
     	}
-        assertEquals(20, pieceCount);
     }
 // Testing to see if a piece is placed where another piece already exists, the piece is not overwritten
     public void testDoubleSet() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
         board.setPiece(temp, 1);
         board.setPiece(temp, 2);
     	Piece t = board.getPiece(temp);
-    	assertEquals(t.getPlayerNumber(), 1);
+    	assertEquals(t.getPlayer(), 1);
     }
 //  Testing to see that all moves retrieved by getPossibleMoves is valid
     public void testValidMoves() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	Piece t = new GridPiece(temp, 1);
     	Position[] possibleMoves = board.getPossibleMoves(t);
@@ -74,17 +72,9 @@ public class GridUnitTest extends AndroidTestCase  {
     		assertEquals(board.isValidMove(t, possibleMoves[i]), true);
     	}
     }
-
-    public void testCorrectNumberOfPiecesReturend() {
-        assertEquals(20, new CcGameBoard(2).getAllPieces().length);
-        assertEquals(30, new CcGameBoard(3).getAllPieces().length);
-        assertEquals(40, new CcGameBoard(4).getAllPieces().length);
-        assertEquals(60, new CcGameBoard(6).getAllPieces().length);
-    }
-
 //  Testing to see that a move outside of possibleMoves is invalid
     public void testInvalidMove() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	Piece t = new GridPiece(temp, 1);
     	Position m = new GridPosition(9,9);
@@ -92,7 +82,7 @@ public class GridUnitTest extends AndroidTestCase  {
     }
 //  Testing to see if moving a piece on a position that already has a piece is not valid
     public void testMoveOnExistingPiece() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	Position temp2 = new GridPosition(5,6);
     	board.setPiece(temp2, 1);
@@ -101,27 +91,25 @@ public class GridUnitTest extends AndroidTestCase  {
     }
 //  Testing to see if the array retrieved by getAllPieces is not a null object
     public void testGetAllPiecesNotNull() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	assertNotNull(board.getAllPieces());
     }
 //  Testing to see that a piece retrieved by getAllPieces is valid
     public void testGetPiecesValid() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	Piece t = new GridPiece(temp, 1);
     	board.setPiece(temp, 1);
     	Piece[] tt = board.getAllPieces();
     	for(int i=0;i<tt.length;i++) {
-    		if(tt[i] != null && tt[i].getPosition().getRow() == 5 &&
-                    tt[i].getPosition().getIndex() == 5) {
-
-    			assertEquals(tt[i].getPlayerNumber(), t.getPlayerNumber());
+    		if(tt[i]!=null) {
+    			assertEquals(tt[i].getPlayer(), t.getPlayer());
     		}
     	}
     }
 //  Testing to see if movePiece changes the Position correctly
     public void testMovePieceValid() {
-    	CcGameBoard board = new CcGameBoard(2);
+    	CcGameBoard board = new CcGameBoard();
     	Position temp = new GridPosition(5,5);
     	Piece t = new GridPiece(temp, 1);
     	board.setPiece(temp, 1);
@@ -130,23 +118,6 @@ public class GridUnitTest extends AndroidTestCase  {
     	assertEquals(m.getPosition().getRow(), 5);
     	assertEquals(m.getPosition().getIndex(), 6);
     	assertNull(board.getPiece(temp));
-    }
-
-    public void testCreateBoardWithValidNumberOfPlayers() {
-        try {
-            new CcGameBoard(1);
-            new CcGameBoard(5);
-            assertTrue("Invalid player number board created.", false);
-        } catch (IllegalArgumentException ex) {}
-
-        try {
-            new CcGameBoard(2);
-            new CcGameBoard(3);
-            new CcGameBoard(4);
-            new CcGameBoard(6);
-        } catch (IllegalArgumentException ex) {
-            assertTrue("Valid player number board couldn't be created.", false);
-        }
     }
 //   Currently disabled. Tests to see if the win condition is triggered appropriately.
     // Call back should be tested by GameState??
