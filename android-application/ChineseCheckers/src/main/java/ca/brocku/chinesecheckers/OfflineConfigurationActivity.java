@@ -114,23 +114,7 @@ public class OfflineConfigurationActivity extends Activity {
 
             if(currentSelection.getId() != view.getId()) { //if the current button was not pressed
 
-                hideWarnings();
-
-                //clears the names if another option is selected for number of players
-                redPlayerEditText.setText("");
-                purplePlayerEditText.setText("");
-                bluePlayerEditText.setText("");
-                greenPlayerEditText.setText("");
-                yellowPlayerEditText.setText("");
-                orangePlayerEditText.setText("");
-
-                //resets the difficulties to easy
-                redPlayerEasyButton.performClick();
-                purplePlayerEasyButton.performClick();
-                bluePlayerEasyButton.performClick();
-                greenPlayerEasyButton.performClick();
-                yellowPlayerEasyButton.performClick();
-                orangePlayerEasyButton.performClick();
+                resetPlayOptions(); //resets all of the player's options
 
                 //shows and labels the name fields based on the number of players option
                 switch(view.getId()) {
@@ -180,6 +164,43 @@ public class OfflineConfigurationActivity extends Activity {
                 currentSelection = (ToggleButton)view;
             }
             ((ToggleButton)view).setChecked(true); //ensures the selected option is checked
+        }
+
+        /** This method resets the player options for each player
+         *
+         */
+        private void resetPlayOptions() {
+            hideWarnings();
+
+            //clears the names if another option is selected for number of players
+            redPlayerEditText.setText("");
+            purplePlayerEditText.setText("");
+            bluePlayerEditText.setText("");
+            greenPlayerEditText.setText("");
+            yellowPlayerEditText.setText("");
+            orangePlayerEditText.setText("");
+
+            //resets the difficulties to easy
+            redPlayerEasyButton.performClick();
+            purplePlayerEasyButton.performClick();
+            bluePlayerEasyButton.performClick();
+            greenPlayerEasyButton.performClick();
+            yellowPlayerEasyButton.performClick();
+            orangePlayerEasyButton.performClick();
+
+            //display AI options for all players except for the first (red) player
+            if(!redPlayerTypeButton.getTag().equals("human"))
+                redPlayerTypeButton.performClick();
+            if(!purplePlayerTypeButton.getTag().equals("robot"))
+                purplePlayerTypeButton.performClick();
+            if(!bluePlayerTypeButton.getTag().equals("robot"))
+                bluePlayerTypeButton.performClick();
+            if(!greenPlayerTypeButton.getTag().equals("robot"))
+                greenPlayerTypeButton.performClick();
+            if(!yellowPlayerTypeButton.getTag().equals("robot"))
+                yellowPlayerTypeButton.performClick();
+            if(!orangePlayerTypeButton.getTag().equals("robot"))
+                orangePlayerTypeButton.performClick();
         }
     }
 
