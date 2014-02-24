@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers.uiengine.visuals;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
@@ -17,10 +18,10 @@ import ca.brocku.chinesecheckers.uiengine.PixelPosition;
  */
 public class Visual {
     protected Visual parent;
-    private ArrayList<Visual> visuals = new ArrayList<Visual>(); 		// Order matters
+    protected ArrayList<Visual> visuals = new ArrayList<Visual>(); 		// Order matters
     protected TouchEventHandler handler = null;
-    public Dimensions dimensions;   // TODO: Make private
-    public PixelPosition position; // TODO: make private
+    protected Dimensions dimensions;
+    protected PixelPosition position;
 
     public Visual(float x, float y, float w, float h) {
         this(new PixelPosition(x, y), new Dimensions(w, h));
@@ -97,6 +98,7 @@ public class Visual {
      * Call when you want to draw to the canvas.
      * @param c The canvas to draw to.
      */
+    @SuppressLint("WrongCall")
     final public void draw(Canvas c) {
         this.onDraw(c);
 
