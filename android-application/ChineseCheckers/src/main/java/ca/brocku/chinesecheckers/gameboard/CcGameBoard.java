@@ -152,7 +152,6 @@ public class CcGameBoard extends GameBoard{
     @Override
     public Piece[] getAllPieces() {
         List<Piece> allPieces = new ArrayList<Piece>();
-        int allPiecesIndex = 0;
         for(int i=0; i<board.length;i++) {
             for(int j=0; j<board[i].length; j++) {
                 if(board[i][j]!=null) {
@@ -177,6 +176,9 @@ public class CcGameBoard extends GameBoard{
             int oldIndex = piece.getPosition().getIndex();
             board[oldRow][oldIndex] = null;
             this.checkWinCondition(piece.getPlayerNumber());
+        }
+        else{
+            throw new IllegalArgumentException("This piece cannot move to this position");
         }
     }
 
@@ -628,7 +630,7 @@ public class CcGameBoard extends GameBoard{
             return playerList;
         }
         else {
-            throw new RuntimeException();
+            throw new IllegalArgumentException("The number of players provided is not 2,3,4,or 6");
         }
 
     }
