@@ -95,6 +95,7 @@ public class CcGameBoard extends GameBoard{
                 setPiece(pieceList[i].getPosition(), pieceList[i].getPlayerNumber());
             }
         }
+        else throw new BoardNotEmptyException("Board is not empty, game cannot be loaded.");
 
     }
 
@@ -178,7 +179,7 @@ public class CcGameBoard extends GameBoard{
             this.checkWinCondition(piece.getPlayerNumber());
         }
         else{
-            throw new IllegalArgumentException("This piece cannot move to this position");
+            throw new IllegalMoveException("This piece cannot move to this position");
         }
     }
 
