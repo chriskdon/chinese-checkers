@@ -7,13 +7,13 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.TextView;
 
-import ca.brocku.chinesecheckers.HotseatGameActivity;
+import ca.brocku.chinesecheckers.OfflineGameActivity;
 import ca.brocku.chinesecheckers.R;
 
 /**
  * Created by Main on 2/18/14.
  */
-public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase2<HotseatGameActivity> {
+public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase2<OfflineGameActivity> {
 
     private TestHelpers testHelper;
 
@@ -23,12 +23,12 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
     private String[] players;
 
     public OfflineGameActivityUnitTest() {
-        super(HotseatGameActivity.class);
+        super(OfflineGameActivity.class);
         testHelper = new TestHelpers();
     }
 
     public OfflineGameActivityUnitTest(Activity curAct,Instrumentation curInstruments){
-        super(HotseatGameActivity.class);
+        super(OfflineGameActivity.class);
         this.curAct = curAct;
         this.curInstruments = curInstruments;
         testHelper = new TestHelpers();
@@ -54,14 +54,14 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
 
     public void testActivity() throws Exception {
 
-        TextView hotseatCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.hotseatCurrentPlayerTextView);
-        testHelper.TextViewTest(this,hotseatCurrentPlayerTextView,true,"Red Bob");
+        TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.offlineCurrentPlayerTextView);
+        testHelper.TextViewTest(this,offlineCurrentPlayerTextView,true,"Red Bob");
 
-        Button hotseatMoveResetButton = (Button) curAct.findViewById(R.id.hotseatMoveResetButton);
-        testHelper.ButtonTest(this,hotseatMoveResetButton,true);
+        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.offlineMoveResetButton);
+        testHelper.ButtonTest(this,offlineMoveResetButton,true);
 
-        Button hotseatMoveDoneButton = (Button) curAct.findViewById(R.id.hotseatMoveDoneButton);
-        testHelper.ButtonTest(this,hotseatMoveDoneButton,true);
+        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.offlineMoveDoneButton);
+        testHelper.ButtonTest(this,offlineMoveDoneButton,true);
 
     }
 

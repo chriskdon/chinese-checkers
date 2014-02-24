@@ -40,7 +40,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
 
     public void testActivity() {
         assertNotNull("MainActivity Not Started",curAct);
-        testHelper.ButtonTest(this,(Button)curAct.findViewById(R.id.hotseatConfigurationActivityButton),true);
+        testHelper.ButtonTest(this,(Button)curAct.findViewById(R.id.offlineConfigurationActivityButton),true);
     }
 
 }

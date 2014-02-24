@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ToggleButton;
 
-import ca.brocku.chinesecheckers.HotseatConfigurationActivity;
-import ca.brocku.chinesecheckers.HotseatGameActivity;
+import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
+import ca.brocku.chinesecheckers.OfflineGameActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -38,15 +38,15 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
 
     public void testActivity() throws Exception {
         new MainActivityUnitTest(curAct, curInstruments).testActivity();
-        final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
-        monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(), null, false);
-        TouchUtils.clickView(this, hotseatConfigurationActivityButton);
+        final Button offlineConfigurationActivityButton = (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton);
+        monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(), null, false);
+        TouchUtils.clickView(this, offlineConfigurationActivityButton);
         curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
-        assertNotNull("Transition to HotseatConfigurationActivity Failed", curAct);
+        assertNotNull("Transition to OfflineConfigurationActivity Failed", curAct);
         curInstruments = getInstrumentation();
         new OfflineConfigurationActivityUnitTest(curAct, curInstruments).testActivity();
         curInstruments.removeMonitor(monitor);
-        monitor = curInstruments.addMonitor(HotseatGameActivity.class.getName(), null, false);
+        monitor = curInstruments.addMonitor(OfflineGameActivity.class.getName(), null, false);
 
         MCGIntegrationRunnable mCGIR = new MCGIntegrationRunnable(this);
         synchronized (mCGIR){
@@ -55,7 +55,7 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
         }
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor, 1000);
-        assertNotNull("Transition to HotseatGameActivity Failed", curAct);
+        assertNotNull("Transition to OfflineGameActivity Failed", curAct);
         try{Thread.sleep(1000);}catch (Exception e){}
         curInstruments = getInstrumentation();
         new OfflineGameActivityUnitTest(curAct, curInstruments).testActivity();
@@ -74,21 +74,21 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
         }
         public void run() {
             synchronized (this){
-                final ToggleButton hotseatTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.hotseatTwoPlayerButton);
-                testHelper.ButtonTest(actInsTest, hotseatTwoPlayerButton, true);
-                hotseatTwoPlayerButton.performClick();
+                final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
+                testHelper.ButtonTest(actInsTest, offlineTwoPlayerButton, true);
+                offlineTwoPlayerButton.performClick();
 
-                final EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
-                testHelper.EditTextTest(actInsTest,hotseatRedPlayerNameEditText,true);
-                final EditText hotseatGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatGreenPlayerNameEditText);
-                testHelper.EditTextTest(actInsTest, hotseatGreenPlayerNameEditText, true);
+                final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
+                testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+                final EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
+                testHelper.EditTextTest(actInsTest, offlineGreenPlayerNameEditText, true);
 
-                final Button hotseatGameActivityButton = (Button) curAct.findViewById(R.id.hotseatGameActivityButton);
-                testHelper.ButtonTest(actInsTest, hotseatGameActivityButton, true);
+                final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
+                testHelper.ButtonTest(actInsTest, offlineGameActivityButton, true);
 
-                hotseatRedPlayerNameEditText.setText("Red Bob");
-                hotseatGreenPlayerNameEditText.setText("Green Bob");
-                hotseatGameActivityButton.performClick();
+                offlineRedPlayerNameEditText.setText("Red Bob");
+                offlineGreenPlayerNameEditText.setText("Green Bob");
+                offlineGameActivityButton.performClick();
 
                 notify();
             }

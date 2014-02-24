@@ -6,7 +6,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.widget.Button;
 
-import ca.brocku.chinesecheckers.HotseatConfigurationActivity;
+import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -32,11 +32,11 @@ public class MainAndConfigIntegrationTest extends ActivityInstrumentationTestCas
 
     public void testActivity() throws Exception {
         new MainActivityUnitTest(curAct,curInstruments).testActivity();
-        final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
-        monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(), null, false);
-        TouchUtils.clickView(this, hotseatConfigurationActivityButton);
+        final Button offlineConfigurationActivityButton = (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton);
+        monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(), null, false);
+        TouchUtils.clickView(this, offlineConfigurationActivityButton);
         curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
-        assertNotNull("Transition to HotseatConfigurationActivity Failed", curAct);
+        assertNotNull("Transition to OfflineConfigurationActivity Failed", curAct);
         curInstruments = getInstrumentation();
         new OfflineConfigurationActivityUnitTest(curAct,curInstruments).testActivity();
     }
