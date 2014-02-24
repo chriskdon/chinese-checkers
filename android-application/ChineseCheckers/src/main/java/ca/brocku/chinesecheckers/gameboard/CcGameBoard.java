@@ -1,6 +1,8 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * The implementation of GameBoard - This board being specifically for chinese checkers.
@@ -149,29 +151,16 @@ public class CcGameBoard extends GameBoard{
      */
     @Override
     public Piece[] getAllPieces() {
-        Piece[] allPieces = new GridPiece[countPieces()];
+        List<Piece> allPieces = new ArrayList<Piece>();
         int allPiecesIndex = 0;
         for(int i=0; i<board.length;i++) {
             for(int j=0; j<board[i].length; j++) {
                 if(board[i][j]!=null) {
-                    allPieces[allPiecesIndex]=board[i][j];
-                    allPiecesIndex=allPiecesIndex+1;
+                    allPieces.add(board[i][j]);
                 }
             }
         }
-        return allPieces;
-    }
-
-    private int countPieces() {
-        int count = 0;
-        for(int i=0; i<board.length;i++) {
-            for(int j=0; j<board[i].length; j++) {
-                if(board[i][j]!=null) {
-                    count++;
-                }
-            }
-        }
-        return count;
+        return allPieces.toArray(new Piece[allPieces.size()]);
     }
     /**
      * Move a piece from one position to another. Prints a statement if the move is invalid for any
