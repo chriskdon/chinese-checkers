@@ -77,6 +77,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
             EditText hotseatRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatRedPlayerNameEditText);
             testHelper.EditTextTest(actInsTest,hotseatRedPlayerNameEditText,true);
+
             EditText hotseatGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.hotseatGreenPlayerNameEditText);
             testHelper.EditTextTest(actInsTest, hotseatGreenPlayerNameEditText, true);
 
