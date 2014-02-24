@@ -9,4 +9,5 @@
     <dimen name="activity_large_text_size">20dp</dimen>
     <dimen name="activity_xlarge_text_size">28dp</dimen>
     <dimen name="activity_xxlarge_text_size">32dp</dimen>
+    <dimen name="dialog_margin">30dp</dimen>
 </resources>

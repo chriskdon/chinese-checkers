@@ -26,13 +26,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="5dp"
-        android:background="@drawable/chch_edittext_red"
+        android:background="@drawable/chch_button_red"
         android:gravity="center_vertical|right"
         android:textSize="@dimen/activity_xlarge_text_size"
         android:textColor="@color/app_background"
         android:textAllCaps="true"
         android:textStyle="bold"
-        android:text="@string/hotseat"
-        android:id="@+id/hotseatConfigurationActivityButton" />
+        android:text="@string/play_offline"
+        android:id="@+id/offlineConfigurationActivityButton" />
 
 </LinearLayout>

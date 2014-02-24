@@ -11,7 +11,7 @@
 
         <item name="android:buttonStyle">@style/Button</item>
 
-        <!-- TODO bug: the following breaks the keyboard; it doesn't pop up -->
+        <!-- bug: the following breaks the keyboard; it doesn't pop up -->
         <!--<item name="android:editTextStyle">@style/EditText</item>-->
     </style>
 
@@ -20,7 +20,25 @@
         <item name="android:background">@drawable/chch_button</item>
     </style>
 
-    <!-- TODO the following is manually entered for each EditText due to above bug -->
+    <style name="AiDifficultyToggleButton" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:textColor">@color/app_background</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CustomDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/app_background_translucent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!--TODO: Remove once custom dialog is created-->
+    <style name="Dialog" parent="android:Theme.Holo.Dialog">
+    </style>
+
+    <!-- the following is manually entered for each EditText due to above bug -->
     <style name="EditText" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:background">@drawable/chch_edittext</item>
         <item name="android:textColorHint">@color/app_hint_text</item>

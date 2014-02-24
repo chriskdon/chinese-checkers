@@ -8,11 +8,18 @@ package ca.brocku.chinesecheckers.gamestate;
  * Date: 2/13/2014
  */
 public class CcPlayer implements Player {
-    String name;
-    int location;
-    public CcPlayer(String n, int l) {
-        name = n;
-        location = l;
+    private String name;
+    private int playerNumber;
+
+    /**
+     * Create a new player.
+     *
+     * @param name          The name of the player.
+     * @param playerNumber  The number of the player.
+     */
+    public CcPlayer(String name, int playerNumber) {
+        this.name = name;
+        this.playerNumber = playerNumber;
     }
     /**
      * Returns the name of a player
@@ -22,5 +29,14 @@ public class CcPlayer implements Player {
     public String getName() {
         return name;
     }
-    public int getStart() { return location;}
+
+    /**
+     * Return the number of the player. Based on their board position.
+     *
+     * @return Number of the player.
+     */
+    @Override
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
 }

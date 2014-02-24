@@ -41,4 +41,9 @@ public class PieceDrawingDetails extends PixelPosition {
     public Position getPosition() {
         return position;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " - (" + getPosition().getRow() + "," + getPosition().getIndex() + ") R: " + getRadius();
+    }
 }
