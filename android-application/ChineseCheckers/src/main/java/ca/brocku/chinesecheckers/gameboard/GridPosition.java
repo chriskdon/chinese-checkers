@@ -7,7 +7,7 @@ package ca.brocku.chinesecheckers.gameboard;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class GridPosition implements Position{
+public class GridPosition extends Position{
     int row, index;
     public GridPosition(int r, int i) {
         row = r;

@@ -11,16 +11,15 @@ import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
 /**
- * Created by Main on 2/3/14.
+ * Created by Main on 2/23/14.
  */
-
-public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MainAndConfigIntegrationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private Activity curAct;
     private Instrumentation curInstruments;
     private Instrumentation.ActivityMonitor monitor;
 
-    public HomeAndSeatTest() {
+    public MainAndConfigIntegrationTest() {
         super(MainActivity.class);
     }
 
@@ -32,14 +31,14 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
     }
 
     public void testActivity() throws Exception {
-        //new MainActivityUnitTest(curAct,curInstruments).runTest();
+        new MainActivityUnitTest(curAct,curInstruments).testActivity();
         final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
         monitor = curInstruments.addMonitor(HotseatConfigurationActivity.class.getName(), null, false);
         TouchUtils.clickView(this, hotseatConfigurationActivityButton);
         curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
         assertNotNull("Transition to HotseatConfigurationActivity Failed", curAct);
         curInstruments = getInstrumentation();
-        //new HotseatConfigurationActivityUnitTest(curAct,curInstruments).runTest();
+        new OfflineConfigurationActivityUnitTest(curAct,curInstruments).testActivity();
     }
 
     public void tearDown() throws Exception {

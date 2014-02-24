@@ -3,16 +3,17 @@ package ca.brocku.chinesecheckers.tests;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.Button;
 
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
 /**
- * Created by Main on 2/4/14.
+ * Created by Main on 2/18/14.
  */
 public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainActivity> {
+
+    private TestHelpers testHelper;
 
     private Activity curAct;
     private Instrumentation curInstruments;
@@ -20,12 +21,14 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
 
     public MainActivityUnitTest() {
         super(MainActivity.class);
+        testHelper = new TestHelpers();
     }
 
     public MainActivityUnitTest(Activity curAct,Instrumentation curInstruments){
         super(MainActivity.class);
         this.curAct = curAct;
         this.curInstruments = curInstruments;
+        testHelper = new TestHelpers();
     }
 
     protected void setUp() throws Exception {
@@ -36,9 +39,8 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     }
 
     public void testActivity() {
-        assertNotNull("MainActivity Not Started", curAct);
-        final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
-        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click", hotseatConfigurationActivityButton.isClickable());
+        assertNotNull("MainActivity Not Started",curAct);
+        testHelper.ButtonTest(this,(Button)curAct.findViewById(R.id.hotseatConfigurationActivityButton),true);
     }
 
 }
