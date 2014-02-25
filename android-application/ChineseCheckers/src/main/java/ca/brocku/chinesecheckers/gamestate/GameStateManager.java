@@ -56,10 +56,18 @@ public class GameStateManager {
      */
     public static interface GameStateEvents {
         /**
-         * Fired when a piece on the board is moved from one position to another.
-         * @param move  The path describing the move.
+         * Fired when it is a new players turn.
+         *
+         * @param player    The player who's turn it is.
          */
-        public void onPieceMoved(Move move);
+        public void onPlayerTurn(Player player);
+
+        /**
+         * Fired when a piece on the board is moved from one position to another.
+         * @param player    The player who made the move.
+         * @param move      The path describing the move.
+         */
+        public void onPieceMoved(Player player, Move move);
 
         /**
          * Occurs when a player forfeit the game.
