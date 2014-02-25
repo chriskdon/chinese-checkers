@@ -8,16 +8,7 @@ package ca.brocku.chinesecheckers.gameboard;
  * Date: 2/1/2014
  */
 public abstract class GameBoard {
-    private GameBoardEvents gameBoardEvents;    // Various game event handlers.
-
-    /**
-     * Set the handler for the game board events callbacks.
-     *
-     * @param gameBoardEventsHandler    The handler.
-     */
-    public void setGameBoardEventsHandler(GameBoardEvents gameBoardEventsHandler) {
-        this.gameBoardEvents = gameBoardEventsHandler;
-    }
+    protected GameBoardEvents gameBoardEventsHandler;    // Various game event handlers.
 
     /**
      * The number of available positions in each row.
@@ -34,6 +25,16 @@ public abstract class GameBoard {
      * Maximum number of pieces on a row
      */
     public static final int MAXIMUM_PIECES_PER_ROW = 13;
+
+    /**
+     * Set the handler for the game board events callbacks.
+     *
+     * @param gameBoardEventsHandler    The handler.
+     */
+    public void setGameBoardEventsHandler(GameBoardEvents gameBoardEventsHandler) {
+
+        this.gameBoardEventsHandler = gameBoardEventsHandler;
+    }
 
     /**
      * Move a piece from one position to another.
@@ -79,7 +80,14 @@ public abstract class GameBoard {
      */
     public abstract boolean isValidMove(Piece piece, Position to);
 
+    /**
+     * Events that can be fired from the game board.
+     */
     public static interface GameBoardEvents {
+        /**
+         * Fired when a player gets all their pieces into the desired goal.
+         * @param playerNumber  The number of the player who won.
+         */
         public void onPlayerWon(int playerNumber);
     }
 }

@@ -8,8 +8,8 @@ package ca.brocku.chinesecheckers.uiengine;
  * Date: 2/2/2014
  */
 public class PixelPosition {
-    public float x; // The x coordinate
-    public float y; // The y coordinate
+    private float x; // The x coordinate
+    private float y; // The y coordinate
 
     /**
      * Initialize pixel position.

@@ -20,6 +20,20 @@
         <item name="android:background">@drawable/chch_button</item>
     </style>
 
+    <style name="AiDifficultyToggleButton" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:textColor">@color/app_background</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CustomDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@color/app_background_translucent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <!--TODO: Remove once custom dialog is created-->
     <style name="Dialog" parent="android:Theme.Holo.Dialog">
     </style>

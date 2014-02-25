@@ -36,16 +36,16 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
     }
 
     public void testButton() {
-        final Button hotseatConfigurationActivityButton = (Button) curAct.findViewById(R.id.hotseatConfigurationActivityButton);
+        final Button offlineConfigurationActivityButton = (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton);
         monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(),null,false);
-        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click",hotseatConfigurationActivityButton.isClickable());
-        TouchUtils.clickView(this, hotseatConfigurationActivityButton);
+        assertTrue("offlineConfigurationActivityButton Did Not Respond To Click",offlineConfigurationActivityButton.isClickable());
+        TouchUtils.clickView(this, offlineConfigurationActivityButton);
         tTransitionToConfigAct();
 //        curAct.runOnUiThread(
 //                new Runnable() {
 //                    public void run() {
-//                        assertNotNull("hotseatConfigurationActivityButton Not Available", hotseatConfigurationActivityButton);
-//                        assertTrue("hotseatConfigurationActivityButton Did Not Respond To Click ",hotseatConfigurationActivityButton.performClick());
+//                        assertNotNull("offlineConfigurationActivityButton Not Available", offlineConfigurationActivityButton);
+//                        assertTrue("offlineConfigurationActivityButton Did Not Respond To Click ",offlineConfigurationActivityButton.performClick());
 //                    }
 //                }
 //        );
@@ -53,8 +53,8 @@ public class HomeAndSeatTest extends ActivityInstrumentationTestCase2<MainActivi
 
     public void tTransitionToConfigAct(){
         curAct = getInstrumentation().waitForMonitorWithTimeout(monitor,1);
-        assertNotNull("Transition to HotseatConfigurationActivity Failed",curAct);
-//        new HotseatConfigurationActivityUnitTest();
+        assertNotNull("Transition to OfflineConfigurationActivity Failed",curAct);
+//        new OfflineConfigurationActivityUnitTest();
     }
 
 }

@@ -7,11 +7,21 @@
     <string name="offline_start_game">Start Game</string>
     <string name="title_activity_offline_configuration">OfflineConfigurationActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="offline">Play Offline</string>
+    <string name="play_offline">Play Offline</string>
+    <string name="offline">Offline</string>
     <string name="title_activity_offline_game">OfflineGameActivity</string>
     <string name="offline_move_done">Done</string>
     <string name="offline_move_reset">Reset</string>
     <string name="title_activity_help">HelpActivity</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dapibus feugiat ullamcorper. Fusce lacinia tellus ac tortor dignissim molestie vel eu augue. Donec porttitor quis tellus vitae tristique. Duis aliquet laoreet fermentum. Ut vitae tempus sapien, quis pulvinar magna. Quisque congue eros at sapien sollicitudin, ut pretium ipsum placerat. Morbi euismod aliquam auctor. Nullam ac congue purus. Pellentesque ultricies mollis sollicitudin.</string>
+    <string name="ai_easy">Easy</string>
+    <string name="ai_medium">Medium</string>
+    <string name="ai_hard">Hard</string>
+    <string name="saved_game_dialog_quit">Quit</string>
+    <string name="saved_game_dialog_resume">Resume</string>
+    <string name="saved_game_dialog_text">Would you like to continue the saved game?</string>
+    <string name="end_game_dialog_text">Would you like to play a new game?</string>
+    <string name="end_game_dialog_home">Home</string>
+    <string name="end_game_dialog_new">New Game</string>
 </resources>

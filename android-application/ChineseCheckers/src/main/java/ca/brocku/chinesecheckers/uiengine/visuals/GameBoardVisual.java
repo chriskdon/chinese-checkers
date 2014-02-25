@@ -47,7 +47,7 @@ public class GameBoardVisual extends Visual {
 
         // Add Pieces
         for(PieceDrawingDetails pos : piecePositionSystem.getPositionDetails()) {
-            PieceVisual pv = new PieceVisual("BLANK", pos, color);
+            PieceVisual pv = new PieceVisual(pos, color);
             pv.setTouchEventHandler(this.pieceTouchEventHandler);
             addChild(pv);
         }

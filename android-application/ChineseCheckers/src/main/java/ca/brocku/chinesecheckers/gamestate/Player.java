@@ -24,6 +24,12 @@ public abstract class Player {
     public abstract String getName();
 
     /**
+     * Return the number identifier for this player.
+     * @return  Player ID
+     */
+    public abstract int getPlayerNumber();
+
+    /**
      * Handles a player making a move.
      */
     public interface PlayerTurnHandler {
