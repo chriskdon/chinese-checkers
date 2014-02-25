@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,11 +21,13 @@ import org.w3c.dom.Text;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class OfflineGameActivity extends Activity {
     private String[] players; //an array of the players' names
+    private GameStateManager gameStateManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class OfflineGameActivity extends Activity {
 
         // Make sure variables are setup before creating fragment
         players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
+        gameStateManager = getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
 
         //passes player array to the offline game fragment
         Fragment offlineGameFragment = new OfflineGameFragment();
@@ -108,7 +112,6 @@ public class OfflineGameActivity extends Activity {
 
             gameBoardUi.setPlayerCount(playerNames.length);
 
-
             gameBoardUi.setBoardEventsHandler(new BoardEventsHandler());
 
 
@@ -158,6 +161,30 @@ public class OfflineGameActivity extends Activity {
                         @Override
                         public int getPlayerNumber() {
                             return 0;
+                        }
+
+                        /**
+                         * Describe the kinds of special objects contained in this Parcelable's
+                         * marshalled representation.
+                         *
+                         * @return a bitmask indicating the set of special object types marshalled
+                         * by the Parcelable.
+                         */
+                        @Override
+                        public int describeContents() {
+                            return 0;
+                        }
+
+                        /**
+                         * Flatten this object in to a Parcel.
+                         *
+                         * @param dest  The Parcel in which the object should be written.
+                         * @param flags Additional flags about how the object should be written.
+                         *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+                         */
+                        @Override
+                        public void writeToParcel(Parcel dest, int flags) {
+
                         }
                     }, position, null);
 

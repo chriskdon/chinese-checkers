@@ -1,5 +1,8 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
@@ -14,7 +17,7 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  * Student #: 4810800
  * Date: 2/22/2014
  */
-public class GameStateManager {
+public class GameStateManager implements Parcelable {
     private GameBoard gameBoard;
     private GameStateEvents gameStateEventsHandler;
     private List<Player> players;
@@ -33,12 +36,60 @@ public class GameStateManager {
     }
 
     /**
+     * Parcelable constructor
+     *
+     * @param parcel    The parcel instance to generate the instance from.
+     */
+    private GameStateManager(Parcel parcel) {
+        gameBoard = parcel.readParcelable(GameBoard.class.getClassLoader());
+    }
+
+    /**
      * Set the event handler for the various game state events.
      * @param handler   The handler to register
      */
     public void setGameStateEventsHandler(GameStateEvents handler) {
         this.gameStateEventsHandler = handler;
     }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(gameBoard, 0);
+    }
+
+    /**
+     * Recreate this instance
+     */
+    public static final Parcelable.Creator<GameStateManager> CREATOR =
+            new Parcelable.Creator<GameStateManager>() {
+
+        public GameStateManager createFromParcel(Parcel in) {
+            return new GameStateManager(in);
+        }
+
+        public GameStateManager[] newArray(int size) {
+            return new GameStateManager[size];
+        }
+    };
 
     /**
      * Handles the events coming directly from the game board.

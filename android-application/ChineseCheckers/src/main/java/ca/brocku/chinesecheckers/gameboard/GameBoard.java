@@ -1,5 +1,8 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * The representation of a game board and what it can do.
  *
@@ -7,7 +10,7 @@ package ca.brocku.chinesecheckers.gameboard;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public abstract class GameBoard {
+public abstract class GameBoard implements Parcelable {
     protected GameBoardEvents gameBoardEventsHandler;    // Various game event handlers.
 
     /**
@@ -79,6 +82,26 @@ public abstract class GameBoard {
      * @return      True if the move is valid, false otherwise.
      */
     public abstract boolean isValidMove(Piece piece, Position to);
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public abstract int describeContents();
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public abstract void writeToParcel(Parcel dest, int flags);
 
     /**
      * Events that can be fired from the game board.
