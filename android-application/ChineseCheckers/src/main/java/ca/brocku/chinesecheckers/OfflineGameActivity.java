@@ -137,8 +137,12 @@ public class OfflineGameActivity extends Activity {
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
             @Override
             public void positionTouched(final Position position) {
-               GameBoard board = gameStateManager.getGameBoard();
-               boardUiEngine.showHintPositions(board.getPossibleMoves(board.getPiece(position)));
+                GameBoard board = gameStateManager.getGameBoard();
+                Piece piece = board.getPiece(position);
+
+                if(piece != null) {
+                    boardUiEngine.showHintPositions(board.getPossibleMoves(piece));
+                }
             }
         }
     }
