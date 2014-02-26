@@ -32,10 +32,115 @@ public class GridUnitTest extends AndroidTestCase  {
     	assertNotNull(board);
     }
 
-    public void testPossibleMovesCorners() {
+    /**
+     * Automate the testing of checking the possible moves for a position.
+     * @param row                   The row of the piece.
+     * @param index                 The index of the piece.
+     * @param numPossibleMoves      The positions it should have.
+     */
+    private void checkPossibleStartMoves(int row, int index, int numPossibleMoves) {
         GameBoard board = newBoard(6);
 
-        assertNull("There should be no possible moves.", board.getPossibleMoves(board.getPiece(newPosition(4, 12))));
+        try {
+            Position[] possible = board.getPossibleMoves(board.getPiece(newPosition(row, index)));
+
+            if(numPossibleMoves == 0) {
+                assertNull("There should be no possible moves for (" + row + ", " + index + ")", possible);
+            } else {
+                assertEquals("There should be " + numPossibleMoves + " possible moves for (" + row + ", " + index + ")", numPossibleMoves, possible.length);
+            }
+        } catch(ArrayIndexOutOfBoundsException ex) {
+            assertTrue("Index out of bounds for (" + row + ", " + index + ")", false);
+        }
+    }
+
+    /**
+     * Make sure the correct number of possible moves is returned for the starting positions.
+     */
+    public void testPossibleMovesCountCorners() {
+        // Player 4
+        checkPossibleStartMoves(0, 0, 0);
+        checkPossibleStartMoves(1, 0, 0);
+        checkPossibleStartMoves(1, 1, 0);
+        checkPossibleStartMoves(2, 0, 2);
+        checkPossibleStartMoves(2, 1, 2);
+        checkPossibleStartMoves(2, 2, 2);
+        checkPossibleStartMoves(3, 0, 2);
+        checkPossibleStartMoves(3, 1, 2);
+        checkPossibleStartMoves(3, 2, 2);
+        checkPossibleStartMoves(3, 3, 2);
+
+        // Player 3
+        checkPossibleStartMoves(4, 0, 0);
+        checkPossibleStartMoves(4, 1, 0);
+        checkPossibleStartMoves(4, 2, 2);
+        checkPossibleStartMoves(4, 3, 2);
+        checkPossibleStartMoves(5, 0, 0);
+        checkPossibleStartMoves(5, 1, 2);
+        checkPossibleStartMoves(5, 2, 2);
+        checkPossibleStartMoves(6, 0, 2);
+        checkPossibleStartMoves(6, 1, 2);
+        checkPossibleStartMoves(7, 0, 2);
+
+        // Player 2
+        checkPossibleStartMoves(9, 0, 2);
+        checkPossibleStartMoves(10, 0, 2);
+        checkPossibleStartMoves(10, 1, 2);
+        checkPossibleStartMoves(11, 0, 0);
+        checkPossibleStartMoves(11, 1, 2);
+        checkPossibleStartMoves(11, 2, 2);
+        checkPossibleStartMoves(12, 0, 0);
+        checkPossibleStartMoves(12, 1, 0);
+        checkPossibleStartMoves(12, 2, 2);
+        checkPossibleStartMoves(12, 3, 2);
+
+        // Player 1
+        checkPossibleStartMoves(13, 0, 2);
+        checkPossibleStartMoves(13, 1, 2);
+        checkPossibleStartMoves(13, 2, 2);
+        checkPossibleStartMoves(13, 3, 2);
+        checkPossibleStartMoves(14, 0, 2);
+        checkPossibleStartMoves(14, 1, 2);
+        checkPossibleStartMoves(14, 2, 2);
+        checkPossibleStartMoves(15, 0, 0);
+        checkPossibleStartMoves(15, 1, 0);
+        checkPossibleStartMoves(16, 0, 0);
+
+        // Player 5
+        checkPossibleStartMoves(4, 9, 2);
+        checkPossibleStartMoves(4, 10, 2);
+        checkPossibleStartMoves(4, 11, 0);
+        checkPossibleStartMoves(4, 12, 0);
+        checkPossibleStartMoves(5, 9, 2);
+        checkPossibleStartMoves(5, 10, 2);
+        checkPossibleStartMoves(5, 11, 0);
+        checkPossibleStartMoves(6, 9, 2);
+        checkPossibleStartMoves(6, 10, 2);
+        checkPossibleStartMoves(7, 9, 2);
+
+        // Player 6
+        checkPossibleStartMoves(9, 9, 2);
+        checkPossibleStartMoves(10, 9, 2);
+        checkPossibleStartMoves(10, 10, 2);
+        checkPossibleStartMoves(11, 9, 2);
+        checkPossibleStartMoves(11, 10, 2);
+        checkPossibleStartMoves(11, 11, 0);
+        checkPossibleStartMoves(12, 9, 2);
+        checkPossibleStartMoves(12, 10, 2);
+        checkPossibleStartMoves(12, 11, 0);
+        checkPossibleStartMoves(12, 12, 0);
+    }
+
+    /**
+     * Check that the correct number of possible moves are returned.
+     */
+    public void testPossibleMovesForCenterPiece() {
+        CcGameBoard board = new CcGameBoard(2);
+        board.setPiece(newPosition(8, 4), 4);
+
+        Position[] possible = board.getPossibleMoves(board.getPiece(newPosition(8,4)));
+
+        assertEquals("Possible moves should be 6", 6, possible.length);
     }
 
 //   Testing that retrieving a nonexistant piece results in a null

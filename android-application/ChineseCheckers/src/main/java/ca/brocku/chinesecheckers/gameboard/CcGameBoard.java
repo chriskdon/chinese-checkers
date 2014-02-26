@@ -594,7 +594,10 @@ public class CcGameBoard extends GameBoard {
                 fixedPossibleMoves.add(possibleMoves[i]);
             }
         }
-        return fixedPossibleMoves.toArray(new Position[fixedPossibleMoves.size()]);
+
+        Position[] temp = fixedPossibleMoves.toArray(new Position[fixedPossibleMoves.size()]);
+
+        return (temp.length <= 0 ? null : temp);
     }
     /**
      * Checks if a move is valid by verifying the possible moves for the given piece and evaluating
