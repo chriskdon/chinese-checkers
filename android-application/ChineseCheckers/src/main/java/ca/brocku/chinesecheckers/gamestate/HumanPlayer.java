@@ -9,7 +9,7 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class CcPlayer extends Player {
+public class HumanPlayer extends Player {
     private String name;
     private int playerNumber;
 
@@ -19,7 +19,7 @@ public class CcPlayer extends Player {
      * @param name          The name of the player.
      * @param playerNumber  The number of the player.
      */
-    public CcPlayer(String name, int playerNumber) {
+    public HumanPlayer(String name, int playerNumber) {
         this.name = name;
         this.playerNumber = playerNumber;
     }

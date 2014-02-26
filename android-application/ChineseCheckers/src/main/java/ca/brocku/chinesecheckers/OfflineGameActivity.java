@@ -83,7 +83,7 @@ public class OfflineGameActivity extends Activity {
     /**
      *  Fragment containing game board, controls, and player turn indicator
      */
-    private class OfflineGameFragment extends Fragment {
+    private static class OfflineGameFragment extends Fragment {
         private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
