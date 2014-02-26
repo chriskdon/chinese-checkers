@@ -244,14 +244,11 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             this.hintPositions = new HashSet<Visual>(positions.length);
 
             // Add Hint
-            for(int i = 0; i < positions.length; i++) {
-                Position p = positions[i];
-                if(p != null) { // TODO: Remove this should be fixed by @goddamnpete
-                    Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
+            for(Position p : positions) {
+                Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
 
-                    this.hintPositions.add(v);
-                    gameBoard.addChild(v);
-                }
+                this.hintPositions.add(v);
+                gameBoard.addChild(v);
             }
 
             redraw();
