@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -83,6 +84,7 @@ public class OfflineGameActivity extends Activity {
     /**
      *  Fragment containing game board, controls, and player turn indicator
      */
+    @SuppressLint("ValidFragment")
     private class OfflineGameFragment extends Fragment {
         private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
