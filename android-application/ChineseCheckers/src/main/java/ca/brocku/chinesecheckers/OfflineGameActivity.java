@@ -2,13 +2,10 @@ package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,13 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
-import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class OfflineGameActivity extends Activity {
@@ -54,7 +48,6 @@ public class OfflineGameActivity extends Activity {
             dialog.show();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
