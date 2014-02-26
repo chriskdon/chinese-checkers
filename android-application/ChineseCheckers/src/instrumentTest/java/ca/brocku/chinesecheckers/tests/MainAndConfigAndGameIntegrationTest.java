@@ -20,7 +20,6 @@ import ca.brocku.chinesecheckers.R;
 public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentationTestCase2<MainActivity>{
 
     private TestHelpers testHelper;
-
     private Activity curAct;
     private Instrumentation curInstruments;
     private Instrumentation.ActivityMonitor monitor;
@@ -42,7 +41,7 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
         final Button offlineConfigurationActivityButton = (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton);
         monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(), null, false);
         TouchUtils.clickView(this, offlineConfigurationActivityButton);
-        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 5000);
+        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
         assertNotNull("Transition to OfflineConfigurationActivity Failed", curAct);
         curInstruments = getInstrumentation();
         new OfflineConfigurationActivityUnitTest(curAct, curInstruments).testActivity();
@@ -55,9 +54,9 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
             mCGIR.wait();
         }
 
-        curAct = curInstruments.waitForMonitorWithTimeout(monitor, 5000);
-        assertNotNull("Transition to OfflineGameActivity Failed", curAct);
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch (Exception e){}
+        assertNotNull("Transition to OfflineGameActivity Failed", curAct);
         curInstruments = getInstrumentation();
         new OfflineGameActivityUnitTest(curAct, curInstruments).testActivity();
     }

@@ -14,6 +14,8 @@ import ca.brocku.chinesecheckers.R;
  */
 public class TestHelpers{
 
+    public int timeoutForActivityTransition = 50000;
+
     public TestHelpers(){}
 
     public void ButtonTest(ActivityInstrumentationTestCase2 withThis, Button toTest,Boolean shouldBeVisible){

@@ -508,9 +508,26 @@ public class CcGameBoard extends GameBoard{
                 possibleMoves[posindex] = checkPosition(new GridPosition(row, index+2));
             }
         } // end leftAndRight
-        return possibleMoves;
+        return assistPossibleMoves(possibleMoves);
     }
-
+    /*
+    Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
+    than the alternative.
+     */
+    private Position[] assistPossibleMoves (Position[] possibleMoves) {
+        List<Position> fixedPossibleMoves = new ArrayList<Position>();
+        int c=0;
+        for(int i=0; i<possibleMoves.length; i++) {
+            if(possibleMoves[i]!=null) {
+                fixedPossibleMoves.add(possibleMoves[i]);
+                c=1;
+            }
+        }
+        if(c==1) {
+            return fixedPossibleMoves.toArray(new Position[fixedPossibleMoves.size()]);
+        }
+        return null;
+    }
     /**
      * Checks if a move is valid by verifying the possible moves for the given piece and evaluating
      * the given position against those positions. If the piece is within the possibleMoves array,
