@@ -3,6 +3,7 @@ package ca.brocku.chinesecheckers.tests;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -13,9 +14,24 @@ import ca.brocku.chinesecheckers.R;
  */
 public class TestHelpers{
 
+    public int timeoutForActivityTransition = 50000;
+
     public TestHelpers(){}
 
     public void ButtonTest(ActivityInstrumentationTestCase2 withThis, Button toTest,Boolean shouldBeVisible){
+        String buttonName = toTest.getResources().getResourceName(toTest.getId());
+
+        withThis.assertNotNull(buttonName + " Not Found",toTest); //Test if existing
+        if(shouldBeVisible){ //Test visibility
+            withThis.assertTrue(buttonName + " Not Shown", toTest.isShown());
+        }
+        else{
+            withThis.assertFalse(buttonName + " Shown When Shouldn't", toTest.isShown());
+        }
+        withThis.assertTrue(buttonName +  " Not Clickable",toTest.isClickable()); //Test if clickable
+    }
+
+    public void ImageButtonTest(ActivityInstrumentationTestCase2 withThis, ImageButton toTest,Boolean shouldBeVisible){
         String buttonName = toTest.getResources().getResourceName(toTest.getId());
 
         withThis.assertNotNull(buttonName + " Not Found",toTest); //Test if existing
@@ -84,19 +100,19 @@ public class TestHelpers{
 
         switch(shouldBeSelected){
             case 1:
-                withThis.assertTrue(easyName + " Not Selected By Default", easy.isSelected());
-                withThis.assertFalse(mediumName + " Selected By Default", medium.isSelected());
-                withThis.assertFalse(hardName + " Selected By Default", hard.isSelected());
+                withThis.assertTrue(easyName + " Not Selected By Default", easy.isChecked());
+                withThis.assertFalse(mediumName + " Selected By Default", medium.isChecked());
+                withThis.assertFalse(hardName + " Selected By Default", hard.isChecked());
                 break;
             case 2:
-                withThis.assertFalse(easyName + " Selected Improperly", easy.isSelected());
-                withThis.assertTrue(mediumName + " Not Selected", medium.isSelected());
-                withThis.assertFalse(hardName + " Selected Improperly", hard.isSelected());
+                withThis.assertFalse(easyName + " Selected Improperly", easy.isChecked());
+                withThis.assertTrue(mediumName + " Not Selected", medium.isChecked());
+                withThis.assertFalse(hardName + " Selected Improperly", hard.isChecked());
                 break;
             case 3:
-                withThis.assertFalse(easyName + " Selected Improperly", easy.isSelected());
-                withThis.assertFalse(mediumName + " Selected Improperly", medium.isSelected());
-                withThis.assertTrue(hardName + " Not Selected", hard.isSelected());
+                withThis.assertFalse(easyName + " Selected Improperly", easy.isChecked());
+                withThis.assertFalse(mediumName + " Selected Improperly", medium.isChecked());
+                withThis.assertTrue(hardName + " Not Selected", hard.isChecked());
                 break;
         }
 

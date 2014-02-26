@@ -5,6 +5,9 @@ chinese-checkers
 
 COSC 3F00 Group Project
 
+**Run Tests**
+gradle connectedCheck
+
 These are the rules that all game logic will be based off of: http://www.mastersgames.com/rules/chinese-checkers-rules.htm
 
 **Alternative for people who can't get Android Studio/Eclipse Working**

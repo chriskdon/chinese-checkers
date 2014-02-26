@@ -3,8 +3,10 @@ package ca.brocku.chinesecheckers.tests;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.KeyEvent;
 import android.widget.Button;
 
+import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -39,8 +41,32 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     }
 
     public void testActivity() {
-        assertNotNull("MainActivity Not Started",curAct);
-        testHelper.ButtonTest(this,(Button)curAct.findViewById(R.id.offlineConfigurationActivityButton),true);
+        activityTestHelper();
+        helpActivityTransitionTest();
+        activityTestHelper();
+    }
+
+    public void helpActivityTransitionTest(){
+        monitor = curInstruments.addMonitor(HelpActivity.class.getName(), null, false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_help, 0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        assertNotNull("Transition to HelpActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(MainActivity.class.getName(),null,false);
+
+        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        assertNotNull("Transition Back to MainActivity Failed",curAct);
+    }
+
+    public void activityTestHelper(){
+        assertNotNull("MainActivity Not Started", curAct);
+        testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton), true);
     }
 
 }

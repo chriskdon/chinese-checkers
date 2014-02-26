@@ -3,13 +3,14 @@ package ca.brocku.chinesecheckers.tests;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
+import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -43,6 +44,30 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
     }
 
     public void testActivity() throws Exception {
+        activityTestHelper();
+        helpActivityTransitionTest();
+        activityTestHelper();
+    }
+
+    public void helpActivityTransitionTest(){
+        monitor = curInstruments.addMonitor(HelpActivity.class.getName(), null, false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_help, 0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        assertNotNull("Transition to HelpActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(),null,false);
+
+        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        assertNotNull("Transition Back to OfflineConfigurationActivity Failed",curAct);
+    }
+
+    public void activityTestHelper() throws Exception{
         assertNotNull("OfflineConfigurationActivity Not Started", curAct);
         PlayerConfigRunnable pCR = new PlayerConfigRunnable(this);
         synchronized (pCR){
@@ -68,15 +93,48 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
             }
         }
 
+        public void AIToggleButtonTest(ToggleButton easyButton,ToggleButton mediumButton, ToggleButton hardButton, ImageButton typeButton){
+            testHelper.AIToggleButtonTest(actInsTest,
+                    easyButton,
+                    mediumButton,
+                    hardButton,
+                    1);
+
+            mediumButton.performClick();
+
+            testHelper.AIToggleButtonTest(actInsTest,
+                    easyButton,
+                    mediumButton,
+                    hardButton,
+                    2);
+
+            hardButton.performClick();
+
+            testHelper.AIToggleButtonTest(actInsTest,
+                    easyButton,
+                    mediumButton,
+                    hardButton,
+                    3);
+
+            testHelper.ImageButtonTest(actInsTest,typeButton,true);
+            typeButton.performClick();
+        }
+
         public void twoPlayerConfigTests() {
 
             ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
             testHelper.ButtonTest(actInsTest,offlineTwoPlayerButton, true);
             offlineTwoPlayerButton.performClick();
-//            try{Thread.sleep(1000);}catch (Exception e){}
+            try{Thread.sleep(1000);}catch (Exception e){}
 
             EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
             testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineGreenPlayerTypeButton)
+            );
 
             EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
             testHelper.EditTextTest(actInsTest, offlineGreenPlayerNameEditText, true);
@@ -115,6 +173,19 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
             final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
             testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineYellowPlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineBluePlayerTypeButton)
+            );
+
             final EditText offlineYellowPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineYellowPlayerNameEditText);
             testHelper.EditTextTest(actInsTest,offlineYellowPlayerNameEditText,true);
             final EditText offlineBluePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineBluePlayerNameEditText);
@@ -187,6 +258,28 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
             final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
             testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineOrangePlayerTypeButton)
+            );
+
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineGreenPlayerTypeButton)
+            );
+
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineBluePlayerTypeButton)
+            );
+
+
             final EditText offlineOrangePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineOrangePlayerNameEditText);
             testHelper.EditTextTest(actInsTest,offlineOrangePlayerNameEditText,true);
             final EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
@@ -352,6 +445,38 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
             final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
             testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineOrangePlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflinePurplePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflinePurplePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflinePurplePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlinePurplePlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineYellowPlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineGreenPlayerTypeButton)
+            );
+
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineBluePlayerTypeButton)
+            );
+
             final EditText offlineOrangePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineOrangePlayerNameEditText);
             testHelper.EditTextTest(actInsTest,offlineOrangePlayerNameEditText,true);
             final EditText offlinePurplePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlinePurplePlayerNameEditText);

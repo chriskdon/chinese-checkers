@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.OfflineGameActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -53,7 +55,30 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
     }
 
     public void testActivity() throws Exception {
+        activityTestHelper();
+        helpActivityTransitionTest();
+        activityTestHelper();
+    }
 
+    public void helpActivityTransitionTest(){
+        monitor = curInstruments.addMonitor(HelpActivity.class.getName(), null, false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_help, 0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        assertNotNull("Transition to HelpActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(OfflineGameActivity.class.getName(),null,false);
+
+        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        assertNotNull("Transition Back to OfflineGameActivity Failed",curAct);
+    }
+
+    public void activityTestHelper(){
         TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.offlineCurrentPlayerTextView);
         testHelper.TextViewTest(this,offlineCurrentPlayerTextView,true,"Red Bob");
 
@@ -62,7 +87,6 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
 
         Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.offlineMoveDoneButton);
         testHelper.ButtonTest(this,offlineMoveDoneButton,true);
-
     }
 
 }
