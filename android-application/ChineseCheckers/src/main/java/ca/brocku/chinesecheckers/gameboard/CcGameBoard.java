@@ -516,12 +516,17 @@ public class CcGameBoard extends GameBoard{
      */
     private Position[] assistPossibleMoves (Position[] possibleMoves) {
         List<Position> fixedPossibleMoves = new ArrayList<Position>();
+        int c=0;
         for(int i=0; i<possibleMoves.length; i++) {
             if(possibleMoves[i]!=null) {
                 fixedPossibleMoves.add(possibleMoves[i]);
+                c=1;
             }
         }
-        return fixedPossibleMoves.toArray(new Position[fixedPossibleMoves.size()]);
+        if(c==1) {
+            return fixedPossibleMoves.toArray(new Position[fixedPossibleMoves.size()]);
+        }
+        return null;
     }
     /**
      * Checks if a move is valid by verifying the possible moves for the given piece and evaluating
