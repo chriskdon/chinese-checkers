@@ -16,15 +16,6 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  */
 public interface BoardUiEngine {
     /**
-     * TODO: Remove and replace with board initialization
-     *
-     * Set the number of players to draw initial board state.
-     *
-     * @param playerCount   The number of player playing.
-     */
-    public void setPlayerCount(int playerCount);
-
-    /**
      * Animate moving a piece on the board.
      *
      * @param from          The Piece to move.

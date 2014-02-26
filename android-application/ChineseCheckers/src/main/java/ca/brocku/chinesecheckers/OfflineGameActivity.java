@@ -27,7 +27,6 @@ import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class OfflineGameActivity extends Activity {
     private String[] players; //an array of the players' names
-    private GameStateManager gameStateManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,6 @@ public class OfflineGameActivity extends Activity {
 
         // Make sure variables are setup before creating fragment
         players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
-        gameStateManager = getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
 
         //passes player array to the offline game fragment
         Fragment offlineGameFragment = new OfflineGameFragment();
@@ -66,7 +64,6 @@ public class OfflineGameActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if(id == R.id.action_help) {
             startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
@@ -82,45 +79,38 @@ public class OfflineGameActivity extends Activity {
         return true;
     }
 
-    /** Fragment containing game board, controls, and player turn indicator
-     *
+    /**
+     *  Fragment containing game board, controls, and player turn indicator
      */
-    public static class OfflineGameFragment extends Fragment {
+    private class OfflineGameFragment extends Fragment {
         private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
         private String[] playerNames;
-
-        public OfflineGameFragment() {
-        }
+        private GameStateManager gameStateManager;  // Manages everything in the game
 
         @Override
         public View onCreateView(LayoutInflater inflater,
-                                 ViewGroup container,
-                                 Bundle savedInstanceState) {
+                                 ViewGroup container, Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
             playerNames = getArguments().getStringArray("PLAYER_NAMES");
+            gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
 
             // Setup Game Board
-            BoardUiEngine gameBoardUi = (BoardUiEngine)
-                    rootView.findViewById(R.id.gameBoardSurface);
+            this.boardUiEngine = (BoardUiEngine) rootView.findViewById(R.id.gameBoardSurface);
 
-            this.boardUiEngine = gameBoardUi;
+            boardUiEngine.setBoardEventsHandler(new BoardEventsHandler());
+            boardUiEngine.initializeBoard(gameStateManager.getGameBoard().getAllPieces());
 
-            gameBoardUi.setPlayerCount(playerNames.length);
-
-            gameBoardUi.setBoardEventsHandler(new BoardEventsHandler());
-
-
-            //Bind Controls
+            // Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
             resetMove = (Button)rootView.findViewById(R.id.offlineMoveResetButton);
             doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
 
-            //Bind Handlers
+            // Bind Handlers
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
@@ -197,12 +187,11 @@ public class OfflineGameActivity extends Activity {
         }
     }
 
-    /** This class represents a custom dialog box which appears when there is a saved game. It
+    /**
+     * This class represents a custom dialog box which appears when there is a saved game. It
      * prompts the user to decide whether to resume the game or quit it.
-     *
      */
     private class ResumeDialog extends Dialog {
-
         public ResumeDialog(final Context context, int theme) {
             super(context, theme);
 
@@ -230,9 +219,9 @@ public class OfflineGameActivity extends Activity {
         }
     }
 
-    /** This class represents a custom dialog box which appears when someone wins. It prompts the
+    /**
+     * This class represents a custom dialog box which appears when someone wins. It prompts the
      * user to decide whether to play a new game or go to the home screen.
-     *
      */
     private class EndOfGameDialog extends Dialog {
         private TextView title; //the title of the Dialog (i.e. "<WINNER_NAME> Wins!")

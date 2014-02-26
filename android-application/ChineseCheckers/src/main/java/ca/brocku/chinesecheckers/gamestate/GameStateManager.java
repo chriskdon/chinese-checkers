@@ -8,6 +8,7 @@ import java.util.List;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 
 /**
  * Handles coordinating the game between multiple players and keeping the game
@@ -33,6 +34,14 @@ public class GameStateManager implements Parcelable {
 
         this.gameBoard = gameBoard;
         this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler());
+    }
+
+    /**
+     * Return a gameboard that can only be looked at.
+     * @return  The gameboard.
+     */
+    public ReadOnlyGameBoard getGameBoard() {
+        return new ReadOnlyGameBoard(gameBoard);
     }
 
     /**
