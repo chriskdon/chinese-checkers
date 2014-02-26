@@ -583,6 +583,7 @@ public class CcGameBoard extends GameBoard {
         } // end leftAndRight
         return assistPossibleMoves(possibleMoves);
     }
+
     /*
     Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
     than the alternative.

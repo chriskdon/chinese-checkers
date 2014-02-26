@@ -24,6 +24,7 @@ import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
@@ -56,7 +57,6 @@ public class OfflineGameActivity extends Activity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -84,8 +84,7 @@ public class OfflineGameActivity extends Activity {
     /**
      *  Fragment containing game board, controls, and player turn indicator
      */
-    @SuppressLint("ValidFragment")
-    private class OfflineGameFragment extends Fragment {
+    private static class OfflineGameFragment extends Fragment {
         private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
@@ -145,6 +144,52 @@ public class OfflineGameActivity extends Activity {
                 if(piece != null) {
                     boardUiEngine.showHintPositions(board.getPossibleMoves(piece));
                 }
+            }
+        }
+
+        private class GameStateEventsHandler implements GameStateManager.GameStateEvents {
+            /**
+             * Fired when it is a new players turn.
+             *
+             * @param player The player who's turn it is.
+             */
+            @Override
+            public void onPlayerTurn(Player player) {
+
+            }
+
+            /**
+             * Fired when a piece on the board is moved from one position to another.
+             *
+             * @param player The player who made the move.
+             * @param move   The path describing the move.
+             */
+            @Override
+            public void onPieceMoved(Player player, Move move) {
+
+            }
+
+            /**
+             * Occurs when a player forfeit the game.
+             * <p/>
+             * TODO: Is this just because they quit, or could this be a result of them taking to long to make a move and being kicked out.
+             *
+             * @param player The player who forfeited.
+             */
+            @Override
+            public void onForfeit(Player player) {
+
+            }
+
+            /**
+             * Occurs when a player wins the game.
+             *
+             * @param player   The player that won.
+             * @param position The position they finished in (1st, 2nd, 3rd, etc.).
+             */
+            @Override
+            public void onPlayerWon(Player player, int position) {
+
             }
         }
     }
