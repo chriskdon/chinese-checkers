@@ -304,7 +304,7 @@ public class CcGameBoard extends GameBoard {
      */
     @Override
     public Position[] getPossibleMoves(Piece forPiece) {
-        Position[] possibleMoves = new GridPosition[12];
+        Position[] possibleMoves = new GridPosition[14];
         int row = forPiece.getPosition().getRow();
         int index = forPiece.getPosition().getIndex();
         int posindex = 0;
