@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ca.brocku.chinesecheckers.HelpActivity;
-import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.OfflineGameActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -67,7 +66,7 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         curInstruments.invokeMenuActionSync(curAct, R.id.action_help, 0);
 
-        curAct = curInstruments.waitForMonitorWithTimeout(monitor, 5000);
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
         assertNotNull("Transition to HelpActivity Failed", curAct);
 
         curInstruments.removeMonitor(monitor);
@@ -75,7 +74,7 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
 
         new HelpActivityUnitTest(curAct,curInstruments).activityTest();
 
-        curAct = curInstruments.waitForMonitorWithTimeout(monitor,5000);
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         assertNotNull("Transition Back to OfflineGameActivity Failed",curAct);
     }
 

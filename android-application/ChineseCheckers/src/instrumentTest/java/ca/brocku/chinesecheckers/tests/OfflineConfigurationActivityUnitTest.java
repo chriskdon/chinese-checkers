@@ -3,8 +3,6 @@ package ca.brocku.chinesecheckers.tests;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 import ca.brocku.chinesecheckers.HelpActivity;
-import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -58,7 +55,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
         curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         curInstruments.invokeMenuActionSync(curAct, R.id.action_help, 0);
 
-        curAct = curInstruments.waitForMonitorWithTimeout(monitor, 5000);
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
         assertNotNull("Transition to HelpActivity Failed", curAct);
 
         curInstruments.removeMonitor(monitor);
@@ -66,7 +63,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
         new HelpActivityUnitTest(curAct,curInstruments).activityTest();
 
-        curAct = curInstruments.waitForMonitorWithTimeout(monitor,5000);
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         assertNotNull("Transition Back to OfflineConfigurationActivity Failed",curAct);
     }
 
