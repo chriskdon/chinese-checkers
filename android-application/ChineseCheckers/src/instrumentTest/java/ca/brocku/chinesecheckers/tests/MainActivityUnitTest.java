@@ -42,8 +42,8 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
 
     public void testActivity() {
         activityTestHelper();
-        helpActivityTransitionTest();
-        activityTestHelper();
+//        helpActivityTransitionTest();
+//        activityTestHelper();
     }
 
     public void helpActivityTransitionTest(){

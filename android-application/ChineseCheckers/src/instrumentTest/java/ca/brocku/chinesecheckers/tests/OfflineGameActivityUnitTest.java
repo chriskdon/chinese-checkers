@@ -56,8 +56,8 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
 
     public void testActivity() throws Exception {
         activityTestHelper();
-        helpActivityTransitionTest();
-        activityTestHelper();
+//        helpActivityTransitionTest();
+//        activityTestHelper();
     }
 
     public void helpActivityTransitionTest(){

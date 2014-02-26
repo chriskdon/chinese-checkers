@@ -45,8 +45,8 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
     public void testActivity() throws Exception {
         activityTestHelper();
-        helpActivityTransitionTest();
-        activityTestHelper();
+//        helpActivityTransitionTest();
+//        activityTestHelper();
     }
 
     public void helpActivityTransitionTest(){
