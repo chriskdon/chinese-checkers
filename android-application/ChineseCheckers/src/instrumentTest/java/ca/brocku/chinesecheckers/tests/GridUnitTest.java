@@ -11,11 +11,33 @@ import ca.brocku.chinesecheckers.gameboard.*;
  * Date: 2/22/2014
  */
 public class GridUnitTest extends AndroidTestCase  {
+    /**
+     * Create a new board.
+     * @param numPlayers
+     * @return
+     */
+    private GameBoard newBoard(int numPlayers) {
+        GameBoard board = new CcGameBoard(numPlayers);
+
+        return board;
+    }
+
+    private Position newPosition(int row, int index) {
+        return new GridPosition(row, index);
+    }
+
     //Testing that board creation does not result in a null object
     public void testBoardCreate() {
     	CcGameBoard board = new CcGameBoard(2);
     	assertNotNull(board);
     }
+
+    public void testPossibleMovesCorners() {
+        GameBoard board = newBoard(6);
+
+        assertNull("There should be no possible moves.", board.getPossibleMoves(board.getPiece(newPosition(4, 12))));
+    }
+
 //   Testing that retrieving a nonexistant piece results in a null
     public void testGetPieceEmpty() {
     	CcGameBoard board = new CcGameBoard(2);
