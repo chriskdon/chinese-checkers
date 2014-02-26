@@ -275,6 +275,106 @@ public class GridUnitTest extends AndroidTestCase  {
             assertTrue("Valid player number board couldn't be created.", false);
         }
     }
+    public void testAccuracyOfGetPossibleMoves() {
+        CcGameBoard board = new CcGameBoard(2);
+        Position[] possibleMoves;
+        Position[] testPositions = {
+                new GridPosition(2,1),
+                new GridPosition(3,1),
+                new GridPosition(4,6),
+                new GridPosition(5,5),
+                new GridPosition(7,4),
+                new GridPosition(8,4),
+                new GridPosition(9,4),
+                new GridPosition(11,5),
+                new GridPosition(12,6),
+                new GridPosition(13,1),
+                new GridPosition(14,0)
+        };
+        board.setPiece(new GridPosition(4,6), 1);
+        board.setPiece(new GridPosition(5,5), 1);
+        board.setPiece(new GridPosition(7,4), 1);
+        board.setPiece(new GridPosition(8,4), 1);
+        board.setPiece(new GridPosition(9,4), 1);
+        board.setPiece(new GridPosition(11,5), 1);
+        board.setPiece(new GridPosition(12,6), 1);
+        Position[][] verifyMoves ={
+                { // verify 2,1
+                        new GridPosition(4,5),
+                        new GridPosition(4,7)
+                },
+                { //verify 3,1
+                        new GridPosition(4,5),
+                        new GridPosition(5,6)
+                },
+                { //verify 4,6
+                        new GridPosition(4,5),
+                        new GridPosition(4,7),
+                        new GridPosition(5,6),
+                        new GridPosition(6,4)
+                },
+                { //verify 5,5
+                        new GridPosition(4,5),
+                        new GridPosition(5,4),
+                        new GridPosition(5,6),
+                        new GridPosition(6,4),
+                        new GridPosition(6,5)
+                },
+                { //verify 7,4
+                        new GridPosition(6,4),
+                        new GridPosition(6,5),
+                        new GridPosition(7,3),
+                        new GridPosition(7,5),
+                        new GridPosition(8,3),
+                        new GridPosition(9,5)
+                },
+                { //verify 8,4
+                        new GridPosition(7,5),
+                        new GridPosition(8,3),
+                        new GridPosition(8,5),
+                        new GridPosition(9,5),
+                        new GridPosition(10,4),
+                        new GridPosition(6,4)
+                },
+                { //verify 9,4
+                        new GridPosition(8,3),
+                        new GridPosition(9,3),
+                        new GridPosition(9,5),
+                        new GridPosition(10,4),
+                        new GridPosition(10,5),
+                        new GridPosition(7,5),
+                },
+                { //verify 11,5
+                        new GridPosition(10,4),
+                        new GridPosition(10,5),
+                        new GridPosition(11,4),
+                        new GridPosition(11,6),
+                        new GridPosition(12,5),
+                },
+                { //verify 12,6
+                        new GridPosition(11,6),
+                        new GridPosition(12,5),
+                        new GridPosition(12,7),
+                        new GridPosition(10,4),
+                },
+                { //verify 13,1
+                        new GridPosition(12,5),
+                        new GridPosition(11,6)
+                },
+                { //verify 14,0
+                        new GridPosition(12,4)
+                }
+        };
+
+        for(int i=0; i<testPositions.length; i++) {
+            possibleMoves = board.getPossibleMoves(board.getPiece(testPositions[i]));
+            for(int j=0; j<possibleMoves.length; j++) {
+                assertEquals(possibleMoves[j].getRow(), verifyMoves[i][j].getRow());
+                assertEquals(possibleMoves[j].getIndex(), verifyMoves[i][j].getIndex());
+            }
+        }
+
+    }
 //   Currently disabled. Tests to see if the win condition is triggered appropriately.
     // Call back should be tested by GameState??
 /*    public void testWinCondition() {
