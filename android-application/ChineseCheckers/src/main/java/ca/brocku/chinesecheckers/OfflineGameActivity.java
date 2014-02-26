@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +19,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
@@ -62,7 +65,6 @@ public class OfflineGameActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if(id == R.id.action_help) {
             startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
@@ -78,46 +80,38 @@ public class OfflineGameActivity extends Activity {
         return true;
     }
 
-    /** Fragment containing game board, controls, and player turn indicator
-     *
+    /**
+     *  Fragment containing game board, controls, and player turn indicator
      */
-    public static class OfflineGameFragment extends Fragment {
+    private class OfflineGameFragment extends Fragment {
         private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
         private String[] playerNames;
-
-        public OfflineGameFragment() {
-        }
+        private GameStateManager gameStateManager;  // Manages everything in the game
 
         @Override
         public View onCreateView(LayoutInflater inflater,
-                                 ViewGroup container,
-                                 Bundle savedInstanceState) {
+                                 ViewGroup container, Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
             playerNames = getArguments().getStringArray("PLAYER_NAMES");
+            gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
 
             // Setup Game Board
-            BoardUiEngine gameBoardUi = (BoardUiEngine)
-                    rootView.findViewById(R.id.gameBoardSurface);
+            this.boardUiEngine = (BoardUiEngine) rootView.findViewById(R.id.gameBoardSurface);
 
-            this.boardUiEngine = gameBoardUi;
+            boardUiEngine.setBoardEventsHandler(new BoardEventsHandler());
+            boardUiEngine.initializeBoard(gameStateManager.getGameBoard().getAllPieces());
 
-            gameBoardUi.setPlayerCount(playerNames.length);
-
-
-            gameBoardUi.setBoardEventsHandler(new BoardEventsHandler());
-
-
-            //Bind Controls
+            // Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
             resetMove = (Button)rootView.findViewById(R.id.offlineMoveResetButton);
             doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
 
-            //Bind Handlers
+            // Bind Handlers
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
@@ -141,41 +135,23 @@ public class OfflineGameActivity extends Activity {
         }
 
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
-            // TODO: This class needs to link with the grid
-            Position lastPosition = null;
-
             @Override
             public void positionTouched(final Position position) {
-                Log.d("TOUCHED", "(" + position.getRow() + ", " + position.getIndex() + ")");
+                GameBoard board = gameStateManager.getGameBoard();
+                Piece piece = board.getPiece(position);
 
-                if(lastPosition != null) {
-                    OfflineGameFragment.this.boardUiEngine.movePiece(new Piece() {
-                        @Override
-                        public Position getPosition() {
-                            return lastPosition;
-                        }
-
-                        @Override
-                        public int getPlayerNumber() {
-                            return 0;
-                        }
-                    }, position, null);
-
-                    lastPosition = null;
-                } else {
-                    lastPosition = position;
+                if(piece != null) {
+                    boardUiEngine.showHintPositions(board.getPossibleMoves(piece));
                 }
-
             }
         }
     }
 
-    /** This class represents a custom dialog box which appears when there is a saved game. It
+    /**
+     * This class represents a custom dialog box which appears when there is a saved game. It
      * prompts the user to decide whether to resume the game or quit it.
-     *
      */
     private class ResumeDialog extends Dialog {
-
         public ResumeDialog(final Context context, int theme) {
             super(context, theme);
 
@@ -203,9 +179,9 @@ public class OfflineGameActivity extends Activity {
         }
     }
 
-    /** This class represents a custom dialog box which appears when someone wins. It prompts the
+    /**
+     * This class represents a custom dialog box which appears when someone wins. It prompts the
      * user to decide whether to play a new game or go to the home screen.
-     *
      */
     private class EndOfGameDialog extends Dialog {
         private TextView title; //the title of the Dialog (i.e. "<WINNER_NAME> Wins!")

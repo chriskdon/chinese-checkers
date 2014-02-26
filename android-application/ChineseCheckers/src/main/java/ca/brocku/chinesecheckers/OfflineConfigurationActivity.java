@@ -15,6 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+
 import static android.view.View.OnFocusChangeListener;
 
 /** This is the Activity associated with the offline configuration screen.
@@ -251,6 +255,7 @@ public class OfflineConfigurationActivity extends Activity {
 
         @Override
         public void onClick(View view) {
+            String[] players = null; //to be passed to OfflineGameActivity
 
             hideWarnings();
 
@@ -277,7 +282,6 @@ public class OfflineConfigurationActivity extends Activity {
                     purplePlayerError.setVisibility(View.VISIBLE);
 
             } else {
-                String[] players; //to be passed to OfflineGameActivity
                 Intent intent = new Intent(OfflineConfigurationActivity.this, OfflineGameActivity.class);
 
                 switch(currentSelection.getId()) {
@@ -309,6 +313,8 @@ public class OfflineConfigurationActivity extends Activity {
                         intent.putExtra("PLAYER_NAMES", players);
                         break;
                 }
+                GameBoard board = new CcGameBoard(players.length);
+                intent.putExtra("GAME_STATE_MANAGER", new GameStateManager(board));
                 OfflineConfigurationActivity.this.finish();
                 startActivity(intent);
             }

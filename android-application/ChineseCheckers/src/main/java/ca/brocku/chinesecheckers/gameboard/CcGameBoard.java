@@ -1,5 +1,8 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.List;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class CcGameBoard extends GameBoard{
+public class CcGameBoard extends GameBoard {
     /**
      * Total number of spaces on the board
      */
@@ -64,6 +67,76 @@ public class CcGameBoard extends GameBoard{
         setGameBoardEventsHandler(handler);
     }
 
+    /**
+     * Constructor for the parcel.
+     * @param parcel    The parcel to build from.
+     */
+    private CcGameBoard(Parcel parcel) {
+        Parcelable[] single = parcel.readParcelableArray(Piece[].class.getClassLoader());
+
+        // Get board back
+        if (single != null) {
+            board = constructBoard();
+            Piece[] singleBoard = Arrays.copyOf(single, single.length, Piece[].class);
+
+            int i = 0;
+            for(int row = 0; row < ROW_POSITION_COUNT.length; row++) {
+                for(int col = 0; col < ROW_POSITION_COUNT[row]; col++) {
+                    board[row][col] = singleBoard[i++];
+                }
+            }
+        }
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // Convert the piece board into a 1d array
+        Piece[] single = new Piece[GameBoard.TOTAL_PIECE_COUNT];
+
+        int i = 0;
+        for(int row = 0; row < board.length; row++) {
+            for(int col = 0; col < board[row].length; col++) {
+                single[i] = board[row][col];
+                i++;
+            }
+        }
+
+        dest.writeParcelableArray(single, 0);
+    }
+
+    /**
+     * Recreate this instance
+     */
+    public static final Parcelable.Creator<CcGameBoard> CREATOR =
+            new Parcelable.Creator<CcGameBoard>() {
+
+                public CcGameBoard createFromParcel(Parcel in) {
+                    return new CcGameBoard(in);
+                }
+
+                public CcGameBoard[] newArray(int size) {
+                    return new CcGameBoard[size];
+                }
+            };
 
     /**
      * Populates the board with pieces in the starting location for each player.
