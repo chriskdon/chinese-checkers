@@ -11,7 +11,7 @@ import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
 /**
- * Created by Main on 2/23/14.
+ * Created by Main on 2/20/14.
  */
 public class MainAndConfigIntegrationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -35,8 +35,9 @@ public class MainAndConfigIntegrationTest extends ActivityInstrumentationTestCas
         final Button offlineConfigurationActivityButton = (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton);
         monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(), null, false);
         TouchUtils.clickView(this, offlineConfigurationActivityButton);
-        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
+        curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 5000);
         assertNotNull("Transition to OfflineConfigurationActivity Failed", curAct);
+
         curInstruments = getInstrumentation();
         new OfflineConfigurationActivityUnitTest(curAct,curInstruments).testActivity();
     }
