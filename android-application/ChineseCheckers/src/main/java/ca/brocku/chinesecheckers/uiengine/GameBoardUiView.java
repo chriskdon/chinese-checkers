@@ -50,10 +50,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
     private float hintStrokeWidth;                              // Width of the hint stroke.
-
-    private int playerCount;                                    // The number of players in the game.
-
-    private Piece[] initialPieces;  // Initial pieces - board may not be ready yet
+    private Piece[] initialPieces;                              // Initial setup of  board piece
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -67,6 +64,10 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         super(context, attrs, defStyle);
     }
 
+    /**
+     * Called when the surface has been created.
+     * @param holder
+     */
     @Override
     public void surfaceCreated(final SurfaceHolder holder) {
         GameBoardUiView.this.surfaceHolder = holder;
@@ -239,14 +240,21 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             gameBoard.removeChildren(hintPositions);
         }
 
-        this.hintPositions = new HashSet<Visual>(positions.length);
+        if(positions != null) {
+            this.hintPositions = new HashSet<Visual>(positions.length);
 
-        // Add Hint
-        for(Position p : positions) {
-            Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
+            // Add Hint
+            for(int i = 0; i < positions.length; i++) {
+                Position p = positions[i];
+                if(p != null) { // TODO: Remove this should be fixed by @goddamnpete
+                    Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
 
-            this.hintPositions.add(v);
-            gameBoard.addChild(v);
+                    this.hintPositions.add(v);
+                    gameBoard.addChild(v);
+                }
+            }
+
+            redraw();
         }
     }
 
@@ -316,6 +324,8 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         }
 
         Canvas c = this.surfaceHolder.lockCanvas();
+
+        c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
 
         gameBoard.draw(c);
 
