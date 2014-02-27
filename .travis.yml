@@ -45,7 +45,7 @@ before_install:
 before_script:
   - chmod +x ci/wait_for_emulator.sh
   - ci/wait_for_emulator.sh
-  - adb shell input keyevent 1 &
+  - adb shell input keyevent 1
   
 
 script:
