@@ -36,14 +36,14 @@ public class GameStateManager implements Parcelable {
         this.gameBoard = gameBoard;
         this.players = players;
 
-        this.postStateReady();
+        this.onStateReady();
     }
 
     /**
      * Called after all the non-transient objects are ready. This should be called after all
      * constructor code. And after deserialization.
      */
-    private void postStateReady() {
+    private void onStateReady() {
         if(this.gameBoard == null) {
             throw new IllegalStateException("GameBoard must be setup.");
         }
