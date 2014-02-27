@@ -132,11 +132,14 @@ public class OfflineGameActivity extends Activity {
             public void positionTouched(final Position position) {
                 GameBoard board = gameStateManager.getGameBoard();
                 Piece piece = board.getPiece(position);
+                Position[] possibleMoves = null;
 
                 if(piece != null) {
-                    boardUiEngine.highlightPiece(piece);
-                    boardUiEngine.showHintPositions(board.getPossibleMoves(piece));
+                    possibleMoves = board.getPossibleMoves(piece);
                 }
+
+                boardUiEngine.highlightPiece(piece);
+                boardUiEngine.showHintPositions(possibleMoves);
             }
         }
     }
