@@ -141,7 +141,6 @@ public class OfflineGameActivity extends Activity {
 
             boardUiEngine.setBoardEventsHandler(new BoardEventsHandler());
             boardUiEngine.initializeBoard(gameStateManager.getGameBoard());
-            //boardUiEngine.initializeBoard(gameStateManager.getGameBoard().getAllPieces());
 
             // Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
@@ -160,7 +159,7 @@ public class OfflineGameActivity extends Activity {
         private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                if(start != null && currentTouched != null) {
+                if(start != null) {
                     gameStateManager.resetPiece(currentTouched, start);
                     boardUiEngine.drawBoard(gameStateManager.getGameBoard());
                 }
@@ -202,21 +201,9 @@ public class OfflineGameActivity extends Activity {
                 if(!moved) {
                     if(piece != null && Player.getPlayerColor(piece.getPlayerNumber()) == gameStateManager.getCurrentPlayer().getPlayerColor()) {
                         if(currentTouched == null || !currentTouched.getPosition().equals(position)) {
-                            boolean check = false;
-                            if(hints != null) {
-                                for(Position p : hints) {
-                                    if(p.equals(position)) {
-                                        check = true;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(hints == null || check) {
-                                currentTouched = piece;
-                                hints = board.getPossibleMoves(piece);
-                                start = piece.getPosition();
-                            }
+                            currentTouched = piece;
+                            hints = board.getPossibleMoves(piece);
+                            start = piece.getPosition();
                         }
                     } else if(piece == null) {
                         // Did the player click a hint
