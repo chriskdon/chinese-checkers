@@ -3,12 +3,22 @@ package ca.brocku.chinesecheckers.gamestate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ArrayList;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.uiengine.PlayerColorManager;
+import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
 
 /**
  * Handles coordinating the game between multiple players and keeping the game
@@ -18,22 +28,152 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  * Student #: 4810800
  * Date: 2/22/2014
  */
-public class GameStateManager implements Parcelable {
+public class GameStateManager implements Parcelable, Serializable {
+    public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
+
     private GameBoard gameBoard;
-    private GameStateEvents gameStateEventsHandler;
-    private List<Player> players;
+    private Map<Player.PlayerColor, Player> players;    // Players in the game
+    private Player.PlayerColor currentPlayer;           // The current players turn
+
+    private transient GameStateEvents gameStateEventsHandler;
 
     /**
      * Constructor
+     *
      * @param gameBoard The game board to use to manage the rules and state of the game.
+     * @param players   The players in the game.
      */
-    public GameStateManager(GameBoard gameBoard) {
-        if(gameBoard == null) {
-            throw new IllegalArgumentException("GameBoard cannot be null.");
+    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players) {
+        this(gameBoard, players, null);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param gameBoard         The game board to use to manage the rules and state of the game.
+     * @param players           The players in the game.
+     * @param currentPlayer     The current player's turn.
+     */
+    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players, Player.PlayerColor currentPlayer) {
+        if(gameBoard == null) { throw new IllegalArgumentException("Board must be defined."); }
+        if(players == null || players.size() <= 0) {
+            throw new IllegalArgumentException("Players must be defined.");
         }
 
         this.gameBoard = gameBoard;
+
+        this.players = new HashMap<Player.PlayerColor, Player>(players.size());
+        for(Player p : players) {
+            this.players.put(p.getPlayerColor(), p);
+        }
+
+        if(currentPlayer == null) {
+            this.currentPlayer = Player.FIRST_PLAYER;
+        } else if(!this.players.containsKey(currentPlayer)) {
+            throw new IllegalArgumentException("Current Player must be in Players list");
+        } else {
+            this.currentPlayer = currentPlayer;
+        }
+
+        this.onStateReady();
+    }
+
+    /**
+     * Called after all the non-transient objects are ready. This should be called after all
+     * constructor code. And after deserialization.
+     */
+    private void onStateReady() {
+        if(this.gameBoard == null) {
+            throw new IllegalStateException("GameBoard must be setup.");
+        }
+
         this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler());
+    }
+
+    /**
+     * Find the color that comes after a set color.
+     *
+     * @param currentPlayer     Get the color after this.
+     * @return  Color after currentPlayer
+     */
+    private Player.PlayerColor getNextPlayer(Player.PlayerColor currentPlayer) {
+        switch (players.size()) {
+            case 2: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.GREEN;
+                    case GREEN: return Player.PlayerColor.RED;
+                }
+            }
+
+            case 3: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.BLUE;
+                    case BLUE: return Player.PlayerColor.YELLOW;
+                    case YELLOW: return Player.PlayerColor.RED;
+                }
+            }
+
+            case 4: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.BLUE;
+                    case BLUE: return Player.PlayerColor.GREEN;
+                    case GREEN: return Player.PlayerColor.ORANGE;
+                    case ORANGE: return Player.PlayerColor.RED;
+                }
+            }
+
+            case 6: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.PURPLE;
+                    case PURPLE: return Player.PlayerColor.BLUE;
+                    case BLUE: return Player.PlayerColor.GREEN;
+                    case GREEN: return Player.PlayerColor.YELLOW;
+                    case YELLOW: return Player.PlayerColor.ORANGE;
+                    case ORANGE: return Player.PlayerColor.RED;
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid Player Color");
+    }
+
+    /**
+     * Start the game
+     */
+    public void startGame() {
+        triggerPlayerTurnEvent(getCurrentPlayer());
+    }
+
+    public void movePiece(Piece piece, Position to) {
+        gameBoard.movePiece(piece, to);
+    }
+
+    public void resetPiece(Piece piece, Position to) {
+        gameBoard.forceMove(piece, to);
+    }
+
+    public void nextPlayer() {
+        currentPlayer = getNextPlayer(currentPlayer);
+        triggerPlayerTurnEvent(getCurrentPlayer());
+    }
+
+    /**
+     * Trigger the on player turn event.
+     *
+     * @param p The player
+     */
+    private void triggerPlayerTurnEvent(Player p) {
+        if(this.gameStateEventsHandler != null) {
+            this.gameStateEventsHandler.onPlayerTurn(p);
+        }
+    }
+
+    /**
+     * Return the player who's turn it currently is.
+     * @return  The player.
+     */
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayer);
     }
 
     /**
@@ -50,7 +190,9 @@ public class GameStateManager implements Parcelable {
      * @param parcel    The parcel instance to generate the instance from.
      */
     private GameStateManager(Parcel parcel) {
-        gameBoard = parcel.readParcelable(GameBoard.class.getClassLoader());
+        this((GameBoard) parcel.readParcelable(GameBoard.class.getClassLoader()),
+                parcel.readArrayList(Player.class.getClassLoader()),
+                Player.PlayerColor.valueOf(parcel.readString()));
     }
 
     /**
@@ -83,6 +225,8 @@ public class GameStateManager implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(gameBoard, 0);
+        dest.writeList(new ArrayList<Player>(players.values()));
+        dest.writeString(currentPlayer.toString());
     }
 
     /**
@@ -148,5 +292,21 @@ public class GameStateManager implements Parcelable {
          * @param position  The position they finished in (1st, 2nd, 3rd, etc.).
          */
         public void onPlayerWon(Player player, int position);
+    }
+
+
+    /** Thi is a private method that the virtual machine will call when this object is deserialized.
+     *
+     * This method is used in order to re-set the events for this object in addition to
+     * deserializing it. This mechanism is available from implementing Serializable.
+     *
+     * @param in    the ObjectInputStream which will deserialize this object
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject(); //Deserializes the GameStateManager object
+
+        onStateReady(); //sets up the events the deserialized object will listen for
     }
 }

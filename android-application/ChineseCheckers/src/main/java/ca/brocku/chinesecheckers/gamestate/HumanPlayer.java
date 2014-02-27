@@ -1,5 +1,10 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import ca.brocku.chinesecheckers.gameboard.GridPiece;
+import ca.brocku.chinesecheckers.gameboard.GridPosition;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 
 /**
@@ -11,17 +16,26 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  */
 public class HumanPlayer extends Player {
     private String name;
-    private int playerNumber;
 
     /**
      * Create a new player.
      *
      * @param name          The name of the player.
-     * @param playerNumber  The number of the player.
+     * @param playerColor   The color of the player.
      */
-    public HumanPlayer(String name, int playerNumber) {
+    public HumanPlayer(String name, PlayerColor playerColor) {
+        super(playerColor);
+
         this.name = name;
-        this.playerNumber = playerNumber;
+    }
+
+    /**
+     * Revive
+     *
+     * @param parcel
+     */
+    private HumanPlayer(Parcel parcel) {
+        this(parcel.readString(), PlayerColor.valueOf(parcel.readString()));
     }
 
     /**
@@ -34,23 +48,52 @@ public class HumanPlayer extends Player {
     }
 
     /**
-     * Return the number of the player. Based on their board position.
-     *
-     * @return Number of the player.
-     */
-    @Override
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    /**
      * Executed when it is this players turn to act.
      *
      * @param gameBoard The current game board.
-     * @param handler   This must be called when the player has finished making their turn.
      */
     @Override
-    public void onTurn(ReadOnlyGameBoard gameBoard, PlayerTurnHandler handler) {
-        // TODO: Human Player Interaction
+    public Move onTurn(ReadOnlyGameBoard gameBoard) {
+        return new Move(gameBoard.getPiece(new GridPosition(0, 0)));
     }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(getPlayerColor().toString());
+    }
+
+    /**
+     * Recreate this instance
+     */
+    public static final Parcelable.Creator<HumanPlayer> CREATOR =
+        new Parcelable.Creator<HumanPlayer>() {
+
+        public HumanPlayer createFromParcel(Parcel in) {
+            return new HumanPlayer(in);
+        }
+
+        public HumanPlayer[] newArray(int size) {
+            return new HumanPlayer[size];
+        }
+    };
 }

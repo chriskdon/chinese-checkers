@@ -94,6 +94,17 @@ public class ReadOnlyGameBoard extends GameBoard {
     }
 
     /**
+     * A list of valid positions that a piece can go to ONLY by hopping over another player.
+     *
+     * @param forPiece The piece to check positions for.
+     * @return The list of positions the piece can move to.
+     */
+    @Override
+    public Position[] getPossibleHops(Piece forPiece) {
+        return gameBoard.getPossibleHops(forPiece);
+    }
+
+    /**
      * Flatten this object in to a Parcel.
      *
      * @param dest  The Parcel in which the object should be written.
@@ -103,5 +114,16 @@ public class ReadOnlyGameBoard extends GameBoard {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(gameBoard, 0);
+    }
+
+    /**
+     * Moves a piece without validaing mvoe.
+     *
+     * @param piece
+     * @param to
+     */
+    @Override
+    public void forceMove(Piece piece, Position to) {
+        throw new UnsupportedOperationException();
     }
 }

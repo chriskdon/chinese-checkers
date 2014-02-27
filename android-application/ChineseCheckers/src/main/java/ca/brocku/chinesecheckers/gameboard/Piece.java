@@ -23,24 +23,4 @@ public interface Piece extends Parcelable {
      * @return  The number.
      */
     public int getPlayerNumber();
-
-    /**
-     * Describe the kinds of special objects contained in this Parcelable's
-     * marshalled representation.
-     *
-     * @return a bitmask indicating the set of special object types marshalled
-     * by the Parcelable.
-     */
-    @Override
-    int describeContents();
-
-    /**
-     * Flatten this object in to a Parcel.
-     *
-     * @param dest  The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     */
-    @Override
-    void writeToParcel(Parcel dest, int flags);
 }
