@@ -260,7 +260,7 @@ public class OfflineConfigurationActivity extends Activity {
 
         @Override
         public void onClick(View view) {
-            List<Player> players = new ArrayList<Player>(6);
+            ArrayList<Player> players = new ArrayList<Player>(6);
 
             hideWarnings();
 

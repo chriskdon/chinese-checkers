@@ -105,7 +105,7 @@ public class OfflineGameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            currentPlayerName.setText("Test"); // TODO: Fix
+            currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
 
             return rootView;
         }
