@@ -127,6 +127,9 @@ public class OfflineGameActivity extends Activity {
             }
         }
 
+        /**
+         * Handle the position be touched, and what to display when the user touches it.
+         */
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
             @Override
             public void positionTouched(final Position position) {

@@ -11,7 +11,7 @@ import android.os.Parcelable;
  * Date: 2/1/2014
  */
 public abstract class GameBoard implements Parcelable {
-    protected GameBoardEvents gameBoardEventsHandler;    // Various game event handlers.
+    protected transient GameBoardEvents gameBoardEventsHandler;    // Various game event handlers.
 
     /**
      * The number of available positions in each row.

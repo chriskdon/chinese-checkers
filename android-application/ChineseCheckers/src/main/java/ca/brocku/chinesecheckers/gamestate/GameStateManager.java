@@ -20,8 +20,9 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  */
 public class GameStateManager implements Parcelable {
     private GameBoard gameBoard;
-    private GameStateEvents gameStateEventsHandler;
     private List<Player> players;
+
+    private transient GameStateEvents gameStateEventsHandler;
 
     /**
      * Constructor

@@ -53,15 +53,15 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     };
 
     private GameBoardVisual gameBoard;                          // Root visual element
-    private SurfaceHolder surfaceHolder;                        // Surface with canvas
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
     private Map<Position, PieceVisual> pieces;                  // Pieces
-    private BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
     private float hintStrokeWidth;                              // Width of the hint stroke.
-
     private Piece currentHighlightedPiece;                      // Currently highlighted piece.
+
+    private transient BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
+    private transient SurfaceHolder surfaceHolder;                        // Surface with canvas
 
     // TODO: Find ways around this
     private Piece[] initialPieces;                              // Initial setup of  board piece
