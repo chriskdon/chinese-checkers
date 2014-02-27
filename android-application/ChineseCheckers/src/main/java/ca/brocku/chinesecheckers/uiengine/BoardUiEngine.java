@@ -2,6 +2,7 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
@@ -16,31 +17,19 @@ import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
  */
 public interface BoardUiEngine {
     /**
-     * TODO: Remove and replace with board initialization
-     *
-     * Set the number of players to draw initial board state.
-     *
-     * @param playerCount   The number of player playing.
-     */
-    public void setPlayerCount(int playerCount);
-
-    /**
      * Animate moving a piece on the board.
      *
-     * @param from          The Piece to move.
-     * @param to            The position to move to.
-     * @param onFinished    Callback to fire when the animation has completed.
+     * @param board
      * @return              Returns true if a piece could be successfully moved.
      */
-    public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished);
+    public void drawBoard(ReadOnlyGameBoard board);
 
     /**
-     * Highlight a position on the board so that the player
-     * can see something important is occurring there.
+     * Highlight a piece on the board.
      *
-     * @param position The position to highlight.
+     * @param piece The position to highlight.
      */
-    public void highlightPosition(Position position);
+    public void highlightPiece(Piece piece);
 
     /**
      * Rotate the board a certain number of <code>degrees</code>.
@@ -79,9 +68,9 @@ public interface BoardUiEngine {
      *
      * Initialize the board with the current piece positions.
      *
-     * @param pieces    The pieces that represent the initial state of the board.
+     * @param board    The pieces that represent the initial state of the board.
      */
-    public void initializeBoard(Piece[] pieces);
+    public void initializeBoard(ReadOnlyGameBoard board);
 
     /**
      * Add a handler to receive any events that occur on the board.

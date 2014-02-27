@@ -6,7 +6,10 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import ca.brocku.chinesecheckers.uiengine.Dimensions;
 import ca.brocku.chinesecheckers.uiengine.PixelPosition;
@@ -18,7 +21,7 @@ import ca.brocku.chinesecheckers.uiengine.PixelPosition;
  */
 public class Visual {
     protected Visual parent;
-    protected ArrayList<Visual> visuals = new ArrayList<Visual>(); 		// Order matters
+    protected List<Visual> visuals = new CopyOnWriteArrayList<Visual>(); 		// Order matters
     protected TouchEventHandler handler = null;
     protected Dimensions dimensions;
     protected PixelPosition position;
@@ -66,7 +69,7 @@ public class Visual {
      * Set the parent of this visual element in the hierarchy
      * @param v Set this instance parent to <code>v</code>.
      */
-    public void setParent(Visual v) {
+    protected void setParent(Visual v) {
         if(parent != null) { throw new RuntimeException("Parent can't be changed."); }
         if(v != null) {
             parent = v;
@@ -115,6 +118,10 @@ public class Visual {
         this.handler = handler;
     }
 
+    public void removeChildren() {
+        this.visuals.clear();
+    }
+
     /**
      * Send touch event to children.
      * It will not send the event to it's ancestors.
@@ -122,8 +129,9 @@ public class Visual {
      * @param e Event details.
      */
     public boolean sendTouchEvent(MotionEvent e) {
-        ListIterator<Visual> iterator = visuals.listIterator(visuals.size());
         boolean handled = false;
+
+        ListIterator<Visual> iterator = visuals.listIterator(visuals.size());
 
         while(iterator.hasPrevious()) {
             Visual v = iterator.previous();

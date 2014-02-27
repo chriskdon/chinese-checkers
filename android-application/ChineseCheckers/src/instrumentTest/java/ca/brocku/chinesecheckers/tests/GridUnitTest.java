@@ -11,68 +11,195 @@ import ca.brocku.chinesecheckers.gameboard.*;
  * Date: 2/22/2014
  */
 public class GridUnitTest extends AndroidTestCase  {
+    /**
+     * Create a new board.
+     * @param numPlayers
+     * @return
+     */
+    private GameBoard newBoard(int numPlayers) {
+        GameBoard board = new CcGameBoard(numPlayers);
+
+        return board;
+    }
+
+    private Position newPosition(int row, int index) {
+        return new GridPosition(row, index);
+    }
+
     //Testing that board creation does not result in a null object
     public void testBoardCreate() {
-        CcGameBoard board = new CcGameBoard(2);
-        assertNotNull(board);
+    	CcGameBoard board = new CcGameBoard(2);
+    	assertNotNull(board);
     }
-    //   Testing that retrieving a nonexistant piece results in a null
+
+    /**
+     * Automate the testing of checking the possible moves for a position.
+     * @param row                   The row of the piece.
+     * @param index                 The index of the piece.
+     * @param numPossibleMoves      The positions it should have.
+     */
+    private void checkPossibleStartMoves(int row, int index, int numPossibleMoves) {
+        GameBoard board = newBoard(6);
+
+        try {
+            Position[] possible = board.getPossibleMoves(board.getPiece(newPosition(row, index)));
+
+            if(numPossibleMoves == 0) {
+                assertNull("There should be no possible moves for (" + row + ", " + index + ")", possible);
+            } else {
+                assertEquals("There should be " + numPossibleMoves + " possible moves for (" + row + ", " + index + ")", numPossibleMoves, possible.length);
+            }
+        } catch(ArrayIndexOutOfBoundsException ex) {
+            assertTrue("Index out of bounds for (" + row + ", " + index + ")", false);
+        }
+    }
+
+    /**
+     * Make sure the correct number of possible moves is returned for the starting positions.
+     */
+    public void testPossibleMovesCountCorners() {
+        // Player 4
+        checkPossibleStartMoves(0, 0, 0);
+        checkPossibleStartMoves(1, 0, 0);
+        checkPossibleStartMoves(1, 1, 0);
+        checkPossibleStartMoves(2, 0, 2);
+        checkPossibleStartMoves(2, 1, 2);
+        checkPossibleStartMoves(2, 2, 2);
+        checkPossibleStartMoves(3, 0, 2);
+        checkPossibleStartMoves(3, 1, 2);
+        checkPossibleStartMoves(3, 2, 2);
+        checkPossibleStartMoves(3, 3, 2);
+
+        // Player 3
+        checkPossibleStartMoves(4, 0, 0);
+        checkPossibleStartMoves(4, 1, 0);
+        checkPossibleStartMoves(4, 2, 2);
+        checkPossibleStartMoves(4, 3, 2);
+        checkPossibleStartMoves(5, 0, 0);
+        checkPossibleStartMoves(5, 1, 2);
+        checkPossibleStartMoves(5, 2, 2);
+        checkPossibleStartMoves(6, 0, 2);
+        checkPossibleStartMoves(6, 1, 2);
+        checkPossibleStartMoves(7, 0, 2);
+
+        // Player 2
+        checkPossibleStartMoves(9, 0, 2);
+        checkPossibleStartMoves(10, 0, 2);
+        checkPossibleStartMoves(10, 1, 2);
+        checkPossibleStartMoves(11, 0, 0);
+        checkPossibleStartMoves(11, 1, 2);
+        checkPossibleStartMoves(11, 2, 2);
+        checkPossibleStartMoves(12, 0, 0);
+        checkPossibleStartMoves(12, 1, 0);
+        checkPossibleStartMoves(12, 2, 2);
+        checkPossibleStartMoves(12, 3, 2);
+
+        // Player 1
+        checkPossibleStartMoves(13, 0, 2);
+        checkPossibleStartMoves(13, 1, 2);
+        checkPossibleStartMoves(13, 2, 2);
+        checkPossibleStartMoves(13, 3, 2);
+        checkPossibleStartMoves(14, 0, 2);
+        checkPossibleStartMoves(14, 1, 2);
+        checkPossibleStartMoves(14, 2, 2);
+        checkPossibleStartMoves(15, 0, 0);
+        checkPossibleStartMoves(15, 1, 0);
+        checkPossibleStartMoves(16, 0, 0);
+
+        // Player 5
+        checkPossibleStartMoves(4, 9, 2);
+        checkPossibleStartMoves(4, 10, 2);
+        checkPossibleStartMoves(4, 11, 0);
+        checkPossibleStartMoves(4, 12, 0);
+        checkPossibleStartMoves(5, 9, 2);
+        checkPossibleStartMoves(5, 10, 2);
+        checkPossibleStartMoves(5, 11, 0);
+        checkPossibleStartMoves(6, 9, 2);
+        checkPossibleStartMoves(6, 10, 2);
+        checkPossibleStartMoves(7, 9, 2);
+
+        // Player 6
+        checkPossibleStartMoves(9, 9, 2);
+        checkPossibleStartMoves(10, 9, 2);
+        checkPossibleStartMoves(10, 10, 2);
+        checkPossibleStartMoves(11, 9, 2);
+        checkPossibleStartMoves(11, 10, 2);
+        checkPossibleStartMoves(11, 11, 0);
+        checkPossibleStartMoves(12, 9, 2);
+        checkPossibleStartMoves(12, 10, 2);
+        checkPossibleStartMoves(12, 11, 0);
+        checkPossibleStartMoves(12, 12, 0);
+    }
+
+    /**
+     * Check that the correct number of possible moves are returned.
+     */
+    public void testPossibleMovesForCenterPiece() {
+        CcGameBoard board = new CcGameBoard(2);
+        board.setPiece(newPosition(8, 4), 4);
+
+        Position[] possible = board.getPossibleMoves(board.getPiece(newPosition(8,4)));
+
+        assertEquals("Possible moves should be 6", 6, possible.length);
+    }
+
+//   Testing that retrieving a nonexistant piece results in a null
     public void testGetPieceEmpty() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
-        assertNull(board.getPiece(temp));
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
+    	assertNull(board.getPiece(temp));
     }
-    //  Testing placement of a piece out of bounds and getting said piece results in a null
+//  Testing placement of a piece out of bounds and getting said piece results in a null
     public void testOutOfBoundsPiece() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(20,10);
-        assertNull(board.getPiece(temp));
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(20,10);
+    	assertNull(board.getPiece(temp));
     }
-    //  Testing the setting and getting of a valid piece
+//  Testing the setting and getting of a valid piece
     public void testSetandGetPiece() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
-        board.setPiece(temp, 1);
-        //assertEquals(board.getPiece(temp).getPlayer().getName(), "TEST");
-        assertEquals(board.getPiece(temp).getPosition().getRow(), 5);
-        assertEquals(board.getPiece(temp).getPosition().getIndex(), 5);
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
+    	board.setPiece(temp, 1);
+    	//assertEquals(board.getPiece(temp).getPlayer().getName(), "TEST");
+    	assertEquals(board.getPiece(temp).getPosition().getRow(), 5);
+    	assertEquals(board.getPiece(temp).getPosition().getIndex(), 5);
     }
-    //  Testing to see if setting a piece out of bounds is not retreived by getAllPieces
+//  Testing to see if setting a piece out of bounds is not retreived by getAllPieces
     public void testSetOutOfBounds() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(20,5);
-        board.setPiece(temp, 1);
-        Piece[] tt = board.getAllPieces();
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(20,5);
+    	board.setPiece(temp, 1);
+    	Piece[] tt = board.getAllPieces();
 
         int pieceCount = 0;
-        for(int i=0; i<tt.length; i++) {
+    	for(int i=0; i<tt.length; i++) {
             if(tt[i] != null) {
                 pieceCount++;
             }
-        }
+    	}
         assertEquals(20, pieceCount);
     }
-    // Testing to see if a piece is placed where another piece already exists, the piece is not overwritten
+// Testing to see if a piece is placed where another piece already exists, the piece is not overwritten
     public void testDoubleSet() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
         board.setPiece(temp, 1);
         board.setPiece(temp, 2);
-        Piece t = board.getPiece(temp);
-        assertEquals(t.getPlayerNumber(), 1);
+    	Piece t = board.getPiece(temp);
+    	assertEquals(t.getPlayerNumber(), 1);
     }
-    //  Testing to see that all moves retrieved by getPossibleMoves is valid
+//  Testing to see that all moves retrieved by getPossibleMoves is valid
     public void testValidMoves() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
-        Piece t = new GridPiece(temp, 1);
-        Position[] possibleMoves = board.getPossibleMoves(t);
-        for(int i=0; i<possibleMoves.length; i++) {
-            if(possibleMoves[i]==null){
-                continue;
-            }
-            assertEquals(board.isValidMove(t, possibleMoves[i]), true);
-        }
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
+    	Piece t = new GridPiece(temp, 1);
+    	Position[] possibleMoves = board.getPossibleMoves(t);
+    	for(int i=0; i<possibleMoves.length; i++) {
+    		if(possibleMoves[i]==null){
+    			continue;
+    		}
+    		assertEquals(board.isValidMove(t, possibleMoves[i]), true);
+    	}
     }
 
     public void testCorrectNumberOfPiecesReturend() {
@@ -82,54 +209,55 @@ public class GridUnitTest extends AndroidTestCase  {
         assertEquals(60, new CcGameBoard(6).getAllPieces().length);
     }
 
-    //  Testing to see that a move outside of possibleMoves is invalid
+//  Testing to see that a move outside of possibleMoves is invalid
     public void testInvalidMove() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
-        Piece t = new GridPiece(temp, 1);
-        Position m = new GridPosition(9,9);
-        assertEquals(board.isValidMove(t, m), false);
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
+    	Piece t = new GridPiece(temp, 1);
+    	Position m = new GridPosition(9,9);
+    	assertEquals(board.isValidMove(t, m), false);
     }
-    //  Testing to see if moving a piece on a position that already has a piece is not valid
+//  Testing to see if moving a piece on a position that already has a piece is not valid
     public void testMoveOnExistingPiece() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
-        Position temp2 = new GridPosition(5,6);
-        board.setPiece(temp2, 1);
-        Piece t = new GridPiece(temp, 1);
-        assertEquals(board.isValidMove(t, temp2), false);
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
+    	Position temp2 = new GridPosition(5,6);
+    	board.setPiece(temp2, 1);
+    	Piece t = new GridPiece(temp, 1);
+    	assertEquals(board.isValidMove(t, temp2), false);
     }
-    //  Testing to see if the array retrieved by getAllPieces is not a null object
+//  Testing to see if the array retrieved by getAllPieces is not a null object
     public void testGetAllPiecesNotNull() {
-        CcGameBoard board = new CcGameBoard(2);
-        assertNotNull(board.getAllPieces());
+    	CcGameBoard board = new CcGameBoard(2);
+    	assertNotNull(board.getAllPieces());
     }
-    //  Testing to see that a piece retrieved by getAllPieces is valid
+//  Testing to see that a piece retrieved by getAllPieces is valid
     public void testGetPiecesValid() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
-        Piece t = new GridPiece(temp, 1);
-        board.setPiece(temp, 1);
-        Piece[] tt = board.getAllPieces();
-        for(int i=0;i<tt.length;i++) {
-            if(tt[i] != null && tt[i].getPosition().getRow() == 5 &&
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
+    	Piece t = new GridPiece(temp, 1);
+    	board.setPiece(temp, 1);
+    	Piece[] tt = board.getAllPieces();
+    	for(int i=0;i<tt.length;i++) {
+    		if(tt[i] != null && tt[i].getPosition().getRow() == 5 &&
                     tt[i].getPosition().getIndex() == 5) {
 
-                assertEquals(tt[i].getPlayerNumber(), t.getPlayerNumber());
-            }
-        }
+    			assertEquals(tt[i].getPlayerNumber(), t.getPlayerNumber());
+    		}
+    	}
     }
-    //  Testing to see if movePiece changes the Position correctly
-    public void testMovePieceValid() {
-        CcGameBoard board = new CcGameBoard(2);
-        Position temp = new GridPosition(5,5);
-        Piece t = new GridPiece(temp, 1);
-        board.setPiece(temp, 1);
-        board.movePiece(t, new GridPosition(5,6));
-        Piece m = board.getPiece(new GridPosition(5,6));
-        assertEquals(m.getPosition().getRow(), 5);
-        assertEquals(m.getPosition().getIndex(), 6);
-        assertNull(board.getPiece(temp));
+
+//  Testing to see if movePiece changes the Position correctly
+    public void testMovePieceValid() { // TODO: FIX THIS
+    	CcGameBoard board = new CcGameBoard(2);
+    	Position temp = new GridPosition(5,5);
+    	Piece t = new GridPiece(temp, 1);
+    	board.setPiece(temp, 1);
+    	board.movePiece(t, new GridPosition(5,6));
+    	Piece m = board.getPiece(new GridPosition(5,6));
+    	assertEquals(m.getPosition().getRow(), 5);
+    	assertEquals(m.getPosition().getIndex(), 6);
+    	assertNull(board.getPiece(temp));
     }
 
     public void testCreateBoardWithValidNumberOfPlayers() {

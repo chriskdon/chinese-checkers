@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import android.os.Parcel;
+
 /**
  * Creates a ReadOnlyGameBoard out of a GameBoard
  *
@@ -69,5 +71,59 @@ public class ReadOnlyGameBoard extends GameBoard {
     @Override
     public boolean isValidMove(Piece piece, Position to) {
         return isValidMove(piece, to);
+    }
+
+    /**
+     * Parcel constructor
+     * @param p
+     */
+    private ReadOnlyGameBoard(Parcel p) {
+        gameBoard = p.readParcelable(GameBoard.class.getClassLoader());
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * A list of valid positions that a piece can go to ONLY by hopping over another player.
+     *
+     * @param forPiece The piece to check positions for.
+     * @return The list of positions the piece can move to.
+     */
+    @Override
+    public Position[] getPossibleHops(Piece forPiece) {
+        return gameBoard.getPossibleHops(forPiece);
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(gameBoard, 0);
+    }
+
+    /**
+     * Moves a piece without validaing mvoe.
+     *
+     * @param piece
+     * @param to
+     */
+    @Override
+    public void forceMove(Piece piece, Position to) {
+        throw new UnsupportedOperationException();
     }
 }

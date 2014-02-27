@@ -3,6 +3,7 @@ package ca.brocku.chinesecheckers;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
+import ca.brocku.chinesecheckers.gamestate.Player;
 
 import static android.view.View.OnFocusChangeListener;
 
@@ -251,6 +261,7 @@ public class OfflineConfigurationActivity extends Activity {
 
         @Override
         public void onClick(View view) {
+            ArrayList<Player> players = new ArrayList<Player>(6);
 
             hideWarnings();
 
@@ -277,44 +288,41 @@ public class OfflineConfigurationActivity extends Activity {
                     purplePlayerError.setVisibility(View.VISIBLE);
 
             } else {
-                String[] players; //to be passed to OfflineGameActivity
                 Intent intent = new Intent(OfflineConfigurationActivity.this, OfflineGameActivity.class);
 
-                switch(currentSelection.getId()) {
-                    case R.id.offlineTwoPlayerButton:
-                        players = new String[]{redPlayerEditText.getText().toString(),
-                                greenPlayerEditText.getText().toString()};
-                        intent.putExtra("PLAYER_NAMES", players);
-                        break;
-                    case R.id.offlineThreePlayerButton:
-                        players = new String[]{redPlayerEditText.getText().toString(),
-                                yellowPlayerEditText.getText().toString(),
-                                bluePlayerEditText.getText().toString()};
-                        intent.putExtra("PLAYER_NAMES", players);
-                        break;
-                    case R.id.offlineFourPlayerButton:
-                        players = new String[]{redPlayerEditText.getText().toString(),
-                                orangePlayerEditText.getText().toString(),
-                                greenPlayerEditText.getText().toString(),
-                                bluePlayerEditText.getText().toString()};
-                        intent.putExtra("PLAYER_NAMES", players);
-                        break;
-                    case R.id.offlineSixPlayerButton:
-                        players = new String[]{redPlayerEditText.getText().toString(),
-                                orangePlayerEditText.getText().toString(),
-                                yellowPlayerEditText.getText().toString(),
-                                greenPlayerEditText.getText().toString(),
-                                bluePlayerEditText.getText().toString(),
-                                purplePlayerEditText.getText().toString()};
-                        intent.putExtra("PLAYER_NAMES", players);
-                        break;
+                // TODO: Handle Robots
+
+                if(redPlayerNameContainer.getVisibility() == View.VISIBLE) {
+                    players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
                 }
+
+                if(purplePlayerNameContainer.getVisibility() == View.VISIBLE) {
+                    players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
+                }
+
+                if(bluePlayerNameContainer.getVisibility() == View.VISIBLE) {
+                    players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
+                }
+
+                if(greenPlayerNameContainer.getVisibility() == View.VISIBLE) {
+                    players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
+                }
+
+                if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE) {
+                    players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
+                }
+
+                if(orangePlayerNameContainer.getVisibility() == View.VISIBLE) {
+                    players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
+                }
+
+                GameBoard board = new CcGameBoard(players.size());
+                intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager(board, players));
                 OfflineConfigurationActivity.this.finish();
                 startActivity(intent);
             }
-
         }
-    }
+   }
 
     /** Hides all of the warning symbols associated with required input.
      *

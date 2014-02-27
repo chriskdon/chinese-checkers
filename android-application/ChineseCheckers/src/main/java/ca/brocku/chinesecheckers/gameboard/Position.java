@@ -1,5 +1,8 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * The common interface that defines a position
  * on the board.
@@ -13,7 +16,7 @@ package ca.brocku.chinesecheckers.gameboard;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public abstract class Position {
+public abstract class Position implements Parcelable {
     public abstract int getRow();
     public abstract int getIndex();
 

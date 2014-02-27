@@ -3,12 +3,19 @@ package ca.brocku.chinesecheckers.uiengine;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Parcel;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 
+import java.net.NoRouteToHostException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +26,7 @@ import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
@@ -27,6 +35,7 @@ import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.HintVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.PieceVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
+import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
 
 /**
  * The ui for the game board components and all the actions you can do
@@ -36,17 +45,19 @@ import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
+public class GameBoardUiView extends SurfaceView implements BoardUiEngine, SurfaceHolder.Callback {
     private GameBoardVisual gameBoard;                          // Root visual element
-    private SurfaceHolder surfaceHolder;                        // Surface with canvas
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
-    private Map<Position, PieceVisual> pieces;                  // Pieces
-    private BoardUiEventsHandler boardUiEventsHandlerhandler;   // Board events handler
+    private Map<Position, Visual> pieces;                  // Pieces
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
     private float hintStrokeWidth;                              // Width of the hint stroke.
+    private Piece currentHighlightedPiece;                      // Currently highlighted piece.
 
-    private int playerCount;                                    // The number of players in the game.
+    private transient BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
+    private transient SurfaceHolder surfaceHolder;                        // Surface with canvas
+
+    private ReadOnlyGameBoard init;
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -61,60 +72,72 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     }
 
     /**
+     * Called when the surface has been created.
+     * @param holder
+     */
+    @Override
+    public void surfaceCreated(final SurfaceHolder holder) {
+        GameBoardUiView.this.surfaceHolder = holder;
+
+        // Get the width and height of the canvas
+        int width, height; {
+            Canvas canvas = holder.lockCanvas();
+            width = canvas.getWidth();
+            height = canvas.getHeight();
+            holder.unlockCanvasAndPost(canvas);
+        }
+
+        piecePositionSystem = new PiecePositionSystem(width, height);
+        gameBoard = new GameBoardVisual(getContext(),
+                piecePositionSystem,
+                width, height);
+
+        gameBoard.setPositionTouchedHandler(new GameBoardVisual.PositionTouchedHandler() {
+            @Override
+            public void onPositionTouched(Position position) {
+                if(boardUiEventsHandler != null) {
+                    boardUiEventsHandler.positionTouched(position);
+                }
+            }
+        });
+
+        if(init != null) {
+            // Draw light home pieces
+            for(Piece p : init.getAllPieces()) {
+                gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.LIGHT)));
+            }
+
+            drawBoard(init);
+            init = null;
+        }
+
+        redraw();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
+
+    /**
      * Register the handler to start drawing the board.
      */
     {
         this.hintColor = getResources().getColor(R.color.hint_color);
         this.hintStrokeWidth = getResources().getInteger(R.integer.hint_stroke_width);
 
-        this.pieces = new HashMap<Position, PieceVisual>();
+        this.pieces = new HashMap<Position, Visual>();
 
-        getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(final SurfaceHolder holder) {
-                GameBoardUiView.this.surfaceHolder = holder;
-
-                // Get the width and height of the canvas
-                int width, height; {
-                    Canvas canvas = holder.lockCanvas();
-                    width = canvas.getWidth();
-                    height = canvas.getHeight();
-                    holder.unlockCanvasAndPost(canvas);
-                }
-
-                piecePositionSystem = new PiecePositionSystem(width, height);
-                gameBoard = new GameBoardVisual(getContext(),
-                                                piecePositionSystem,
-                                                width, height);
-
-                gameBoard.setPositionTouchedHandler(new GameBoardVisual.PositionTouchedHandler() {
-                    @Override
-                    public void onPositionTouched(Position position) {
-                        if(boardUiEventsHandlerhandler != null) {
-                            boardUiEventsHandlerhandler.positionTouched(position);
-                        }
-                    }
-                });
-
-                drawPlayer(piecePositionSystem);
-
-                redraw();
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-
-            }
-        });
+        getHolder().addCallback(this);
     }
 
     /**
-     * Occurrs when a user touches the surface.
+     * Occurs when a user touches the surface.
      * @param event The details of where the user touched.
      * @return True...the event was handled.
      */
@@ -130,203 +153,41 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     }
 
     /**
-     * TODO: Remove and replace with board initialization
-     * <paint/>
-     * Set the number of players to draw initial board state.
-     *
-     * @param playerCount The number of player playing.
-     */
-    @Override
-    public void setPlayerCount(int playerCount) {
-       this.playerCount = playerCount;
-    }
-
-    // TODO: Remove --> For Testing
-    private void drawPlayer(PiecePositionSystem pos) {
-        if(playerCount == 2 || playerCount == 3 || playerCount == 4 || playerCount == 6) {
-            // Draw Red Pieces
-            int color = getResources().getColor(R.color.red);
-            gameBoard.addChild(drawPiece(pos, 0, 0, color));
-            gameBoard.addChild(drawPiece(pos, 1, 0, color));
-            gameBoard.addChild(drawPiece(pos, 1, 1, color));
-            gameBoard.addChild(drawPiece(pos, 2, 0, color));
-            gameBoard.addChild(drawPiece(pos, 2, 1, color));
-            gameBoard.addChild(drawPiece(pos, 2, 2, color));
-            gameBoard.addChild(drawPiece(pos, 3, 0, color));
-            gameBoard.addChild(drawPiece(pos, 3, 1, color));
-            gameBoard.addChild(drawPiece(pos, 3, 2, color));
-            gameBoard.addChild(drawPiece(pos, 3, 3, color));
-        }
-
-        if(playerCount == 2 || playerCount == 4 || playerCount == 6) {
-            // Draw Green Pieces
-            int color = getResources().getColor(R.color.green);
-            gameBoard.addChild(drawPiece(pos, 13, 3, color));
-            gameBoard.addChild(drawPiece(pos, 13, 2, color));
-            gameBoard.addChild(drawPiece(pos, 13, 1, color));
-            gameBoard.addChild(drawPiece(pos, 13, 0, color));
-            gameBoard.addChild(drawPiece(pos, 14, 2, color));
-            gameBoard.addChild(drawPiece(pos, 14, 1, color));
-            gameBoard.addChild(drawPiece(pos, 14, 0, color));
-            gameBoard.addChild(drawPiece(pos, 15, 1, color));
-            gameBoard.addChild(drawPiece(pos, 15, 0, color));
-            gameBoard.addChild(drawPiece(pos, 16, 0, color));
-        }
-
-        if(playerCount == 3 || playerCount == 6) {
-            // Draw Yellow Pieces
-            int color = getResources().getColor(R.color.yellow);
-            gameBoard.addChild(drawPiece(pos, 12, 12, color));
-            gameBoard.addChild(drawPiece(pos, 12, 11, color));
-            gameBoard.addChild(drawPiece(pos, 12, 10, color));
-            gameBoard.addChild(drawPiece(pos, 12, 9, color));
-            gameBoard.addChild(drawPiece(pos, 11, 11, color));
-            gameBoard.addChild(drawPiece(pos, 11, 10, color));
-            gameBoard.addChild(drawPiece(pos, 11, 9, color));
-            gameBoard.addChild(drawPiece(pos, 10, 10, color));
-            gameBoard.addChild(drawPiece(pos, 10, 9, color));
-            gameBoard.addChild(drawPiece(pos, 9, 9, color));
-        }
-
-        if(playerCount == 3 || playerCount == 4 || playerCount == 6) {
-            // Draw Blue Pieces
-            int color = getResources().getColor(R.color.blue);
-            gameBoard.addChild(drawPiece(pos, 12, 3, color));
-            gameBoard.addChild(drawPiece(pos, 12, 2, color));
-            gameBoard.addChild(drawPiece(pos, 12, 1, color));
-            gameBoard.addChild(drawPiece(pos, 12, 0, color));
-            gameBoard.addChild(drawPiece(pos, 11, 2, color));
-            gameBoard.addChild(drawPiece(pos, 11, 1, color));
-            gameBoard.addChild(drawPiece(pos, 11, 0, color));
-            gameBoard.addChild(drawPiece(pos, 10, 1, color));
-            gameBoard.addChild(drawPiece(pos, 10, 0, color));
-            gameBoard.addChild(drawPiece(pos, 9, 0, color));
-        }
-
-        if(playerCount == 6) {
-            // Draw Purple Pieces
-            int color = getResources().getColor(R.color.purple);
-            gameBoard.addChild(drawPiece(pos, 4, 0, color));
-            gameBoard.addChild(drawPiece(pos, 4, 1, color));
-            gameBoard.addChild(drawPiece(pos, 4, 2, color));
-            gameBoard.addChild(drawPiece(pos, 4, 3, color));
-            gameBoard.addChild(drawPiece(pos, 5, 0, color));
-            gameBoard.addChild(drawPiece(pos, 5, 1, color));
-            gameBoard.addChild(drawPiece(pos, 5, 2, color));
-            gameBoard.addChild(drawPiece(pos, 6, 0, color));
-            gameBoard.addChild(drawPiece(pos, 6, 1, color));
-            gameBoard.addChild(drawPiece(pos, 7, 0, color));
-        }
-
-        if(playerCount == 6 || playerCount == 4) {
-            // Draw Orange Pieces
-            int color = getResources().getColor(R.color.orange);
-            gameBoard.addChild(drawPiece(pos, 4, 9, color));
-            gameBoard.addChild(drawPiece(pos, 4, 10, color));
-            gameBoard.addChild(drawPiece(pos, 4, 11, color));
-            gameBoard.addChild(drawPiece(pos, 4, 12, color));
-            gameBoard.addChild(drawPiece(pos, 5, 9, color));
-            gameBoard.addChild(drawPiece(pos, 5, 10, color));
-            gameBoard.addChild(drawPiece(pos, 5, 11, color));
-            gameBoard.addChild(drawPiece(pos, 6, 9, color));
-            gameBoard.addChild(drawPiece(pos, 6, 10, color));
-            gameBoard.addChild(drawPiece(pos, 7, 9, color));
-        }
-
-        Position[] positions = new Position[2];
-        positions[0] = createPosition(4,5);
-        positions[1] = createPosition(4,6);
-        showHintPositions(positions);
-    }
-
-    // TODO: FOR TESTING -- REMOVE
-    private Position createPosition(final int row, final int index) {
-        return new Position() {
-            @Override
-            public int getRow() {
-                return row;
-            }
-
-            @Override
-            public int getIndex() {
-                return index;
-            }
-        };
-    }
-
-    // TODO: Utility function for display testing --> REMOVE
-    private PieceVisual drawPiece(PiecePositionSystem pos, final int row, final int index, int color) {
-        Position p = new Position() {
-            @Override
-            public int getRow() {
-                return row;
-            }
-
-            @Override
-            public int getIndex() {
-                return index;
-            }
-        };
-
-        PieceVisual pv = new PieceVisual(pos.get(p), color);
-
-        pieces.put(p, pv);
-
-        return pv;
-    }
-
-    /**
      * Animate moving a piece on the board.
      *
-     * This does not guarantee a check to see if the user is trying to place pieces on top of
-     * each other. All it is doing is moving pieces around. That should be checked elsewhere.
-     *
-     * @param from       The Piece to move.
-     * @param to         The position to move to.
-     * @param onFinished Callback to fire when the animation has completed.
-     * @return           Returns true if a piece could be successfully moved.
+     * @param board@return Returns true if a piece could be successfully moved.
      */
     @Override
-    public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished) {
-        // Make sure it is not modified before we get the start position
-        final Position fromPosition;
-        synchronized (from) {
-            fromPosition = from.getPosition();
+    public void drawBoard(ReadOnlyGameBoard board) {
+        gameBoard.removeChildren(pieces.values());
+
+        for(Piece p : board.getAllPieces()) {
+            PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
+            this.pieces.put(p.getPosition(), pv);
+            gameBoard.addChild(pv);
         }
-
-        PieceVisual p = pieces.remove(fromPosition);
-        if(p != null) {
-            p.setPieceDrawingDetails(piecePositionSystem.get(to));
-            redraw();
-
-            if(onFinished != null) {
-                onFinished.onPieceFinishedMovingAnimation(from, fromPosition);
-            }
-
-            if(pieces.get(to) == null) { // Make sure we aren't overwriting piece.
-                pieces.put(to, p);
-            } else {
-                throw new IllegalStateException("There is already a piece at that position.");
-            }
-
-            return true;
-        }
-
-        // TODO: Handle this
-        Log.d("MOVE", "Tried to move a piece that wasn't there.");
-
-        return  false;
     }
 
     /**
-     * Highlight a position on the board so that the player
-     * can see something important is occurring there.
+     * Highlight a piece on the board.
      *
-     * @param position The position to highlight.
+     * @param piece The position to highlight. Or NULL to clear any highlighted position
      */
     @Override
-    public void highlightPosition(Position position) {
+    public void highlightPiece(Piece piece) {
+        if(currentHighlightedPiece != null) {
+            ((PieceVisual)pieces.get(currentHighlightedPiece.getPosition()))
+                    .setColor(getPlayerColor(getResources(),Player.getPlayerColor(currentHighlightedPiece.getPlayerNumber()), ColorSate.NORMAL));
+        }
 
+        if(piece != null) {
+            PieceVisual pv = (PieceVisual)pieces.get(piece.getPosition());
+            pv.setColor(getPlayerColor(getResources(), Player.getPlayerColor(piece.getPlayerNumber()),
+                                       ColorSate.DARK));
+        }
+
+        currentHighlightedPiece = piece;
+        redraw();
     }
 
     /**
@@ -341,13 +202,25 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
     }
 
     /**
+     * TODO: Possibly put this in constructor
+     * <p/>
+     * Initialize the board with the current piece positions.
+     *
+     * @param board
+     */
+    @Override
+    public void initializeBoard(ReadOnlyGameBoard board) {
+        init = board;
+    }
+
+    /**
      * Do the animation for when a player wins.
      *
      * @param player The player that won.
      */
     @Override
     public void playerWon(Player player) {
-
+        // TODO
     }
 
     /**
@@ -374,36 +247,40 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
             gameBoard.removeChildren(hintPositions);
         }
 
-        this.hintPositions = new HashSet<Visual>(positions.length);
+        if(positions != null) {
+            this.hintPositions = new HashSet<Visual>(positions.length);
 
-        // Add Hint
-        for(Position p : positions) {
-            Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
+            // Add Hint
+            for(Position p : positions) {
+                Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
 
-            this.hintPositions.add(v);
-            gameBoard.addChild(v);
+                this.hintPositions.add(v);
+                gameBoard.addChild(v);
+            }
         }
+
+        redraw();
     }
 
-    /**
-     * TODO: Possibly put this in constructor
-     * <paint/>
-     * Initialize the board with the current piece positions.
-     *
-     * @param pieces The pieces that represent the initial state of the board.
-     */
-    @Override
-    public void initializeBoard(Piece[] pieces) {
 
-    }
 
     /**
-     * Returns the largest possible side for a square that can be created on this device.
-     *
-     * @return The largest side length.
+     * Load all the pieces onto the board.
+     * @param pieces
      */
-    private int getLargestSquareSide() {
-        return (this.getWidth() < this.getHeight() ? this.getWidth() : this.getHeight());
+    private void loadBoardPieces(Piece[] pieces) {
+        if(piecePositionSystem == null) {
+            throw new IllegalStateException("The Piece Position System is not ready.");
+        }
+
+        for(Piece p : pieces) {
+            PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()),
+                                             getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
+
+            this.pieces.put(p.getPosition(), pv);
+
+            gameBoard.addChild(pv);
+        }
     }
 
     /**
@@ -413,7 +290,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
      */
     @Override
     public void setBoardEventsHandler(BoardUiEventsHandler handler) {
-        this.boardUiEventsHandlerhandler = handler;
+        this.boardUiEventsHandler = handler;
     }
 
     /**
@@ -426,8 +303,21 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine {
 
         Canvas c = this.surfaceHolder.lockCanvas();
 
+        c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
+
         gameBoard.draw(c);
 
         this.surfaceHolder.unlockCanvasAndPost(c);
+    }
+
+    /**
+     * Fires when the surface holder is ready
+     */
+    public interface SurfaceHolderReadyHandler {
+        /**
+         * Fired when the surface holder is ready.
+         * @param holder
+         */
+        public void onSurfaceHolderReady(SurfaceHolder holder);
     }
 }

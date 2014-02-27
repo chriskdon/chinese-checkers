@@ -1,5 +1,8 @@
 package ca.brocku.chinesecheckers.gameboard;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.List;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class CcGameBoard extends GameBoard{
+public class CcGameBoard extends GameBoard {
     /**
      * Total number of spaces on the board
      */
@@ -64,6 +67,76 @@ public class CcGameBoard extends GameBoard{
         setGameBoardEventsHandler(handler);
     }
 
+    /**
+     * Constructor for the parcel.
+     * @param parcel    The parcel to build from.
+     */
+    private CcGameBoard(Parcel parcel) {
+        Parcelable[] single = parcel.readParcelableArray(Piece[].class.getClassLoader());
+
+        // Get board back
+        if (single != null) {
+            board = constructBoard();
+            Piece[] singleBoard = Arrays.copyOf(single, single.length, Piece[].class);
+
+            int i = 0;
+            for(int row = 0; row < ROW_POSITION_COUNT.length; row++) {
+                for(int col = 0; col < ROW_POSITION_COUNT[row]; col++) {
+                    board[row][col] = singleBoard[i++];
+                }
+            }
+        }
+    }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // Convert the piece board into a 1d array
+        Piece[] single = new Piece[GameBoard.TOTAL_PIECE_COUNT];
+
+        int i = 0;
+        for(int row = 0; row < board.length; row++) {
+            for(int col = 0; col < board[row].length; col++) {
+                single[i] = board[row][col];
+                i++;
+            }
+        }
+
+        dest.writeParcelableArray(single, 0);
+    }
+
+    /**
+     * Recreate this instance
+     */
+    public static final Parcelable.Creator<CcGameBoard> CREATOR =
+            new Parcelable.Creator<CcGameBoard>() {
+
+                public CcGameBoard createFromParcel(Parcel in) {
+                    return new CcGameBoard(in);
+                }
+
+                public CcGameBoard[] newArray(int size) {
+                    return new CcGameBoard[size];
+                }
+            };
 
     /**
      * Populates the board with pieces in the starting location for each player.
@@ -172,15 +245,28 @@ public class CcGameBoard extends GameBoard{
     @Override
     public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
-            setPiece(to, piece.getPlayerNumber());
-            int oldRow = piece.getPosition().getRow();
-            int oldIndex = piece.getPosition().getIndex();
-            board[oldRow][oldIndex] = null;
+            forceMove(piece, to);
             this.checkWinCondition(piece.getPlayerNumber());
         }
         else{
             throw new IllegalMoveException("This piece cannot move to this position");
         }
+    }
+
+    /**
+     * Moves a piece without validaing mvoe.
+     *
+     * @param piece
+     * @param to
+     */
+    @Override
+    public void forceMove(Piece piece, Position to) {
+        //setPiece(to, piece.getPlayerNumber()); // TODO: THIS SHOULDN'T BE HERE!!!
+        int oldRow = piece.getPosition().getRow();
+        int oldIndex = piece.getPosition().getIndex();
+        ((GridPiece) piece).setPosition(to);
+        board[oldRow][oldIndex] = null;
+        board[piece.getPosition().getRow()][piece.getPosition().getIndex()] = piece;
     }
 
     /**
@@ -508,25 +594,49 @@ public class CcGameBoard extends GameBoard{
                 possibleMoves[posindex] = checkPosition(new GridPosition(row, index+2));
             }
         } // end leftAndRight
+
         return assistPossibleMoves(possibleMoves);
     }
-    /*
-    Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
-    than the alternative.
+
+    /**
+     * A list of valid positions that a piece can go to ONLY by hopping over another player.
+     *
+     * @param forPiece The piece to check positions for.
+     * @return The list of positions the piece can move to.
      */
+    @Override
+    public Position[] getPossibleHops(Piece forPiece) {
+        Position[] allPossible = getPossibleMoves(forPiece);
+
+        ArrayList<Position> hops = new ArrayList<Position>();
+        if(allPossible != null) {
+            for(Position p : allPossible) {
+                if(Math.abs(p.getRow() - forPiece.getPosition().getRow()) == 2 ||
+                   Math.abs(p.getIndex() - forPiece.getPosition().getIndex()) == 2) {
+
+                    hops.add(p);
+                }
+            }
+        }
+
+        return (hops.size() > 0 ? hops.toArray(new Position[hops.size()]) : null);
+    }
+
+    /*
+        Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
+        than the alternative.
+         */
     private Position[] assistPossibleMoves (Position[] possibleMoves) {
         List<Position> fixedPossibleMoves = new ArrayList<Position>();
-        int c=0;
         for(int i=0; i<possibleMoves.length; i++) {
             if(possibleMoves[i]!=null) {
                 fixedPossibleMoves.add(possibleMoves[i]);
-                c=1;
             }
         }
-        if(c==1) {
-            return fixedPossibleMoves.toArray(new Position[fixedPossibleMoves.size()]);
-        }
-        return null;
+
+        Position[] temp = fixedPossibleMoves.toArray(new Position[fixedPossibleMoves.size()]);
+
+        return (temp.length <= 0 ? null : temp);
     }
     /**
      * Checks if a move is valid by verifying the possible moves for the given piece and evaluating
