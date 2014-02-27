@@ -20,7 +20,7 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  */
 public class GameStateManager implements Parcelable {
     private GameBoard gameBoard;
-    private List<Player> players;
+    private List<Player> players;   // Players in the game
 
     private transient GameStateEvents gameStateEventsHandler;
 
@@ -28,12 +28,26 @@ public class GameStateManager implements Parcelable {
      * Constructor
      * @param gameBoard The game board to use to manage the rules and state of the game.
      */
-    public GameStateManager(GameBoard gameBoard) {
+    public GameStateManager(GameBoard gameBoard, List<Player> players) {
         if(gameBoard == null) {
             throw new IllegalArgumentException("GameBoard cannot be null.");
         }
 
         this.gameBoard = gameBoard;
+        this.players = players;
+
+        this.postStateReady();
+    }
+
+    /**
+     * Called after all the non-transient objects are ready. This should be called after all
+     * constructor code. And after deserialization.
+     */
+    private void postStateReady() {
+        if(this.gameBoard == null) {
+            throw new IllegalStateException("GameBoard must be setup.");
+        }
+
         this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler());
     }
 
