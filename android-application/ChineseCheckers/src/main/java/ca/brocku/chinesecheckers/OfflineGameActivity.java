@@ -26,20 +26,19 @@ import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class OfflineGameActivity extends Activity {
-    private String[] players; //an array of the players' names
+    private GameStateManager gameStateManager;  // Manages everything in the game
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_game);
 
-        // Make sure variables are setup before creating fragment
-        players = getIntent().getExtras().getStringArray("PLAYER_NAMES");
+        gameStateManager = getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
 
         //passes player array to the offline game fragment
         Fragment offlineGameFragment = new OfflineGameFragment();
         Bundle offlineGameFragmentBundle = new Bundle();
-        offlineGameFragmentBundle.putStringArray("PLAYER_NAMES", players);
+        offlineGameFragmentBundle.putParcelable("GAME_STATE_MANAGER", gameStateManager);
         offlineGameFragment.setArguments(offlineGameFragmentBundle);
 
         if (savedInstanceState == null) {
@@ -114,12 +113,11 @@ public class OfflineGameActivity extends Activity {
      *  Fragment containing game board, controls, and player turn indicator
      */
     private static class OfflineGameFragment extends Fragment {
+        private GameStateManager gameStateManager;
         private BoardUiEngine boardUiEngine;
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
-        private String[] playerNames;
-        private GameStateManager gameStateManager;  // Manages everything in the game
 
         @Override
         public View onCreateView(LayoutInflater inflater,
@@ -127,14 +125,13 @@ public class OfflineGameActivity extends Activity {
 
             View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
-            playerNames = getArguments().getStringArray("PLAYER_NAMES");
-            gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
+            gameStateManager = getArguments().getParcelable("GAME_STATE_MANAGER");
 
             // Setup Game Board
             this.boardUiEngine = (BoardUiEngine) rootView.findViewById(R.id.gameBoardSurface);
 
             boardUiEngine.setBoardEventsHandler(new BoardEventsHandler());
-            //boardUiEngine.initializeBoard(gameStateManager.getGameBoard().getAllPieces());
+            boardUiEngine.initializeBoard(gameStateManager.getGameBoard().getAllPieces());
 
             // Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
@@ -145,7 +142,7 @@ public class OfflineGameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            currentPlayerName.setText(playerNames[0]);
+            currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
 
             return rootView;
         }

@@ -4,14 +4,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ArrayList;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
 
 /**
  * Handles coordinating the game between multiple players and keeping the game
@@ -25,21 +31,46 @@ public class GameStateManager implements Parcelable, Serializable {
     public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
 
     private GameBoard gameBoard;
-    private List<Player> players;   // Players in the game
+    private Map<Player.PlayerColor, Player> players;    // Players in the game
+    private Player.PlayerColor currentPlayer;           // The current players turn
 
     private transient GameStateEvents gameStateEventsHandler;
 
     /**
      * Constructor
+     *
      * @param gameBoard The game board to use to manage the rules and state of the game.
+     * @param players   The players in the game.
      */
-    public GameStateManager(GameBoard gameBoard, List<Player> players) {
-        if(gameBoard == null) {
-            throw new IllegalArgumentException("GameBoard cannot be null.");
+    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players) {
+        this(gameBoard, players, null);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param gameBoard         The game board to use to manage the rules and state of the game.
+     * @param players           The players in the game.
+     * @param currentPlayer     The current player's turn.
+     */
+    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players, Player.PlayerColor currentPlayer) {
+        if(gameBoard == null) { throw new IllegalArgumentException("Board must be defined."); }
+        if(players == null || players.size() <= 0) {
+            throw new IllegalArgumentException("Players must be defined.");
         }
 
         this.gameBoard = gameBoard;
-        this.players = players;
+
+        this.players = new HashMap<Player.PlayerColor, Player>(players.size());
+        for(Player p : players) {
+            this.players.put(p.getPlayerColor(), p);
+        }
+
+        if(currentPlayer == null) {
+            this.currentPlayer = Player.FIRST_PLAYER;
+        } else {
+            this.currentPlayer = currentPlayer;
+        }
 
         this.onStateReady();
     }
@@ -57,6 +88,14 @@ public class GameStateManager implements Parcelable, Serializable {
     }
 
     /**
+     * Return the player who's turn it currently is.
+     * @return  The player.
+     */
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayer);
+    }
+
+    /**
      * Return a gameboard that can only be looked at.
      * @return  The gameboard.
      */
@@ -70,7 +109,9 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param parcel    The parcel instance to generate the instance from.
      */
     private GameStateManager(Parcel parcel) {
-        gameBoard = parcel.readParcelable(GameBoard.class.getClassLoader());
+        this((GameBoard) parcel.readParcelable(GameBoard.class.getClassLoader()),
+                parcel.readArrayList(Player.class.getClassLoader()),
+                Player.PlayerColor.valueOf(parcel.readString()));
     }
 
     /**
@@ -103,6 +144,8 @@ public class GameStateManager implements Parcelable, Serializable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(gameBoard, 0);
+        dest.writeList(new ArrayList<Player>(players.values()));
+        dest.writeString(currentPlayer.toString());
     }
 
     /**

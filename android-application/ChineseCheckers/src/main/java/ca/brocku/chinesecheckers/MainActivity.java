@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,8 +86,8 @@ public class MainActivity extends Activity {
 
                     //Bundle information and start the OfflineGameActivity
                     Intent intent = new Intent(MainActivity.this, OfflineGameActivity.class);
-                    intent.getExtras().putParcelable("GAME_STATE_MANAGER", gameStateManager); //Store GameStateManager
-                    intent.getExtras().putBoolean("SAVED_GAME", true); //Store flag that this is a saved game
+                    intent.putExtra("GAME_STATE_MANAGER", (Parcelable)gameStateManager); //Store GameStateManager
+                    intent.putExtra("SAVED_GAME", true); //Store flag that this is a saved game
                     startActivity(intent);
 
                 } catch (Exception e) {
