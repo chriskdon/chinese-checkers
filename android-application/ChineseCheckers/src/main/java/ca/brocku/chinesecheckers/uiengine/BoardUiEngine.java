@@ -19,9 +19,7 @@ public interface BoardUiEngine {
     /**
      * Animate moving a piece on the board.
      *
-     * @param from          The Piece to move.
-     * @param to            The position to move to.
-     * @param onFinished    Callback to fire when the animation has completed.
+     * @param board
      * @return              Returns true if a piece could be successfully moved.
      */
     public void drawBoard(ReadOnlyGameBoard board);
@@ -70,7 +68,7 @@ public interface BoardUiEngine {
      *
      * Initialize the board with the current piece positions.
      *
-     * @param pieces    The pieces that represent the initial state of the board.
+     * @param board    The pieces that represent the initial state of the board.
      */
     public void initializeBoard(ReadOnlyGameBoard board);
 

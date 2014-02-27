@@ -99,9 +99,9 @@ public class OfflineGameActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public Boolean onEndGame() {
+    public Boolean onEndGame(Player p) {
         EndOfGameDialog dialog = new EndOfGameDialog(this, R.style.CustomDialogTheme);
-        dialog.setWinner("Kuba");
+        dialog.setWinner(p.getName());
         dialog.show();
 
         return true;
@@ -281,7 +281,7 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public void onPlayerWon(Player player, int position) {
-                ((OfflineGameActivity)getActivity()).onEndGame();
+                ((OfflineGameActivity)getActivity()).onEndGame(player);
             }
         }
 

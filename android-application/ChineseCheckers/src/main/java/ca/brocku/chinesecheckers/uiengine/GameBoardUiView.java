@@ -102,6 +102,11 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         });
 
         if(init != null) {
+            // Draw light home pieces
+            for(Piece p : init.getAllPieces()) {
+                gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.LIGHT)));
+            }
+
             drawBoard(init);
             init = null;
         }
