@@ -25,9 +25,9 @@ import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
  * Date: 2/22/2014
  */
 public class GameStateManager implements Parcelable {
-    private GameBoard gameBoard;
-    private Map<Player.PlayerColor, Player> players;          // Players in the game
-    private Player.PlayerColor currentPlayer;   // The current players turn
+    private GameBoard gameBoard;                        // Manages rules and state
+    private Map<Player.PlayerColor, Player> players;    // Players in the game
+    private Player.PlayerColor currentPlayer;           // The current players turn
 
     private transient GameStateEvents gameStateEventsHandler;
 
