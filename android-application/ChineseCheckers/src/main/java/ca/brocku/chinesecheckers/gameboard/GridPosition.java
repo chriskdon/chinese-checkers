@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gameboard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * The implementation of Position used to represent a position on the chinese checkers game grid.
  *
@@ -10,7 +12,7 @@ import android.os.Parcelable;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class GridPosition extends Position {
+public class GridPosition extends Position implements Serializable {
     private int row, index;
 
     public GridPosition(int r, int i) {

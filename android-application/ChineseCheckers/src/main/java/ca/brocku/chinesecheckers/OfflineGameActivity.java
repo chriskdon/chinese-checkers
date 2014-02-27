@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 public class OfflineGameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
+    private Boolean isEndCurrentGame; //a boolean which can prevent saving the state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class OfflineGameActivity extends Activity {
         setContentView(R.layout.activity_offline_game);
 
         gameStateManager = getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
+        isEndCurrentGame = false;
 
         //passes player array to the offline game fragment
         Fragment offlineGameFragment = new OfflineGameFragment();
@@ -48,7 +51,7 @@ public class OfflineGameActivity extends Activity {
         }
 
         //Show the Resume Game dialog box if we are loading a saves game
-        if(savedInstanceState != null && savedInstanceState.getBoolean("SAVED_GAME")) {
+        if(getIntent().getBooleanExtra("SAVED_GAME", false)) {
             ResumeDialog dialog = new ResumeDialog(this, R.style.CustomDialogTheme);
             dialog.show();
         }
@@ -58,23 +61,28 @@ public class OfflineGameActivity extends Activity {
     protected void onPause() {
         super.onPause();
 
-        try { //try to serialize the GameStateManager
+        if(!isEndCurrentGame) { //only save the state if Quit Game was not selected form dialog
 
-            //Prepare to write out the GameStateManager
-            FileOutputStream fos = openFileOutput(GameStateManager.SERIALIZED_FILENAME, Activity.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            try { //try to serialize the GameStateManager
 
-            //Get the GameStateManager from the OfflineGameFragment
-            GameStateManager gameStateManager = ((OfflineGameFragment)getFragmentManager()
-                    .findFragmentByTag("OfflineGameFragment"))
-                    .getGameStateManager();
+                //Prepare to write out the GameStateManager
+                FileOutputStream fos = openFileOutput(GameStateManager.SERIALIZED_FILENAME, Activity.MODE_PRIVATE);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-            //Write out the GameStateManager
-            oos.writeObject(gameStateManager);
-            oos.close();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+                //Get the GameStateManager from the OfflineGameFragment
+                GameStateManager gameStateManager = ((OfflineGameFragment)getFragmentManager()
+                        .findFragmentByTag("OfflineGameFragment"))
+                        .getGameStateManager();
+
+                //Write out the GameStateManager
+                oos.writeObject(gameStateManager);
+                oos.close();
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -118,12 +126,20 @@ public class OfflineGameActivity extends Activity {
         private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
+        private View rootView;
 
         @Override
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
+            rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
+
+            return rootView;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
 
             gameStateManager = getArguments().getParcelable("GAME_STATE_MANAGER");
 
@@ -144,7 +160,6 @@ public class OfflineGameActivity extends Activity {
 
             currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
 
-            return rootView;
         }
 
         private class ResetMoveHandler implements View.OnClickListener {
@@ -187,6 +202,21 @@ public class OfflineGameActivity extends Activity {
         public GameStateManager getGameStateManager() {
             return gameStateManager;
         }
+
+        /** This is a setter method for the GameStateManager
+         *
+         */
+        public void setGameStateManager(GameStateManager gameStateManager) {
+            this.gameStateManager = gameStateManager;
+        }
+
+        /** This is a getter method for the fragment's BoardUiEngine
+         *
+         * @return  the UI Engine
+         */
+        public void setBoardUiEngine(BoardUiEngine boardUiEngine) {
+            this.boardUiEngine = boardUiEngine;
+        }
     }
 
     /**
@@ -214,6 +244,12 @@ public class OfflineGameActivity extends Activity {
             quitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    isEndCurrentGame = true; //set to not save the state (as we are quitting the current game)
+
+                    //Delete the current saved game
+                    File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+                    savedOfflineGame.delete();
+
                     ((Activity)context).finish();
                     startActivity(new Intent(context, OfflineConfigurationActivity.class));
                 }
