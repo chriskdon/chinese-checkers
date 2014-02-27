@@ -134,6 +134,7 @@ public class OfflineGameActivity extends Activity {
                 Piece piece = board.getPiece(position);
 
                 if(piece != null) {
+                    boardUiEngine.highlightPiece(piece);
                     boardUiEngine.showHintPositions(board.getPossibleMoves(piece));
                 }
             }

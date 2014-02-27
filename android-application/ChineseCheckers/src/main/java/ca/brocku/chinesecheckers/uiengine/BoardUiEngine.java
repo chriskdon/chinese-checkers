@@ -26,12 +26,11 @@ public interface BoardUiEngine {
     public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished);
 
     /**
-     * Highlight a position on the board so that the player
-     * can see something important is occurring there.
+     * Highlight a piece on the board.
      *
-     * @param position The position to highlight.
+     * @param piece The position to highlight.
      */
-    public void highlightPosition(Position position);
+    public void highlightPiece(Piece piece);
 
     /**
      * Rotate the board a certain number of <code>degrees</code>.

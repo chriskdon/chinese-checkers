@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.net.NoRouteToHostException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +43,15 @@ import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
  * Date: 2/1/2014
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine, SurfaceHolder.Callback {
+    /**
+     * States that a piece color can be in.
+     */
+    private enum ColorSate {
+        NORMAL,
+        DARK,
+        LIGHT
+    };
+
     private GameBoardVisual gameBoard;                          // Root visual element
     private SurfaceHolder surfaceHolder;                        // Surface with canvas
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
@@ -50,6 +60,10 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
     private float hintStrokeWidth;                              // Width of the hint stroke.
+
+    private Piece currentHighlightedPiece;                      // Currently highlighted piece.
+
+    // TODO: Find ways around this
     private Piece[] initialPieces;                              // Initial setup of  board piece
 
     public GameBoardUiView(Context context) {
@@ -185,14 +199,24 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     }
 
     /**
-     * Highlight a position on the board so that the player
-     * can see something important is occurring there.
+     * Highlight a piece on the board.
      *
-     * @param position The position to highlight.
+     * @param piece The position to highlight. Or NULL to clear any highlighted position
      */
     @Override
-    public void highlightPosition(Position position) {
+    public void highlightPiece(Piece piece) {
+        if(currentHighlightedPiece != null) {
+            pieces.get(currentHighlightedPiece.getPosition())
+                    .setColor(getPlayerColor(currentHighlightedPiece.getPlayerNumber(),                            ColorSate.NORMAL));
+        }
 
+        if(piece != null) {
+            PieceVisual pv = pieces.get(piece.getPosition());
+            pv.setColor(getPlayerColor(piece.getPlayerNumber(), ColorSate.DARK));
+        }
+
+        currentHighlightedPiece = piece;
+        redraw();
     }
 
     /**
@@ -250,9 +274,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
                 this.hintPositions.add(v);
                 gameBoard.addChild(v);
             }
-
-            redraw();
         }
+
+        redraw();
     }
 
     /**
@@ -276,7 +300,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         for(Piece p : pieces) {
             PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()),
-                                             getPlayerColor(p.getPlayerNumber()));
+                                             getPlayerColor(p.getPlayerNumber(), ColorSate.NORMAL));
 
             this.pieces.put(p.getPosition(), pv);
 
@@ -289,14 +313,40 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param playerNumber  The number of the player.
      * @return  The color value.
      */
-    private int getPlayerColor(int playerNumber) {
-        switch(playerNumber) {
-            case 1: return getResources().getColor(R.color.red);
-            case 2: return getResources().getColor(R.color.purple);
-            case 3: return getResources().getColor(R.color.blue);
-            case 4: return getResources().getColor(R.color.green);
-            case 5: return getResources().getColor(R.color.yellow);
-            case 6: return getResources().getColor(R.color.orange);
+    private int getPlayerColor(int playerNumber, ColorSate state) {
+        switch (state) {
+            case NORMAL: {
+                switch(playerNumber) {
+                    case 1: return getResources().getColor(R.color.red);
+                    case 2: return getResources().getColor(R.color.purple);
+                    case 3: return getResources().getColor(R.color.blue);
+                    case 4: return getResources().getColor(R.color.green);
+                    case 5: return getResources().getColor(R.color.yellow);
+                    case 6: return getResources().getColor(R.color.orange);
+                }
+            }
+
+            case DARK: {
+                switch(playerNumber) {
+                    case 1: return getResources().getColor(R.color.dark_red);
+                    case 2: return getResources().getColor(R.color.dark_purple);
+                    case 3: return getResources().getColor(R.color.dark_blue);
+                    case 4: return getResources().getColor(R.color.dark_green);
+                    case 5: return getResources().getColor(R.color.dark_yellow);
+                    case 6: return getResources().getColor(R.color.dark_orange);
+                }
+            }
+
+            case LIGHT: {
+                switch(playerNumber) {
+                    case 1: return getResources().getColor(R.color.light_red);
+                    case 2: return getResources().getColor(R.color.light_purple);
+                    case 3: return getResources().getColor(R.color.light_blue);
+                    case 4: return getResources().getColor(R.color.light_green);
+                    case 5: return getResources().getColor(R.color.light_yellow);
+                    case 6: return getResources().getColor(R.color.light_orange);
+                }
+            }
         }
 
         throw new IllegalArgumentException("Player Number must be between 1 and 6");

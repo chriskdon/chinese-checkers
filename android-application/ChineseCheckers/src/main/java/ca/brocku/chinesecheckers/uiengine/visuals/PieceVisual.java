@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers.uiengine.visuals;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -36,6 +37,15 @@ public class PieceVisual extends Visual {
         paint.setColor(color);
 
         setPieceDrawingDetails(pieceDrawingDetails);
+    }
+
+    /**
+     * Set the color of the piece.
+     * @param color The color of the piece.
+     */
+    public void setColor(int color) {
+        this.color = color;
+        paint.setColor(color);
     }
 
     /**
