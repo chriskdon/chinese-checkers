@@ -245,17 +245,28 @@ public class CcGameBoard extends GameBoard {
     @Override
     public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
-            //setPiece(to, piece.getPlayerNumber()); // TODO: THIS SHOULDN'T BE HERE!!!
-            int oldRow = piece.getPosition().getRow();
-            int oldIndex = piece.getPosition().getIndex();
-            ((GridPiece) piece).setPosition(to);
-            board[oldRow][oldIndex] = null;
-            board[piece.getPosition().getRow()][piece.getPosition().getIndex()] = piece;
+            forceMove(piece, to);
             this.checkWinCondition(piece.getPlayerNumber());
         }
         else{
             throw new IllegalMoveException("This piece cannot move to this position");
         }
+    }
+
+    /**
+     * Moves a piece without validaing mvoe.
+     *
+     * @param piece
+     * @param to
+     */
+    @Override
+    public void forceMove(Piece piece, Position to) {
+        //setPiece(to, piece.getPlayerNumber()); // TODO: THIS SHOULDN'T BE HERE!!!
+        int oldRow = piece.getPosition().getRow();
+        int oldIndex = piece.getPosition().getIndex();
+        ((GridPiece) piece).setPosition(to);
+        board[oldRow][oldIndex] = null;
+        board[piece.getPosition().getRow()][piece.getPosition().getIndex()] = piece;
     }
 
     /**
@@ -583,13 +594,38 @@ public class CcGameBoard extends GameBoard {
                 possibleMoves[posindex] = checkPosition(new GridPosition(row, index+2));
             }
         } // end leftAndRight
+
         return assistPossibleMoves(possibleMoves);
     }
 
-    /*
-    Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
-    than the alternative.
+    /**
+     * A list of valid positions that a piece can go to ONLY by hopping over another player.
+     *
+     * @param forPiece The piece to check positions for.
+     * @return The list of positions the piece can move to.
      */
+    @Override
+    public Position[] getPossibleHops(Piece forPiece) {
+        Position[] allPossible = getPossibleMoves(forPiece);
+
+        ArrayList<Position> hops = new ArrayList<Position>();
+        if(allPossible != null) {
+            for(Position p : allPossible) {
+                if(Math.abs(p.getRow() - forPiece.getPosition().getRow()) == 2 ||
+                   Math.abs(p.getIndex() - forPiece.getPosition().getIndex()) == 2) {
+
+                    hops.add(p);
+                }
+            }
+        }
+
+        return (hops.size() > 0 ? hops.toArray(new Position[hops.size()]) : null);
+    }
+
+    /*
+        Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
+        than the alternative.
+         */
     private Position[] assistPossibleMoves (Position[] possibleMoves) {
         List<Position> fixedPossibleMoves = new ArrayList<Position>();
         for(int i=0; i<possibleMoves.length; i++) {

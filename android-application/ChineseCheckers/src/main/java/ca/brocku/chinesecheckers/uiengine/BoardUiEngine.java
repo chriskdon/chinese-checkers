@@ -2,6 +2,7 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
@@ -23,7 +24,7 @@ public interface BoardUiEngine {
      * @param onFinished    Callback to fire when the animation has completed.
      * @return              Returns true if a piece could be successfully moved.
      */
-    public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished);
+    public void drawBoard(ReadOnlyGameBoard board);
 
     /**
      * Highlight a piece on the board.
@@ -71,7 +72,7 @@ public interface BoardUiEngine {
      *
      * @param pieces    The pieces that represent the initial state of the board.
      */
-    public void initializeBoard(Piece[] pieces);
+    public void initializeBoard(ReadOnlyGameBoard board);
 
     /**
      * Add a handler to receive any events that occur on the board.

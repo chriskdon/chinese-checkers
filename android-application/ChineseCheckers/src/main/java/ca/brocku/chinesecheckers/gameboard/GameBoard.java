@@ -77,6 +77,14 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public abstract Position[] getPossibleMoves(Piece forPiece);
 
     /**
+     * A list of valid positions that a piece can go to ONLY by hopping over another player.
+     *
+     * @param forPiece  The piece to check positions for.
+     * @return  The list of positions the piece can move to.
+     */
+    public abstract Position[] getPossibleHops(Piece forPiece);
+
+    /**
      * Check if a move is valid for a specified piece.
      *
      * @param piece The piece making the move.
@@ -84,6 +92,13 @@ public abstract class GameBoard implements Parcelable, Serializable {
      * @return      True if the move is valid, false otherwise.
      */
     public abstract boolean isValidMove(Piece piece, Position to);
+
+    /**
+     * Moves a piece without validaing mvoe.
+     * @param piece
+     * @param to
+     */
+    public abstract void forceMove(Piece piece, Position to);
 
     /**
      * Describe the kinds of special objects contained in this Parcelable's

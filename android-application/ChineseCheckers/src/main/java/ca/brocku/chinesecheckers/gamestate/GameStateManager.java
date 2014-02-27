@@ -146,10 +146,13 @@ public class GameStateManager implements Parcelable, Serializable {
 
     public void movePiece(Piece piece, Position to) {
         gameBoard.movePiece(piece, to);
-        nextPlayer();
     }
 
-    private void nextPlayer() {
+    public void resetPiece(Piece piece, Position to) {
+        gameBoard.forceMove(piece, to);
+    }
+
+    public void nextPlayer() {
         currentPlayer = getNextPlayer(currentPlayer);
         triggerPlayerTurnEvent(getCurrentPlayer());
     }

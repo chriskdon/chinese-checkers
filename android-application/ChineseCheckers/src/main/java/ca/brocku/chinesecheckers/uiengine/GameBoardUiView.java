@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.net.NoRouteToHostException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,6 +26,7 @@ import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
@@ -46,7 +48,7 @@ import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine, SurfaceHolder.Callback {
     private GameBoardVisual gameBoard;                          // Root visual element
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
-    private Map<Position, PieceVisual> pieces;                  // Pieces
+    private Map<Position, Visual> pieces;                  // Pieces
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
     private float hintStrokeWidth;                              // Width of the hint stroke.
@@ -55,8 +57,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     private transient BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
     private transient SurfaceHolder surfaceHolder;                        // Surface with canvas
 
-    // TODO: Find ways around this
-    private Piece[] initialPieces;                              // Initial setup of  board piece
+    private ReadOnlyGameBoard init;
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -100,10 +101,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             }
         });
 
-        // Load initial board state
-        if(initialPieces != null) {
-            loadBoardPieces(initialPieces);
-            initialPieces = null;   // No longer need these
+        if(init != null) {
+            drawBoard(init);
+            init = null;
         }
 
         redraw();
@@ -126,7 +126,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         this.hintColor = getResources().getColor(R.color.hint_color);
         this.hintStrokeWidth = getResources().getInteger(R.integer.hint_stroke_width);
 
-        this.pieces = new HashMap<Position, PieceVisual>();
+        this.pieces = new HashMap<Position, Visual>();
 
         getHolder().addCallback(this);
     }
@@ -150,44 +150,17 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     /**
      * Animate moving a piece on the board.
      *
-     * This does not guarantee a check to see if the user is trying to place pieces on top of
-     * each other. All it is doing is moving pieces around. That should be checked elsewhere.
-     *
-     * @param from       The Piece to move.
-     * @param to         The position to move to.
-     * @param onFinished Callback to fire when the animation has completed.
-     * @return           Returns true if a piece could be successfully moved.
+     * @param board@return Returns true if a piece could be successfully moved.
      */
     @Override
-    public boolean movePiece(Piece from, Position to, FinishedMovingPieceHandler onFinished) {
-        // Make sure it is not modified before we get the start position
-        final Position fromPosition;
-        synchronized (from) {
-            fromPosition = from.getPosition();
+    public void drawBoard(ReadOnlyGameBoard board) {
+        gameBoard.removeChildren(pieces.values());
+
+        for(Piece p : board.getAllPieces()) {
+            PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
+            this.pieces.put(p.getPosition(), pv);
+            gameBoard.addChild(pv);
         }
-
-        PieceVisual p = pieces.remove(fromPosition);
-        if(p != null) {
-            p.setPieceDrawingDetails(piecePositionSystem.get(to));
-            redraw();
-
-            if(onFinished != null) {
-                onFinished.onPieceFinishedMovingAnimation(from, fromPosition);
-            }
-
-            if(pieces.get(to) == null) { // Make sure we aren't overwriting piece.
-                pieces.put(to, p);
-            } else {
-                throw new IllegalStateException("There is already a piece at that position.");
-            }
-
-            return true;
-        }
-
-        // TODO: Handle this
-        Log.d("MOVE", "Tried to move a piece that wasn't there.");
-
-        return  false;
     }
 
     /**
@@ -198,12 +171,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     @Override
     public void highlightPiece(Piece piece) {
         if(currentHighlightedPiece != null) {
-            pieces.get(currentHighlightedPiece.getPosition())
+            ((PieceVisual)pieces.get(currentHighlightedPiece.getPosition()))
                     .setColor(getPlayerColor(getResources(),Player.getPlayerColor(currentHighlightedPiece.getPlayerNumber()), ColorSate.NORMAL));
         }
 
         if(piece != null) {
-            PieceVisual pv = pieces.get(piece.getPosition());
+            PieceVisual pv = (PieceVisual)pieces.get(piece.getPosition());
             pv.setColor(getPlayerColor(getResources(), Player.getPlayerColor(piece.getPlayerNumber()),
                                        ColorSate.DARK));
         }
@@ -221,6 +194,18 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     @Override
     public void rotateBoard(int degrees, FinishedRotatingBoardHandler onFinished) {
         // TODO
+    }
+
+    /**
+     * TODO: Possibly put this in constructor
+     * <p/>
+     * Initialize the board with the current piece positions.
+     *
+     * @param board
+     */
+    @Override
+    public void initializeBoard(ReadOnlyGameBoard board) {
+        init = board;
     }
 
     /**
@@ -272,15 +257,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         redraw();
     }
 
-    /**
-     * Initialize the board with the current piece positions.
-     *
-     * @param pieces The pieces that represent the initial state of the board.
-     */
-    @Override
-    public void initializeBoard(Piece[] pieces) {
-        initialPieces = pieces;
-    }
+
 
     /**
      * Load all the pieces onto the board.
