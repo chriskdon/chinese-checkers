@@ -11,17 +11,17 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  */
 public class HumanPlayer extends Player {
     private String name;
-    private int playerNumber;
 
     /**
      * Create a new player.
      *
      * @param name          The name of the player.
-     * @param playerNumber  The number of the player.
+     * @param playerColor   The color of the player.
      */
-    public HumanPlayer(String name, int playerNumber) {
+    public HumanPlayer(String name, PlayerColor playerColor) {
+        super(playerColor);
+
         this.name = name;
-        this.playerNumber = playerNumber;
     }
 
     /**
@@ -31,16 +31,6 @@ public class HumanPlayer extends Player {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Return the number of the player. Based on their board position.
-     *
-     * @return Number of the player.
-     */
-    @Override
-    public int getPlayerNumber() {
-        return playerNumber;
     }
 
     /**

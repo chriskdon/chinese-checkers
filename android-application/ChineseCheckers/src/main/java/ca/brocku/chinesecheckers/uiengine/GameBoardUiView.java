@@ -46,7 +46,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     /**
      * States that a piece color can be in.
      */
-    private enum ColorSate {
+    private static enum ColorSate {
         NORMAL,
         DARK,
         LIGHT
@@ -207,12 +207,13 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     public void highlightPiece(Piece piece) {
         if(currentHighlightedPiece != null) {
             pieces.get(currentHighlightedPiece.getPosition())
-                    .setColor(getPlayerColor(currentHighlightedPiece.getPlayerNumber(),                            ColorSate.NORMAL));
+                    .setColor(getPlayerColor(Player.getPlayerColor(currentHighlightedPiece.getPlayerNumber()), ColorSate.NORMAL));
         }
 
         if(piece != null) {
             PieceVisual pv = pieces.get(piece.getPosition());
-            pv.setColor(getPlayerColor(piece.getPlayerNumber(), ColorSate.DARK));
+            pv.setColor(getPlayerColor(Player.getPlayerColor(piece.getPlayerNumber()),
+                                       ColorSate.DARK));
         }
 
         currentHighlightedPiece = piece;
@@ -300,7 +301,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         for(Piece p : pieces) {
             PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()),
-                                             getPlayerColor(p.getPlayerNumber(), ColorSate.NORMAL));
+                                             getPlayerColor(Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
 
             this.pieces.put(p.getPosition(), pv);
 
@@ -310,41 +311,41 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
     /**
      * Get the color associated with a player.
-     * @param playerNumber  The number of the player.
+     * @param playerColor  The color of the player.
      * @return  The color value.
      */
-    private int getPlayerColor(int playerNumber, ColorSate state) {
+    private int getPlayerColor(Player.PlayerColor playerColor, ColorSate state) {
         switch (state) {
             case NORMAL: {
-                switch(playerNumber) {
-                    case 1: return getResources().getColor(R.color.red);
-                    case 2: return getResources().getColor(R.color.purple);
-                    case 3: return getResources().getColor(R.color.blue);
-                    case 4: return getResources().getColor(R.color.green);
-                    case 5: return getResources().getColor(R.color.yellow);
-                    case 6: return getResources().getColor(R.color.orange);
+                switch(playerColor) {
+                    case RED: return getResources().getColor(R.color.red);
+                    case PURPLE: return getResources().getColor(R.color.purple);
+                    case BLUE: return getResources().getColor(R.color.blue);
+                    case GREEN: return getResources().getColor(R.color.green);
+                    case YELLOW: return getResources().getColor(R.color.yellow);
+                    case ORANGE: return getResources().getColor(R.color.orange);
                 }
             }
 
             case DARK: {
-                switch(playerNumber) {
-                    case 1: return getResources().getColor(R.color.dark_red);
-                    case 2: return getResources().getColor(R.color.dark_purple);
-                    case 3: return getResources().getColor(R.color.dark_blue);
-                    case 4: return getResources().getColor(R.color.dark_green);
-                    case 5: return getResources().getColor(R.color.dark_yellow);
-                    case 6: return getResources().getColor(R.color.dark_orange);
+                switch(playerColor) {
+                    case RED: return getResources().getColor(R.color.dark_red);
+                    case PURPLE: return getResources().getColor(R.color.dark_purple);
+                    case BLUE: return getResources().getColor(R.color.dark_blue);
+                    case GREEN: return getResources().getColor(R.color.dark_green);
+                    case YELLOW: return getResources().getColor(R.color.dark_yellow);
+                    case ORANGE: return getResources().getColor(R.color.dark_orange);
                 }
             }
 
             case LIGHT: {
-                switch(playerNumber) {
-                    case 1: return getResources().getColor(R.color.light_red);
-                    case 2: return getResources().getColor(R.color.light_purple);
-                    case 3: return getResources().getColor(R.color.light_blue);
-                    case 4: return getResources().getColor(R.color.light_green);
-                    case 5: return getResources().getColor(R.color.light_yellow);
-                    case 6: return getResources().getColor(R.color.light_orange);
+                switch(playerColor) {
+                    case RED: return getResources().getColor(R.color.light_red);
+                    case PURPLE: return getResources().getColor(R.color.light_purple);
+                    case BLUE: return getResources().getColor(R.color.light_blue);
+                    case GREEN: return getResources().getColor(R.color.light_green);
+                    case YELLOW: return getResources().getColor(R.color.light_yellow);
+                    case ORANGE: return getResources().getColor(R.color.light_orange);
                 }
             }
         }
