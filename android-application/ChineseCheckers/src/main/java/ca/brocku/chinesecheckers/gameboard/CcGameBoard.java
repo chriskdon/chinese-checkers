@@ -245,10 +245,12 @@ public class CcGameBoard extends GameBoard {
     @Override
     public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
-            setPiece(to, piece.getPlayerNumber());
+            //setPiece(to, piece.getPlayerNumber()); // TODO: THIS SHOULDN'T BE HERE!!!
             int oldRow = piece.getPosition().getRow();
             int oldIndex = piece.getPosition().getIndex();
+            ((GridPiece) piece).setPosition(to);
             board[oldRow][oldIndex] = null;
+            board[piece.getPosition().getRow()][piece.getPosition().getIndex()] = piece;
             this.checkWinCondition(piece.getPlayerNumber());
         }
         else{

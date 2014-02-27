@@ -33,9 +33,8 @@ public abstract class Player implements Serializable, Parcelable {
     /**
      * Executed when it is this players turn to act.
      * @param gameBoard The current game board.
-     * @param handler   This must be called when the player has finished making their turn.
      */
-    public abstract void onTurn(ReadOnlyGameBoard gameBoard, PlayerTurnHandler handler);
+    public abstract Move onTurn(ReadOnlyGameBoard gameBoard);
 
     /**
      * Get the name of this player.

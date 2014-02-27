@@ -33,6 +33,7 @@ import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.HintVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.PieceVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
+import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
 
 /**
  * The ui for the game board components and all the actions you can do
@@ -43,15 +44,6 @@ import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
  * Date: 2/1/2014
  */
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine, SurfaceHolder.Callback {
-    /**
-     * States that a piece color can be in.
-     */
-    private static enum ColorSate {
-        NORMAL,
-        DARK,
-        LIGHT
-    };
-
     private GameBoardVisual gameBoard;                          // Root visual element
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
     private Map<Position, PieceVisual> pieces;                  // Pieces
@@ -207,12 +199,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     public void highlightPiece(Piece piece) {
         if(currentHighlightedPiece != null) {
             pieces.get(currentHighlightedPiece.getPosition())
-                    .setColor(getPlayerColor(Player.getPlayerColor(currentHighlightedPiece.getPlayerNumber()), ColorSate.NORMAL));
+                    .setColor(getPlayerColor(getResources(),Player.getPlayerColor(currentHighlightedPiece.getPlayerNumber()), ColorSate.NORMAL));
         }
 
         if(piece != null) {
             PieceVisual pv = pieces.get(piece.getPosition());
-            pv.setColor(getPlayerColor(Player.getPlayerColor(piece.getPlayerNumber()),
+            pv.setColor(getPlayerColor(getResources(), Player.getPlayerColor(piece.getPlayerNumber()),
                                        ColorSate.DARK));
         }
 
@@ -301,56 +293,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         for(Piece p : pieces) {
             PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()),
-                                             getPlayerColor(Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
+                                             getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
 
             this.pieces.put(p.getPosition(), pv);
 
             gameBoard.addChild(pv);
         }
-    }
-
-    /**
-     * Get the color associated with a player.
-     * @param playerColor  The color of the player.
-     * @return  The color value.
-     */
-    private int getPlayerColor(Player.PlayerColor playerColor, ColorSate state) {
-        switch (state) {
-            case NORMAL: {
-                switch(playerColor) {
-                    case RED: return getResources().getColor(R.color.red);
-                    case PURPLE: return getResources().getColor(R.color.purple);
-                    case BLUE: return getResources().getColor(R.color.blue);
-                    case GREEN: return getResources().getColor(R.color.green);
-                    case YELLOW: return getResources().getColor(R.color.yellow);
-                    case ORANGE: return getResources().getColor(R.color.orange);
-                }
-            }
-
-            case DARK: {
-                switch(playerColor) {
-                    case RED: return getResources().getColor(R.color.dark_red);
-                    case PURPLE: return getResources().getColor(R.color.dark_purple);
-                    case BLUE: return getResources().getColor(R.color.dark_blue);
-                    case GREEN: return getResources().getColor(R.color.dark_green);
-                    case YELLOW: return getResources().getColor(R.color.dark_yellow);
-                    case ORANGE: return getResources().getColor(R.color.dark_orange);
-                }
-            }
-
-            case LIGHT: {
-                switch(playerColor) {
-                    case RED: return getResources().getColor(R.color.light_red);
-                    case PURPLE: return getResources().getColor(R.color.light_purple);
-                    case BLUE: return getResources().getColor(R.color.light_blue);
-                    case GREEN: return getResources().getColor(R.color.light_green);
-                    case YELLOW: return getResources().getColor(R.color.light_yellow);
-                    case ORANGE: return getResources().getColor(R.color.light_orange);
-                }
-            }
-        }
-
-        throw new IllegalArgumentException("Player Number must be between 1 and 6");
     }
 
     /**

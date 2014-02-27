@@ -90,6 +90,25 @@ public class GameStateManager implements Parcelable, Serializable {
     }
 
     /**
+     * Start the game
+     */
+    public void startGame() {
+        nextPlayer();
+    }
+
+    public void movePiece(Piece piece, Position to) {
+        gameBoard.movePiece(piece, to);
+        nextPlayer();
+    }
+
+    private void nextPlayer() {
+        if(this.gameStateEventsHandler != null) {
+            final Player p = getCurrentPlayer();
+            this.gameStateEventsHandler.onPlayerTurn(p);
+        }
+    }
+
+    /**
      * Return the player who's turn it currently is.
      * @return  The player.
      */
