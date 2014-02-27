@@ -314,7 +314,7 @@ public class OfflineConfigurationActivity extends Activity {
                         break;
                 }
                 GameBoard board = new CcGameBoard(players.length);
-                intent.putExtra("GAME_STATE_MANAGER", new GameStateManager(board));
+                //intent.putExtra("GAME_STATE_MANAGER", new GameStateManager(board));
                 OfflineConfigurationActivity.this.finish();
                 startActivity(intent);
             }

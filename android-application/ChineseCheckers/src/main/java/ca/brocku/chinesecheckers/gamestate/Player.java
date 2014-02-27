@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import java.io.Serializable;
+
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 
 /**
@@ -9,7 +11,7 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public abstract class Player {
+public abstract class Player implements Serializable {
     /**
      * Executed when it is this players turn to act.
      * @param gameBoard The current game board.

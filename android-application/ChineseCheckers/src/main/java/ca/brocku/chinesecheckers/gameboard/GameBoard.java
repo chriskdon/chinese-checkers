@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gameboard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * The representation of a game board and what it can do.
  *
@@ -10,7 +12,7 @@ import android.os.Parcelable;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public abstract class GameBoard implements Parcelable {
+public abstract class GameBoard implements Parcelable, Serializable {
     protected transient GameBoardEvents gameBoardEventsHandler;    // Various game event handlers.
 
     /**

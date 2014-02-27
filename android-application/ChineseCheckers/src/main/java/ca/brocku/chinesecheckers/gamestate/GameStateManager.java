@@ -3,6 +3,9 @@ package ca.brocku.chinesecheckers.gamestate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.List;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
@@ -18,7 +21,9 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  * Student #: 4810800
  * Date: 2/22/2014
  */
-public class GameStateManager implements Parcelable {
+public class GameStateManager implements Parcelable, Serializable {
+    public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
+
     private GameBoard gameBoard;
     private List<Player> players;   // Players in the game
 
@@ -163,5 +168,21 @@ public class GameStateManager implements Parcelable {
          * @param position  The position they finished in (1st, 2nd, 3rd, etc.).
          */
         public void onPlayerWon(Player player, int position);
+    }
+
+
+    /** Thi is a private method that the virtual machine will call when this object is deserialized.
+     *
+     * This method is used in order to re-set the events for this object in addition to
+     * deserializing it. This mechanism is available from implementing Serializable.
+     *
+     * @param in    the ObjectInputStream which will deserialize this object
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject(); //Deserializes the GameStateManager object
+
+        onStateReady(); //sets up the events the deserialized object will listen for
     }
 }
