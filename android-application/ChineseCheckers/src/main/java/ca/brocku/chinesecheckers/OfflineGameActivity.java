@@ -257,6 +257,7 @@ public class OfflineGameActivity extends Activity {
                     File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
                     savedOfflineGame.delete();
 
+                    ResumeDialog.this.dismiss();
                     ((Activity)context).finish();
                     startActivity(new Intent(context, OfflineConfigurationActivity.class));
                 }
