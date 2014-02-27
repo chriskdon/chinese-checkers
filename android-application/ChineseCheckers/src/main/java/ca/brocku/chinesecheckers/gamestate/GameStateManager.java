@@ -68,6 +68,8 @@ public class GameStateManager implements Parcelable, Serializable {
 
         if(currentPlayer == null) {
             this.currentPlayer = Player.FIRST_PLAYER;
+        } else if(!this.players.containsKey(currentPlayer)) {
+            throw new IllegalArgumentException("Current Player must be in Players list");
         } else {
             this.currentPlayer = currentPlayer;
         }

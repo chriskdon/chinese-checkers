@@ -76,7 +76,6 @@ public class MainActivity extends Activity {
 
             if(savedOfflineGame.exists()) { //if there is a saved game file
                 try {
-
                     //Load the GameStateManager from storage
                     FileInputStream fis = new FileInputStream(savedOfflineGame);
                     ObjectInputStream ois = new ObjectInputStream(fis);
@@ -94,7 +93,6 @@ public class MainActivity extends Activity {
                     savedOfflineGame.delete(); //delete the saved game as it couldn't be loaded
                     e.printStackTrace();
                 }
-
             } else { //there is no saved game, go to configuration for the offline game
                 startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
             }
