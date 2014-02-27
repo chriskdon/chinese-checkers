@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.ActionProvider;
 import android.view.ContextMenu;
@@ -14,9 +15,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.OfflineGameActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
+import ca.brocku.chinesecheckers.gamestate.Player;
 
 /**
  * Created by Main on 2/18/14.
@@ -46,14 +54,11 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         super.setUp();
         testHelper = new TestHelpers();
         Intent intent = new Intent();
-        String[] players = new String[]{
-                "Red Bob",
-                "Orange Bob",
-                "Yellow Bob",
-                "Green Bob",
-                "Blue Bob",
-                "Purple Bob"};
-        intent.putExtra("PLAYER_NAMES", players);
+        ArrayList<Player> players = new ArrayList<Player>(6);
+        players.add(new HumanPlayer("Red Bob", Player.PlayerColor.RED));
+        players.add(new HumanPlayer("Green Bob",Player.PlayerColor.GREEN));
+        GameBoard board = new CcGameBoard(players.size());
+        intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager(board, players));
         setActivityIntent(intent);
         setActivityInitialTouchMode(false);
         curAct = getActivity();
