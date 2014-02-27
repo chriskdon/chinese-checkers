@@ -25,6 +25,7 @@ import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
+import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 
 public class OfflineGameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
@@ -173,6 +174,12 @@ public class OfflineGameActivity extends Activity {
             @Override
             public void onClick(View view) {
 
+                boardUiEngine.rotateBoard(60, new FinishedRotatingBoardHandler() {
+                    @Override
+                    public void onBoardFinishedRotationAnimation() {
+
+                    }
+                });
             }
         }
 

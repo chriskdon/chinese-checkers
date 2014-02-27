@@ -38,7 +38,7 @@ public interface BoardUiEngine {
      * @param degrees       The number of degrees to rotate the board.
      * @param onFinished    Called when the rotation animation has completed.
      */
-    public void rotateBoard(int degrees, FinishedRotatingBoardHandler onFinished);
+    public void rotateBoard(float degrees, FinishedRotatingBoardHandler onFinished);
 
     /**
      * Do the animation for when a player wins.

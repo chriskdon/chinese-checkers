@@ -2,27 +2,18 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Parcel;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 
-import java.net.NoRouteToHostException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.Move;
@@ -59,6 +50,8 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     private int hintColor;                                      // Displayed hint color.
     private float hintStrokeWidth;                              // Width of the hint stroke.
     private Piece currentHighlightedPiece;                      // Currently highlighted piece.
+    private float canvasWidth, canvasHeight;                      // Width/Height of the canvas
+    private float currentRotation;                              // Degrees canvas has rotated
 
     private transient BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
     private transient SurfaceHolder surfaceHolder;                        // Surface with canvas
@@ -91,8 +84,11 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             Canvas canvas = holder.lockCanvas();
             width = canvas.getWidth();
             height = canvas.getHeight();
+            canvasWidth = ((float)canvas.getWidth());//-0.0f;
+            canvasHeight = ((float)canvas.getHeight());//-1.75f;
             holder.unlockCanvasAndPost(canvas);
         }
+        currentRotation = 0;
 
         piecePositionSystem = new PiecePositionSystem(width, height);
         gameBoard = new GameBoardVisual(getContext(),
@@ -227,8 +223,23 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param onFinished Called when the rotation animation has completed.
      */
     @Override
-    public void rotateBoard(int degrees, FinishedRotatingBoardHandler onFinished) {
-        // TODO
+    public void rotateBoard(float degrees, FinishedRotatingBoardHandler onFinished) {
+        redraw();
+
+        currentRotation = (currentRotation + degrees)%360;
+        Log.e("ROTATION", String.valueOf(currentRotation));
+
+        Canvas c = this.surfaceHolder.lockCanvas();
+
+        //TODO: make rotation more precise; remove clear canvas below to see issue
+        c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
+
+
+        gameBoard.draw(c);
+
+        c.rotate(currentRotation, canvasWidth/2.0f, canvasHeight /2.0f); // Clear canvas
+
+        this.surfaceHolder.unlockCanvasAndPost(c);
     }
 
     /**
