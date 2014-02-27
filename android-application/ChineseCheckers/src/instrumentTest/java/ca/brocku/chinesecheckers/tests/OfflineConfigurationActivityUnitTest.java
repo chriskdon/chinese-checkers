@@ -271,6 +271,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 //        curAct.onOptionsItemSelected(item);
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
         assertNotNull("Transition to HelpActivity Failed", curAct);
 
         curInstruments.removeMonitor(monitor);
@@ -279,6 +280,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
         new HelpActivityUnitTest(curAct,curInstruments).activityTest();
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
         assertNotNull("Transition Back to OfflineConfigurationActivity Failed",curAct);
     }
 
