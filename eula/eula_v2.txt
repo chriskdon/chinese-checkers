@@ -24,9 +24,11 @@ b. The Application may contain features that are used in conjunction with Google
 
 4. LOGICAL OPERATORS TERMS OF SERVICE AND PRIVACY POLICY
 
-a. Logical Operators may collect information through the Application in order to build an online profile and establish rankings.  Logical Operators will not use this information for any other purpose, and will not share it with any third party.
+a. By installing the Application and accepting this agreement, you certify that you are at least 13 years of age, and will not allow any person below the age of 13 to use the Application, in accordance with the Children's Online Privacy Protection Act. (http://www.coppa.org/coppa.htm) 
 
-b. Logical Operators will abide by Google's Privacy Policy as outlined in section 3.  In addition, Logical Operators will require you to follow Google's Terms of Service as outlined in section 3.
+b. Logical Operators may collect information through the Application in order to build an online profile and establish rankings.  Logical Operators will not use this information for any other purpose, and will not share it with any third party.
+
+c. Logical Operators will abide by Google's Privacy Policy as outlined in section 3.  In addition, Logical Operators will require you to follow Google's Terms of Service as outlined in section 3.
 
 
 5. TERMINATION
