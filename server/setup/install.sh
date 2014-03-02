@@ -1,4 +1,4 @@
-# Intall APT Tools
+### Intall APT Tools
 sudo apt-get update
 sudo apt-get install -y python-software-properties
 sudo apt-get install -y software-properties-common
@@ -8,20 +8,35 @@ sudo add-apt-repository ppa:chris-lea/node.js
 sudo add-apt-repository ppa:webupd8team/java
 sudo apt-get update
 
-# Install NodeJS
+### Install NodeJS
 sudo apt-get install -y nodejs
 
-# Install Orace Java 7
+### Install Orace Java 7
 sudo apt-get install -y oracle-java7-installer
 
-# Install Reverse Proxy
+### Install Reverse Proxy
 sudo apt-get install -y nginx
 
-# Install Node Libraris
+### Install Node Libraris
 sudo npm -g install forever
 sudo npm -g install http-proxy
 
-# Stop Apache
+### Stop Apache
 sudo /etc/init.d/apache2 stop
 
-# Load nginx conf
+### Load nginx conf
+
+# Main nginx conf
+cd /etc/nginx
+sudo rm nginx.conf
+sudo wget https://github.com/kubasub/chinese-checkers/blob/develop/server/setup/nginx/nginx.conf
+
+# Codecanister conf
+cd /etc/nginx/conf.d
+sudo rm codecanister.com.conf
+sudo wget https://github.com/kubasub/chinese-checkers/blob/develop/server/setup/nginx/codecanister.com.conf
+
+# Restart
+sudo service nginx restart
+
+
