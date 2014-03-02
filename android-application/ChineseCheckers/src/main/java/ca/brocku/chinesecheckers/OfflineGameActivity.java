@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,13 +20,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
+import ca.brocku.chinesecheckers.gamestate.Move;
+import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
+
+import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
 
 public class OfflineGameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
@@ -110,9 +117,9 @@ public class OfflineGameActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public Boolean onEndGame() {
+    public Boolean onEndGame(Player p) {
         EndOfGameDialog dialog = new EndOfGameDialog(this, R.style.CustomDialogTheme);
-        dialog.setWinner("Kuba");
+        dialog.setWinner(p.getName());
         dialog.show();
 
         return true;
@@ -128,6 +135,12 @@ public class OfflineGameActivity extends Activity {
         private Button resetMove;
         private Button doneMove;
         private View rootView;
+private TextView titleBar;
+        private boolean moved = false;
+        private Position[] hints;
+        private Piece currentTouched;
+
+        private Position start;
 
         @Override
         public View onCreateView(LayoutInflater inflater,
@@ -135,20 +148,24 @@ public class OfflineGameActivity extends Activity {
 
             rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
-            return rootView;
+            titleBar = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
+
+return rootView;
         }
 
         @Override
         public void onResume() {
             super.onResume();
 
-            gameStateManager = getArguments().getParcelable("GAME_STATE_MANAGER");
+gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
+            
+gameStateManager.setGameStateEventsHandler(new GameStateEventsHandler());
 
             // Setup Game Board
             this.boardUiEngine = (BoardUiEngine) rootView.findViewById(R.id.gameBoardSurface);
 
             boardUiEngine.setBoardEventsHandler(new BoardEventsHandler());
-            boardUiEngine.initializeBoard(gameStateManager.getGameBoard().getAllPieces());
+            boardUiEngine.initializeBoard(gameStateManager.getGameBoard());
 
             // Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
@@ -159,46 +176,135 @@ public class OfflineGameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
+            gameStateManager.startGame();
 
         }
 
         private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
+                if(start != null) {
+                    gameStateManager.resetPiece(currentTouched, start);
+                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
+                }
 
+                currentTouched = null;
+                start = null;
+                moved = false;
+
+                boardUiEngine.showHintPositions(null);
+                boardUiEngine.highlightPiece(null);
             }
         }
 
         private class DoneMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
+                moved = false;
+                currentTouched = null;
+                hints = null;
 
-                boardUiEngine.rotateBoard(60, new FinishedRotatingBoardHandler() {
-                    @Override
-                    public void onBoardFinishedRotationAnimation() {
-
-                    }
-                });
-            }
+                boardUiEngine.showHintPositions(null);
+                boardUiEngine.highlightPiece(null);
+                               }
         }
 
         /**
          * Handle the position be touched, and what to display when the user touches it.
          */
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
+
+
             @Override
             public void positionTouched(final Position position) {
                 GameBoard board = gameStateManager.getGameBoard();
                 Piece piece = board.getPiece(position);
-                Position[] possibleMoves = null;
 
-                if(piece != null) {
-                    possibleMoves = board.getPossibleMoves(piece);
+                // Did they touch their own piece.
+                if(!moved) {
+                    if(piece != null && Player.getPlayerColor(piece.getPlayerNumber()) == gameStateManager.getCurrentPlayer().getPlayerColor()) {
+                        if(currentTouched == null || !currentTouched.getPosition().equals(position)) {
+                            currentTouched = piece;
+                            hints = board.getPossibleMoves(piece);
+                            start = piece.getPosition();
+                        }
+                    } else if(piece == null) {
+                        // Did the player click a hint
+                        if(hints != null) {
+                            for(Position h : hints) {
+                                if(h.equals(position)) {
+                                    gameStateManager.movePiece(currentTouched, position);       // Move board
+                                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
+                                    moved = true;
+
+                                    Position[] hops = gameStateManager.getGameBoard().getPossibleHops(currentTouched);
+                                    if(hops != null) {
+                                        hints = hops;
+                                        boardUiEngine.showHintPositions(hops);
+                                        moved = false;
+                                    } else {
+                                        hints = null;
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
 
-                boardUiEngine.highlightPiece(piece);
-                boardUiEngine.showHintPositions(possibleMoves);
+                boardUiEngine.highlightPiece(currentTouched);
+                boardUiEngine.showHintPositions(hints);
+            }
+        }
+
+        /**
+         * Handle game state changes.
+         */
+        private class GameStateEventsHandler implements GameStateManager.GameStateEvents {
+            /**
+             * Fired when it is a new players turn.
+             *
+             * @param player The player who's turn it is.
+             */
+            @Override
+            public void onPlayerTurn(Player player) {
+                titleBar.setBackgroundColor(getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL));
+                currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
+            }
+
+            /**
+             * Fired when a piece on the board is moved from one position to another.
+             *
+             * @param player The player who made the move.
+             * @param move   The path describing the move.
+             */
+            @Override
+            public void onPieceMoved(Player player, Move move) {
+
+            }
+
+            /**
+             * Occurs when a player forfeit the game.
+             * <p/>
+             * TODO: Is this just because they quit, or could this be a result of them taking to long to make a move and being kicked out.
+             *
+             * @param player The player who forfeited.
+             */
+            @Override
+            public void onForfeit(Player player) {
+
+            }
+
+            /**
+             * Occurs when a player wins the game.
+             *
+             * @param player   The player that won.
+             * @param position The position they finished in (1st, 2nd, 3rd, etc.).
+             */
+            @Override
+            public void onPlayerWon(Player player, int position) {
+                ((OfflineGameActivity)getActivity()).onEndGame(player);
             }
         }
 

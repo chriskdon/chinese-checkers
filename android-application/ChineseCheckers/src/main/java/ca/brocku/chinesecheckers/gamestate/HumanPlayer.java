@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gamestate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ca.brocku.chinesecheckers.gameboard.GridPiece;
+import ca.brocku.chinesecheckers.gameboard.GridPosition;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 
 /**
@@ -49,11 +51,10 @@ public class HumanPlayer extends Player {
      * Executed when it is this players turn to act.
      *
      * @param gameBoard The current game board.
-     * @param handler   This must be called when the player has finished making their turn.
      */
     @Override
-    public void onTurn(ReadOnlyGameBoard gameBoard, PlayerTurnHandler handler) {
-        // TODO: Human Player Interaction
+    public Move onTurn(ReadOnlyGameBoard gameBoard) {
+        return new Move(gameBoard.getPiece(new GridPosition(0, 0)));
     }
 
     /**

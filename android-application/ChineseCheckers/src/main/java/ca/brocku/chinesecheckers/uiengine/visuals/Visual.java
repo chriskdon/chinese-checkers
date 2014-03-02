@@ -118,6 +118,10 @@ public class Visual {
         this.handler = handler;
     }
 
+    public void removeChildren() {
+        this.visuals.clear();
+    }
+
     /**
      * Send touch event to children.
      * It will not send the event to it's ancestors.

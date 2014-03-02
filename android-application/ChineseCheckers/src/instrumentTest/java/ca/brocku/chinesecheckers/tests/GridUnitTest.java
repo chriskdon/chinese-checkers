@@ -246,8 +246,9 @@ public class GridUnitTest extends AndroidTestCase  {
     		}
     	}
     }
+
 //  Testing to see if movePiece changes the Position correctly
-    public void testMovePieceValid() {
+    public void testMovePieceValid() { // TODO: FIX THIS
     	CcGameBoard board = new CcGameBoard(2);
     	Position temp = new GridPosition(5,5);
     	Piece t = new GridPiece(temp, 1);

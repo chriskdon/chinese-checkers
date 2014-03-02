@@ -17,6 +17,7 @@ import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.uiengine.PlayerColorManager;
 import ca.brocku.chinesecheckers.uiengine.visuals.Visual;
 
 /**
@@ -87,6 +88,84 @@ public class GameStateManager implements Parcelable, Serializable {
         }
 
         this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler());
+    }
+
+    /**
+     * Find the color that comes after a set color.
+     *
+     * @param currentPlayer     Get the color after this.
+     * @return  Color after currentPlayer
+     */
+    private Player.PlayerColor getNextPlayer(Player.PlayerColor currentPlayer) {
+        switch (players.size()) {
+            case 2: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.GREEN;
+                    case GREEN: return Player.PlayerColor.RED;
+                }
+            }
+
+            case 3: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.BLUE;
+                    case BLUE: return Player.PlayerColor.YELLOW;
+                    case YELLOW: return Player.PlayerColor.RED;
+                }
+            }
+
+            case 4: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.BLUE;
+                    case BLUE: return Player.PlayerColor.GREEN;
+                    case GREEN: return Player.PlayerColor.ORANGE;
+                    case ORANGE: return Player.PlayerColor.RED;
+                }
+            }
+
+            case 6: {
+                switch (currentPlayer) {
+                    case RED: return Player.PlayerColor.PURPLE;
+                    case PURPLE: return Player.PlayerColor.BLUE;
+                    case BLUE: return Player.PlayerColor.GREEN;
+                    case GREEN: return Player.PlayerColor.YELLOW;
+                    case YELLOW: return Player.PlayerColor.ORANGE;
+                    case ORANGE: return Player.PlayerColor.RED;
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid Player Color");
+    }
+
+    /**
+     * Start the game
+     */
+    public void startGame() {
+        triggerPlayerTurnEvent(getCurrentPlayer());
+    }
+
+    public void movePiece(Piece piece, Position to) {
+        gameBoard.movePiece(piece, to);
+    }
+
+    public void resetPiece(Piece piece, Position to) {
+        gameBoard.forceMove(piece, to);
+    }
+
+    public void nextPlayer() {
+        currentPlayer = getNextPlayer(currentPlayer);
+        triggerPlayerTurnEvent(getCurrentPlayer());
+    }
+
+    /**
+     * Trigger the on player turn event.
+     *
+     * @param p The player
+     */
+    private void triggerPlayerTurnEvent(Player p) {
+        if(this.gameStateEventsHandler != null) {
+            this.gameStateEventsHandler.onPlayerTurn(p);
+        }
     }
 
     /**
