@@ -517,7 +517,7 @@ public class CcGameBoard extends GameBoard {
                         posindex=posindex+1;
                     }
                 }
-                if(row==9) {
+                else if(row==9) {
                     if(isOccupied(new GridPosition(row-1, index-1))) {
                         possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-1));
                         posindex=posindex+1;
@@ -565,7 +565,7 @@ public class CcGameBoard extends GameBoard {
                         posindex=posindex+1;
                     }
                 }
-                if(row==9) {
+                else if(row==9) {
                     if(isOccupied(new GridPosition(row-1, index))) {
                         possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+1));
                         posindex=posindex+1;
