@@ -140,7 +140,8 @@ public class PiecePositionSystem implements Serializable {
                      */
                     @Override
                     public void writeToParcel(Parcel dest, int flags) {
-
+                        dest.writeInt(posRow);
+                        dest.writeInt(posIndex);
                     }
                 };
 

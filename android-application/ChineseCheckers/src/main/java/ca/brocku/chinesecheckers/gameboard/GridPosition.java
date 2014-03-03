@@ -52,7 +52,7 @@ public class GridPosition extends Position implements Serializable {
      * Constructor for parcel.
      * @param p The parcel.
      */
-    private GridPosition(Parcel p) {
+    GridPosition(Parcel p) {
         row = p.readInt();
         index = p.readInt();
     }

@@ -28,8 +28,8 @@ public abstract class Position implements Parcelable, Serializable {
     public static final Parcelable.Creator<Position> CREATOR =
             new Parcelable.Creator<Position>() {
                 @Override
-                public Position createFromParcel(Parcel parcel) {
-                    return null;
+                public GridPosition createFromParcel(Parcel in) {
+                    return new GridPosition(in);
                 }
 
                 @Override
