@@ -2,7 +2,9 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.graphics.Canvas;
 import android.os.Parcel;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,8 +20,8 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  * Student #: 4810800
  * Date: 2/3/2014
  */
-public class PiecePositionSystem {
-    private Map<Position, PieceDrawingDetails> positionDetails; // Position mapping
+public class PiecePositionSystem implements Serializable {
+    private transient Map<Position, PieceDrawingDetails> positionDetails; // Position mapping
 
     /**
      * Create the instance, and calculate all the board positions.
