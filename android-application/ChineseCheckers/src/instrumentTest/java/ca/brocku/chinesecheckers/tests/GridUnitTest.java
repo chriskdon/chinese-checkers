@@ -1812,6 +1812,7 @@ public class GridUnitTest extends AndroidTestCase  {
         // Tests immediate neighbours
         for(int i=0; i<testPositions.length; i++) {
             CcGameBoard board = new CcGameBoard();
+            board.setPiece(testPositions[i], 1);
             possibleMoves = board.getPossibleMoves(board.getPiece(testPositions[i]));
             for(int j=0; j<possibleMoves.length; j++) {
                 check=0;
@@ -1826,9 +1827,10 @@ public class GridUnitTest extends AndroidTestCase  {
         //Tests hopping positions
         for(int i=0; i<testPositions.length; i++) {
             CcGameBoard board = new CcGameBoard();
+            board.setPiece(testPositions[i], 1);
             possibleMoves = board.getPossibleMoves(board.getPiece(testPositions[i]));
             for(int w=0; w<possibleMoves.length; w++) {
-                board.setPiece(possibleMoves[i], 1);
+                board.setPiece(possibleMoves[w], 1);
             }
             for(int j=0; j<possibleMoves.length; j++) {
                 check=0;
