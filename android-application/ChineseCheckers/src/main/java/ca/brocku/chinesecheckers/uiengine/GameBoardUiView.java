@@ -212,13 +212,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         Canvas c = this.surfaceHolder.lockCanvas();
 
         //TODO: make rotation more precise; remove clear canvas below to see issue
-
+        //TODO Cont'd: ISSUE IS PROB WITH THE PIECES NOT BEING DRAWN IN THE CENTER OF THE CANVAS
         c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
 
+        c.rotate(currentRotation, canvasWidth/2.0f, canvasHeight /2.0f); // Clear canvas
 
         gameBoard.draw(c);
-
-        c.rotate(currentRotation, canvasWidth/2.0f, canvasHeight /2.0f); // Clear canvas
 
         this.surfaceHolder.unlockCanvasAndPost(c);
     }

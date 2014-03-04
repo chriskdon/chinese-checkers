@@ -202,6 +202,34 @@ public class OfflineGameActivity extends Activity {
 
                 boardUiEngine.showHintPositions(null);
                 boardUiEngine.highlightPiece(null);
+
+                //rotate the board an amount depending on num players
+                int degreesToRotate = 0;
+                switch (gameStateManager.getNumberOfPlayers()) {
+                    case 2:
+                        degreesToRotate = -180;
+                        break;
+                    case 3:
+                        degreesToRotate = -120;
+                        break;
+                    case 4:
+                        switch (gameStateManager.getCurrentPlayer().getPlayerColor()) {
+                            case RED:
+                            case GREEN:
+                                degreesToRotate = -120;
+                                break;
+                            case BLUE:
+                            case ORANGE:
+                                degreesToRotate = -60;
+                                break;
+                        }
+                        break;
+                    case 6:
+                        degreesToRotate = -60;
+                        break;
+                }
+
+                //boardUiEngine.rotateBoard(degreesToRotate, null);
                 gameStateManager.nextPlayer();
             }
         }
