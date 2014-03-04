@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
          */
         @Override
         public void onClick(View view) {
-            File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);//new File(GameStateManager.SERIALIZED_FILENAME); //get the serialized file
+            File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME); //get the serialized file
 
             if(savedOfflineGame.exists()) { //if there is a saved game file
                 try {
