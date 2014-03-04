@@ -168,6 +168,10 @@ public class GameStateManager implements Parcelable, Serializable {
         }
     }
 
+    public int getNumberOfPlayers() {
+        return players.size();
+    }
+
     /**
      * Return the player who's turn it currently is.
      * @return  The player.
