@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,19 +19,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
-import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
 import ca.brocku.chinesecheckers.gamestate.Move;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
-import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 
-import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
+import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.ColorSate;
+import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.getPlayerColor;
 
 public class OfflineGameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
@@ -94,17 +91,10 @@ public class OfflineGameActivity extends Activity {
         }
     }
 
-    private class ResetMoveHandler implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -118,9 +108,15 @@ public class OfflineGameActivity extends Activity {
     }
 
     public Boolean onEndGame(Player p) {
+        isEndCurrentGame = true; //prevent saving this (finished) game
+
         EndOfGameDialog dialog = new EndOfGameDialog(this, R.style.CustomDialogTheme);
         dialog.setWinner(p.getName());
         dialog.show();
+
+        //Delete the current saved game
+        File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+        savedOfflineGame.delete();
 
         return true;
     }
@@ -135,7 +131,7 @@ public class OfflineGameActivity extends Activity {
         private Button resetMove;
         private Button doneMove;
         private View rootView;
-private TextView titleBar;
+        private TextView titleBar;
         private boolean moved = false;
         private Position[] hints;
         private Piece currentTouched;
@@ -150,16 +146,16 @@ private TextView titleBar;
 
             titleBar = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
 
-return rootView;
+            return rootView;
         }
 
         @Override
         public void onResume() {
             super.onResume();
 
-gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
+            gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
             
-gameStateManager.setGameStateEventsHandler(new GameStateEventsHandler());
+            gameStateManager.setGameStateEventsHandler(new GameStateEventsHandler());
 
             // Setup Game Board
             this.boardUiEngine = (BoardUiEngine) rootView.findViewById(R.id.gameBoardSurface);
@@ -409,6 +405,22 @@ gameStateManager.setGameStateEventsHandler(new GameStateEventsHandler());
 
         public void setWinner(String winner) {
             title.setText(winner + " Wins!!");
+        }
+
+        /** This method disables the back button if we are in an end of game state.
+         * 
+         * isEndCurrentGame is true when the End of Game dialog appears. We do not want the option to
+         * dismiss the dialog so that players can continue to play after there is a winner.
+         *
+         * Note: the other case when isEndCurrentGame is true is when Quit is selected from the Resume
+         * Game dialog. This will not have an effect on that functionality.
+         *
+         */
+        @Override
+        public void onBackPressed() {
+            if(!isEndCurrentGame) { //don't disable the back key if the game is not at its end
+                super.onBackPressed();
+            }
         }
     }
 }

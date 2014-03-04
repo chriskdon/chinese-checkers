@@ -252,7 +252,7 @@ public class GameStateManager implements Parcelable, Serializable {
         public void onPlayerWon(int playerNumber) {
             // TODO: Add real player
             if(GameStateManager.this.gameStateEventsHandler != null) {
-                GameStateManager.this.gameStateEventsHandler.onPlayerWon(null, playerNumber);
+                GameStateManager.this.gameStateEventsHandler.onPlayerWon(getCurrentPlayer(), playerNumber);
             }
         }
     }
