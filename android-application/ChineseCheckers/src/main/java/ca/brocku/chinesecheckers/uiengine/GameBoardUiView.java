@@ -48,11 +48,13 @@ import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine, SurfaceHolder.Callback {
     private GameBoardVisual gameBoard;                          // Root visual element
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
-    private Map<Position, Visual> pieces;                  // Pieces
+    private Map<Position, Visual> pieces;                       // Pieces
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
     private float hintStrokeWidth;                              // Width of the hint stroke.
     private Piece currentHighlightedPiece;                      // Currently highlighted piece.
+    private float canvasWidth, canvasHeight;                      // Width/Height of the canvas
+    private float currentRotation;                              // Degrees canvas has rotated
 
     private transient BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
     private transient SurfaceHolder surfaceHolder;                        // Surface with canvas
@@ -84,8 +86,11 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             Canvas canvas = holder.lockCanvas();
             width = canvas.getWidth();
             height = canvas.getHeight();
+            canvasWidth = ((float)canvas.getWidth());//-0.0f;
+            canvasHeight = ((float)canvas.getHeight());//-1.75f;
             holder.unlockCanvasAndPost(canvas);
         }
+        currentRotation = 0;
 
         piecePositionSystem = new PiecePositionSystem(width, height);
         gameBoard = new GameBoardVisual(getContext(),
@@ -197,11 +202,28 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param onFinished Called when the rotation animation has completed.
      */
     @Override
-    public void rotateBoard(int degrees, FinishedRotatingBoardHandler onFinished) {
-        // TODO
+    public void rotateBoard(float degrees, FinishedRotatingBoardHandler onFinished) {
+        redraw();
+
+        currentRotation = (currentRotation + degrees)%360;
+
+        Log.e("ROTATION", String.valueOf(currentRotation));
+
+        Canvas c = this.surfaceHolder.lockCanvas();
+
+        //TODO: make rotation more precise; remove clear canvas below to see issue
+
+        c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
+
+
+        gameBoard.draw(c);
+
+        c.rotate(currentRotation, canvasWidth/2.0f, canvasHeight /2.0f); // Clear canvas
+
+        this.surfaceHolder.unlockCanvasAndPost(c);
     }
 
-    /**
+ /**
      * TODO: Possibly put this in constructor
      * <p/>
      * Initialize the board with the current piece positions.

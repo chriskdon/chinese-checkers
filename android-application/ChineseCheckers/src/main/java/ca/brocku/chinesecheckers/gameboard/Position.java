@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gameboard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * The common interface that defines a position
  * on the board.
@@ -16,9 +18,25 @@ import android.os.Parcelable;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public abstract class Position implements Parcelable {
+public abstract class Position implements Parcelable, Serializable {
     public abstract int getRow();
     public abstract int getIndex();
+
+    /**
+     * Recreate this instance
+     */
+    public static final Parcelable.Creator<Position> CREATOR =
+            new Parcelable.Creator<Position>() {
+                @Override
+                public GridPosition createFromParcel(Parcel in) {
+                    return new GridPosition(in);
+                }
+
+                @Override
+                public Position[] newArray(int i) {
+                    return new Position[0];
+                }
+            };
 
     /**
      * Equality test. Two positions are equal if they have the same row and index

@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gameboard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * The implementation of Piece used to represent the pieces players may use on a chinese checkers
  * board.
@@ -11,7 +13,7 @@ import android.os.Parcelable;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class GridPiece implements Piece {
+public class GridPiece implements Piece, Serializable {
     private Position position;
     private int player;
 

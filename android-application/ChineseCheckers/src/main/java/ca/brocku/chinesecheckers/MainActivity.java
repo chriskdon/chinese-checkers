@@ -72,12 +72,12 @@ public class MainActivity extends Activity {
          */
         @Override
         public void onClick(View view) {
-            File savedOfflineGame = new File(GameStateManager.SERIALIZED_FILENAME); //get the serialized file
+            File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);//new File(GameStateManager.SERIALIZED_FILENAME); //get the serialized file
 
             if(savedOfflineGame.exists()) { //if there is a saved game file
                 try {
                     //Load the GameStateManager from storage
-                    FileInputStream fis = new FileInputStream(savedOfflineGame);
+                    FileInputStream fis = openFileInput(GameStateManager.SERIALIZED_FILENAME);
                     ObjectInputStream ois = new ObjectInputStream(fis);
                     GameStateManager gameStateManager = (GameStateManager)ois.readObject();
                     ois.close();
