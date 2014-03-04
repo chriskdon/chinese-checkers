@@ -206,7 +206,8 @@ gameStateManager.setGameStateEventsHandler(new GameStateEventsHandler());
 
                 boardUiEngine.showHintPositions(null);
                 boardUiEngine.highlightPiece(null);
-                               }
+                gameStateManager.nextPlayer();
+            }
         }
 
         /**
