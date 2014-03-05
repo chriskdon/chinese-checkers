@@ -11,8 +11,11 @@ sudo apt-get update
 # Install NodeJS
 sudo apt-get install -y nodejs
 
-# Install Orace Java 7
+# Install Oracle Java 7
 sudo apt-get install -y oracle-java7-installer
+
+# Install MySQL
+sudo apt-get install -y mysql-server
 
 # Install Reverse Proxy
 sudo apt-get install -y nginx
