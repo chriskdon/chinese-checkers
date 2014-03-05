@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import static android.view.View.OnFocusChangeListener;
  * starts the offline game activity.
  *
  */
+@SuppressLint("all")
 public class OfflineConfigurationActivity extends Activity {
     private ToggleButton twoPlayerButton, threePlayerButton, fourPlayerButton, sixPlayerButton;
     private ToggleButton redPlayerEasyButton, redPlayerMediumButton, redPlayerHardButton,
@@ -291,6 +293,20 @@ public class OfflineConfigurationActivity extends Activity {
                 Intent intent = new Intent(OfflineConfigurationActivity.this, OfflineGameActivity.class);
 
                 // TODO: Handle Robots
+                //TODO: START TEMP CODE
+                if(redPlayerTypeButton.getTag().equals("robot"))
+                    redPlayerEditText.setText("AI Robbie");
+                if(purplePlayerTypeButton.getTag().equals("robot"))
+                    purplePlayerEditText.setText("AI Roboto");
+                if(bluePlayerTypeButton.getTag().equals("robot"))
+                    bluePlayerEditText.setText("AI Roomba");
+                if(greenPlayerTypeButton.getTag().equals("robot"))
+                    greenPlayerEditText.setText("AI Roberto");
+                if(yellowPlayerTypeButton.getTag().equals("robot"))
+                    yellowPlayerEditText.setText("AI Robeye");
+                if(orangePlayerTypeButton.getTag().equals("robot"))
+                    orangePlayerEditText.setText("AI Robber");
+                //TODO: END TEMP CODE
 
                 if(redPlayerNameContainer.getVisibility() == View.VISIBLE) {
                     players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));

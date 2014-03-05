@@ -168,6 +168,10 @@ public class GameStateManager implements Parcelable, Serializable {
         }
     }
 
+    public int getNumberOfPlayers() {
+        return players.size();
+    }
+
     /**
      * Return the player who's turn it currently is.
      * @return  The player.
@@ -250,9 +254,8 @@ public class GameStateManager implements Parcelable, Serializable {
     private class GameBoardEventsHandler implements GameBoard.GameBoardEvents {
         @Override
         public void onPlayerWon(int playerNumber) {
-            // TODO: Add real player
             if(GameStateManager.this.gameStateEventsHandler != null) {
-                GameStateManager.this.gameStateEventsHandler.onPlayerWon(null, playerNumber);
+                GameStateManager.this.gameStateEventsHandler.onPlayerWon(getCurrentPlayer(), playerNumber);
             }
         }
     }

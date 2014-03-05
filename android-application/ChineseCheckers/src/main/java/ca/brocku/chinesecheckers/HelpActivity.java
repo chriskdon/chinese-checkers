@@ -1,10 +1,12 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+@SuppressLint("all")
 public class HelpActivity extends Activity {
 
     @Override

@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import ca.brocku.chinesecheckers.gamestate.GameStateManager;
  * modes and user settings.
  *
  */
+@SuppressLint("all")
 public class MainActivity extends Activity {
     private Button offlineActivityButton;
 
@@ -72,12 +74,12 @@ public class MainActivity extends Activity {
          */
         @Override
         public void onClick(View view) {
-            File savedOfflineGame = new File(GameStateManager.SERIALIZED_FILENAME); //get the serialized file
+            File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME); //get the serialized file
 
             if(savedOfflineGame.exists()) { //if there is a saved game file
                 try {
                     //Load the GameStateManager from storage
-                    FileInputStream fis = new FileInputStream(savedOfflineGame);
+                    FileInputStream fis = openFileInput(GameStateManager.SERIALIZED_FILENAME);
                     ObjectInputStream ois = new ObjectInputStream(fis);
                     GameStateManager gameStateManager = (GameStateManager)ois.readObject();
                     ois.close();

@@ -37,6 +37,13 @@ public class CcGameBoard extends GameBoard {
     }
 
     /**
+     * Constructs an empty board, used for testing purposes
+     */
+    public CcGameBoard() {
+        board=constructBoard();
+    }
+
+    /**
      * Initialize a new game with the specified number of players.
      * @param numPlayers    The number of players in the game. {2,3,4,6}
      * @param handler       The event handler to set for the game.
@@ -256,12 +263,11 @@ public class CcGameBoard extends GameBoard {
     /**
      * Moves a piece without validaing mvoe.
      *
-     * @param piece
-     * @param to
+     * @param piece Piece to be moved
+     * @param to Location that the piece is moving to
      */
     @Override
     public void forceMove(Piece piece, Position to) {
-        //setPiece(to, piece.getPlayerNumber()); // TODO: THIS SHOULDN'T BE HERE!!!
         int oldRow = piece.getPosition().getRow();
         int oldIndex = piece.getPosition().getIndex();
         ((GridPiece) piece).setPosition(to);
@@ -517,7 +523,7 @@ public class CcGameBoard extends GameBoard {
                         posindex=posindex+1;
                     }
                 }
-                if(row==9) {
+                else if(row==9) {
                     if(isOccupied(new GridPosition(row-1, index-1))) {
                         possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-1));
                         posindex=posindex+1;
@@ -565,7 +571,7 @@ public class CcGameBoard extends GameBoard {
                         posindex=posindex+1;
                     }
                 }
-                if(row==9) {
+                else if(row==9) {
                     if(isOccupied(new GridPosition(row-1, index))) {
                         possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+1));
                         posindex=posindex+1;
