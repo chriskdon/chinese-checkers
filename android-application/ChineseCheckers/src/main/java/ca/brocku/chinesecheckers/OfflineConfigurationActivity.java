@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import static android.view.View.OnFocusChangeListener;
  * starts the offline game activity.
  *
  */
+@SuppressLint("all")
 public class OfflineConfigurationActivity extends Activity {
     private ToggleButton twoPlayerButton, threePlayerButton, fourPlayerButton, sixPlayerButton;
     private ToggleButton redPlayerEasyButton, redPlayerMediumButton, redPlayerHardButton,

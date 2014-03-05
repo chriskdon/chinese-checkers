@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -31,6 +32,7 @@ import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.ColorSate;
 import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.getPlayerColor;
 
+@SuppressLint("all")
 public class OfflineGameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
     private Boolean isEndCurrentGame; //a boolean which can prevent saving the state

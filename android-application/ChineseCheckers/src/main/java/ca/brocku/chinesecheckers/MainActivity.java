@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import ca.brocku.chinesecheckers.gamestate.GameStateManager;
  * modes and user settings.
  *
  */
+@SuppressLint("all")
 public class MainActivity extends Activity {
     private Button offlineActivityButton;
 

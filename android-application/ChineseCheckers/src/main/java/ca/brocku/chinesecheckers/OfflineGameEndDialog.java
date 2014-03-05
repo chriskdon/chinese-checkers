@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -11,6 +12,7 @@ import android.view.ContextThemeWrapper;
 /**
  * Created by kubasub on 2/22/2014.
  */
+@SuppressLint("all")
 public class OfflineGameEndDialog extends DialogFragment {
 
     @Override
