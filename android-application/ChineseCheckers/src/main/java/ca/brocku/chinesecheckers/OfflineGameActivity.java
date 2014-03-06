@@ -89,6 +89,23 @@ public class OfflineGameActivity extends Activity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_help) {
+            startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
+        } else if(id == R.id.action_settings) {
+            startActivity(new Intent(OfflineGameActivity.this, SettingsActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
@@ -115,22 +132,6 @@ public class OfflineGameActivity extends Activity {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.action_help) {
-            startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /** This function handles the end of game state.
