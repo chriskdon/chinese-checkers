@@ -12,4 +12,5 @@ Vagrant will be our platform that essentially duplicates the server environment,
 2. `vagrant box add raring64 http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box`
 3. `vagrant up`
 4. `vagrant ssh`
-5. 
+5. `wget https://raw.github.com/kubasub/chinese-checkers/feature/server_setup/server/setup/install.sh`
+6. `sudo sh install.sh`
