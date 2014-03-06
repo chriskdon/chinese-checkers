@@ -59,8 +59,34 @@ public class OfflineGameActivity extends Activity {
 
         //Show the Resume Game dialog box if we are loading a saves game
         if(getIntent().getBooleanExtra("SAVED_GAME", false)) {
-            ResumeDialog dialog = new ResumeDialog(this, R.style.CustomDialogTheme);
-            dialog.show();
+
+            final Popup resumeDialog = new Popup(this);
+            resumeDialog.setTitleText(R.string.offline_resume_title)
+                    .setMessageText(R.string.offline_resume_message)
+                    .setAcceptButtonText(R.string.offline_resume_accept)
+                    .setDeclineButtonText(R.string.offline_resume_decline)
+                    .setAcceptClickListener(new Button.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            resumeDialog.dismiss();
+                        }
+                    })
+                    .setDeclineClickListener(new Button.OnClickListener() {
+                        //Handler to quit the current game and go to the config screen if quit is chosen
+                        @Override
+                        public void onClick(View view) {
+                            isEndCurrentGame = true; //set to not save the state (as we are quitting the current game)
+
+                            //Delete the current saved game
+                            File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+                            savedOfflineGame.delete();
+
+                            resumeDialog.dismiss();
+                            OfflineGameActivity.this.finish();
+                            startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -109,16 +135,44 @@ public class OfflineGameActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /** This function handles the end of game state.
+     *
+     * It disables saving, deletes the currently saved game, and shows the end of game dialog.
+     *
+     * @param p the player who won
+     * @return whether or not this was handled
+     */
     public Boolean onEndGame(Player p) {
         isEndCurrentGame = true; //prevent saving this (finished) game
-
-        EndOfGameDialog dialog = new EndOfGameDialog(this, R.style.CustomDialogTheme);
-        dialog.setWinner(p.getName());
-        dialog.show();
 
         //Delete the current saved game
         File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
         savedOfflineGame.delete();
+
+        //Show the end of game dialog
+        final Popup endGameDialog = new Popup(this);
+        endGameDialog.setTitleText(p.getName() + " Wins!!")
+                .setMessageText(R.string.offline_end_game_message)
+                .setAcceptButtonText(R.string.offline_end_game_accept)
+                .setDeclineButtonText(R.string.offline_end_game_decline)
+                .setAcceptClickListener(new Button.OnClickListener() {
+                    //Handler to close the dialog if option to play new game is chosen
+                    @Override
+                    public void onClick(View view) {
+                        OfflineGameActivity.this.finish();
+                        startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                    }
+                })
+                .setDeclineClickListener(new Button.OnClickListener() {
+                    //Handler for "Home" button to quit the current game and go to the main activity
+                    @Override
+                    public void onClick(View view) {
+                        OfflineGameActivity.this.finish();
+                        startActivity(new Intent(OfflineGameActivity.this, MainActivity.class));
+                    }
+                })
+                .disableBackButton(true)
+                .show();
 
         return true;
     }
@@ -359,98 +413,4 @@ public class OfflineGameActivity extends Activity {
         }
     }
 
-    /**
-     * This class represents a custom dialog box which appears when there is a saved game. It
-     * prompts the user to decide whether to resume the game or quit it.
-     */
-    private class ResumeDialog extends Dialog {
-        public ResumeDialog(final Context context, int theme) {
-            super(context, theme);
-
-            setContentView(R.layout.fragment_offline_game_resume_dialog); //dialog layout
-
-            //Bind controls for the dialog options
-            Button resumeButton = (Button)findViewById(R.id.offlineAcceptContinuationButton);
-            Button quitButton = (Button)findViewById(R.id.offlineDeclineContinuationButton);
-
-            //Handler to close the dialog if option to resume is chosen
-            resumeButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-
-            //Handler to quit the current game and go to the config screen if quit is chosen
-            quitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    isEndCurrentGame = true; //set to not save the state (as we are quitting the current game)
-
-                    //Delete the current saved game
-                    File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
-                    savedOfflineGame.delete();
-
-                    ResumeDialog.this.dismiss();
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
-                }
-            });
-        }
-    }
-
-    /**
-     * This class represents a custom dialog box which appears when someone wins. It prompts the
-     * user to decide whether to play a new game or go to the home screen.
-     */
-    private class EndOfGameDialog extends Dialog {
-        private TextView title; //the title of the Dialog (i.e. "<WINNER_NAME> Wins!")
-
-        public EndOfGameDialog(final Context context, int theme) {
-            super(context, theme);
-
-            setContentView(R.layout.fragment_offline_game_end_dialog); //dialog layout
-
-            //Bind controls for the dialog options and title
-            Button newGameButton = (Button)findViewById(R.id.offlineGameEndToNewButton);
-            Button homeButton = (Button)findViewById(R.id.offlineGameEndToHomeButton);
-            title = (TextView)findViewById(R.id.offlineGameEndTitle);
-
-            //Handler to close the dialog if option to play new game is chosen
-            newGameButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
-                }
-            });
-
-            //Handler for "Home" button to quit the current game and go to the main activity
-            homeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, MainActivity.class));
-                }
-            });
-        }
-
-        public void setWinner(String winner) {
-            title.setText(winner + " Wins!!");
-        }
-
-        /** This method disables the back button if we are in an end of game state.
-         * 
-         * isEndCurrentGame is true when the End of Game dialog appears. We do not want the option to
-         * dismiss the dialog so that players can continue to play after there is a winner.
-         *
-         * Note: the other case when isEndCurrentGame is true is when Quit is selected from the Resume
-         * Game dialog. This will not have an effect on that functionality.
-         *
-         */
-        @Override
-        public void onBackPressed() {
-            if(!isEndCurrentGame) { //don't disable the back key if the game is not at its end
-                super.onBackPressed();
-            }
-        }
-    }
 }

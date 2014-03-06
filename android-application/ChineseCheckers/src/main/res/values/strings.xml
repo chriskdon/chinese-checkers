@@ -19,10 +19,15 @@
     <string name="ai_easy">Easy</string>
     <string name="ai_medium">Medium</string>
     <string name="ai_hard">Hard</string>
-    <string name="saved_game_dialog_quit">Quit</string>
-    <string name="saved_game_dialog_resume">Resume</string>
-    <string name="saved_game_dialog_text">Would you like to continue the saved game?</string>
-    <string name="end_game_dialog_text">Would you like to play a new game?</string>
-    <string name="end_game_dialog_home">Home</string>
-    <string name="end_game_dialog_new">New Game</string>
+
+    <string name="offline_resume_title">Game in progress</string>
+    <string name="offline_resume_message">Would you like to continue the saved game?</string>
+    <string name="offline_resume_accept">Resume</string>
+    <string name="offline_resume_decline">Quit</string>
+
+    <string name="offline_end_game_title">Game Over</string>
+    <string name="offline_end_game_message">Would you like to play a new game?</string>
+    <string name="offline_end_game_accept">New Game</string>
+    <string name="offline_end_game_decline">Home</string>
+
 </resources>
