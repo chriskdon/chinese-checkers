@@ -9,8 +9,10 @@ Vagrant will be our platform that essentially duplicates the server environment,
 
 **Vagrant Setup**
 1. Open a shell in the <VAGRANT_FOLDER>, then type 
-2. `vagrant box add raring64 http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-amd64-vagrant-disk1.box`
-3. `vagrant up`
-4. `vagrant ssh`
-5. `wget https://raw.github.com/kubasub/chinese-checkers/feature/server_setup/server/setup/install.sh`
-6. `sudo sh install.sh`
+2. `vagrant up`
+3. `vagrant ssh`
+
+**Notes**
+1. The server you run in the Vagrant VM should be running on `0.0.0.0:80`. This will be mapped to `127.0.0.1:8080` on your local computer.
+2. The folder in the vm `/vagrant` is mapped to the folder the where `vagrant up` was ran. So the current folder.
+3. MySQL username is `user` and password is `root`
