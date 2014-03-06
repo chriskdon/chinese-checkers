@@ -2,9 +2,7 @@ package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,7 +69,7 @@ public class OfflineGameActivity extends Activity {
                             resumeDialog.dismiss();
                         }
                     })
-                    .setDeclineClickListener(new Button.OnClickListener() {
+                    .setCancelClickListener(new Button.OnClickListener() {
                         //Handler to quit the current game and go to the config screen if quit is chosen
                         @Override
                         public void onClick(View view) {
@@ -164,7 +162,7 @@ public class OfflineGameActivity extends Activity {
                         startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
                     }
                 })
-                .setDeclineClickListener(new Button.OnClickListener() {
+                .setCancelClickListener(new Button.OnClickListener() {
                     //Handler for "Home" button to quit the current game and go to the main activity
                     @Override
                     public void onClick(View view) {
@@ -223,8 +221,8 @@ public class OfflineGameActivity extends Activity {
 
             // Bind Controls
             currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
-            resetMove = (Button)rootView.findViewById(R.id.offlineMoveResetButton);
-            doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
+            resetMove = (Button)rootView.findViewById(R.id.gameMoveResetButton);
+            doneMove = (Button)rootView.findViewById(R.id.gameMoveDoneButton);
 
             // Bind Handlers
             resetMove.setOnClickListener(new ResetMoveHandler());

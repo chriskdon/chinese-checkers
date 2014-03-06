@@ -59,7 +59,7 @@ public class Popup extends Dialog {
         return this;
     }
 
-    public Popup setDeclineClickListener(Button.OnClickListener listener) {
+    public Popup setCancelClickListener(Button.OnClickListener listener) {
         declineButton.setOnClickListener(listener);
         return this;
     }

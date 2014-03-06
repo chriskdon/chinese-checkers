@@ -130,7 +130,7 @@ public class OfflineConfigurationActivity extends Activity {
 
                 //shows and labels the name fields based on the number of players option
                 switch(view.getId()) {
-                    case R.id.offlineTwoPlayerButton:
+                    case R.id.twoPlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
                         greenPlayerEditText.setHint("Player 2");
@@ -138,7 +138,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.GONE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineThreePlayerButton:
+                    case R.id.threePlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerEditText.setHint("Player 2");
                         yellowPlayerNameContainer.setVisibility(View.VISIBLE);
@@ -147,7 +147,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineFourPlayerButton:
+                    case R.id.fourPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
@@ -157,7 +157,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineSixPlayerButton:
+                    case R.id.sixPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerEditText.setHint("Player 3");
@@ -357,10 +357,10 @@ public class OfflineConfigurationActivity extends Activity {
      */
     private void bindControls() {
         //Number of player buttons
-        twoPlayerButton = (ToggleButton) findViewById(R.id.offlineTwoPlayerButton);
-        threePlayerButton = (ToggleButton) findViewById(R.id.offlineThreePlayerButton);
-        fourPlayerButton = (ToggleButton) findViewById(R.id.offlineFourPlayerButton);
-        sixPlayerButton = (ToggleButton) findViewById(R.id.offlineSixPlayerButton);
+        twoPlayerButton = (ToggleButton) findViewById(R.id.twoPlayerButton);
+        threePlayerButton = (ToggleButton) findViewById(R.id.threePlayerButton);
+        fourPlayerButton = (ToggleButton) findViewById(R.id.fourPlayerButton);
+        sixPlayerButton = (ToggleButton) findViewById(R.id.sixPlayerButton);
 
         //Player info containers
         redPlayerNameContainer = (LinearLayout)findViewById(R.id.offlineRedPlayerNameContainer);
