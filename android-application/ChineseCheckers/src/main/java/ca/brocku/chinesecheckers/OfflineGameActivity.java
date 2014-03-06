@@ -159,6 +159,7 @@ public class OfflineGameActivity extends Activity {
                     //Handler to close the dialog if option to play new game is chosen
                     @Override
                     public void onClick(View view) {
+                        endGameDialog.dismiss();
                         OfflineGameActivity.this.finish();
                         startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
                     }
@@ -167,6 +168,7 @@ public class OfflineGameActivity extends Activity {
                     //Handler for "Home" button to quit the current game and go to the main activity
                     @Override
                     public void onClick(View view) {
+                        endGameDialog.dismiss();
                         OfflineGameActivity.this.finish();
                         startActivity(new Intent(OfflineGameActivity.this, MainActivity.class));
                     }
