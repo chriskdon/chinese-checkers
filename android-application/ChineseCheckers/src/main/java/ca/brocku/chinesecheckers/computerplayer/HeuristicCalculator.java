@@ -13,32 +13,74 @@ import ca.brocku.chinesecheckers.gameboard.Piece;
  */
 
 public class HeuristicCalculator {
+    int[] goalState;
 
-
+    public HeuristicCalculator(int playerNumber, GameBoard board){
+        this.goalState = getGoalState(playerNumber, board);
+    }
     /**
      * Calculates the distance from a piece to the farthest corner of the goal state.
      * Gives distance to travel 2.5 times more weight than distance from center
      * of the board.
      *
      * @param piece The piece to be checked.
-     * @param board The current state of the board.
      * @return The pathing heuristic of the piece.
      */
-    public int getDistanceHeuristic(Piece piece, GameBoard board){
-        int distanceFromGoal = 0;
+    public int getDistanceHeuristic(Piece piece){
+        int distanceFromGoal = 0, rowCase = 0, indexCase = 0;
 
-        int[] goalState = getGoalState(piece.getPlayerNumber(), board);
+        //vertical displacement from the goal state
+        if(goalState[0] == 16 || goalState[0] == 0)
+            rowCase = 1;//up/down center
+        if(goalState[0] == 9 || goalState[0] == 9)
+            rowCase = 2;//up diagonal
+        if(goalState[0] == 7 || goalState[0] == 7)
+            rowCase = 3;//down diagonal
+        switch(rowCase){
+            case 1:
+                distanceFromGoal += Math.abs(piece.getPosition().getRow() - goalState[0])*20;
+                break;
+            case 2:
+                distanceFromGoal += Math.abs(piece.getPosition().getRow() - (goalState[0]+3))*10;
+                break;
+            case 3:
+                distanceFromGoal += Math.abs(piece.getPosition().getRow() - (goalState[0]-3))*10;
+                break;
+            default:
+                break;
+        }
 
+        //horizontal displacement from the goal state
+        if(goalState[1] == 1 || goalState[1] == 4)
+            indexCase = 1;//up/down center
+        if(goalState[1] == 3 || goalState[1] == 5)
+            indexCase = 2;//leftward diagonal
+        if(goalState[1] == 5 || goalState[1] == 6)
+            indexCase = 3;//rightward diagonal
+        switch(indexCase){
+            case 1:
+                //first three rows into one of the vertical goal states
+                if(piece.getPosition().getRow() < 4 && piece.getPosition().getRow() > 0)
+                    distanceFromGoal += Math.abs(piece.getPosition().getIndex() - 1) * 8;
+                if(piece.getPosition().getRow() > 12 && piece.getPosition().getRow() < 16)
+                    distanceFromGoal += Math.abs(piece.getPosition().getIndex() - 1) * 8;
+                //deepest row in one of the vertical goal states
+                if(piece.getPosition().getRow() == 0 || piece.getPosition().getRow() == 16)
+                    distanceFromGoal += 0;
+                //rows between the vertical goal states in the grid
+                if(piece.getPosition().getRow() >= 4 && piece.getPosition().getRow() <= 12)
+                    distanceFromGoal += Math.abs((piece.getPosition().getIndex()) - (Math.abs(piece.getPosition().getIndex() - 8) / 2) + 4) * 8;
+                break;
+            case 2:
+                distanceFromGoal += Math.abs(piece.getPosition().getIndex() - goalState[1]) * 18;
+                break;
+            case 3:
+                distanceFromGoal += Math.abs(piece.getPosition().getIndex() - (goalState[1]+3)) * 18;
+                break;
+            default:
+                break;
+        }
 
-
-
-
-
-
-        /* must be modified greatly
-        distanceFromGoal += Math.abs(piece.getPosition().getRow() - goalState[0])*20;
-        distanceFromGoal += Math.abs(piece.getPosition().getIndex() - goalState[1]) * 8;
-            */
         return distanceFromGoal;
     }
 
@@ -64,8 +106,6 @@ public class HeuristicCalculator {
         winPos[1] = getOffsetIndex(winLocation);
         return winPos;
     }
-
-
 
     /**
      * An assisting function for getGoalState that returns an offset row value
