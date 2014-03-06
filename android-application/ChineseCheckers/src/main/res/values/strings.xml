@@ -12,7 +12,8 @@
     <string name="title_activity_offline_game">OfflineGameActivity</string>
     <string name="offline_move_done">Done</string>
     <string name="offline_move_reset">Reset</string>
-    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_help">Help</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="waiting_title_bar">Waiting for players...</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dapibus feugiat ullamcorper. Fusce lacinia tellus ac tortor dignissim molestie vel eu augue. Donec porttitor quis tellus vitae tristique. Duis aliquet laoreet fermentum. Ut vitae tempus sapien, quis pulvinar magna. Quisque congue eros at sapien sollicitudin, ut pretium ipsum placerat. Morbi euismod aliquam auctor. Nullam ac congue purus. Pellentesque ultricies mollis sollicitudin.</string>
@@ -29,5 +30,6 @@
     <string name="offline_end_game_message">Would you like to play a new game?</string>
     <string name="offline_end_game_accept">New Game</string>
     <string name="offline_end_game_decline">Home</string>
+    <string name="play_online">Play Online</string>
 
 </resources>

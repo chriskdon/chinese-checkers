@@ -46,12 +46,31 @@
                 android:value="OfflineConfigurationActivity" />
         </activity>
         <activity
-            android:name="ca.brocku.chinesecheckers.HelpActivity"
-            android:label="@string/title_activity_help"
-            android:parentActivityName="ca.brocku.chinesecheckers.MainActivity" >
+            android:name="ca.brocku.chinesecheckers.OnlineListActivity"
+            android:label="@string/title_activity_offline_game"
+            android:parentActivityName="ca.brocku.chinesecheckers.MainActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
+        </activity>
+        <activity
+            android:name="ca.brocku.chinesecheckers.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:parentActivityName="ca.brocku.chinesecheckers.MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="MainActivity" />
+        </activity>
+        <activity
+            android:name="ca.brocku.chinesecheckers.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="ca.brocku.chinesecheckers.MainActivity"
+            android:screenOrientation="portrait" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="MainActivity" />
         </activity>
     </application>
 

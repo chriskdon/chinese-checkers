@@ -60,28 +60,26 @@ public class OfflineConfigurationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_configuration);
 
-        //Bind UI Controls
-        bindControls();
+        bindControls(); //bind UI controls
 
-        //Bind Handlers
-        bindHandlers();
+        bindHandlers(); //bind handlers
 
         currentSelection = twoPlayerButton;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if(id == R.id.action_help) {
             startActivity(new Intent(OfflineConfigurationActivity.this, HelpActivity.class));
+        } else if(id == R.id.action_settings) {
+            startActivity(new Intent(OfflineConfigurationActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
