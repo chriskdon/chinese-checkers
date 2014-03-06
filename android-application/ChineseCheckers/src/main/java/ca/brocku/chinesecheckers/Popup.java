@@ -4,14 +4,17 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /** This dialog is used system-wide as the default dialog.
  *
  */
 public class Popup extends Dialog {
+    private LinearLayout titleContainer;
     private TextView title;
     private TextView message;
+    private LinearLayout buttonContainer;
     private Button acceptButton;
     private Button declineButton;
     private boolean isBackButtonDisabled;
@@ -21,8 +24,11 @@ public class Popup extends Dialog {
 
         setContentView(R.layout.fragment_dialog); //dialog layout
 
+        //Bind Controls
+        titleContainer = (LinearLayout)findViewById(R.id.dialogTitleContainer);
         title = (TextView)findViewById(R.id.dialogTitle);
         message = (TextView)findViewById(R.id.dialogMessage);
+        buttonContainer = (LinearLayout)findViewById(R.id.dialogButtonContainer);
         acceptButton = (Button)findViewById(R.id.dialogAcceptButton);
         declineButton = (Button)findViewById(R.id.dialogCancelButton);
 
@@ -34,6 +40,24 @@ public class Popup extends Dialog {
         if(!isBackButtonDisabled) { //don't disable the back key
             super.onBackPressed();
         }
+    }
+
+    public Popup hideTitle(boolean b) {
+        if(b) {
+            titleContainer.setVisibility(View.GONE);
+        } else {
+            titleContainer.setVisibility(View.VISIBLE);
+        }
+        return this;
+    }
+
+    public Popup hideButtons(boolean b) {
+        if(b) {
+            buttonContainer.setVisibility(View.GONE);
+        } else {
+            buttonContainer.setVisibility(View.VISIBLE);
+        }
+        return this;
     }
 
     public Popup setTitleText(int text) {

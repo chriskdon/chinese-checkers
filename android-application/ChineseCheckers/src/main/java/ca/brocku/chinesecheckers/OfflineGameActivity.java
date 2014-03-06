@@ -236,8 +236,10 @@ public class OfflineGameActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Popup playerListDialog = new Popup(getActivity());
-                playerListDialog.setTitleText("Temp Dialog")
-                        .setMessageText("This will have a list of players. There won't be a title or buttons")
+                playerListDialog
+                        .hideTitle(true)
+                        .hideButtons(true)
+                        .setMessageText("There will be a list of players here.")
                         .show();
             }
         }
