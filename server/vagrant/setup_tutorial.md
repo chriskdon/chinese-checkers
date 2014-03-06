@@ -13,6 +13,6 @@ Vagrant will be our platform that essentially duplicates the server environment,
 3. `vagrant ssh`
 
 **Notes**
-1. The server you run in the Vagrant VM should be running on `0.0.0.0:80`. This will be mapped to `127.0.0.1:8080` on your local computer.
+1. The server you run in the Vagrant VM should be running on `0.0.0.0:8080`. This will be mapped to `127.0.0.1:8080` on your local computer.
 2. The folder in the vm `/vagrant` is mapped to the folder the where `vagrant up` was ran. So the current folder.
 3. MySQL username is `user` and password is `root`
