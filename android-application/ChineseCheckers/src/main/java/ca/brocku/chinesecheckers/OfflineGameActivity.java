@@ -185,11 +185,10 @@ public class OfflineGameActivity extends Activity {
     private static class OfflineGameFragment extends Fragment {
         private GameStateManager gameStateManager;
         private BoardUiEngine boardUiEngine;
-        private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
         private View rootView;
-        private TextView titleBar;
+        private Button titleBarButton;
         private boolean moved = false;
         private Position[] hints;
         private Piece currentTouched;
@@ -201,8 +200,6 @@ public class OfflineGameActivity extends Activity {
                                  ViewGroup container, Bundle savedInstanceState) {
 
             rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
-
-            titleBar = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
 
             return rootView;
         }
@@ -222,16 +219,27 @@ public class OfflineGameActivity extends Activity {
             boardUiEngine.initializeBoard(gameStateManager.getGameBoard());
 
             // Bind Controls
-            currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
+            titleBarButton = (Button)rootView.findViewById(R.id.gamePlayerListButton);
             resetMove = (Button)rootView.findViewById(R.id.gameMoveResetButton);
             doneMove = (Button)rootView.findViewById(R.id.gameMoveDoneButton);
 
             // Bind Handlers
+            titleBarButton.setOnClickListener(new TitleBarButtonHandler());
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
             gameStateManager.startGame();
 
+        }
+
+        private class TitleBarButtonHandler implements View.OnClickListener {
+            @Override
+            public void onClick(View view) {
+                Popup playerListDialog = new Popup(getActivity());
+                playerListDialog.setTitleText("Temp Dialog")
+                        .setMessageText("This will have a list of players. There won't be a title or buttons")
+                        .show();
+            }
         }
 
         private class ResetMoveHandler implements View.OnClickListener {
@@ -352,8 +360,9 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public void onPlayerTurn(Player player) {
-                titleBar.setBackgroundColor(getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL));
-                currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
+                setTitleBarButtonColor(player);
+                //titleBarButton.setBackgroundColor(getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL));
+                titleBarButton.setText(gameStateManager.getCurrentPlayer().getName());
             }
 
             /**
@@ -413,6 +422,30 @@ public class OfflineGameActivity extends Activity {
         public void setBoardUiEngine(BoardUiEngine boardUiEngine) {
             this.boardUiEngine = boardUiEngine;
         }
+
+        private void setTitleBarButtonColor(Player player) {
+            switch (player.getPlayerColor()) {
+                    case RED:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_red);
+                        break;
+                    case PURPLE:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_purple);
+                        break;
+                    case BLUE:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_blue);
+                        break;
+                    case GREEN:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_green);
+                        break;
+                    case YELLOW:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_yellow);
+                        break;
+                    case ORANGE:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_orange);
+                        break;
+                }
+        }
+
     }
 
 }

@@ -29,6 +29,13 @@ public class Popup extends Dialog {
         isBackButtonDisabled = false;
     }
 
+    @Override
+    public void onBackPressed() {
+        if(!isBackButtonDisabled) { //don't disable the back key
+            super.onBackPressed();
+        }
+    }
+
     public Popup setTitleText(int text) {
         title.setText(text);
         return this;
@@ -44,12 +51,27 @@ public class Popup extends Dialog {
         return this;
     }
 
+    public Popup setMessageText(String text) {
+        message.setText(text);
+        return this;
+    }
+
     public Popup setAcceptButtonText(int text) {
         acceptButton.setText(text);
         return this;
     }
 
+    public Popup setAcceptButtonText(String text) {
+        acceptButton.setText(text);
+        return this;
+    }
+
     public Popup setDeclineButtonText(int text) {
+        declineButton.setText(text);
+        return this;
+    }
+
+    public Popup setDeclineButtonText(String text) {
         declineButton.setText(text);
         return this;
     }
@@ -75,13 +97,6 @@ public class Popup extends Dialog {
 
     public Button getDeclineButton() {
         return declineButton;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(!isBackButtonDisabled) { //don't disable the back key
-            super.onBackPressed();
-        }
     }
 
 }
