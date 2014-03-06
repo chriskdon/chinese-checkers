@@ -58,7 +58,7 @@ else
 	sudo service nginx restart
 
 	# Install Latest Chinese Checkers App Version
-	alias pullChineseCheckers = 'sudo mkdir /tmp/chinese-checkers/; cd /tmp/chinese-checkers/; sudo git clone https://github.com/kubasub/chinese-checkers; cd ~; rm -rf /tmp/chinese-checkers/'
+	alias pullChineseCheckers = 'rm -rf ~/apps/chinese-checkers/; mkdir ~/apps/chinese-checkers/; sudo git clone -b develop https://github.com/kubasub/chinese-checkers; cp -r /tmp/chinese-checkers/server/server-application/* ~/apps/chinese-checkers/; sudo forever restartall; rm -rf /tmp/chinese-checkers/; cd ~/;'
 fi
 
 
