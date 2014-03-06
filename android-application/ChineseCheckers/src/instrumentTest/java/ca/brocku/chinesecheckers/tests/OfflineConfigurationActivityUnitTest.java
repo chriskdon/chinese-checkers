@@ -289,7 +289,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
         PlayerConfigRunnable pCR = new PlayerConfigRunnable(this);
         synchronized (pCR){
             curAct.runOnUiThread(pCR);
-            pCR.wait();
+            ((Object) pCR).wait();
         }
     }
 
@@ -306,7 +306,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
                 threePlayerConfigTests();
                 fourPlayerConfigTests();
                 sixPlayerConfigTests();
-                notify();
+                ((Object) this).notify();
             }
         }
 
@@ -339,7 +339,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
         public void twoPlayerConfigTests() {
 
-            ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
+            ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.twoPlayerButton);
             testHelper.ButtonTest(actInsTest,offlineTwoPlayerButton, true);
             offlineTwoPlayerButton.performClick();
             try{Thread.sleep(1000);}catch (Exception e){}
@@ -383,7 +383,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
 
         public void threePlayerConfigTests(){
 
-            final ToggleButton offlineThreePlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineThreePlayerButton);
+            final ToggleButton offlineThreePlayerButton = (ToggleButton) curAct.findViewById(R.id.threePlayerButton);
             testHelper.ButtonTest(actInsTest,offlineThreePlayerButton,true);
             offlineThreePlayerButton.performClick();
 //            try{Thread.sleep(1000);}catch (Exception e){}
@@ -468,7 +468,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
         }
 
         public void fourPlayerConfigTests(){
-            final ToggleButton offlineFourPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineFourPlayerButton);
+            final ToggleButton offlineFourPlayerButton = (ToggleButton) curAct.findViewById(R.id.fourPlayerButton);
             testHelper.ButtonTest(actInsTest,offlineFourPlayerButton,true);
             offlineFourPlayerButton.performClick();
 //            try{Thread.sleep(1000);}catch (Exception e){}
@@ -655,7 +655,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
         }
 
         public void sixPlayerConfigTests(){
-            final ToggleButton offlineSixPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineSixPlayerButton);
+            final ToggleButton offlineSixPlayerButton = (ToggleButton) curAct.findViewById(R.id.sixPlayerButton);
             testHelper.ButtonTest(actInsTest,offlineSixPlayerButton,true);
             offlineSixPlayerButton.performClick();
 //            try{Thread.sleep(1000);}catch (Exception e){}

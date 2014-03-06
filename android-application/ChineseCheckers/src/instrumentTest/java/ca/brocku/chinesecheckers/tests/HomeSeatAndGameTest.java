@@ -43,7 +43,7 @@ public class HomeSeatAndGameTest extends ActivityInstrumentationTestCase2<MainAc
 //        new OfflineConfigurationActivityUnitTest(curAct, curInstruments).runTest();
         curInstruments.removeMonitor(monitor);
         monitor = curInstruments.addMonitor(OfflineGameActivity.class.getName(), null, false);
-        final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
+        final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.twoPlayerButton);
         assertNotNull("offlineTwoPlayerButton Not Found", offlineTwoPlayerButton);
         curAct.runOnUiThread(
                 new Runnable() {

@@ -304,10 +304,10 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.offlineCurrentPlayerTextView);
         testHelper.TextViewTest(this,offlineCurrentPlayerTextView,true,"Red Bob");
 
-        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.offlineMoveResetButton);
+        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.gameMoveResetButton);
         testHelper.ButtonTest(this,offlineMoveResetButton,true);
 
-        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.offlineMoveDoneButton);
+        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.gameMoveDoneButton);
         testHelper.ButtonTest(this,offlineMoveDoneButton,true);
     }
 
