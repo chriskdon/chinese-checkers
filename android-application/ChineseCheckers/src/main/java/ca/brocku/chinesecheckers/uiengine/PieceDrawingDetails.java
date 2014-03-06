@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.uiengine;
 
+import java.io.Serializable;
+
 import ca.brocku.chinesecheckers.gameboard.Position;
 
 /**

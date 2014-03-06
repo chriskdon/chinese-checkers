@@ -2,33 +2,45 @@ package ca.brocku.chinesecheckers.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.ActionProvider;
+import android.view.ContextMenu;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ToggleButton;
 
+import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.R;
 
 /**
- * Created by Main on 2/4/14.
+ * Created by Main on 2/18/14.
  */
 public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentationTestCase2<OfflineConfigurationActivity> {
 
-    private static final long sleepTime = 10000;
+    private TestHelpers testHelper;
     private Activity curAct;
     private Instrumentation curInstruments;
     private Instrumentation.ActivityMonitor monitor;
 
     public OfflineConfigurationActivityUnitTest() {
         super(OfflineConfigurationActivity.class);
+        testHelper = new TestHelpers();
     }
 
     public OfflineConfigurationActivityUnitTest(Activity curAct, Instrumentation curInstruments) {
         super(OfflineConfigurationActivity.class);
         this.curAct = curAct;
         this.curInstruments = curInstruments;
+        testHelper = new TestHelpers();
     }
 
     protected void setUp() throws Exception {
@@ -39,984 +51,1260 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
     }
 
     public void testActivity() throws Exception {
+        activityTestHelper();
+        helpActivityTransitionTest();
+        activityTestHelper();
+    }
+
+    public void helpActivityTransitionTest(){
+        monitor = curInstruments.addMonitor(HelpActivity.class.getName(), null, false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_help, 0);
+
+//        MenuItem item = new MenuItem() {
+//            @Override
+//            public int getItemId() {
+//                return R.id.action_help;
+//            }
+//
+//            @Override
+//            public int getGroupId() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public int getOrder() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public MenuItem setTitle(CharSequence charSequence) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setTitle(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public CharSequence getTitle() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setTitleCondensed(CharSequence charSequence) {
+//                return null;
+//            }
+//
+//            @Override
+//            public CharSequence getTitleCondensed() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setIcon(Drawable drawable) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setIcon(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public Drawable getIcon() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setIntent(Intent intent) {
+//                return null;
+//            }
+//
+//            @Override
+//            public Intent getIntent() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setShortcut(char c, char c2) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setNumericShortcut(char c) {
+//                return null;
+//            }
+//
+//            @Override
+//            public char getNumericShortcut() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public MenuItem setAlphabeticShortcut(char c) {
+//                return null;
+//            }
+//
+//            @Override
+//            public char getAlphabeticShortcut() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public MenuItem setCheckable(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isCheckable() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setChecked(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isChecked() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setVisible(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isVisible() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setEnabled(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isEnabled() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean hasSubMenu() {
+//                return false;
+//            }
+//
+//            @Override
+//            public SubMenu getSubMenu() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setOnMenuItemClickListener(OnMenuItemClickListener onMenuItemClickListener) {
+//                return null;
+//            }
+//
+//            @Override
+//            public ContextMenu.ContextMenuInfo getMenuInfo() {
+//                return null;
+//            }
+//
+//            @Override
+//            public void setShowAsAction(int i) {
+//
+//            }
+//
+//            @Override
+//            public MenuItem setShowAsActionFlags(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setActionView(View view) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setActionView(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public View getActionView() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setActionProvider(ActionProvider actionProvider) {
+//                return null;
+//            }
+//
+//            @Override
+//            public ActionProvider getActionProvider() {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean expandActionView() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean collapseActionView() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean isActionViewExpanded() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setOnActionExpandListener(OnActionExpandListener onActionExpandListener) {
+//                return null;
+//            }
+//        };
+//        curAct.onOptionsItemSelected(item);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition to HelpActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(),null,false);
+
+        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition Back to OfflineConfigurationActivity Failed",curAct);
+    }
+
+    public void activityTestHelper() throws Exception{
         assertNotNull("OfflineConfigurationActivity Not Started", curAct);
-        twoPlayerConfigTests();
-        threePlayerConfigTests();
-        fourPlayerConfigTests();
-        sixPlayerConfigTests();
+        PlayerConfigRunnable pCR = new PlayerConfigRunnable(this);
+        synchronized (pCR){
+            curAct.runOnUiThread(pCR);
+            pCR.wait();
+        }
     }
 
-    public void twoPlayerConfigTests() throws Exception {
-        final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
-        assertNotNull("offlineTwoPlayerButton Not Found", offlineTwoPlayerButton);
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
-                        offlineTwoPlayerButton.performClick();
-                    }
-                }
-        );
 
-        final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
-        assertNotNull("offlineRedPlayerNameEditText Not Found", offlineRedPlayerNameEditText);
-        assertTrue("offlineGreenPlayerNameEditText Not Enabled", offlineRedPlayerNameEditText.isEnabled());
-        final EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
-        assertNotNull("offlineGreenPlayerNameEditText Not Found", offlineGreenPlayerNameEditText);
-        assertTrue("offlineGreenPlayerNameEditText Not Enabled", offlineGreenPlayerNameEditText.isEnabled());
+    private class PlayerConfigRunnable implements Runnable{
+        ActivityInstrumentationTestCase2 actInsTest;
+        PlayerConfigRunnable(ActivityInstrumentationTestCase2 actInsTest){
+            this.actInsTest = actInsTest;
+        }
 
-        final ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
-        final ImageView offlineGreenPlayerError = (ImageView) curAct.findViewById(R.id.offlineGreenPlayerError);
+        public void run(){
+            synchronized (this){
+                twoPlayerConfigTests();
+                threePlayerConfigTests();
+                fourPlayerConfigTests();
+                sixPlayerConfigTests();
+                notify();
+            }
+        }
 
-        final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
-        assertNotNull("offlineGameActivityButton Not Found", offlineGameActivityButton);
-        assertTrue("offlineGameActivityButton Not Clickable", offlineGameActivityButton.isClickable());
+        public void AIToggleButtonTest(ToggleButton easyButton,ToggleButton mediumButton, ToggleButton hardButton, ImageButton typeButton){
+            testHelper.AIToggleButtonTest(actInsTest,
+                    easyButton,
+                    mediumButton,
+                    hardButton,
+                    1);
+
+            mediumButton.performClick();
+
+            testHelper.AIToggleButtonTest(actInsTest,
+                    easyButton,
+                    mediumButton,
+                    hardButton,
+                    2);
+
+            hardButton.performClick();
+
+            testHelper.AIToggleButtonTest(actInsTest,
+                    easyButton,
+                    mediumButton,
+                    hardButton,
+                    3);
+
+            testHelper.ImageButtonTest(actInsTest,typeButton,true);
+            typeButton.performClick();
+        }
+
+        public void twoPlayerConfigTests() {
+
+            ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
+            testHelper.ButtonTest(actInsTest,offlineTwoPlayerButton, true);
+            offlineTwoPlayerButton.performClick();
+            try{Thread.sleep(1000);}catch (Exception e){}
+
+            EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineGreenPlayerTypeButton)
+            );
+
+            EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest, offlineGreenPlayerNameEditText, true);
+
+            ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
+            ImageView offlineGreenPlayerError = (ImageView) curAct.findViewById(R.id.offlineGreenPlayerError);
+
+            Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
+            testHelper.ButtonTest(actInsTest,offlineGameActivityButton,true);
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+
+        }
+
+        public void threePlayerConfigTests(){
+
+            final ToggleButton offlineThreePlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineThreePlayerButton);
+            testHelper.ButtonTest(actInsTest,offlineThreePlayerButton,true);
+            offlineThreePlayerButton.performClick();
+//            try{Thread.sleep(1000);}catch (Exception e){}
+
+            final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineYellowPlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineBluePlayerTypeButton)
+            );
+
+            final EditText offlineYellowPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineYellowPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineYellowPlayerNameEditText,true);
+            final EditText offlineBluePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineBluePlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineBluePlayerNameEditText,true);
+
+            final ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
+            final ImageView offlineYellowPlayerError = (ImageView) curAct.findViewById(R.id.offlineYellowPlayerError);
+            final ImageView offlineBluePlayerError = (ImageView) curAct.findViewById(R.id.offlineBluePlayerError);
+
+            final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
+            testHelper.ButtonTest(actInsTest,offlineGameActivityButton,true);
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineYellowPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+        }
+
+        public void fourPlayerConfigTests(){
+            final ToggleButton offlineFourPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineFourPlayerButton);
+            testHelper.ButtonTest(actInsTest,offlineFourPlayerButton,true);
+            offlineFourPlayerButton.performClick();
+//            try{Thread.sleep(1000);}catch (Exception e){}
+
+            final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineOrangePlayerTypeButton)
+            );
 
 
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineGreenPlayerTypeButton)
+            );
 
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
 
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineBluePlayerTypeButton)
+            );
 
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
 
-                    }
-                }
-        );
+            final EditText offlineOrangePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineOrangePlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineOrangePlayerNameEditText,true);
+            final EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineGreenPlayerNameEditText,true);
+            final EditText offlineBluePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineBluePlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineBluePlayerNameEditText,true);
+
+            final ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
+            final ImageView offlineOrangePlayerError = (ImageView) curAct.findViewById(R.id.offlineOrangePlayerError);
+            final ImageView offlineGreenPlayerError = (ImageView) curAct.findViewById(R.id.offlineGreenPlayerError);
+            final ImageView offlineBluePlayerError = (ImageView) curAct.findViewById(R.id.offlineBluePlayerError);
+
+            final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
+            testHelper.ButtonTest(actInsTest,offlineFourPlayerButton,true);
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+//
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+        }
+
+        public void sixPlayerConfigTests(){
+            final ToggleButton offlineSixPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineSixPlayerButton);
+            testHelper.ButtonTest(actInsTest,offlineSixPlayerButton,true);
+            offlineSixPlayerButton.performClick();
+//            try{Thread.sleep(1000);}catch (Exception e){}
+
+            final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineRedPlayerNameEditText,true);
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineOrangePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineOrangePlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflinePurplePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflinePurplePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflinePurplePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlinePurplePlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineYellowPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineYellowPlayerTypeButton)
+            );
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineGreenPlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineGreenPlayerTypeButton)
+            );
+
+
+            this.AIToggleButtonTest((ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerEasyButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerMediumButton),
+                    (ToggleButton)curAct.findViewById(R.id.OfflineBluePlayerHardButton),
+                    (ImageButton)curAct.findViewById(R.id.offlineBluePlayerTypeButton)
+            );
+
+            final EditText offlineOrangePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineOrangePlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineOrangePlayerNameEditText,true);
+            final EditText offlinePurplePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlinePurplePlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlinePurplePlayerNameEditText,true);
+            final EditText offlineYellowPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineYellowPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineYellowPlayerNameEditText,true);
+            final EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineGreenPlayerNameEditText,true);
+            final EditText offlineBluePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineBluePlayerNameEditText);
+            testHelper.EditTextTest(actInsTest,offlineBluePlayerNameEditText,true);
+
+            final ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
+            final ImageView offlineOrangePlayerError = (ImageView) curAct.findViewById(R.id.offlineOrangePlayerError);
+            final ImageView offlinePurplePlayerError = (ImageView) curAct.findViewById(R.id.offlinePurplePlayerError);
+            final ImageView offlineYellowPlayerError = (ImageView) curAct.findViewById(R.id.offlineYellowPlayerError);
+            final ImageView offlineGreenPlayerError = (ImageView) curAct.findViewById(R.id.offlineGreenPlayerError);
+            final ImageView offlineBluePlayerError = (ImageView) curAct.findViewById(R.id.offlineBluePlayerError);
+
+            final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
+            testHelper.ButtonTest(actInsTest,offlineGameActivityButton,true);
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("Red Bob");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("Orange Bob");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Not Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("Purple Bob");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("Yellow Bob");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+            offlineRedPlayerNameEditText.setText("");
+            offlineOrangePlayerNameEditText.setText("");
+            offlinePurplePlayerNameEditText.setText("");
+            offlineYellowPlayerNameEditText.setText("");
+            offlineGreenPlayerNameEditText.setText("Green Bob");
+            offlineBluePlayerNameEditText.setText("Blue Bob");
+            offlineGameActivityButton.performClick();
+            assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
+            assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
+            assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
+            assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
+            assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
+            assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
+
+        }
 
     }
 
-    public void threePlayerConfigTests() throws Exception {
-        final ToggleButton offlineThreePlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineThreePlayerButton);
-        assertNotNull("offlineThreePlayerButton Not Found", offlineThreePlayerButton);
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
-                        offlineThreePlayerButton.performClick();
-                    }
-                }
-        );
-
-        final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
-        assertNotNull("offlineRedPlayerNameEditText Not Found", offlineRedPlayerNameEditText);
-        assertTrue("offlineGreenPlayerNameEditText Not Enabled", offlineRedPlayerNameEditText.isEnabled());
-        final EditText offlineYellowPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineYellowPlayerNameEditText);
-        assertNotNull("offlineYellowPlayerNameEditText Not Found", offlineYellowPlayerNameEditText);
-        assertTrue("offlineYellowPlayerNameEditText Not Enabled", offlineYellowPlayerNameEditText.isEnabled());
-        final EditText offlineBluePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineBluePlayerNameEditText);
-        assertNotNull("offlineBluePlayerNameEditText Not Found", offlineBluePlayerNameEditText);
-        assertTrue("offlineBluePlayerNameEditText Not Enabled", offlineBluePlayerNameEditText.isEnabled());
-
-        final ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
-        final ImageView offlineYellowPlayerError = (ImageView) curAct.findViewById(R.id.offlineYellowPlayerError);
-        final ImageView offlineBluePlayerError = (ImageView) curAct.findViewById(R.id.offlineBluePlayerError);
-
-        final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
-        assertNotNull("offlineGameActivityButton Not Found", offlineGameActivityButton);
-        assertTrue("offlineGameActivityButton Not Clickable", offlineGameActivityButton.isClickable());
-
-
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                    }
-                }
-        );
-    }
-
-    public void fourPlayerConfigTests() throws Exception {
-        final ToggleButton offlineFourPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineFourPlayerButton);
-        assertNotNull("offlineFourPlayerButton Not Found", offlineFourPlayerButton);
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
-                        offlineFourPlayerButton.performClick();
-                    }
-                }
-        );
-
-        final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
-        assertNotNull("offlineRedPlayerNameEditText Not Found", offlineRedPlayerNameEditText);
-        assertTrue("offlineRedPlayerNameEditText Not Enabled", offlineRedPlayerNameEditText.isEnabled());
-        final EditText offlineOrangePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineOrangePlayerNameEditText);
-        assertNotNull("offlineOrangePlayerNameEditText Not Found", offlineOrangePlayerNameEditText);
-        assertTrue("offlineOrangePlayerNameEditText Not Enabled", offlineOrangePlayerNameEditText.isEnabled());
-        final EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
-        assertNotNull("offlineGreenPlayerNameEditText Not Found", offlineGreenPlayerNameEditText);
-        assertTrue("offlineGreenPlayerNameEditText Not Enabled", offlineGreenPlayerNameEditText.isEnabled());
-        final EditText offlineBluePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineBluePlayerNameEditText);
-        assertNotNull("offlineBluePlayerNameEditText Not Found", offlineBluePlayerNameEditText);
-        assertTrue("offlineBluePlayerNameEditText Not Enabled", offlineBluePlayerNameEditText.isEnabled());
-
-        final ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
-        final ImageView offlineOrangePlayerError = (ImageView) curAct.findViewById(R.id.offlineOrangePlayerError);
-        final ImageView offlineGreenPlayerError = (ImageView) curAct.findViewById(R.id.offlineGreenPlayerError);
-        final ImageView offlineBluePlayerError = (ImageView) curAct.findViewById(R.id.offlineBluePlayerError);
-
-        final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
-        assertNotNull("offlineGameActivityButton Not Found", offlineGameActivityButton);
-        assertTrue("offlineGameActivityButton Not Clickable", offlineGameActivityButton.isClickable());
-
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-//
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-                    }
-                }
-        );
-    }
-
-    public void sixPlayerConfigTests() throws Exception {
-        final ToggleButton offlineSixPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineSixPlayerButton);
-        assertNotNull("offlineSixPlayerButton Not Found", offlineSixPlayerButton);
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
-                        offlineSixPlayerButton.performClick();
-                    }
-                }
-        );
-
-        synchronized (this) { Thread.sleep(sleepTime); }
-        final EditText offlineRedPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineRedPlayerNameEditText);
-        assertNotNull("offlineRedPlayerNameEditText Not Found", offlineRedPlayerNameEditText);
-        assertTrue("offlineRedPlayerNameEditText Not Enabled", offlineRedPlayerNameEditText.isEnabled());
-        assertEquals("offlineRedPlayerNameEditText Initalized With Text","",offlineRedPlayerNameEditText.getText().toString());
-        assertTrue("offlineRedPlayerNameEditText Not Visible", offlineRedPlayerNameEditText.isShown());
-        final EditText offlineOrangePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineOrangePlayerNameEditText);
-        assertNotNull("offlineOrangePlayerNameEditText Not Found", offlineOrangePlayerNameEditText);
-        assertTrue("offlineOrangePlayerNameEditText Not Enabled", offlineOrangePlayerNameEditText.isEnabled());
-        assertEquals("offlineOrangePlayerNameEditText Initalized With Text","",offlineOrangePlayerNameEditText.getText().toString());
-        assertTrue("offlineOrangePlayerNameEditText Not Visible", offlineOrangePlayerNameEditText.isShown());
-        final EditText offlinePurplePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlinePurplePlayerNameEditText);
-        assertNotNull("offlinePurplePlayerNameEditText Not Found", offlinePurplePlayerNameEditText);
-        assertTrue("offlinePurplePlayerNameEditText Not Enabled", offlinePurplePlayerNameEditText.isEnabled());
-        assertEquals("offlinePurplePlayerNameEditText Initalized With Text","",offlinePurplePlayerNameEditText.getText().toString());
-        assertTrue("offlinePurplePlayerNameEditText Not Visible", offlinePurplePlayerNameEditText.isShown());
-        final EditText offlineYellowPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineYellowPlayerNameEditText);
-        assertNotNull("offlineYellowPlayerNameEditText Not Found", offlineYellowPlayerNameEditText);
-        assertTrue("offlineYellowPlayerNameEditText Not Enabled", offlineYellowPlayerNameEditText.isEnabled());
-        assertEquals("offlineYellowPlayerNameEditText Initalized With Text","",offlineYellowPlayerNameEditText.getText().toString());
-        assertTrue("offlineYellowPlayerNameEditText Not Visible", offlineYellowPlayerNameEditText.isShown());
-        final EditText offlineGreenPlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineGreenPlayerNameEditText);
-        assertNotNull("offlineGreenPlayerNameEditText Not Found", offlineGreenPlayerNameEditText);
-        assertTrue("offlineGreenPlayerNameEditText Not Enabled", offlineGreenPlayerNameEditText.isEnabled());
-        assertEquals("offlineGreenPlayerNameEditText Initalized With Text","",offlineGreenPlayerNameEditText.getText().toString());
-        assertTrue("offlineGreenPlayerNameEditText Not Visible", offlineGreenPlayerNameEditText.isShown());
-        final EditText offlineBluePlayerNameEditText = (EditText) curAct.findViewById(R.id.offlineBluePlayerNameEditText);
-        assertNotNull("offlineBluePlayerNameEditText Not Found", offlineBluePlayerNameEditText);
-        assertTrue("offlineBluePlayerNameEditText Not Enabled", offlineBluePlayerNameEditText.isEnabled());
-        assertEquals("offlineBluePlayerNameEditText Initalized With Text","",offlineBluePlayerNameEditText.getText().toString());
-        assertTrue("offlineBluePlayerNameEditText Not Visible", offlineBluePlayerNameEditText.isShown());
-
-        final ImageView offlineRedPlayerError = (ImageView) curAct.findViewById(R.id.offlineRedPlayerError);
-        final ImageView offlineOrangePlayerError = (ImageView) curAct.findViewById(R.id.offlineOrangePlayerError);
-        final ImageView offlinePurplePlayerError = (ImageView) curAct.findViewById(R.id.offlinePurplePlayerError);
-        final ImageView offlineYellowPlayerError = (ImageView) curAct.findViewById(R.id.offlineYellowPlayerError);
-        final ImageView offlineGreenPlayerError = (ImageView) curAct.findViewById(R.id.offlineGreenPlayerError);
-        final ImageView offlineBluePlayerError = (ImageView) curAct.findViewById(R.id.offlineBluePlayerError);
-
-        final Button offlineGameActivityButton = (Button) curAct.findViewById(R.id.offlineGameActivityButton);
-        assertNotNull("offlineGameActivityButton Not Found", offlineGameActivityButton);
-        assertTrue("offlineGameActivityButton Not Clickable", offlineGameActivityButton.isClickable());
-
-        curAct.runOnUiThread(
-                new Runnable() {
-                    public void run() {
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("Red Bob");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertFalse("offlineRedPlayerError Displayed Inappropriately", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("Orange Bob");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertFalse("offlineOrangePlayerError Displayed Inappropriately", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately ", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Not Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("Purple Bob");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertFalse("offlinePurplePlayerError Displayed Inappropriately", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertTrue("offlineBluePlayerError Not Displayed", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertTrue("offlineGreenPlayerError Not Displayed", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("Yellow Bob");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertFalse("offlineYellowPlayerError Displayed Inappropriately", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                        offlineRedPlayerNameEditText.setText("");
-                        offlineOrangePlayerNameEditText.setText("");
-                        offlinePurplePlayerNameEditText.setText("");
-                        offlineYellowPlayerNameEditText.setText("");
-                        offlineGreenPlayerNameEditText.setText("Green Bob");
-                        offlineBluePlayerNameEditText.setText("Blue Bob");
-                        offlineGameActivityButton.performClick();
-                        assertTrue("offlineRedPlayerError Not Displayed", offlineRedPlayerError.isShown());
-                        assertTrue("offlineOrangePlayerError Not Displayed", offlineOrangePlayerError.isShown());
-                        assertTrue("offlinePurplePlayerError Not Displayed", offlinePurplePlayerError.isShown());
-                        assertTrue("offlineYellowPlayerError Not Displayed", offlineYellowPlayerError.isShown());
-                        assertFalse("offlineGreenPlayerError Displayed Inappropriately", offlineGreenPlayerError.isShown());
-                        assertFalse("offlineBluePlayerError Displayed Inappropriately", offlineBluePlayerError.isShown());
-
-                    }
-                }
-        );
-
-    }
 }
-
