@@ -16,3 +16,5 @@ Vagrant will be our platform that essentially duplicates the server environment,
 1. The server you run in the Vagrant VM should be running on `0.0.0.0:8080`. This will be mapped to `127.0.0.1:8080` on your local computer.
 2. The folder in the vm `/vagrant` is mapped to the folder the where `vagrant up` was ran. So the current folder.
 3. MySQL username is `user` and password is `root`
+4. To start vagrant at each development session run `vagrant up`
+5. DON'T FORGET to run `vagrant suspend` or `vagrant halt` at the end of each development session or it will keep running in the background.
