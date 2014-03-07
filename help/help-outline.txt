@@ -1,0 +1,36 @@
+HOW TO PLAY
+
+-board setup
+
+-moving a peg
+
+-hopping pegs
+
+-win conditions
+
+OFFLINE PLAY
+
+-configuration
+	--number of players
+	--switching to AI
+		---demo mode
+	--name entry
+	--click start game
+
+-take a turn, pass the device
+	--?put how to play here?
+
+ONLINE PLAY
+
+-username
+
+-starting a game
+	--number of players
+	--additional AI players
+
+-turns
+	--notifications
+	--take a turn
+
+-timeout
+	--AI takeover
