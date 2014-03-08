@@ -15,7 +15,7 @@ The framework we are using is [Play 2.2.2](www.playframework.com)
 3. `vagrant ssh`
 
 **How To Run The Application**
-Run `sudo play "~run 8080"` in the `server-application/ChineseCheckersServer` folder. The application should automatically reload and compile the files when you change them.
+Run `sudo play "~run 8080"` in the `/vagrant/server-application/ChineseCheckersServer` folder. The application should automatically reload and compile the files when you change them.
 
 **Notes**
 1. The server you run in the Vagrant VM should be running on `0.0.0.0:8080`. This will be mapped to `127.0.0.1:8080` on your local computer.
