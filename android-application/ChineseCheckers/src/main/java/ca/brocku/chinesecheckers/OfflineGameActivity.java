@@ -2,9 +2,7 @@ package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,7 +30,7 @@ import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.ColorSate;
 import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.getPlayerColor;
 
-@SuppressLint("all")
+@SuppressLint("All")
 public class OfflineGameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
     private Boolean isEndCurrentGame; //a boolean which can prevent saving the state
@@ -59,9 +57,52 @@ public class OfflineGameActivity extends Activity {
 
         //Show the Resume Game dialog box if we are loading a saves game
         if(getIntent().getBooleanExtra("SAVED_GAME", false)) {
-            ResumeDialog dialog = new ResumeDialog(this, R.style.CustomDialogTheme);
-            dialog.show();
+
+            final Popup resumeDialog = new Popup(this);
+            resumeDialog.setTitleText(R.string.offline_resume_title)
+                    .setMessageText(R.string.offline_resume_message)
+                    .setAcceptButtonText(R.string.offline_resume_accept)
+                    .setDeclineButtonText(R.string.offline_resume_decline)
+                    .setAcceptClickListener(new Button.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            resumeDialog.dismiss();
+                        }
+                    })
+                    .setCancelClickListener(new Button.OnClickListener() {
+                        //Handler to quit the current game and go to the config screen if quit is chosen
+                        @Override
+                        public void onClick(View view) {
+                            isEndCurrentGame = true; //set to not save the state (as we are quitting the current game)
+
+                            //Delete the current saved game
+                            File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+                            savedOfflineGame.delete();
+
+                            resumeDialog.dismiss();
+                            OfflineGameActivity.this.finish();
+                            startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                        }
+                    })
+                    .show();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_help) {
+            startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
+        } else if(id == R.id.action_settings) {
+            startActivity(new Intent(OfflineGameActivity.this, SettingsActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -93,32 +134,46 @@ public class OfflineGameActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.action_help) {
-            startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    /** This function handles the end of game state.
+     *
+     * It disables saving, deletes the currently saved game, and shows the end of game dialog.
+     *
+     * @param p the player who won
+     * @return whether or not this was handled
+     */
     public Boolean onEndGame(Player p) {
         isEndCurrentGame = true; //prevent saving this (finished) game
-
-        EndOfGameDialog dialog = new EndOfGameDialog(this, R.style.CustomDialogTheme);
-        dialog.setWinner(p.getName());
-        dialog.show();
 
         //Delete the current saved game
         File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
         savedOfflineGame.delete();
+
+        //Show the end of game dialog
+        final Popup endGameDialog = new Popup(this);
+        endGameDialog.setTitleText(p.getName() + " Wins!!")
+                .setMessageText(R.string.offline_end_game_message)
+                .setAcceptButtonText(R.string.offline_end_game_accept)
+                .setDeclineButtonText(R.string.offline_end_game_decline)
+                .setAcceptClickListener(new Button.OnClickListener() {
+                    //Handler to close the dialog if option to play new game is chosen
+                    @Override
+                    public void onClick(View view) {
+                        endGameDialog.dismiss();
+                        OfflineGameActivity.this.finish();
+                        startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                    }
+                })
+                .setCancelClickListener(new Button.OnClickListener() {
+                    //Handler for "Home" button to quit the current game and go to the main activity
+                    @Override
+                    public void onClick(View view) {
+                        endGameDialog.dismiss();
+                        OfflineGameActivity.this.finish();
+                        startActivity(new Intent(OfflineGameActivity.this, MainActivity.class));
+                    }
+                })
+                .disableBackButton(true)
+                .show();
 
         return true;
     }
@@ -126,14 +181,14 @@ public class OfflineGameActivity extends Activity {
     /**
      *  Fragment containing game board, controls, and player turn indicator
      */
+    @SuppressLint("ValidFragment")
     private static class OfflineGameFragment extends Fragment {
         private GameStateManager gameStateManager;
         private BoardUiEngine boardUiEngine;
-        private TextView currentPlayerName;
         private Button resetMove;
         private Button doneMove;
         private View rootView;
-        private TextView titleBar;
+        private Button titleBarButton;
         private boolean moved = false;
         private Position[] hints;
         private Piece currentTouched;
@@ -145,8 +200,6 @@ public class OfflineGameActivity extends Activity {
                                  ViewGroup container, Bundle savedInstanceState) {
 
             rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
-
-            titleBar = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
 
             return rootView;
         }
@@ -166,16 +219,29 @@ public class OfflineGameActivity extends Activity {
             boardUiEngine.initializeBoard(gameStateManager.getGameBoard());
 
             // Bind Controls
-            currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
-            resetMove = (Button)rootView.findViewById(R.id.offlineMoveResetButton);
-            doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
+            titleBarButton = (Button)rootView.findViewById(R.id.gamePlayerListButton);
+            resetMove = (Button)rootView.findViewById(R.id.gameMoveResetButton);
+            doneMove = (Button)rootView.findViewById(R.id.gameMoveDoneButton);
 
             // Bind Handlers
+            titleBarButton.setOnClickListener(new TitleBarButtonHandler());
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
             gameStateManager.startGame();
 
+        }
+
+        private class TitleBarButtonHandler implements View.OnClickListener {
+            @Override
+            public void onClick(View view) {
+                Popup playerListDialog = new Popup(getActivity());
+                playerListDialog
+                        .hideTitle(true)
+                        .hideButtons(true)
+                        .setMessageText("There will be a list of players here.")
+                        .show();
+            }
         }
 
         private class ResetMoveHandler implements View.OnClickListener {
@@ -296,8 +362,9 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public void onPlayerTurn(Player player) {
-                titleBar.setBackgroundColor(getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL));
-                currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
+                setTitleBarButtonColor(player);
+                //titleBarButton.setBackgroundColor(getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL));
+                titleBarButton.setText(gameStateManager.getCurrentPlayer().getName());
             }
 
             /**
@@ -357,100 +424,30 @@ public class OfflineGameActivity extends Activity {
         public void setBoardUiEngine(BoardUiEngine boardUiEngine) {
             this.boardUiEngine = boardUiEngine;
         }
+
+        private void setTitleBarButtonColor(Player player) {
+            switch (player.getPlayerColor()) {
+                    case RED:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_red);
+                        break;
+                    case PURPLE:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_purple);
+                        break;
+                    case BLUE:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_blue);
+                        break;
+                    case GREEN:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_green);
+                        break;
+                    case YELLOW:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_yellow);
+                        break;
+                    case ORANGE:
+                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_orange);
+                        break;
+                }
+        }
+
     }
 
-    /**
-     * This class represents a custom dialog box which appears when there is a saved game. It
-     * prompts the user to decide whether to resume the game or quit it.
-     */
-    private class ResumeDialog extends Dialog {
-        public ResumeDialog(final Context context, int theme) {
-            super(context, theme);
-
-            setContentView(R.layout.fragment_offline_game_resume_dialog); //dialog layout
-
-            //Bind controls for the dialog options
-            Button resumeButton = (Button)findViewById(R.id.offlineAcceptContinuationButton);
-            Button quitButton = (Button)findViewById(R.id.offlineDeclineContinuationButton);
-
-            //Handler to close the dialog if option to resume is chosen
-            resumeButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-
-            //Handler to quit the current game and go to the config screen if quit is chosen
-            quitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    isEndCurrentGame = true; //set to not save the state (as we are quitting the current game)
-
-                    //Delete the current saved game
-                    File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
-                    savedOfflineGame.delete();
-
-                    ResumeDialog.this.dismiss();
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
-                }
-            });
-        }
-    }
-
-    /**
-     * This class represents a custom dialog box which appears when someone wins. It prompts the
-     * user to decide whether to play a new game or go to the home screen.
-     */
-    private class EndOfGameDialog extends Dialog {
-        private TextView title; //the title of the Dialog (i.e. "<WINNER_NAME> Wins!")
-
-        public EndOfGameDialog(final Context context, int theme) {
-            super(context, theme);
-
-            setContentView(R.layout.fragment_offline_game_end_dialog); //dialog layout
-
-            //Bind controls for the dialog options and title
-            Button newGameButton = (Button)findViewById(R.id.offlineGameEndToNewButton);
-            Button homeButton = (Button)findViewById(R.id.offlineGameEndToHomeButton);
-            title = (TextView)findViewById(R.id.offlineGameEndTitle);
-
-            //Handler to close the dialog if option to play new game is chosen
-            newGameButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
-                }
-            });
-
-            //Handler for "Home" button to quit the current game and go to the main activity
-            homeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, MainActivity.class));
-                }
-            });
-        }
-
-        public void setWinner(String winner) {
-            title.setText(winner + " Wins!!");
-        }
-
-        /** This method disables the back button if we are in an end of game state.
-         * 
-         * isEndCurrentGame is true when the End of Game dialog appears. We do not want the option to
-         * dismiss the dialog so that players can continue to play after there is a winner.
-         *
-         * Note: the other case when isEndCurrentGame is true is when Quit is selected from the Resume
-         * Game dialog. This will not have an effect on that functionality.
-         *
-         */
-        @Override
-        public void onBackPressed() {
-            if(!isEndCurrentGame) { //don't disable the back key if the game is not at its end
-                super.onBackPressed();
-            }
-        }
-    }
 }

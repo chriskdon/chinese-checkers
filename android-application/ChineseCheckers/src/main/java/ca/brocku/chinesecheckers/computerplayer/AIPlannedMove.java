@@ -1,8 +1,6 @@
 package ca.brocku.chinesecheckers.computerplayer;
 
-import java.util.Collections;
-import java.util.List;
-
+import java.util.ArrayList;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 
@@ -15,10 +13,10 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  */
 
 public class AIPlannedMove {
-    private int heuristic;          // The heuristic after the move.
-    private Piece pieceMoved;       // The piece that was moved.
-    private Position newPosition;
-    //private List<Position> path;    // The path it took to get to its final position.
+    private int heuristic = 0;
+    private Piece pieceMoved;
+    private ArrayList<Position> path;
+
 
     /**
      * Constructor for the piece that moves and the path taken.
@@ -27,10 +25,9 @@ public class AIPlannedMove {
      * @param path          The path the piece took to move.
      */
     //public AIPlannedMove(Piece pieceMoved, List<Position> path, int heuristic) {
-    public AIPlannedMove(Piece pieceMoved, Position newPosition, int heuristic) {
+    public AIPlannedMove(Piece pieceMoved, ArrayList<Position> path, int heuristic) {
         this.pieceMoved = pieceMoved;
-        this.newPosition = newPosition;
-        //this.path = path;
+        this.path = path;
         this.heuristic = heuristic;
     }
 
@@ -38,7 +35,7 @@ public class AIPlannedMove {
 
     public void setPieceMoved(Piece piece){ this.pieceMoved = piece; }
 
-    public void setNewPosition(Position newPosition){ this.newPosition = newPosition; }
+    public void setPath(ArrayList<Position> path){ this.path = path; }
 
     public int getHeuristic() {
         return heuristic;
@@ -48,16 +45,7 @@ public class AIPlannedMove {
         return pieceMoved;
     }
 
-    public Position getNewPosition() {
-        return newPosition;
+    public ArrayList<Position> getPath() {
+        return path;
     }
-
-    /**
-     * Returns an unmodifiable path that the piece took.
-     *
-     * @return The path.
-     */
-    /*public List<Position> getPath() {
-        return Collections.unmodifiableList(path);
-    }*/
 }

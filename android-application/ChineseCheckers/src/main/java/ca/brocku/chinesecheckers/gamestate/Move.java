@@ -26,7 +26,7 @@ public class Move {
      * Constructor for the piece that moves and the path taken.
      *
      */
-    public Move() {
+    public Move(Piece pieceMoved, List<Position> path) {
         this.pieceMoved = pieceMoved;
         this.path = path;
     }

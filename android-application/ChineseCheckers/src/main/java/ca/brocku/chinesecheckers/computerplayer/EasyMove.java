@@ -16,31 +16,32 @@ import ca.brocku.chinesecheckers.gamestate.Move;
  * Date: 2/24/2014
  */
 public class EasyMove {
+    private AIPlannedMove currentMove;
+    private HeuristicCalculator cHeuristic;
 
     /**
      * Calculates the move that an easy AI would make
      *
      * @param player Player number of the AI.
-     * @param board The current state of the board.
+     * @param board  The current state of the board.
      * @return The move the AI chooses to make.
      */
     public Move getEasyMove(int player, GameBoard board) {
         Piece[] AIPieces = getPlayerPieces(player, board);
-        GameBoard tempBoard;
-        Move move = null;
-        HeuristicCalculator cHeuristic = new HeuristicCalculator(player, board);
+        GameBoard tempBoard = board;
+        int tempHeuristic;
+        Move move;
+        cHeuristic = new HeuristicCalculator(player, board);
+        ArrayList<Position> path;
 
         /*
-        Gets each possible move for each player-owned piece.
+        Gets each single step move for each player-owned piece.
          */
         for (Piece piece : AIPieces) {
-            //Easy AI is a greedy AI, so boardstate is irrelivent, only delta pieceHeuristic matters
-            int currentHeuristic = cHeuristic.getDistanceHeuristic(piece), tempHeuristic;
-            AIPlannedMove currentMove = null;
+            path = null;
 
             Position[] initialPossible = board.getPossibleMoves(piece);
             ArrayList<Position> hops = new ArrayList<Position>();
-            int j = 0;
             if (initialPossible != null) {
                 for (Position p : initialPossible) {
                     if (Math.abs(p.getRow() - piece.getPosition().getRow()) == 2 ||
@@ -50,26 +51,27 @@ public class EasyMove {
                     }
                 }
             }
-            //adds chain hops to the list of possible moves
-            Position[] allPossible = getAllHops(piece, hops.toArray(new Position[hops.size()]), board);
 
             //Compares the preference of the move to the currently favoured move
-            for (Position pos : allPossible) {
+            for (Position pos : initialPossible) {
                 tempBoard = board;
+                path.add(pos);
                 tempBoard.forceMove(piece, pos);
                 tempHeuristic = cHeuristic.getDistanceHeuristic(piece);
-                if(currentMove == null){
-                    currentMove = new AIPlannedMove(piece, pos, tempHeuristic);
-                }
-                if (tempHeuristic < currentMove.getHeuristic()) {
-                    //replace current AIPlannedMove
+                if (currentMove.getHeuristic() == 0) {
+                    currentMove.setPieceMoved(piece);
+                    currentMove.setPath(path);
+                    currentMove.setHeuristic(tempHeuristic);
+                } else if (tempHeuristic < currentMove.getHeuristic()) {
                     currentMove.setHeuristic(tempHeuristic);
                     currentMove.setPieceMoved(piece);
-                    currentMove.setNewPosition(pos);
+                    currentMove.setPath(path);
                 }
+                path.remove(path.size() - 1); //remove the completed move
             }
+            checkAllHops(piece, initialPossible, tempBoard, path);
         }
-        move = new Move();
+        move = new Move(currentMove.getPieceMoved(), currentMove.getPath());
         return move;
     }
 
@@ -77,14 +79,14 @@ public class EasyMove {
      * Returns all of the pieces on the gameboard owned by the player player.
      *
      * @param player is the owning player.
-     * @param board is the gameboard containing pieces.
+     * @param board  is the gameboard containing pieces.
      * @return array of pieces belonging to the player.
      */
-    public Piece[] getPlayerPieces(int player, GameBoard board){
+    public Piece[] getPlayerPieces(int player, GameBoard board) {
         Piece[] allPieces = board.getAllPieces(), playerPieces = new Piece[10];
         int j = 0;
-        for (int i=0 ; i < allPieces.length ; i++)
-            if(allPieces[i].getPlayerNumber() == player){
+        for (int i = 0; i < allPieces.length; i++)
+            if (allPieces[i].getPlayerNumber() == player) {
                 playerPieces[j] = allPieces[i];
                 j++;
             }
@@ -93,50 +95,46 @@ public class EasyMove {
     }
 
     /**
-     * Recursively calculates all hops of any distance for the provided piece
+     * Recursively calculates the heuristic and path of all hops of any distance for the provided piece
      *
-     * @param current Piece to calculate hop paths for
+     * @param current   Piece to calculate hop paths for
      * @param listSoFar Current list of moves for the piece
      * @param tempBoard The gameboard
+     * @param path      The path taken to the current position for the piece
      * @return An array of positions that the piece can move to
      */
-    private Position[] getAllHops(Piece current, Position[] listSoFar, GameBoard tempBoard){
+    private void checkAllHops(Piece current, Position[] listSoFar, GameBoard tempBoard, ArrayList<Position> path) {
         Boolean existingHop;
         Position currentPosition = current.getPosition();
         Position[] hops = tempBoard.getPossibleHops(current);
-        ArrayList<Position> newHops = new ArrayList<Position>();
+        //ArrayList<Position> newHops = new ArrayList<Position>();
+        int thisHeuristic;
 
         //remove duplicate hops
-        if(hops == null)
-            return hops;
-        else
-            for(Position position: hops){
+        if (hops != null) {
+            for (Position position : hops) {                    //for each possible hop
                 existingHop = false;
-                for(Position existingPosition: listSoFar){
-                    if(existingPosition == position)
+                for (Position existingPosition : listSoFar) {   //remove previously visitted positions
+                    if (existingPosition == position)
                         existingHop = true;
                 }
-                if(existingHop == false)
-                    newHops.add(position);
+                if (!existingHop) {
+                    path.add(position);                         //check if this is the new best move
+                    thisHeuristic = cHeuristic.getDistanceHeuristic(current);
+                    if (thisHeuristic <= currentMove.getHeuristic()) {
+                        currentMove.setHeuristic(thisHeuristic);
+                        currentMove.setPath(path);
+                        currentMove.setPieceMoved(current);
+                    }
+                    listSoFar[listSoFar.length] = position;     //add to visitted positions
+                    checkAllHops(current, listSoFar, tempBoard, path);  //recursive call
+                    path.remove(path.size() - 1);                 //remove latest hop
+                    tempBoard.forceMove(current, path.get(path.size() - 1));
+
+
+                }
             }
-
-       //for each new, non-duplicate hop, this function calls itself
-        if(newHops.size() > 0){
-            Position[] allNewHops = newHops.toArray(new Position[newHops.size()]);
-            int j = listSoFar.length;
-            for(int i = 0 ; i < allNewHops.length ; i++)
-            listSoFar[j] = allNewHops[i];
-            j++;
-            for(Position position : allNewHops)
-                    tempBoard.forceMove(current, position);
-                    listSoFar = getAllHops(current, listSoFar, tempBoard);
         }
-
-        //sets the board back to its initial state. Not required, but neater.
-        tempBoard.forceMove(current, currentPosition);
-
-        return listSoFar;
-
 
     }
 }

@@ -20,6 +20,7 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.brocku.chinesecheckers.computerplayer.AIPlayer;
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
@@ -60,28 +61,26 @@ public class OfflineConfigurationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_configuration);
 
-        //Bind UI Controls
-        bindControls();
+        bindControls(); //bind UI controls
 
-        //Bind Handlers
-        bindHandlers();
+        bindHandlers(); //bind handlers
 
         currentSelection = twoPlayerButton;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if(id == R.id.action_help) {
             startActivity(new Intent(OfflineConfigurationActivity.this, HelpActivity.class));
+        } else if(id == R.id.action_settings) {
+            startActivity(new Intent(OfflineConfigurationActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -130,7 +129,7 @@ public class OfflineConfigurationActivity extends Activity {
 
                 //shows and labels the name fields based on the number of players option
                 switch(view.getId()) {
-                    case R.id.offlineTwoPlayerButton:
+                    case R.id.twoPlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
                         greenPlayerEditText.setHint("Player 2");
@@ -138,7 +137,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.GONE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineThreePlayerButton:
+                    case R.id.threePlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerEditText.setHint("Player 2");
                         yellowPlayerNameContainer.setVisibility(View.VISIBLE);
@@ -147,7 +146,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineFourPlayerButton:
+                    case R.id.fourPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
@@ -157,7 +156,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineSixPlayerButton:
+                    case R.id.sixPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerEditText.setHint("Player 3");
@@ -311,27 +310,76 @@ public class OfflineConfigurationActivity extends Activity {
                 if(redPlayerNameContainer.getVisibility() == View.VISIBLE) {
                     players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
                 }
+                //required? "redPlayerNameContainer.getVisibility() ==  VISIBLE &&"
+                else if(redPlayerTypeButton.getTag().equals("robot")){
+                    if(redPlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.RED, 1));
+                    if(redPlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.RED, 1));
+                    if(redPlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.RED, 1));
+                }
 
                 if(purplePlayerNameContainer.getVisibility() == View.VISIBLE) {
                     players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
                 }
-
+                //required? "purplePlayerNameContainer.getVisibility() ==  VISIBLE &&"
+                else if( purplePlayerTypeButton.getTag().equals("robot")) {
+                    if (purplePlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.PURPLE, 2));
+                    if (purplePlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.PURPLE, 2));
+                    if (purplePlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.PURPLE, 2));
+                }
                 if(bluePlayerNameContainer.getVisibility() == View.VISIBLE) {
                     players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
                 }
-
+                //required? "bluePlayerNameContainer.getVisibility() ==  VISIBLE &&"
+                else if(bluePlayerTypeButton.getTag().equals("robot")) {
+                    if (bluePlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.BLUE, 3));
+                    if (bluePlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.BLUE, 3));
+                    if (bluePlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.BLUE, 3));
+                }
                 if(greenPlayerNameContainer.getVisibility() == View.VISIBLE) {
                     players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
                 }
-
+                //required? "greenPlayerNameContainer.getVisibility() ==  VISIBLE &&"
+                else if(greenPlayerTypeButton.getTag().equals("robot")) {
+                    if (greenPlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.GREEN, 4));
+                    if (greenPlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.GREEN, 4));
+                    if (greenPlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.GREEN, 4));
+                }
                 if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE) {
                     players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
                 }
-
+                //required? "yellowPlayerNameContainer.getVisibility() ==  VISIBLE &&"
+                else if(yellowPlayerTypeButton.getTag().equals("robot")) {
+                    if (redPlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.YELLOW, 5));
+                    if (yellowPlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.YELLOW, 5));
+                    if (yellowPlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.YELLOW, 5));
+                }
                 if(orangePlayerNameContainer.getVisibility() == View.VISIBLE) {
                     players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
                 }
-
+                //required? "orangePlayerNameContainer.getVisibility() ==  VISIBLE &&"
+                else if(orangePlayerTypeButton.getTag().equals("robot")) {
+                    if (orangePlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.ORANGE, 6));
+                    if (orangePlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.ORANGE, 6));
+                    if (orangePlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.ORANGE, 6));
+                }
                 GameBoard board = new CcGameBoard(players.size());
                 intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager(board, players));
                 OfflineConfigurationActivity.this.finish();
@@ -357,10 +405,10 @@ public class OfflineConfigurationActivity extends Activity {
      */
     private void bindControls() {
         //Number of player buttons
-        twoPlayerButton = (ToggleButton) findViewById(R.id.offlineTwoPlayerButton);
-        threePlayerButton = (ToggleButton) findViewById(R.id.offlineThreePlayerButton);
-        fourPlayerButton = (ToggleButton) findViewById(R.id.offlineFourPlayerButton);
-        sixPlayerButton = (ToggleButton) findViewById(R.id.offlineSixPlayerButton);
+        twoPlayerButton = (ToggleButton) findViewById(R.id.twoPlayerButton);
+        threePlayerButton = (ToggleButton) findViewById(R.id.threePlayerButton);
+        fourPlayerButton = (ToggleButton) findViewById(R.id.fourPlayerButton);
+        sixPlayerButton = (ToggleButton) findViewById(R.id.sixPlayerButton);
 
         //Player info containers
         redPlayerNameContainer = (LinearLayout)findViewById(R.id.offlineRedPlayerNameContainer);

@@ -1,34 +1,36 @@
 package ca.brocku.chinesecheckers;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
-@SuppressLint("all")
-public class HelpActivity extends Activity {
+/**
+ * Created by kubasub on 2014-03-06.
+ */
+public class SettingsActivity extends Activity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_static_page);
+        setContentView(R.layout.activity_settings);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.help, menu);
+        getMenuInflater().inflate(R.menu.settings,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(HelpActivity.this, SettingsActivity.class));
+        if(id == R.id.action_help) {
+            startActivity(new Intent(SettingsActivity.this, HelpActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

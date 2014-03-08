@@ -265,6 +265,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * the lifecycle of the game.
      */
     public static interface GameStateEvents {
+
         /**
          * Fired when it is a new players turn.
          *

@@ -32,6 +32,9 @@ import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 @SuppressLint("all")
 public class MainActivity extends Activity {
     private Button offlineActivityButton;
+    private Button onlineActivityButton;
+    private Button helpActivityButton;
+    private Button settingsActivityButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,25 +43,30 @@ public class MainActivity extends Activity {
 
         //Bind Controls
         offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
+        onlineActivityButton = (Button)findViewById(R.id.onlineListActivityButton);
+        helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
+        settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
 
         //Bind Handlers
         offlineActivityButton.setOnClickListener(new OfflineActivityButtonHandler());
-
+        onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
+        helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
+        settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if(id == R.id.action_help) {
             startActivity(new Intent(MainActivity.this, HelpActivity.class));
+        } else if(id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -98,6 +106,27 @@ public class MainActivity extends Activity {
             } else { //there is no saved game, go to configuration for the offline game
                 startActivity(new Intent(MainActivity.this, OfflineConfigurationActivity.class));
             }
+        }
+    }
+
+    private class OnlineActivityButtonHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(MainActivity.this, OnlineListActivity.class));
+        }
+    }
+
+    private class HelpActivityButtonHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(MainActivity.this, HelpActivity.class));
+        }
+    }
+
+    private class SettingsActivityButtonHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         }
     }
 }

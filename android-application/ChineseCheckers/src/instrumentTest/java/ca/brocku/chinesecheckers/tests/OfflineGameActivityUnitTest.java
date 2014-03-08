@@ -3,15 +3,9 @@ package ca.brocku.chinesecheckers.tests;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.ActionProvider;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.view.SubMenu;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -301,13 +295,13 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
     }
 
     public void activityTestHelper(){
-        TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.offlineCurrentPlayerTextView);
+        TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.gamePlayerListButton);
         testHelper.TextViewTest(this,offlineCurrentPlayerTextView,true,"Red Bob");
 
-        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.offlineMoveResetButton);
+        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.gameMoveResetButton);
         testHelper.ButtonTest(this,offlineMoveResetButton,true);
 
-        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.offlineMoveDoneButton);
+        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.gameMoveDoneButton);
         testHelper.ButtonTest(this,offlineMoveDoneButton,true);
     }
 

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="ca.brocku.chinesecheckers.OfflineGameActivity$OfflineGameFragment">
 
-    <TextView
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -15,7 +15,7 @@
         android:textSize="@dimen/activity_large_text_size"
         android:singleLine="true"
         android:text="@string/waiting_title_bar"
-        android:id="@+id/offlineCurrentPlayerTextView" />
+        android:id="@+id/gamePlayerListButton" />
 
     <!--
         Uncomment next section and comment out the
@@ -30,15 +30,14 @@
         android:src="@drawable/demo_game"
         android:layout_gravity="center_horizontal"
         android:id="@+id/logo"
-        android:layout_below="@+id/offlineCurrentPlayerTextView"
-        android:layout_above="@+id/offlinePlayerControlsLayout" />
+        android:layout_below="@+id/gamePlayerListButton  android:layout_above="@+id/offlinePlayerControlsLayout" />
     -->
 
     <ca.brocku.chinesecheckers.uiengine.GameBoardUiView
         android:id="@+id/gameBoardSurface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/offlineCurrentPlayerTextView"
+        android:layout_below="@+id/gamePlayerListButton"
         android:layout_above="@+id/offlinePlayerControlsLayout" />
 
     <LinearLayout
@@ -59,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/offline_move_reset"
-            android:id="@+id/offlineMoveResetButton"/>
+            android:id="@+id/gameMoveResetButton"/>
 
         <Button
             android:padding="15dp"
@@ -72,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/offline_move_done"
-            android:id="@+id/offlineMoveDoneButton"/>
+            android:id="@+id/gameMoveDoneButton"/>
 
     </LinearLayout>
 
