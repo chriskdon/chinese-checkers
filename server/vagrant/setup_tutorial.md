@@ -2,6 +2,8 @@
 
 Vagrant will be our platform that essentially duplicates the server environment, so we can each work on our own separate instance.
 
+The framework we are using is [Play 2.2.2](www.playframework.com)
+
 **Installation**
 1. Install [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
 2. Download [Vagrant](www.vagrantup.com/downloads)
