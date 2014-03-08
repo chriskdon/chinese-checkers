@@ -12,6 +12,9 @@ Vagrant will be our platform that essentially duplicates the server environment,
 2. `vagrant up`
 3. `vagrant ssh`
 
+**How To Run The Application**
+Run `sudo play "~run 8080"` in the `server-application/ChineseCheckersServer` folder. The application should automatically reload and compile the files when you change them.
+
 **Notes**
 1. The server you run in the Vagrant VM should be running on `0.0.0.0:8080`. This will be mapped to `127.0.0.1:8080` on your local computer.
 2. The folder in the vm `/vagrant` is mapped to the folder the where `vagrant up` was ran. So the current folder.
