@@ -1,13 +1,3 @@
-HOW TO PLAY
-
--board setup
-
--moving a peg
-
--hopping pegs
-
--win conditions
-
 OFFLINE PLAY
 
 -configuration
@@ -34,3 +24,13 @@ ONLINE PLAY
 
 -timeout
 	--AI takeover
+
+HOW TO PLAY
+
+-board setup
+
+-moving a peg
+
+-hopping pegs
+
+-win conditions
