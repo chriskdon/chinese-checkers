@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -166,6 +167,20 @@ public class GameStateManager implements Parcelable, Serializable {
         if(this.gameStateEventsHandler != null) {
             this.gameStateEventsHandler.onPlayerTurn(p);
         }
+    }
+
+    public Player[] getPlayers() {
+        Player[] playerArray = new Player[getNumberOfPlayers()];
+        Iterator it = players.entrySet().iterator();
+
+        int counter = 0;
+        while(it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            playerArray[counter++] = (Player)pairs.getValue();
+            //it.remove();
+        }
+
+        return playerArray;
     }
 
     public int getNumberOfPlayers() {

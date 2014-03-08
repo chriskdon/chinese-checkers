@@ -198,9 +198,7 @@ public class OfflineGameActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
-
             rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
-
             return rootView;
         }
 
@@ -229,7 +227,6 @@ public class OfflineGameActivity extends Activity {
             doneMove.setOnClickListener(new DoneMoveHandler());
 
             gameStateManager.startGame();
-
         }
 
         private class TitleBarButtonHandler implements View.OnClickListener {
@@ -237,9 +234,9 @@ public class OfflineGameActivity extends Activity {
             public void onClick(View view) {
                 Popup playerListDialog = new Popup(getActivity());
                 playerListDialog
-                        .hideTitle(true)
+                        .setTitleText("Players")
+                        .enablePlayerList(gameStateManager.getPlayers())
                         .hideButtons(true)
-                        .setMessageText("There will be a list of players here.")
                         .show();
             }
         }
@@ -363,7 +360,6 @@ public class OfflineGameActivity extends Activity {
             @Override
             public void onPlayerTurn(Player player) {
                 setTitleBarButtonColor(player);
-                //titleBarButton.setBackgroundColor(getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL));
                 titleBarButton.setText(gameStateManager.getCurrentPlayer().getName());
             }
 

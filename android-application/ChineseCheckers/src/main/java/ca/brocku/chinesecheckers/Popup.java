@@ -2,17 +2,23 @@ package ca.brocku.chinesecheckers;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import ca.brocku.chinesecheckers.gamestate.Player;
+
 /** This dialog is used system-wide as the default dialog.
  *
  */
 public class Popup extends Dialog {
+    private Context context;
+
     private LinearLayout titleContainer;
     private TextView title;
+    private LinearLayout bodyContainer;
     private TextView message;
     private LinearLayout buttonContainer;
     private Button acceptButton;
@@ -24,15 +30,20 @@ public class Popup extends Dialog {
 
         setContentView(R.layout.fragment_dialog); //dialog layout
 
+        this.context = context;
+
         //Bind Controls
         titleContainer = (LinearLayout)findViewById(R.id.dialogTitleContainer);
         title = (TextView)findViewById(R.id.dialogTitle);
+        bodyContainer = (LinearLayout)findViewById(R.id.dialogBodyContainer);
         message = (TextView)findViewById(R.id.dialogMessage);
         buttonContainer = (LinearLayout)findViewById(R.id.dialogButtonContainer);
         acceptButton = (Button)findViewById(R.id.dialogAcceptButton);
         declineButton = (Button)findViewById(R.id.dialogCancelButton);
 
         isBackButtonDisabled = false;
+
+
     }
 
     @Override
@@ -110,9 +121,50 @@ public class Popup extends Dialog {
         return this;
     }
 
+    public Popup enablePlayerList(Player[] players) {
+        message.setVisibility(View.GONE);
+
+        View playerListView = View.inflate(context, R.layout.fragment_player_list, bodyContainer);
+
+        for(Player player : players) {
+            switch (player.getPlayerColor()) {
+                case RED:
+                    playerListView.findViewById(R.id.playerListRedContainer).setVisibility(View.VISIBLE);
+                    ((TextView)playerListView.findViewById(R.id.playerListRedTextView)).setText(player.getName());
+                    break;
+                case PURPLE:
+                    playerListView.findViewById(R.id.playerListPurpleContainer).setVisibility(View.VISIBLE);
+                    ((TextView)playerListView.findViewById(R.id.playerListPurpleTextView)).setText(player.getName());
+                    break;
+                case BLUE:
+                    playerListView.findViewById(R.id.playerListBlueContainer).setVisibility(View.VISIBLE);
+                    ((TextView)playerListView.findViewById(R.id.playerListBlueTextView)).setText(player.getName());
+                    break;
+                case GREEN:
+                    playerListView.findViewById(R.id.playerListGreenContainer).setVisibility(View.VISIBLE);
+                    ((TextView)playerListView.findViewById(R.id.playerListGreenTextView)).setText(player.getName());
+                    break;
+                case YELLOW:
+                    playerListView.findViewById(R.id.playerListYellowContainer).setVisibility(View.VISIBLE);
+                    ((TextView)playerListView.findViewById(R.id.playerListYellowTextView)).setText(player.getName());
+                    break;
+                case ORANGE:
+                    playerListView.findViewById(R.id.playerListOrangeContainer).setVisibility(View.VISIBLE);
+                    ((TextView)playerListView.findViewById(R.id.playerListOrangeTextView)).setText(player.getName());
+                    break;
+            }
+        }
+
+        return this;
+    }
+
     public Popup disableBackButton(boolean isBackButtonDisabled) {
         this.isBackButtonDisabled = isBackButtonDisabled;
         return this;
+    }
+
+    public LinearLayout getBodyContainer() {
+        return bodyContainer;
     }
 
     public Button getAcceptButton() {

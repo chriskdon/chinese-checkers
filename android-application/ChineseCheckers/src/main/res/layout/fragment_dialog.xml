@@ -16,7 +16,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
             android:textSize="@dimen/activity_xlarge_text_size"
@@ -29,11 +29,25 @@
 
     </LinearLayout>
 
-    <TextView
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:id="@+id/dialogMessage"/>
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialogMessage"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialogBodyContainer"/>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
