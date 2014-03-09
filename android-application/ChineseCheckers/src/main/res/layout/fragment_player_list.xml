@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_accept"/>
+            android:src="@drawable/ic_player_peg_red"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_accept"/>
+            android:src="@drawable/ic_player_peg_purple"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_accept"/>
+            android:src="@drawable/ic_player_peg_blue"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_accept"/>
+            android:src="@drawable/ic_player_peg_green"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_accept"/>
+            android:src="@drawable/ic_player_peg_yellow"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_accept"/>
+            android:src="@drawable/ic_player_peg_orange"/>
 
         <TextView
             android:layout_width="wrap_content"
