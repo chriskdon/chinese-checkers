@@ -136,7 +136,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -218,7 +218,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -301,7 +301,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -384,7 +384,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -466,7 +466,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -549,7 +549,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
