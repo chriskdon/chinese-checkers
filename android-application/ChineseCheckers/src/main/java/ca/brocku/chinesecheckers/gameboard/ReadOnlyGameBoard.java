@@ -135,4 +135,22 @@ public class ReadOnlyGameBoard extends GameBoard {
     public GameBoard getDeepCopy() {
         return gameBoard.getDeepCopy();
     }
+
+    /**
+     * Get the number of players
+     *
+     * @return
+     */
+    @Override
+    public int getPlayerCount() {
+        return gameBoard.getPlayerCount();
+    }
+
+    /**
+     * Reset the board to start state
+     */
+    @Override
+    public void reset() {
+        throw new UnsupportedOperationException("This board cannot be modified");
+    }
 }

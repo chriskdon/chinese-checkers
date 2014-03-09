@@ -19,6 +19,7 @@ public class CcGameBoard extends GameBoard {
      * Total number of spaces on the board
      */
     private GridPiece[][] board;
+    private int numPlayers = 0;
 
     /**
      * Construct a new board for a specified number of players.
@@ -63,6 +64,8 @@ public class CcGameBoard extends GameBoard {
         if(!Arrays.asList(2, 3, 4, 6).contains(numPlayers)) {
             throw new IllegalArgumentException("The number of players must be {2,3,4,6}.");
         }
+
+        this.numPlayers = numPlayers;
 
         board = constructBoard();
         populateNewGame(numPlayers);
@@ -787,7 +790,7 @@ public class CcGameBoard extends GameBoard {
     public GameBoard getDeepCopy() {
         Piece[] pieces = getAllPieces();
 
-        GameBoard board = new CcGameBoard(); // Empty Board
+        CcGameBoard board = new CcGameBoard(); // Empty Board
 
         // Construct board
         for(final Piece p : pieces) {
@@ -814,7 +817,28 @@ public class CcGameBoard extends GameBoard {
             });
         }
 
+        board.numPlayers = pieces.length/10;
+
         return board;
+    }
+
+    /**
+     * Get the number of players
+     *
+     * @return
+     */
+    @Override
+    public int getPlayerCount() {
+        return numPlayers;
+    }
+
+    /**
+     * Reset the board to start state
+     */
+    @Override
+    public void reset() {
+        board = constructBoard();
+        populateNewGame(getPlayerCount());
     }
 }
 

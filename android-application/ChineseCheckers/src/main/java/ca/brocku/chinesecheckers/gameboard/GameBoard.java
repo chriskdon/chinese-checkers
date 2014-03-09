@@ -106,6 +106,17 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public abstract GameBoard getDeepCopy();
 
     /**
+     * Get the number of players
+     * @return
+     */
+    public abstract int getPlayerCount();
+
+    /**
+     * Reset the board to start state
+     */
+    public abstract void reset();
+
+    /**
      * Describe the kinds of special objects contained in this Parcelable's
      * marshalled representation.
      *

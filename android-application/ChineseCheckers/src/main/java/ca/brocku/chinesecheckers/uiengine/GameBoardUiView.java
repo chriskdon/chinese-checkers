@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
@@ -97,7 +99,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         if(init != null) {
             // Draw light home pieces
-            for(Piece p : init.getAllPieces()) {
+            GameBoard temp = init.getDeepCopy();
+            temp.reset();
+            for(Piece p : temp.getAllPieces()) {
                 gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.LIGHT)));
             }
 
