@@ -2,32 +2,21 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Parcel;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 
-import java.net.NoRouteToHostException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.Move;
+import ca.brocku.chinesecheckers.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -207,7 +196,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         currentRotation = (currentRotation + degrees)%360;
 
-        Log.e("ROTATION", String.valueOf(currentRotation));
+        // Log.e("ROTATION", String.valueOf(currentRotation));
 
         Canvas c = this.surfaceHolder.lockCanvas();
 
@@ -249,11 +238,11 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * <p/>
      * Return a piece back to it's original position.
      *
-     * @param move       The piece and path taken.
+     * @param movePath       The piece and path taken.
      * @param onFinished Callback to fire when the animation has completed.
      */
     @Override
-    public void cancelMove(Move move, FinishedMovingPieceHandler onFinished) {
+    public void cancelMove(MovePath movePath, FinishedMovingPieceHandler onFinished) {
 
     }
 

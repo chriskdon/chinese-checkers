@@ -78,7 +78,7 @@ public class PieceVisual extends Visual {
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.e("X- & Y-Center & Radius", getCenterX() + " " + getCenterY() + " " + pieceDrawingDetails.getRadius());
+        //Log.e("X- & Y-Center & Radius", getCenterX() + " " + getCenterY() + " " + pieceDrawingDetails.getRadius());
         canvas.drawCircle(getCenterX(), getCenterY(), pieceDrawingDetails.getRadius(), paint);
     }
 

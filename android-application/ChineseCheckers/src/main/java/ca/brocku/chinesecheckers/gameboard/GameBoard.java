@@ -42,7 +42,7 @@ public abstract class GameBoard implements Parcelable, Serializable {
     }
 
     /**
-     * Move a piece from one position to another.
+     * MovePath a piece from one position to another.
      *
      * @param piece The piece to move.
      * @param to    The new position of the piece.
@@ -94,11 +94,11 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public abstract boolean isValidMove(Piece piece, Position to);
 
     /**
-     * Moves a piece without validaing mvoe.
-     * @param piece
-     * @param to
+     * Add a piece to the board.
+     *
+     * @param p
      */
-    public abstract void forceMove(Piece piece, Position to);
+    public abstract void addPiece(Piece p);
 
     /**
      * Describe the kinds of special objects contained in this Parcelable's

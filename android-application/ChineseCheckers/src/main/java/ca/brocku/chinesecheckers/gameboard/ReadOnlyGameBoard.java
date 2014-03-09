@@ -17,7 +17,7 @@ public class ReadOnlyGameBoard extends GameBoard {
     }
 
     /**
-     * Move a piece from one position to another.
+     * MovePath a piece from one position to another.
      *
      * @param piece The piece to move.
      * @param to    The new position of the piece.
@@ -117,13 +117,50 @@ public class ReadOnlyGameBoard extends GameBoard {
     }
 
     /**
-     * Moves a piece without validaing mvoe.
+     * Add a piece to the board.
      *
-     * @param piece
-     * @param to
+     * @param p
      */
     @Override
-    public void forceMove(Piece piece, Position to) {
-        throw new UnsupportedOperationException();
+    public void addPiece(Piece p) {
+        throw new UnsupportedOperationException("You can not add a piece to a Read-Only board.");
+    }
+
+    /**
+     * Create a deep copy of the game board that can be modified.
+     *
+     * @return
+     */
+    public GameBoard getModifiableCopy() {
+        Piece[] pieces = getAllPieces();
+
+        GameBoard board = new CcGameBoard(); // Empty Board
+
+        // Construct board
+        for(final Piece p : pieces) {
+            board.addPiece(new Piece() {
+                @Override
+                public Position getPosition() {
+                    return p.getPosition();
+                }
+
+                @Override
+                public int getPlayerNumber() {
+                    return p.getPlayerNumber();
+                }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel parcel, int i) {
+
+                }
+            });
+        }
+
+        return board;
     }
 }

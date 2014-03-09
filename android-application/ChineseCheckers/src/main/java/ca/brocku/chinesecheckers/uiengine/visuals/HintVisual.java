@@ -22,6 +22,7 @@ public class HintVisual extends PieceVisual {
         super(pieceDrawingDetails, color);
 
         paint.setStyle(Paint.Style.STROKE);
+        paint.setAntiAlias(true);
         paint.setStrokeWidth(strokeWidth);
     }
 

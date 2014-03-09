@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,13 +21,12 @@ import java.io.ObjectOutputStream;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
-import ca.brocku.chinesecheckers.gamestate.Move;
+import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
+import ca.brocku.chinesecheckers.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
-
-import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.ColorSate;
-import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.getPlayerColor;
 
 @SuppressLint("All")
 public class OfflineGameActivity extends Activity {
@@ -189,11 +187,26 @@ public class OfflineGameActivity extends Activity {
         private Button doneMove;
         private View rootView;
         private Button titleBarButton;
-        private boolean moved = false;
-        private Position[] hints;
-        private Piece currentTouched;
 
-        private Position start;
+        // Things for a human players turn
+        private MovePath movePath;
+        private Piece currentPiece;
+        private Player currentPlayer;
+        private GameBoard board = null;
+        private Position[] possibleMoves;
+        private boolean madeMove = false;
+
+        /**
+         * Get a modifiable version of the current game board.
+         * @return
+         */
+        private GameBoard getModifiableBoard() {
+            if(board == null) {
+                board = gameStateManager.getGameBoard().getModifiableCopy();
+            }
+
+            return board;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater,
@@ -229,6 +242,52 @@ public class OfflineGameActivity extends Activity {
             gameStateManager.startGame();
         }
 
+        /**
+         * Is the current player who's turn it is a Human.
+         * @return  True if the turn is for a human.
+         */
+        private boolean isHumanTurn() {
+            return (currentPlayer != null && currentPlayer instanceof HumanPlayer);
+        }
+
+        /** This is a getter method for the fragment's GameStateManager
+         *
+         * @return the GameStateManager
+         */
+        public GameStateManager getGameStateManager() {
+            return gameStateManager;
+        }
+
+        /**
+         * Set the color for the title bar based on the player.
+         * @param player    The The player who's turn it is.
+         */
+        private void setTitleBarButtonColor(Player player) {
+            switch (player.getPlayerColor()) {
+                case RED:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_red);
+                    break;
+                case PURPLE:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_purple);
+                    break;
+                case BLUE:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_blue);
+                    break;
+                case GREEN:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_green);
+                    break;
+                case YELLOW:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_yellow);
+                    break;
+                case ORANGE:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_orange);
+                    break;
+            }
+        }
+
+        /**
+         * Handle the user clicking the title bar.
+         */
         private class TitleBarButtonHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
@@ -241,32 +300,28 @@ public class OfflineGameActivity extends Activity {
             }
         }
 
+        /**
+         * Handler the user clicking the reset button.
+         */
         private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                if(start != null) {
-                    gameStateManager.resetPiece(currentTouched, start);
-                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                }
-
-                currentTouched = null;
-                start = null;
-                moved = false;
-
+                resetHumanState();
+                boardUiEngine.drawBoard(gameStateManager.getGameBoard());
                 boardUiEngine.showHintPositions(null);
                 boardUiEngine.highlightPiece(null);
             }
         }
 
+        /**
+         * Handle the user clicking the done button.
+         */
         private class DoneMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                moved = false;
-                currentTouched = null;
-                hints = null;
-
-                boardUiEngine.showHintPositions(null);
-                boardUiEngine.highlightPiece(null);
+                ((HumanPlayer)currentPlayer)
+                        .getPlayerTurnState()
+                        .signalMove(currentPlayer, movePath);
 
                 //rotate the board an amount depending on num players
                 int degreesToRotate = 0;
@@ -294,57 +349,57 @@ public class OfflineGameActivity extends Activity {
                         break;
                 }
 
-                //boardUiEngine.rotateBoard(degreesToRotate, null);
-                gameStateManager.nextPlayer();
+                resetHumanState();
+                boardUiEngine.drawBoard(gameStateManager.getGameBoard());
+                boardUiEngine.showHintPositions(null);
+                boardUiEngine.highlightPiece(null);
             }
+        }
+
+        private void resetHumanState() {
+            currentPiece = null;
+            board = null;
+            possibleMoves = null;
+            madeMove = false;
+            movePath = null;
         }
 
         /**
          * Handle the position be touched, and what to display when the user touches it.
          */
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
-
-
             @Override
             public void positionTouched(final Position position) {
-                GameBoard board = gameStateManager.getGameBoard();
-                Piece piece = board.getPiece(position);
+                if (isHumanTurn()) {
+                    GameBoard board = getModifiableBoard();
+                    Piece piece = board.getPiece(position);
 
-                // Did they touch their own piece.
-                if(!moved) {
-                    if(piece != null && Player.getPlayerColor(piece.getPlayerNumber()) == gameStateManager.getCurrentPlayer().getPlayerColor()) {
-                        if(currentTouched == null || !currentTouched.getPosition().equals(position)) {
-                            currentTouched = piece;
-                            hints = board.getPossibleMoves(piece);
-                            start = piece.getPosition();
-                        }
-                    } else if(piece == null) {
-                        // Did the player click a hint
-                        if(hints != null) {
-                            for(Position h : hints) {
-                                if(h.equals(position)) {
-                                    gameStateManager.movePiece(currentTouched, position);       // Move board
-                                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                                    moved = true;
-
-                                    Position[] hops = gameStateManager.getGameBoard().getPossibleHops(currentTouched);
-                                    if(hops != null) {
-                                        hints = hops;
-                                        boardUiEngine.showHintPositions(hops);
-                                        moved = false;
-                                    } else {
-                                        hints = null;
-                                    }
-
-                                    break;
-                                }
+                    if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
+                        for(Position p : possibleMoves) {
+                            if(position.equals(p)) { // User Clicked a valid piece
+                                board.movePiece(currentPiece, p);
+                                currentPiece = board.getPiece(p);
+                                possibleMoves = board.getPossibleHops(currentPiece);
+                                movePath.addToPath(p);
+                                madeMove = true;
                             }
                         }
+                    } else if(piece != null && piece.getPlayerNumber() != currentPlayer.getPlayerNumber()) { // Didn't select a valid piece
+                        resetHumanState();
+                    } else if(piece != null && !madeMove) { // Selecting first valid piece
+                        resetHumanState();
+                        currentPiece = piece;
+                        possibleMoves = board.getPossibleMoves(currentPiece);
+                        movePath = new MovePath(new Position(piece.getPosition().getRow(), piece.getPosition().getIndex()));
+                    } else if(!madeMove) {
+                        resetHumanState();
                     }
-                }
 
-                boardUiEngine.highlightPiece(currentTouched);
-                boardUiEngine.showHintPositions(hints);
+                    // Update Drawing
+                    boardUiEngine.drawBoard(new ReadOnlyGameBoard(board));
+                    boardUiEngine.highlightPiece(currentPiece);
+                    boardUiEngine.showHintPositions(possibleMoves);
+                }
             }
         }
 
@@ -359,6 +414,7 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public void onPlayerTurn(Player player) {
+                currentPlayer = player;
                 setTitleBarButtonColor(player);
                 titleBarButton.setText(gameStateManager.getCurrentPlayer().getName());
             }
@@ -366,18 +422,18 @@ public class OfflineGameActivity extends Activity {
             /**
              * Fired when a piece on the board is moved from one position to another.
              *
-             * @param player The player who made the move.
-             * @param move   The path describing the move.
+             * @param player The player who made the movePath.
+             * @param movePath   The path describing the movePath.
              */
             @Override
-            public void onPieceMoved(Player player, Move move) {
+            public void onPieceMoved(Player player, MovePath movePath) {
 
             }
 
             /**
              * Occurs when a player forfeit the game.
              * <p/>
-             * TODO: Is this just because they quit, or could this be a result of them taking to long to make a move and being kicked out.
+             * TODO: Is this just because they quit, or could this be a result of them taking to long to make a movePath and being kicked out.
              *
              * @param player The player who forfeited.
              */
@@ -397,53 +453,5 @@ public class OfflineGameActivity extends Activity {
                 ((OfflineGameActivity)getActivity()).onEndGame(player);
             }
         }
-
-        /** This is a getter method for the fragment's GameStateManager
-         *
-         * @return the GameStateManager
-         */
-        public GameStateManager getGameStateManager() {
-            return gameStateManager;
-        }
-
-        /** This is a setter method for the GameStateManager
-         *
-         */
-        public void setGameStateManager(GameStateManager gameStateManager) {
-            this.gameStateManager = gameStateManager;
-        }
-
-        /** This is a getter method for the fragment's BoardUiEngine
-         *
-         * @return  the UI Engine
-         */
-        public void setBoardUiEngine(BoardUiEngine boardUiEngine) {
-            this.boardUiEngine = boardUiEngine;
-        }
-
-        private void setTitleBarButtonColor(Player player) {
-            switch (player.getPlayerColor()) {
-                    case RED:
-                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_red);
-                        break;
-                    case PURPLE:
-                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_purple);
-                        break;
-                    case BLUE:
-                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_blue);
-                        break;
-                    case GREEN:
-                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_green);
-                        break;
-                    case YELLOW:
-                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_yellow);
-                        break;
-                    case ORANGE:
-                        titleBarButton.setBackgroundResource(R.drawable.chch_button_square_orange);
-                        break;
-                }
-        }
-
     }
-
 }
