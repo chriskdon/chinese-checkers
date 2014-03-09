@@ -12,6 +12,8 @@ import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
  * Date: 2/22/2014
  */
 public class HintVisual extends PieceVisual {
+    private float strokeWidth;
+
     /**
      * Create a new hint.
      * @param pieceDrawingDetails   Details for drawing the hint at a piece location.
@@ -20,6 +22,8 @@ public class HintVisual extends PieceVisual {
      */
     public HintVisual(PieceDrawingDetails pieceDrawingDetails, int color, float strokeWidth) {
         super(pieceDrawingDetails, color);
+
+        this.strokeWidth = strokeWidth;
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
@@ -33,6 +37,6 @@ public class HintVisual extends PieceVisual {
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(getCenterX(), getCenterY(), getRadius(), paint);
+        canvas.drawCircle(getCenterX(), getCenterY(), getRadius() - (strokeWidth/2), paint);
     }
 }
