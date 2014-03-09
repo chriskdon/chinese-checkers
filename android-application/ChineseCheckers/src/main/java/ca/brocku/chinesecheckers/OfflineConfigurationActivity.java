@@ -307,11 +307,10 @@ public class OfflineConfigurationActivity extends Activity {
                     orangePlayerEditText.setText("AI Robber");
                 //TODO: END TEMP CODE
 
-                if(redPlayerNameContainer.getVisibility() == View.VISIBLE) {
+                if(redPlayerNameContainer.getVisibility() == View.VISIBLE && redPlayerTypeButton.getTag().equals("human")) {
                     players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
                 }
-                //required? "redPlayerNameContainer.getVisibility() ==  VISIBLE &&"
-                else if(redPlayerTypeButton.getTag().equals("robot")){
+                else if(redPlayerNameContainer.getVisibility() ==  View.VISIBLE && redPlayerTypeButton.getTag().equals("robot")){
                     if(redPlayerEasyButton.isChecked())
                         players.add(new AIPlayer("EASY", Player.PlayerColor.RED, 1));
                     if(redPlayerMediumButton.isChecked())
@@ -320,11 +319,10 @@ public class OfflineConfigurationActivity extends Activity {
                         players.add(new AIPlayer("HARD", Player.PlayerColor.RED, 1));
                 }
 
-                if(purplePlayerNameContainer.getVisibility() == View.VISIBLE) {
+                if(purplePlayerNameContainer.getVisibility() == View.VISIBLE && purplePlayerTypeButton.getTag().equals("human")) {
                     players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
                 }
-                //required? "purplePlayerNameContainer.getVisibility() ==  VISIBLE &&"
-                else if( purplePlayerTypeButton.getTag().equals("robot")) {
+                else if(purplePlayerNameContainer.getVisibility() ==  View.VISIBLE && purplePlayerTypeButton.getTag().equals("robot")) {
                     if (purplePlayerEasyButton.isChecked())
                         players.add(new AIPlayer("EASY", Player.PlayerColor.PURPLE, 2));
                     if (purplePlayerMediumButton.isChecked())
@@ -332,11 +330,10 @@ public class OfflineConfigurationActivity extends Activity {
                     if (purplePlayerHardButton.isChecked())
                         players.add(new AIPlayer("HARD", Player.PlayerColor.PURPLE, 2));
                 }
-                if(bluePlayerNameContainer.getVisibility() == View.VISIBLE) {
+                if(bluePlayerNameContainer.getVisibility() == View.VISIBLE && bluePlayerTypeButton.getTag().equals("human")) {
                     players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
                 }
-                //required? "bluePlayerNameContainer.getVisibility() ==  VISIBLE &&"
-                else if(bluePlayerTypeButton.getTag().equals("robot")) {
+                else if(bluePlayerNameContainer.getVisibility() ==  View.VISIBLE && bluePlayerTypeButton.getTag().equals("robot")) {
                     if (bluePlayerEasyButton.isChecked())
                         players.add(new AIPlayer("EASY", Player.PlayerColor.BLUE, 3));
                     if (bluePlayerMediumButton.isChecked())
@@ -344,11 +341,10 @@ public class OfflineConfigurationActivity extends Activity {
                     if (bluePlayerHardButton.isChecked())
                         players.add(new AIPlayer("HARD", Player.PlayerColor.BLUE, 3));
                 }
-                if(greenPlayerNameContainer.getVisibility() == View.VISIBLE) {
+                if(greenPlayerNameContainer.getVisibility() == View.VISIBLE && greenPlayerTypeButton.getTag().equals("human")) {
                     players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
                 }
-                //required? "greenPlayerNameContainer.getVisibility() ==  VISIBLE &&"
-                else if(greenPlayerTypeButton.getTag().equals("robot")) {
+                else if(greenPlayerNameContainer.getVisibility() ==  View.VISIBLE && greenPlayerTypeButton.getTag().equals("robot")) {
                     if (greenPlayerEasyButton.isChecked())
                         players.add(new AIPlayer("EASY", Player.PlayerColor.GREEN, 4));
                     if (greenPlayerMediumButton.isChecked())
@@ -356,11 +352,10 @@ public class OfflineConfigurationActivity extends Activity {
                     if (greenPlayerHardButton.isChecked())
                         players.add(new AIPlayer("HARD", Player.PlayerColor.GREEN, 4));
                 }
-                if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE) {
+                if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE && yellowPlayerTypeButton.getTag().equals("human")) {
                     players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
                 }
-                //required? "yellowPlayerNameContainer.getVisibility() ==  VISIBLE &&"
-                else if(yellowPlayerTypeButton.getTag().equals("robot")) {
+                else if(yellowPlayerNameContainer.getVisibility() ==  View.VISIBLE && yellowPlayerTypeButton.getTag().equals("robot")) {
                     if (redPlayerEasyButton.isChecked())
                         players.add(new AIPlayer("EASY", Player.PlayerColor.YELLOW, 5));
                     if (yellowPlayerMediumButton.isChecked())
@@ -368,11 +363,10 @@ public class OfflineConfigurationActivity extends Activity {
                     if (yellowPlayerHardButton.isChecked())
                         players.add(new AIPlayer("HARD", Player.PlayerColor.YELLOW, 5));
                 }
-                if(orangePlayerNameContainer.getVisibility() == View.VISIBLE) {
+                if(orangePlayerNameContainer.getVisibility() == View.VISIBLE && orangePlayerTypeButton.getTag().equals("human")) {
                     players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
                 }
-                //required? "orangePlayerNameContainer.getVisibility() ==  VISIBLE &&"
-                else if(orangePlayerTypeButton.getTag().equals("robot")) {
+                else if(orangePlayerNameContainer.getVisibility() ==  View.VISIBLE && orangePlayerTypeButton.getTag().equals("robot")) {
                     if (orangePlayerEasyButton.isChecked())
                         players.add(new AIPlayer("EASY", Player.PlayerColor.ORANGE, 6));
                     if (orangePlayerMediumButton.isChecked())
