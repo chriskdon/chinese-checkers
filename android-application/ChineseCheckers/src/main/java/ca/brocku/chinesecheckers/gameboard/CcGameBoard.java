@@ -18,7 +18,8 @@ public class CcGameBoard extends GameBoard {
     /**
      * Total number of spaces on the board
      */
-    private Piece[][] board;
+    private GridPiece[][] board;
+    private int numPlayers = 0;
 
     /**
      * Construct a new board for a specified number of players.
@@ -40,7 +41,17 @@ public class CcGameBoard extends GameBoard {
      * Constructs an empty board, used for testing purposes
      */
     public CcGameBoard() {
-        board=constructBoard();
+        board = constructBoard();
+    }
+
+    /**
+     * Add a piece to the board.
+     *
+     * @param p
+     */
+    @Override
+    public void addPiece(Piece p) {
+        setPiece(p.getPosition(), p.getPlayerNumber());
     }
 
     /**
@@ -53,6 +64,8 @@ public class CcGameBoard extends GameBoard {
         if(!Arrays.asList(2, 3, 4, 6).contains(numPlayers)) {
             throw new IllegalArgumentException("The number of players must be {2,3,4,6}.");
         }
+
+        this.numPlayers = numPlayers;
 
         board = constructBoard();
         populateNewGame(numPlayers);
@@ -79,12 +92,12 @@ public class CcGameBoard extends GameBoard {
      * @param parcel    The parcel to build from.
      */
     private CcGameBoard(Parcel parcel) {
-        Parcelable[] single = parcel.readParcelableArray(Piece[].class.getClassLoader());
+        Parcelable[] single = parcel.readParcelableArray(GridPiece[].class.getClassLoader());
 
         // Get board back
         if (single != null) {
             board = constructBoard();
-            Piece[] singleBoard = Arrays.copyOf(single, single.length, Piece[].class);
+            GridPiece[] singleBoard = Arrays.copyOf(single, single.length, GridPiece[].class);
 
             int i = 0;
             for(int row = 0; row < ROW_POSITION_COUNT.length; row++) {
@@ -159,7 +172,7 @@ public class CcGameBoard extends GameBoard {
                 for(int j=0; j<i+1; j++) {
                     k = getOffsetRow(start, i);
                     h = getOffsetIndex(start, j);
-                    setPiece(new GridPosition(k, h), playerList[x]);
+                    setPiece(new Position(k, h), playerList[x]);
                 }
             }
         }
@@ -217,10 +230,10 @@ public class CcGameBoard extends GameBoard {
      *
      * @return  A ragged two dimensional Piece array representing a chinese checkers board
      */
-    private Piece[][] constructBoard() {
-        Piece[][] board = new Piece[17][];
+    private GridPiece[][] constructBoard() {
+        GridPiece[][] board = new GridPiece[17][];
         for(int i=0; i<board.length;i++) {
-            board[i] = new Piece[ROW_POSITION_COUNT[i]];
+            board[i] = new GridPiece[ROW_POSITION_COUNT[i]];
         }
         return board;
     }
@@ -243,7 +256,7 @@ public class CcGameBoard extends GameBoard {
         return allPieces.toArray(new Piece[allPieces.size()]);
     }
     /**
-     * Move a piece from one position to another. Prints a statement if the move is invalid for any
+     * MovePath a piece from one position to another. Prints a statement if the move is invalid for any
      * reason.
      *
      * @param piece The piece to move.
@@ -252,7 +265,7 @@ public class CcGameBoard extends GameBoard {
     @Override
     public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
-            forceMove(piece, to);
+            forceMove((GridPiece)getPiece(piece.getPosition()), to);
             this.checkWinCondition(piece.getPlayerNumber());
         }
         else{
@@ -266,11 +279,10 @@ public class CcGameBoard extends GameBoard {
      * @param piece Piece to be moved
      * @param to Location that the piece is moving to
      */
-    @Override
-    public void forceMove(Piece piece, Position to) {
+    private void forceMove(GridPiece piece, Position to) {
         int oldRow = piece.getPosition().getRow();
         int oldIndex = piece.getPosition().getIndex();
-        ((GridPiece) piece).setPosition(to);
+        piece.setPosition(to);
         board[oldRow][oldIndex] = null;
         board[piece.getPosition().getRow()][piece.getPosition().getIndex()] = piece;
     }
@@ -323,78 +335,78 @@ public class CcGameBoard extends GameBoard {
      */
     @Override
     public Position[] getPossibleMoves(Piece forPiece) {
-        Position[] possibleMoves = new GridPosition[14];
+        Position[] possibleMoves = new Position[14];
         int row = forPiece.getPosition().getRow();
         int index = forPiece.getPosition().getIndex();
         int posindex = 0;
         { // immediateNeighbours
             if (row>12 || (row>3 && row<8)) { // if y is between 4 and 8 and greater than 12
                 if(row==4) {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index-5));
+                    possibleMoves[posindex] = checkPosition(new Position(row-1, index-5));
                     posindex=posindex+1;
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index-5+1));
+                    possibleMoves[posindex] = checkPosition(new Position(row-1, index-5+1));
                     posindex=posindex+1;
                 }
                 else if(row==13) {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index+4));
+                    possibleMoves[posindex] = checkPosition(new Position(row-1, index+4));
                     posindex=posindex+1;
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index+4+1));
+                    possibleMoves[posindex] = checkPosition(new Position(row-1, index+4+1));
                     posindex=posindex+1;
                 }
                 else {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index));
+                    possibleMoves[posindex] = checkPosition(new Position(row-1, index));
                     posindex=posindex+1;
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index+1));
+                    possibleMoves[posindex] = checkPosition(new Position(row-1, index+1));
                     posindex=posindex+1;
                 }
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index-1));
+                possibleMoves[posindex] = checkPosition(new Position(row, index-1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index+1));
+                possibleMoves[posindex] = checkPosition(new Position(row, index+1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index-1));
+                possibleMoves[posindex] = checkPosition(new Position(row+1, index-1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index));
+                possibleMoves[posindex] = checkPosition(new Position(row+1, index));
                 posindex=posindex+1;
             }
             else if (row==8) { // dead middle of the board
-                possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index));
+                possibleMoves[posindex] = checkPosition(new Position(row-1, index));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index+1));
+                possibleMoves[posindex] = checkPosition(new Position(row-1, index+1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index-1));
+                possibleMoves[posindex] = checkPosition(new Position(row, index-1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index+1));
+                possibleMoves[posindex] = checkPosition(new Position(row, index+1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index));
+                possibleMoves[posindex] = checkPosition(new Position(row+1, index));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index+1));
+                possibleMoves[posindex] = checkPosition(new Position(row+1, index+1));
                 posindex=posindex+1;
             }
             else { // if y is between 9 and 11 or less than 4
-                possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index-1));
+                possibleMoves[posindex] = checkPosition(new Position(row-1, index-1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row-1, index));
+                possibleMoves[posindex] = checkPosition(new Position(row-1, index));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index-1));
+                possibleMoves[posindex] = checkPosition(new Position(row, index-1));
                 posindex=posindex+1;
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index+1));
+                possibleMoves[posindex] = checkPosition(new Position(row, index+1));
                 posindex=posindex+1;
                 if(row==3) {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index+4));
+                    possibleMoves[posindex] = checkPosition(new Position(row+1, index+4));
                     posindex=posindex+1;
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index+4+1));
+                    possibleMoves[posindex] = checkPosition(new Position(row+1, index+4+1));
                     posindex=posindex+1;
                 }
                 else if(row==12) {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index-5));
+                    possibleMoves[posindex] = checkPosition(new Position(row+1, index-5));
                     posindex=posindex+1;
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index-5+1));
+                    possibleMoves[posindex] = checkPosition(new Position(row+1, index-5+1));
                     posindex=posindex+1;
                 }
                 else {
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index));
+                    possibleMoves[posindex] = checkPosition(new Position(row+1, index));
                     posindex=posindex+1;
-                    possibleMoves[posindex] = checkPosition(new GridPosition(row+1, index+1));
+                    possibleMoves[posindex] = checkPosition(new Position(row+1, index+1));
                     posindex=posindex+1;
                 }
             }
@@ -402,46 +414,46 @@ public class CcGameBoard extends GameBoard {
         {
             if (row>10 || (row>3 && row<8)) { // if y is between 4 and 8 and greater than 10
                 if(row==11) {
-                    if(isOccupied(new GridPosition(row+1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-5));
+                    if(isOccupied(new Position(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index-5));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==12) {
-                    if(isOccupied(new GridPosition(row+1, index-4))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-6));
+                    if(isOccupied(new Position(row+1, index-4))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index-6));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==7) {
-                    if(isOccupied(new GridPosition(row+1, index-1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-1));
+                    if(isOccupied(new Position(row+1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index-1));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row+1, index-1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-2));
+                    if(isOccupied(new Position(row+1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index-2));
                         posindex=posindex+1;
                     }
                 }
             }
             else { // if y is between 9 and 10 or less than 4
                 if(row==3) {
-                    if(isOccupied(new GridPosition(row+1, index+4))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+3));
+                    if(isOccupied(new Position(row+1, index+4))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index+3));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==2) {
-                    if(isOccupied(new GridPosition(row+1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+4));
+                    if(isOccupied(new Position(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index+4));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row+1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index));
+                    if(isOccupied(new Position(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index));
                         posindex=posindex+1;
                     }
                 }
@@ -450,46 +462,46 @@ public class CcGameBoard extends GameBoard {
         { // down right
             if (row>10 || (row>3 && row<8)) { // if row is between 4 and 8 and greater than 10
                 if(row==11) {
-                    if(isOccupied(new GridPosition(row+1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-3));
+                    if(isOccupied(new Position(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index-3));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==12) {
-                    if(isOccupied(new GridPosition(row+1, index-4))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index-4));
+                    if(isOccupied(new Position(row+1, index-4))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index-4));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==7) {
-                    if(isOccupied(new GridPosition(row+1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+1));
+                    if(isOccupied(new Position(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index+1));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row+1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index));
+                    if(isOccupied(new Position(row+1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index));
                         posindex=posindex+1;
                     }
                 }
             }
             else { // if row is between 9 and 10 or less than 4
                 if(row==2) {
-                    if(isOccupied(new GridPosition(row+1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+6));
+                    if(isOccupied(new Position(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index+6));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==3) {
-                    if(isOccupied(new GridPosition(row+1, index+5))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+5));
+                    if(isOccupied(new Position(row+1, index+5))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index+5));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row+1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row+2, index+2));
+                    if(isOccupied(new Position(row+1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row+2, index+2));
                         posindex=posindex+1;
                     }
                 }
@@ -498,46 +510,46 @@ public class CcGameBoard extends GameBoard {
         { // upperLeft
             if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
                 if(row==14) {
-                    if(isOccupied(new GridPosition(row-1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+4));
+                    if(isOccupied(new Position(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index+4));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==13) {
-                    if(isOccupied(new GridPosition(row-1, index+4))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+3));
+                    if(isOccupied(new Position(row-1, index+4))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index+3));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row-1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index));
+                    if(isOccupied(new Position(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index));
                         posindex=posindex+1;
                     }
                 }
             }
             else { // if row is between 9 and 10 or less than 4
                 if(row==4) {
-                    if(isOccupied(new GridPosition(row-1, index-5))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-6));
+                    if(isOccupied(new Position(row-1, index-5))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index-6));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==9) {
-                    if(isOccupied(new GridPosition(row-1, index-1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-1));
+                    if(isOccupied(new Position(row-1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index-1));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==5) {
-                    if(isOccupied(new GridPosition(row-1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-5));
+                    if(isOccupied(new Position(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index-5));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row-1, index-1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-2));
+                    if(isOccupied(new Position(row-1, index-1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index-2));
                         posindex=posindex+1;
                     }
                 }
@@ -546,58 +558,58 @@ public class CcGameBoard extends GameBoard {
         { // upperRight
             if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
                 if(row==14) {
-                    if(isOccupied(new GridPosition(row-1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+6));
+                    if(isOccupied(new Position(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index+6));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==13) {
-                    if(isOccupied(new GridPosition(row-1, index+5))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+5));
+                    if(isOccupied(new Position(row-1, index+5))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index+5));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row-1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+2));
+                    if(isOccupied(new Position(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index+2));
                         posindex=posindex+1;
                     }
                 }
             }
             else { // if row is between 9 and 10 or less than 4
                 if(row==4) {
-                    if(isOccupied(new GridPosition(row-1, index-4))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-4));
+                    if(isOccupied(new Position(row-1, index-4))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index-4));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==9) {
-                    if(isOccupied(new GridPosition(row-1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index+1));
+                    if(isOccupied(new Position(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index+1));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==5) {
-                    if(isOccupied(new GridPosition(row-1, index+1))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index-3));
+                    if(isOccupied(new Position(row-1, index+1))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index-3));
                         posindex=posindex+1;
                     }
                 }
                 else {
-                    if(isOccupied(new GridPosition(row-1, index))) {
-                        possibleMoves[posindex] = checkPosition(new GridPosition(row-2, index));
+                    if(isOccupied(new Position(row-1, index))) {
+                        possibleMoves[posindex] = checkPosition(new Position(row-2, index));
                         posindex=posindex+1;
                     }
                 }
             }
         } // end upperRight
         { // leftAndRight
-            if(isOccupied(new GridPosition(row, index-1))) {
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index-2));
+            if(isOccupied(new Position(row, index-1))) {
+                possibleMoves[posindex] = checkPosition(new Position(row, index-2));
                 posindex=posindex+1;
             }
-            if(isOccupied(new GridPosition(row, index+1))) {
-                possibleMoves[posindex] = checkPosition(new GridPosition(row, index+2));
+            if(isOccupied(new Position(row, index+1))) {
+                possibleMoves[posindex] = checkPosition(new Position(row, index+2));
             }
         } // end leftAndRight
 
@@ -656,9 +668,9 @@ public class CcGameBoard extends GameBoard {
     @Override
     public boolean isValidMove(Piece piece, Position to) {
         Position[] possibleMoves = getPossibleMoves(piece);
-        for(int i=0; i<possibleMoves.length; i++) {
-            if (possibleMoves[i]!=null) {
-                if(possibleMoves[i].getRow() == to.getRow() && possibleMoves[i].getIndex() == to.getIndex()) {
+        for(int i = 0; i < possibleMoves.length; i++) {
+            if (possibleMoves[i] != null) {
+                if(possibleMoves[i].equals(to)) {
                     return true;
                 }
             }
@@ -767,6 +779,66 @@ public class CcGameBoard extends GameBoard {
             throw new IllegalArgumentException("The number of players provided is not 2,3,4,or 6");
         }
 
+    }
+
+    /**
+     * Create a deep copy of the game board that can be modified.
+     *
+     * @return
+     */
+    @Override
+    public GameBoard getDeepCopy() {
+        Piece[] pieces = getAllPieces();
+
+        CcGameBoard board = new CcGameBoard(); // Empty Board
+
+        // Construct board
+        for(final Piece p : pieces) {
+            board.addPiece(new Piece() {
+                @Override
+                public Position getPosition() {
+                    return p.getPosition();
+                }
+
+                @Override
+                public int getPlayerNumber() {
+                    return p.getPlayerNumber();
+                }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel parcel, int i) {
+
+                }
+            });
+        }
+
+        board.numPlayers = pieces.length/10;
+
+        return board;
+    }
+
+    /**
+     * Get the number of players
+     *
+     * @return
+     */
+    @Override
+    public int getPlayerCount() {
+        return numPlayers;
+    }
+
+    /**
+     * Reset the board to start state
+     */
+    @Override
+    public void reset() {
+        board = constructBoard();
+        populateNewGame(getPlayerCount());
     }
 }
 

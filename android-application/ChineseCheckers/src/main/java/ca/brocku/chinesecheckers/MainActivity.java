@@ -2,10 +2,8 @@ package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,12 +12,7 @@ import android.widget.Button;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.OptionalDataException;
-import java.io.StreamCorruptedException;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 
@@ -95,7 +88,7 @@ public class MainActivity extends Activity {
 
                     //Bundle information and start the OfflineGameActivity
                     Intent intent = new Intent(MainActivity.this, OfflineGameActivity.class);
-                    intent.putExtra("GAME_STATE_MANAGER", (Parcelable)gameStateManager); //Store GameStateManager
+                    intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
                     intent.putExtra("SAVED_GAME", true); //Store flag that this is a saved game
                     startActivity(intent);
 
