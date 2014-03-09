@@ -307,10 +307,12 @@ public class OfflineGameActivity extends Activity {
         private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                resetHumanState();
-                boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                boardUiEngine.showHintPositions(null);
-                boardUiEngine.highlightPiece(null);
+                if(isHumanTurn()) { // It must be a humans turn
+                    resetHumanState();
+                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
+                    boardUiEngine.showHintPositions(null);
+                    boardUiEngine.highlightPiece(null);
+                }
             }
         }
 
@@ -320,20 +322,22 @@ public class OfflineGameActivity extends Activity {
         private class DoneMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                if(movePath.size() < 2) {
-                    // TODO: REPLACE THIS WITH A REAL MESSAGE
-                    Toast.makeText(getActivity(), "Make a move.", Toast.LENGTH_SHORT).show();
-                    return;
+                if(isHumanTurn()) { // Not a humans turn
+                    if(movePath.size() < 2) {
+                        // TODO: REPLACE THIS WITH A REAL MESSAGE
+                        Toast.makeText(getActivity(), "Make a move.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    ((HumanPlayer)currentPlayer)
+                            .getPlayerTurnState()
+                            .signalMove(currentPlayer, movePath);
+
+                    resetHumanState();
+                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
+                    boardUiEngine.showHintPositions(null);
+                    boardUiEngine.highlightPiece(null);
                 }
-
-                ((HumanPlayer)currentPlayer)
-                        .getPlayerTurnState()
-                        .signalMove(currentPlayer, movePath);
-
-                resetHumanState();
-                boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                boardUiEngine.showHintPositions(null);
-                boardUiEngine.highlightPiece(null);
             }
         }
 
