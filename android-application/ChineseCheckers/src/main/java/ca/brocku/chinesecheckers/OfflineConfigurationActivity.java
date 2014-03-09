@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;

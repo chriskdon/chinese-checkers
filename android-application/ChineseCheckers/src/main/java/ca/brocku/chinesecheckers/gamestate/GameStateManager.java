@@ -279,6 +279,8 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
     @Override
     public void signalMove(Player p, MovePath m) {
         if(p == getCurrentPlayer()) {
+            GameBoard originalBoard = gameBoard.getDeepCopy();
+
             // Move the sequence of pieces
             Iterator<Position> it = m.getPath().iterator();
             Position last = null;
@@ -292,6 +294,10 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
                 gameBoard.movePiece(gameBoard.getPiece(last), current);
 
                 last = current;
+            }
+
+            if(this.gameStateEventsHandler != null) {
+                this.gameStateEventsHandler.onBoardModified(p, originalBoard, m);
             }
 
             nextPlayer();
@@ -314,10 +320,11 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
 
         /**
          * Fired when a piece on the board is moved from one position to another.
-         * @param player    The player who made the movePath.
-         * @param movePath      The path describing the movePath.
+         * @param player            The player who modified the board
+         * @param originalBoard     The original copied state of the board.
+         * @param movePath          The path describing the movePath.
          */
-        public void onPieceMoved(Player player, MovePath movePath);
+        public void onBoardModified(Player player, GameBoard originalBoard,  MovePath movePath);
 
         /**
          * Occurs when a player forfeit the game.

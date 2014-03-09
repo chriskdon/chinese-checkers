@@ -777,6 +777,45 @@ public class CcGameBoard extends GameBoard {
         }
 
     }
+
+    /**
+     * Create a deep copy of the game board that can be modified.
+     *
+     * @return
+     */
+    @Override
+    public GameBoard getDeepCopy() {
+        Piece[] pieces = getAllPieces();
+
+        GameBoard board = new CcGameBoard(); // Empty Board
+
+        // Construct board
+        for(final Piece p : pieces) {
+            board.addPiece(new Piece() {
+                @Override
+                public Position getPosition() {
+                    return p.getPosition();
+                }
+
+                @Override
+                public int getPlayerNumber() {
+                    return p.getPlayerNumber();
+                }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel parcel, int i) {
+
+                }
+            });
+        }
+
+        return board;
+    }
 }
 
 

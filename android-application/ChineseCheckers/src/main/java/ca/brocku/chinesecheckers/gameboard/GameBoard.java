@@ -20,7 +20,6 @@ public abstract class GameBoard implements Parcelable, Serializable {
      */
     public static final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1};
 
-
     /**
      * Total number of spaces on the board
      */
@@ -99,6 +98,12 @@ public abstract class GameBoard implements Parcelable, Serializable {
      * @param p
      */
     public abstract void addPiece(Piece p);
+
+    /**
+     * Returns a deep copied version of the gameboard.
+     * @return
+     */
+    public abstract GameBoard getDeepCopy();
 
     /**
      * Describe the kinds of special objects contained in this Parcelable's

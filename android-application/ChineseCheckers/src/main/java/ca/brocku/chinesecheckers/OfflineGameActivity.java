@@ -18,7 +18,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
@@ -204,7 +203,7 @@ public class OfflineGameActivity extends Activity {
          */
         private GameBoard getModifiableBoard() {
             if(board == null) {
-                board = gameStateManager.getGameBoard().getModifiableCopy();
+                board = gameStateManager.getGameBoard().getDeepCopy();
             }
 
             return board;
@@ -331,32 +330,6 @@ public class OfflineGameActivity extends Activity {
                         .getPlayerTurnState()
                         .signalMove(currentPlayer, movePath);
 
-                //rotate the board an amount depending on num players
-                int degreesToRotate = 0;
-                switch (gameStateManager.getNumberOfPlayers()) {
-                    case 2:
-                        degreesToRotate = -180;
-                        break;
-                    case 3:
-                        degreesToRotate = -120;
-                        break;
-                    case 4:
-                        switch (gameStateManager.getCurrentPlayer().getPlayerColor()) {
-                            case RED:
-                            case GREEN:
-                                degreesToRotate = -120;
-                                break;
-                            case BLUE:
-                            case ORANGE:
-                                degreesToRotate = -60;
-                                break;
-                        }
-                        break;
-                    case 6:
-                        degreesToRotate = -60;
-                        break;
-                }
-
                 resetHumanState();
                 boardUiEngine.drawBoard(gameStateManager.getGameBoard());
                 boardUiEngine.showHintPositions(null);
@@ -431,6 +404,36 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public void onPlayerTurn(Player player) {
+                // Rotate the board an amount depending on num players
+                // Rotation needs to be calculated when it is a new players turn
+                // there is a special case for the very first turn
+                /*
+                int degreesToRotate = 0;
+                switch (gameStateManager.getNumberOfPlayers()) {
+                    case 2:
+                        degreesToRotate = -180;
+                        break;
+                    case 3:
+                        degreesToRotate = -120;
+                        break;
+                    case 4:
+                        switch (gameStateManager.getCurrentPlayer().getPlayerColor()) {
+                            case RED:
+                            case GREEN:
+                                degreesToRotate = -120;
+                                break;
+                            case BLUE:
+                            case ORANGE:
+                                degreesToRotate = -60;
+                                break;
+                        }
+                        break;
+                    case 6:
+                        degreesToRotate = -60;
+                        break;
+                }
+                */
+
                 setCurrentPlayer(player);
 
                 setTitleBarButtonColor(player);
@@ -440,12 +443,15 @@ public class OfflineGameActivity extends Activity {
             /**
              * Fired when a piece on the board is moved from one position to another.
              *
-             * @param player The player who made the movePath.
-             * @param movePath   The path describing the movePath.
+             * @param player        The player who modified the board
+             * @param originalBoard The original copied state of the board.
+             * @param movePath      The path describing the movePath.
              */
             @Override
-            public void onPieceMoved(Player player, MovePath movePath) {
-
+            public void onBoardModified(Player player, GameBoard originalBoard, MovePath movePath) {
+                // TODO: This will need to be overridden for online game play because
+                //       the state of the game board will have changed.
+                //       but because we're sharing it for offline this is useless.
             }
 
             /**

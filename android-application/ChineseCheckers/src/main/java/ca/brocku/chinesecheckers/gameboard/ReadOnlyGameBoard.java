@@ -127,40 +127,12 @@ public class ReadOnlyGameBoard extends GameBoard {
     }
 
     /**
-     * Create a deep copy of the game board that can be modified.
+     * Returns a deep copied version of the gameboard.
      *
      * @return
      */
-    public GameBoard getModifiableCopy() {
-        Piece[] pieces = getAllPieces();
-
-        GameBoard board = new CcGameBoard(); // Empty Board
-
-        // Construct board
-        for(final Piece p : pieces) {
-            board.addPiece(new Piece() {
-                @Override
-                public Position getPosition() {
-                    return p.getPosition();
-                }
-
-                @Override
-                public int getPlayerNumber() {
-                    return p.getPlayerNumber();
-                }
-
-                @Override
-                public int describeContents() {
-                    return 0;
-                }
-
-                @Override
-                public void writeToParcel(Parcel parcel, int i) {
-
-                }
-            });
-        }
-
-        return board;
+    @Override
+    public GameBoard getDeepCopy() {
+        return gameBoard.getDeepCopy();
     }
 }
