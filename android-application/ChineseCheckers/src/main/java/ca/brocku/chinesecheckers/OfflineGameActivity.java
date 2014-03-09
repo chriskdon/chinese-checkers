@@ -310,7 +310,7 @@ public class OfflineGameActivity extends Activity {
                 if(isHumanTurn()) { // It must be a humans turn
                     resetHumanState();
                     boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                    boardUiEngine.showHintPositions(null);
+                    boardUiEngine.showHintPositions(currentPlayer, null);
                     boardUiEngine.highlightPiece(null);
                 }
             }
@@ -335,7 +335,7 @@ public class OfflineGameActivity extends Activity {
 
                     resetHumanState();
                     boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                    boardUiEngine.showHintPositions(null);
+                    boardUiEngine.showHintPositions(currentPlayer, null);
                     boardUiEngine.highlightPiece(null);
                 }
             }
@@ -392,7 +392,7 @@ public class OfflineGameActivity extends Activity {
                     // Update Drawing
                     boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
                     boardUiEngine.highlightPiece(currentPiece);
-                    boardUiEngine.showHintPositions(possibleMoves);
+                    boardUiEngine.showHintPositions(currentPlayer, possibleMoves);
                 }
             }
         }

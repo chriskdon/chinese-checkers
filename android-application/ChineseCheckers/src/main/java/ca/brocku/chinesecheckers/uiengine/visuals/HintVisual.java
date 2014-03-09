@@ -13,21 +13,24 @@ import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
  */
 public class HintVisual extends PieceVisual {
     private float strokeWidth;
+    private Paint strokePaint;
 
     /**
      * Create a new hint.
      * @param pieceDrawingDetails   Details for drawing the hint at a piece location.
-     * @param color                 The color of the stroke.
-     * @param strokeWidth           The width of the stroke.
+     * @param backgroundColor       The color of the background.
+     * @param strokeColor           The color of the outer stroke.
      */
-    public HintVisual(PieceDrawingDetails pieceDrawingDetails, int color, float strokeWidth) {
-        super(pieceDrawingDetails, color);
+    public HintVisual(PieceDrawingDetails pieceDrawingDetails, int backgroundColor, int strokeColor) {
+        super(pieceDrawingDetails, backgroundColor);
 
-        this.strokeWidth = strokeWidth;
+        this.strokeWidth = this.getRadius()/4;
 
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(strokeWidth);
+        this.strokePaint = new Paint();
+        this.strokePaint.setStyle(Paint.Style.STROKE);
+        this.strokePaint.setAntiAlias(true);
+        this.strokePaint.setColor(strokeColor);
+        this.strokePaint.setStrokeWidth(strokeWidth);
     }
 
     /**
@@ -37,6 +40,7 @@ public class HintVisual extends PieceVisual {
      */
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawCircle(getCenterX(), getCenterY(), getRadius() - (strokeWidth/2), paint);
+        canvas.drawCircle(getCenterX(), getCenterY(), getRadius(), paint);
+        canvas.drawCircle(getCenterX(), getCenterY(), getRadius() - (strokeWidth/2), strokePaint);
     }
 }

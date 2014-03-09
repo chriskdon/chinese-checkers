@@ -61,7 +61,7 @@ public interface BoardUiEngine {
      *
      * @param positions The positions to draw the hints on.
      */
-    public void showHintPositions(Position[] positions);
+    public void showHintPositions(Player player, Position[] positions);
 
     /**
      * TODO: Possibly put this in constructor

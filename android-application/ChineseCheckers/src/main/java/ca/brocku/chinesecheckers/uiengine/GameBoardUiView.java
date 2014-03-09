@@ -42,7 +42,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     private Map<Position, Visual> pieces;                       // Pieces
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
-    private float hintStrokeWidth;                              // Width of the hint stroke.
+    private int emptySpaceColor;                                // The color of an empty space
     private Piece currentHighlightedPiece;                      // Currently highlighted piece.
     private float canvasWidth, canvasHeight;                      // Width/Height of the canvas
     private float currentRotation;                              // Degrees canvas has rotated
@@ -127,7 +127,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      */
     {
         this.hintColor = getResources().getColor(R.color.hint_color);
-        this.hintStrokeWidth = getResources().getInteger(R.integer.hint_stroke_width);
+        this.emptySpaceColor = getResources().getColor(R.color.gray);
 
         this.pieces = new HashMap<Position, Visual>();
 
@@ -256,7 +256,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param positions The positions to draw the hints on.
      */
     @Override
-    public void showHintPositions(Position[] positions) {
+    public void showHintPositions(Player player, Position[] positions) {
         if(this.hintPositions != null) {
             gameBoard.removeChildren(hintPositions);
         }
@@ -264,9 +264,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         if(positions != null) {
             this.hintPositions = new HashSet<Visual>(positions.length);
 
+            int strokeColor = getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL);
+
+
             // Add Hint
             for(Position p : positions) {
-                Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
+                Visual v = new HintVisual(piecePositionSystem.get(p), this.emptySpaceColor, strokeColor);
 
                 this.hintPositions.add(v);
                 gameBoard.addChild(v);
