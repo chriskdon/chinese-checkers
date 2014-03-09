@@ -42,7 +42,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     private Map<Position, Visual> pieces;                       // Pieces
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
-    private int emptySpaceColor;                                // The color of an empty space
     private Piece currentHighlightedPiece;                      // Currently highlighted piece.
     private float canvasWidth, canvasHeight;                      // Width/Height of the canvas
     private float currentRotation;                              // Degrees canvas has rotated
@@ -102,7 +101,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             GameBoard temp = init.getDeepCopy();
             temp.reset();
             for(Piece p : temp.getAllPieces()) {
-                gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.LIGHT)));
+                gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()),
+                        getPlayerColor(getResources(),
+                                Player.getPlayerColor(p.getPlayerNumber()), ColorSate.VERY_DARK)));
             }
 
             drawBoard(init);
@@ -127,7 +128,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      */
     {
         this.hintColor = getResources().getColor(R.color.hint_color);
-        this.emptySpaceColor = getResources().getColor(R.color.gray);
 
         this.pieces = new HashMap<Position, Visual>();
 
@@ -181,7 +181,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         if(piece != null) {
             PieceVisual pv = (PieceVisual)pieces.get(piece.getPosition());
             pv.setColor(getPlayerColor(getResources(), Player.getPlayerColor(piece.getPlayerNumber()),
-                                       ColorSate.DARK));
+                                       ColorSate.LIGHT));
         }
 
         currentHighlightedPiece = piece;
@@ -238,25 +238,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     }
 
     /**
-     * TODO: Possibly unneeded could be done with movePiece.
-     * <p/>
-     * Return a piece back to it's original position.
-     *
-     * @param movePath       The piece and path taken.
-     * @param onFinished Callback to fire when the animation has completed.
-     */
-    @Override
-    public void cancelMove(MovePath movePath, FinishedMovingPieceHandler onFinished) {
-
-    }
-
-    /**
      * Show hints on the board for positions the player could potentially move to.
      *
      * @param positions The positions to draw the hints on.
      */
     @Override
-    public void showHintPositions(Player player, Position[] positions) {
+    public void showHintPositions(Position[] positions) {
         if(this.hintPositions != null) {
             gameBoard.removeChildren(hintPositions);
         }
@@ -264,12 +251,9 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         if(positions != null) {
             this.hintPositions = new HashSet<Visual>(positions.length);
 
-            int strokeColor = getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL);
-
-
             // Add Hint
             for(Position p : positions) {
-                Visual v = new HintVisual(piecePositionSystem.get(p), this.emptySpaceColor, strokeColor);
+                Visual v = new HintVisual(piecePositionSystem.get(p), this.hintColor);
 
                 this.hintPositions.add(v);
                 gameBoard.addChild(v);

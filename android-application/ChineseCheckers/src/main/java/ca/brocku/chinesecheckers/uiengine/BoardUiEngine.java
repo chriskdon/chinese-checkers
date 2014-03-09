@@ -47,21 +47,11 @@ public interface BoardUiEngine {
     public void playerWon(Player player);
 
     /**
-     * TODO: Possibly unneeded could be done with movePiece.
-     *
-     * Return a piece back to it's original position.
-     *
-     * @param movePath              The piece and path taken.
-     * @param onFinished        Callback to fire when the animation has completed.
-     */
-    public void cancelMove(MovePath movePath, FinishedMovingPieceHandler onFinished);
-
-    /**
      * Show hints on the board for positions the player could potentially move to.
      *
      * @param positions The positions to draw the hints on.
      */
-    public void showHintPositions(Player player, Position[] positions);
+    public void showHintPositions(Position[] positions);
 
     /**
      * TODO: Possibly put this in constructor
