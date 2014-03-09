@@ -11,12 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
@@ -188,13 +190,13 @@ public class OfflineGameActivity extends Activity {
         private View rootView;
         private Button titleBarButton;
 
-        // Things for a human players turn
-        private MovePath movePath;
-        private Piece currentPiece;
         private Player currentPlayer;
+
+        // Things for a human players turn
+        private MovePath movePath = new MovePath();
+        private Piece currentPiece;
         private GameBoard board = null;
         private Position[] possibleMoves;
-        private boolean madeMove = false;
 
         /**
          * Get a modifiable version of the current game board.
@@ -319,6 +321,12 @@ public class OfflineGameActivity extends Activity {
         private class DoneMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
+                if(movePath.size() < 2) {
+                    // TODO: REPLACE THIS WITH A REAL MESSAGE
+                    Toast.makeText(getActivity(), "Make a move.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 ((HumanPlayer)currentPlayer)
                         .getPlayerTurnState()
                         .signalMove(currentPlayer, movePath);
@@ -356,12 +364,24 @@ public class OfflineGameActivity extends Activity {
             }
         }
 
+        /**
+         * Reset the objects related to the human move state
+         */
         private void resetHumanState() {
             currentPiece = null;
             board = null;
             possibleMoves = null;
-            madeMove = false;
-            movePath = null;
+            movePath = new MovePath();
+        }
+
+        /**
+         * Set who the current player is.
+         *
+         * @param p The player to set as current.
+         */
+        private void setCurrentPlayer(Player p) {
+            currentPlayer = p;
+            if(isHumanTurn()) { resetHumanState(); }
         }
 
         /**
@@ -371,32 +391,29 @@ public class OfflineGameActivity extends Activity {
             @Override
             public void positionTouched(final Position position) {
                 if (isHumanTurn()) {
-                    GameBoard board = getModifiableBoard();
-                    Piece piece = board.getPiece(position);
+                    GameBoard tempBoard = getModifiableBoard();
+                    Piece piece = tempBoard.getPiece(position);
 
                     if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
                         for(Position p : possibleMoves) {
-                            if(position.equals(p)) { // User Clicked a valid piece
-                                board.movePiece(currentPiece, p);
-                                currentPiece = board.getPiece(p);
-                                possibleMoves = board.getPossibleHops(currentPiece);
+                            if(p != null && position.equals(p)) { // User Clicked a valid piece
+                                tempBoard.movePiece(currentPiece, p);
+                                currentPiece = tempBoard.getPiece(p);
+                                possibleMoves = tempBoard.getPossibleHops(currentPiece);
                                 movePath.addToPath(p);
-                                madeMove = true;
                             }
                         }
-                    } else if(piece != null && piece.getPlayerNumber() != currentPlayer.getPlayerNumber()) { // Didn't select a valid piece
-                        resetHumanState();
-                    } else if(piece != null && !madeMove) { // Selecting first valid piece
+                    } else if(piece != null && movePath.size() <= 1 && piece.getPlayerNumber() == currentPlayer.getPlayerNumber()) { // Selecting first valid piece
                         resetHumanState();
                         currentPiece = piece;
-                        possibleMoves = board.getPossibleMoves(currentPiece);
+                        possibleMoves = tempBoard.getPossibleMoves(currentPiece);
                         movePath = new MovePath(new Position(piece.getPosition().getRow(), piece.getPosition().getIndex()));
-                    } else if(!madeMove) {
+                    } else if(movePath.size() <= 1) {
                         resetHumanState();
                     }
 
                     // Update Drawing
-                    boardUiEngine.drawBoard(new ReadOnlyGameBoard(board));
+                    boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
                     boardUiEngine.highlightPiece(currentPiece);
                     boardUiEngine.showHintPositions(possibleMoves);
                 }
@@ -414,7 +431,8 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public void onPlayerTurn(Player player) {
-                currentPlayer = player;
+                setCurrentPlayer(player);
+
                 setTitleBarButtonColor(player);
                 titleBarButton.setText(gameStateManager.getCurrentPlayer().getName());
             }

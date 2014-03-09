@@ -86,6 +86,21 @@ public class MovePath {
         return Collections.unmodifiableList(path);
     }
 
+    /**
+     * Is this position already in the path.
+     * @param p
+     * @return
+     */
+    public boolean contains(Position p) {
+        for(Position pos : path) {
+            if(pos.equals(p)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public int size() {
         return path.size();
     }
