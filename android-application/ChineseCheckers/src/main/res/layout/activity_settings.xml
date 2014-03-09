@@ -98,7 +98,7 @@
                 android:padding="5dp"
 
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
+                android:layout_height="@dimen/input_field_height"
                 android:layout_gravity="left"
                 android:inputType="text|textNoSuggestions"
                 android:hint="my.username"
