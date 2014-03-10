@@ -12,8 +12,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.gameboard.IllegalMoveException;
 
 /**
  * Handles coordinating the game between multiple players and keeping the game
@@ -292,7 +294,16 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
 
                 Position current = it.next();
 
-                gameBoard.movePiece(gameBoard.getPiece(last), current);
+                Piece piece = gameBoard.getPiece(last);
+
+                // Check for illegal moves
+                if(piece == null) {
+                    throw new IllegalMoveException("There is no piece at that position.");
+                } else if(piece.getPlayerNumber() != p.getPlayerNumber()) {
+                    throw new IllegalMoveException("Player<" + p.getName() + "> cannot move that piece.");
+                }
+
+                gameBoard.movePiece(piece, current);
 
                 last = current;
             }

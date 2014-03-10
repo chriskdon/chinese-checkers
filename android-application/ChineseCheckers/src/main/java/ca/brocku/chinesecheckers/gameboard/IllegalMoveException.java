@@ -3,7 +3,7 @@ package ca.brocku.chinesecheckers.gameboard;
 /**
  * Created by zz on 2/23/14.
  */
-class IllegalMoveException extends RuntimeException
+public class IllegalMoveException extends RuntimeException
 {
     //Parameterless Constructor
     public IllegalMoveException() {}
