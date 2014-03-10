@@ -181,7 +181,7 @@ public class OfflineGameActivity extends Activity {
      *  Fragment containing game board, controls, and player turn indicator
      */
     @SuppressLint("ValidFragment")
-    private static class OfflineGameFragment extends Fragment {
+    public static class OfflineGameFragment extends Fragment {
         private GameStateManager gameStateManager;
         private BoardUiEngine boardUiEngine;
         private Button resetMove;
@@ -196,6 +196,8 @@ public class OfflineGameActivity extends Activity {
         private Piece currentPiece;
         private GameBoard board = null;
         private Position[] possibleMoves;
+
+        public OfflineGameFragment() {}
 
         /**
          * Get a modifiable version of the current game board.
