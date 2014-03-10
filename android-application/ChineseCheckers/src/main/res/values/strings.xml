@@ -37,5 +37,7 @@
     <string name="online_games">Online Games</string>
     <string name="settings_show_possible_moves">Show possible moves</string>
     <string name="settings_your_username">Your username</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Accept</string>
 
 </resources>

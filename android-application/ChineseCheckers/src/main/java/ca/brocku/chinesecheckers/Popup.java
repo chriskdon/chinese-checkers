@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import ca.brocku.chinesecheckers.gamestate.Player;
@@ -121,6 +122,34 @@ public class Popup extends Dialog {
         return this;
     }
 
+    public Popup enableNewGameOptions() {
+        message.setVisibility(View.GONE);
+
+        View newGameOptionsView = View.inflate(context, R.layout.fragment_online_new_game, bodyContainer);
+
+        return this;
+    }
+
+    public int getNumberOfPlayers() {
+        RadioGroup radioGroup = (RadioGroup)findViewById(R.id.newGameNumberOfPlayersRadioGroup);
+        int numberOfPlayers = -1;
+        switch (radioGroup.getCheckedRadioButtonId()) {
+            case R.id.twoPlayerButton:
+                numberOfPlayers = 2;
+                break;
+            case R.id.threePlayerButton:
+                numberOfPlayers = 3;
+                break;
+            case R.id.fourPlayerButton:
+                numberOfPlayers = 4;
+                break;
+            case R.id.sixPlayerButton:
+                numberOfPlayers = 6;
+                break;
+        }
+        return numberOfPlayers;
+    }
+
     public Popup enablePlayerList(Player[] players) {
         message.setVisibility(View.GONE);
 
@@ -174,5 +203,4 @@ public class Popup extends Dialog {
     public Button getDeclineButton() {
         return declineButton;
     }
-
 }
