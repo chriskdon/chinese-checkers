@@ -3,8 +3,10 @@ package ca.brocku.chinesecheckers;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.util.UUID;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 
@@ -29,10 +32,16 @@ public class MainActivity extends Activity {
     private Button helpActivityButton;
     private Button settingsActivityButton;
 
+    public static final String PREF_DONE_INITIAL_SETUP = "DONE_INITIAL_SETUP";
+    public static final String PREF_SHOW_MOVES = "SHOW_MOVES";
+    public static final String PREF_USER_ID = "USER_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setInitialPreferences(); //only sets the prefs on first launch
 
         //Bind Controls
         offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
@@ -62,6 +71,31 @@ public class MainActivity extends Activity {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /** Sets initial preferences if it is the first time the application is launched.
+     *
+     * The preferences set are:
+     *      Show possible moves to true
+     *      user's ID to a generated UUID
+     *
+     */
+    private void setInitialPreferences() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Gets boolean to determine if this is the first time app is launched
+        Boolean isInitialSetupDone = sharedPref.getBoolean(PREF_DONE_INITIAL_SETUP, false);
+
+        //Sets the default preferences. This is only ran the first time application is launched.
+        if(!isInitialSetupDone) {
+            SharedPreferences.Editor editor = sharedPref.edit(); //editor for the prefs
+
+            editor
+                .putBoolean(PREF_DONE_INITIAL_SETUP, true)
+                .putBoolean(PREF_SHOW_MOVES, true)
+                .putString(PREF_USER_ID, UUID.randomUUID().toString())
+                .commit();
+        }
     }
 
     /** Handles clicking on the "Offline" game button.
