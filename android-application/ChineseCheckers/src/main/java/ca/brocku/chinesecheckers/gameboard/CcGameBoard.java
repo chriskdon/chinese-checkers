@@ -411,16 +411,16 @@ public class CcGameBoard extends GameBoard {
                 }
             }
         }
-        {
+        { //downLeft
             if (row>10 || (row>3 && row<8)) { // if y is between 4 and 8 and greater than 10
                 if(row==11) {
-                    if(isOccupied(new Position(row+1, index+1))) {
+                    if(isOccupied(new Position(row+1, index))) {
                         possibleMoves[posindex] = checkPosition(new Position(row+2, index-5));
                         posindex=posindex+1;
                     }
                 }
                 else if(row==12) {
-                    if(isOccupied(new Position(row+1, index-4))) {
+                    if(isOccupied(new Position(row+1, index-5))) {
                         possibleMoves[posindex] = checkPosition(new Position(row+2, index-6));
                         posindex=posindex+1;
                     }
@@ -510,7 +510,7 @@ public class CcGameBoard extends GameBoard {
         { // upperLeft
             if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
                 if(row==14) {
-                    if(isOccupied(new Position(row-1, index+1))) {
+                    if(isOccupied(new Position(row-1, index))) {
                         possibleMoves[posindex] = checkPosition(new Position(row-2, index+4));
                         posindex=posindex+1;
                     }
@@ -558,7 +558,7 @@ public class CcGameBoard extends GameBoard {
         { // upperRight
             if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
                 if(row==14) {
-                    if(isOccupied(new Position(row-1, index))) {
+                    if(isOccupied(new Position(row-1, index+1))) {
                         possibleMoves[posindex] = checkPosition(new Position(row-2, index+6));
                         posindex=posindex+1;
                     }
