@@ -131,7 +131,7 @@ public class Popup extends Dialog {
     }
 
     public int getNumberOfPlayers() {
-        RadioGroup radioGroup = (RadioGroup)findViewById(R.id.newGameNumberOfPlayersRadioGroup);
+        RadioGroup radioGroup = (RadioGroup)findViewById(R.id.numberOfPlayersRadioGroup);
         int numberOfPlayers = -1;
         switch (radioGroup.getCheckedRadioButtonId()) {
             case R.id.twoPlayerButton:
