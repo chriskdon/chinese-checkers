@@ -274,7 +274,8 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
     /**
      * Signal that a move has been made.
      *
-     * @param m The move that was made.
+     * @param p     The player that is making the move.
+     * @param m     The path from start to end of the move that was made.
      */
     @Override
     public void signalMove(Player p, MovePath m) {

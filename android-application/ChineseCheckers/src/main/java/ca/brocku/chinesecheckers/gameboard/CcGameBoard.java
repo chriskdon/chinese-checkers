@@ -558,7 +558,7 @@ public class CcGameBoard extends GameBoard {
         { // upperRight
             if (row>12 || (row>5 && row<9)) { // if row is between 4 and 8 and greater than 10
                 if(row==14) {
-                    if(isOccupied(new Position(row-1, index+1))) {
+                    if(isOccupied(new Position(row-1, index))) {
                         possibleMoves[posindex] = checkPosition(new Position(row-2, index+6));
                         posindex=posindex+1;
                     }

@@ -61,6 +61,9 @@ public class MovePath {
         this.path.add(pos);
     }
 
+    /**
+     * @return The position of the piece's starting location before it was moved.
+     */
     public Position getStartPosition() {
         if(path.size() > 0) {
             return path.get(0);
@@ -69,6 +72,9 @@ public class MovePath {
         throw new IllegalStateException("The path has not been added yet");
     }
 
+    /**
+     * @return The final resting position of the move that was made.
+     */
     public Position getEndPosition() {
         if(path.size() > 0) {
             return path.get(path.size() - 1);
@@ -101,6 +107,9 @@ public class MovePath {
         return false;
     }
 
+    /**
+     * @return How many positions are in the path.
+     */
     public int size() {
         return path.size();
     }
