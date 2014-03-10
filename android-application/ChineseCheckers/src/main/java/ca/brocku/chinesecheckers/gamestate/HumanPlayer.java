@@ -48,7 +48,8 @@ public class HumanPlayer extends Player {
     /**
      * Executed when it is this players turn to act.
      *
-     * @param state The current state.
+     * @param state The current state. This will not be valid to use if it is not the current
+     *              players turn.
      */
     @Override
     public void onTurn(PlayerTurnState state) {
