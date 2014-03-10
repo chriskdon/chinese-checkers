@@ -49,4 +49,4 @@ before_script:
   
 
 script:
-  - gradle connectedCheck
+  - gradle assemble
