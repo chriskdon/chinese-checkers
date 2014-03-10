@@ -53,7 +53,7 @@
 
         <Button
             android:padding="15dp"
-            android:background="@drawable/chch_button_square_red"
+            android:background="@drawable/chch_button"
             android:textSize="@dimen/activity_xlarge_text_size"
             android:textAllCaps="true"
             android:gravity="right|center_horizontal"
@@ -64,9 +64,13 @@
             android:text="@string/offline_move_reset"
             android:id="@+id/gameMoveResetButton"/>
 
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="match_parent" />
+
         <Button
             android:padding="15dp"
-            android:background="@drawable/chch_button_square_green"
+            android:background="@drawable/chch_button"
             android:textSize="@dimen/activity_xlarge_text_size"
             android:textAllCaps="true"
             android:gravity="right|center_horizontal"
