@@ -7,12 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 /**
  * Created by kubasub on 2014-03-06.
  */
 public class OnlineListActivity extends Activity {
+    private LinearLayout gameListContainer;
     private Button newGameButton;
 
 
@@ -21,11 +23,25 @@ public class OnlineListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_list);
 
+
+        //TODO: server request for current games
+        //for each current game:
+        ////inflate a fragment_online_list_item view into gameListContainer
+        ////set all of the item's elements:
+        //////gameID, player pegs, current turn peg, notification icon
+        //////if there is a winner set the trophy icon and winner name
+
+
         //Bind Controls
         newGameButton = (Button)findViewById(R.id.onlineNewGameButton);
+        gameListContainer = (LinearLayout)findViewById(R.id.onlineGameListContainer);
 
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
+
+        //TODO: make new game dialog appear if there are no games in the list
+        //  if(no games)
+        //      newGameButton.performClick();
     }
 
     @Override
