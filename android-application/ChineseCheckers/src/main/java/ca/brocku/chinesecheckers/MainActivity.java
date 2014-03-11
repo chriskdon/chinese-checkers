@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +20,8 @@ import java.io.ObjectInputStream;
 import java.util.UUID;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.network.gcm.GcmActivity;
+import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
 
 /** This is the activity for the home screen of Chinese Checkers.
  *
@@ -26,7 +30,7 @@ import ca.brocku.chinesecheckers.gamestate.GameStateManager;
  *
  */
 @SuppressLint("all")
-public class MainActivity extends Activity {
+public class MainActivity extends GcmActivity {
     private Button offlineActivityButton;
     private Button onlineActivityButton;
     private Button helpActivityButton;
