@@ -2,7 +2,7 @@
 <resources>
 
     <color name="app_background">#161717</color>
-    <color name="app_background_translucent">#BB161717</color>
+    <color name="app_background_translucent">#DD161717</color>
     <color name="app_text">#F2F4F7</color>
     <color name="app_hint_text">#88292B2B</color>
 
@@ -20,26 +20,32 @@
     <!-- Player Colours -->
     <color name="red">#ED2C31</color>
     <color name="dark_red">#C50409</color>
+    <color name="very_dark_red">#4c090a</color>
     <color name="light_red">#FFADB0</color>
 
     <color name="orange">#F89230</color>
     <color name="dark_orange">#D06A08</color>
+    <color name="very_dark_orange">#532c00</color>
     <color name="light_orange">#FFD2AD</color>
 
     <color name="yellow">#F8E816</color>
     <color name="dark_yellow">#D0C000</color>
+    <color name="very_dark_yellow">#4e4a00</color>
     <color name="light_yellow">#FFF6AD</color>
 
     <color name="green">#15A850</color>
     <color name="dark_green">#008028</color>
+    <color name="very_dark_green">#133e1c</color>
     <color name="light_green">#ADFFCB</color>
 
     <color name="blue">#1780C1</color>
     <color name="dark_blue">#005899</color>
+    <color name="very_dark_blue">#0d273e</color>
     <color name="light_blue">#ADE1FF</color>
 
     <color name="purple">#8601AF</color>
     <color name="dark_purple">#5E0087</color>
+    <color name="very_dark_purple">#340044</color>
     <color name="light_purple">#E7ADFF</color>
 
     <color name="hint_color">#E5E7E9</color>

@@ -17,14 +17,11 @@
         android:src="@drawable/logo"
         android:layout_gravity="center_horizontal" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
-
     <Button
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:padding="5dp"
         android:background="@drawable/chch_button_red"
         android:gravity="center_vertical|right"
@@ -34,5 +31,49 @@
         android:textStyle="bold"
         android:text="@string/play_offline"
         android:id="@+id/offlineConfigurationActivityButton" />
+
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:padding="5dp"
+        android:background="@drawable/chch_button_blue"
+        android:gravity="center_vertical|right"
+        android:textSize="@dimen/activity_xlarge_text_size"
+        android:textColor="@color/app_background"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:text="@string/play_online"
+        android:id="@+id/onlineListActivityButton" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="175dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@null"
+        android:gravity="center"
+        android:textSize="@dimen/activity_normal_text_size"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:text="@string/title_activity_help"
+        android:id="@+id/helpActivityButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:gravity="center"
+        android:textSize="@dimen/activity_normal_text_size"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:text="@string/title_activity_settings"
+        android:id="@+id/settingsActivityButton" />
 
 </LinearLayout>

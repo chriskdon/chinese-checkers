@@ -45,7 +45,9 @@ public class HelpActivityUnitTest extends ActivityInstrumentationTestCase2<HelpA
         synchronized (hR){
             try{
                 curAct.runOnUiThread(hR);
-                hR.wait();
+                ///////////////////////////////////////////////////////////HEADER COMMENTED OUT
+                //hR.wait();
+                ((Object) hR).wait();
             }
             catch(Exception e){}
         }
@@ -55,7 +57,9 @@ public class HelpActivityUnitTest extends ActivityInstrumentationTestCase2<HelpA
         public void run(){
             synchronized (this){
                 curAct.onBackPressed();
-                notify();
+                ///////////////////////////////////////////////////////////HEADER COMMENTED OUT
+                //notify();
+                ((Object) this).notify();
             }
         }
     }

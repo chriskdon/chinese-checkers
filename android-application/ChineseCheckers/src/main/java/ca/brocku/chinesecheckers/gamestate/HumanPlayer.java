@@ -3,10 +3,6 @@ package ca.brocku.chinesecheckers.gamestate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import ca.brocku.chinesecheckers.gameboard.GridPiece;
-import ca.brocku.chinesecheckers.gameboard.GridPosition;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-
 /**
  * The implementation of Player that is used to represent a chinese checkers player.
  *
@@ -16,6 +12,8 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  */
 public class HumanPlayer extends Player {
     private String name;
+
+    private transient PlayerTurnState playerTurnState;
 
     /**
      * Create a new player.
@@ -50,11 +48,24 @@ public class HumanPlayer extends Player {
     /**
      * Executed when it is this players turn to act.
      *
-     * @param gameBoard The current game board.
+     * @param state The current state. This will not be valid to use if it is not the current
+     *              players turn.
      */
     @Override
-    public Move onTurn(ReadOnlyGameBoard gameBoard) {
-        return new Move(gameBoard.getPiece(new GridPosition(0, 0)));
+    public void onTurn(PlayerTurnState state) {
+        this.playerTurnState = state;
+    }
+
+    /**
+     * Get the turn state
+     * @return
+     */
+    public PlayerTurnState getPlayerTurnState() {
+        if(playerTurnState == null) {
+            throw new IllegalStateException("This player does not have a player turn state manager.");
+        }
+
+        return this.playerTurnState;
     }
 
     /**

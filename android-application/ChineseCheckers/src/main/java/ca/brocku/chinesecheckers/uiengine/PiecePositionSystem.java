@@ -2,7 +2,9 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.graphics.Canvas;
 import android.os.Parcel;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,8 +20,8 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  * Student #: 4810800
  * Date: 2/3/2014
  */
-public class PiecePositionSystem {
-    private Map<Position, PieceDrawingDetails> positionDetails; // Position mapping
+public class PiecePositionSystem implements Serializable {
+    private transient Map<Position, PieceDrawingDetails> positionDetails; // Position mapping
 
     /**
      * Create the instance, and calculate all the board positions.
@@ -106,41 +108,7 @@ public class PiecePositionSystem {
                 final int posRow = row;
                 final int posIndex = i;
 
-                final Position position = new Position() {
-                    @Override
-                    public int getRow() {
-                        return posRow;
-                    }
-
-                    @Override
-                    public int getIndex() {
-                        return posIndex;
-                    }
-
-                    /**
-                     * Describe the kinds of special objects contained in this Parcelable's
-                     * marshalled representation.
-                     *
-                     * @return a bitmask indicating the set of special object types marshalled
-                     * by the Parcelable.
-                     */
-                    @Override
-                    public int describeContents() {
-                        return 0;
-                    }
-
-                    /**
-                     * Flatten this object in to a Parcel.
-                     *
-                     * @param dest  The Parcel in which the object should be written.
-                     * @param flags Additional flags about how the object should be written.
-                     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-                     */
-                    @Override
-                    public void writeToParcel(Parcel dest, int flags) {
-
-                    }
-                };
+                final Position position = new Position(posRow, posIndex);
 
                 // Store in the hash map
                 dest.put(position, new PieceDrawingDetails(position, x, y, radiusArea - shrink));

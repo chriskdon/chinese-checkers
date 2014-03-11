@@ -1,44 +1,57 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceCategory;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
-import ca.brocku.chinesecheckers.gamestate.Move;
+import ca.brocku.chinesecheckers.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
-import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 
-import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
-
+@SuppressLint("All")
 public class OfflineGameActivity extends Activity {
+    private GameStateManager gameStateManager;  // Manages everything in the game
+    private Boolean isEndCurrentGame; //a boolean which can prevent saving the state
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_game);
 
+        gameStateManager = getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
+        isEndCurrentGame = false;
+
         //passes player array to the offline game fragment
         Fragment offlineGameFragment = new OfflineGameFragment();
+        Bundle offlineGameFragmentBundle = new Bundle();
+        offlineGameFragmentBundle.putParcelable("GAME_STATE_MANAGER", gameStateManager);
+        offlineGameFragment.setArguments(offlineGameFragmentBundle);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -47,46 +60,41 @@ public class OfflineGameActivity extends Activity {
         }
 
         //Show the Resume Game dialog box if we are loading a saves game
-        if(savedInstanceState != null && savedInstanceState.getBoolean("SAVED_GAME")) {
-            ResumeDialog dialog = new ResumeDialog(this, R.style.CustomDialogTheme);
-            dialog.show();
-        }
-    }
+        if(getIntent().getBooleanExtra("SAVED_GAME", false)) {
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+            final Popup resumeDialog = new Popup(this);
+            resumeDialog.setTitleText(R.string.offline_resume_title)
+                    .setMessageText(R.string.offline_resume_message)
+                    .setAcceptButtonText(R.string.offline_resume_accept)
+                    .setDeclineButtonText(R.string.offline_resume_decline)
+                    .setAcceptClickListener(new Button.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            resumeDialog.dismiss();
+                        }
+                    })
+                    .setCancelClickListener(new Button.OnClickListener() {
+                        //Handler to quit the current game and go to the config screen if quit is chosen
+                        @Override
+                        public void onClick(View view) {
+                            isEndCurrentGame = true; //set to not save the state (as we are quitting the current game)
 
-        try { //try to serialize the GameStateManager
-            //Prepare to write out the GameStateManager
-            FileOutputStream fos = openFileOutput(GameStateManager.SERIALIZED_FILENAME, Activity.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+                            //Delete the current saved game
+                            File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+                            savedOfflineGame.delete();
 
-            //Get the GameStateManager from the OfflineGameFragment
-            GameStateManager gameStateManager = ((OfflineGameFragment)getFragmentManager()
-                    .findFragmentByTag("OfflineGameFragment"))
-                    .getGameStateManager();
-
-            //Write out the GameStateManager
-            oos.writeObject(gameStateManager);
-            oos.close();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private class ResetMoveHandler implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-
+                            resumeDialog.dismiss();
+                            OfflineGameActivity.this.finish();
+                            startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                        }
+                    })
+                    .show();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -95,14 +103,81 @@ public class OfflineGameActivity extends Activity {
         int id = item.getItemId();
         if(id == R.id.action_help) {
             startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
+        } else if(id == R.id.action_settings) {
+            startActivity(new Intent(OfflineGameActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(!isEndCurrentGame) { //only save the state if Quit Game was not selected form dialog
+
+            try { //try to serialize the GameStateManager
+
+                //Prepare to write out the GameStateManager
+                FileOutputStream fos = openFileOutput(GameStateManager.SERIALIZED_FILENAME, Activity.MODE_PRIVATE);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+                //Get the GameStateManager from the OfflineGameFragment
+                GameStateManager gameStateManager = ((OfflineGameFragment)getFragmentManager()
+                        .findFragmentByTag("OfflineGameFragment"))
+                        .getGameStateManager();
+
+                //Write out the GameStateManager
+                oos.writeObject(gameStateManager);
+                oos.close();
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /** This function handles the end of game state.
+     *
+     * It disables saving, deletes the currently saved game, and shows the end of game dialog.
+     *
+     * @param p the player who won
+     * @return whether or not this was handled
+     */
     public Boolean onEndGame(Player p) {
-        EndOfGameDialog dialog = new EndOfGameDialog(this, R.style.CustomDialogTheme);
-        dialog.setWinner(p.getName());
-        dialog.show();
+        isEndCurrentGame = true; //prevent saving this (finished) game
+
+        //Delete the current saved game
+        File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+        savedOfflineGame.delete();
+
+        //Show the end of game dialog
+        final Popup endGameDialog = new Popup(this);
+        endGameDialog.setTitleText(p.getName() + " Wins!!")
+                .setMessageText(R.string.offline_end_game_message)
+                .setAcceptButtonText(R.string.offline_end_game_accept)
+                .setDeclineButtonText(R.string.offline_end_game_decline)
+                .setAcceptClickListener(new Button.OnClickListener() {
+                    //Handler to close the dialog if option to play new game is chosen
+                    @Override
+                    public void onClick(View view) {
+                        endGameDialog.dismiss();
+                        OfflineGameActivity.this.finish();
+                        startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                    }
+                })
+                .setCancelClickListener(new Button.OnClickListener() {
+                    //Handler for "Home" button to quit the current game and go to the main activity
+                    @Override
+                    public void onClick(View view) {
+                        endGameDialog.dismiss();
+                        OfflineGameActivity.this.finish();
+                        startActivity(new Intent(OfflineGameActivity.this, MainActivity.class));
+                    }
+                })
+                .disableBackButton(true)
+                .show();
 
         return true;
     }
@@ -110,30 +185,52 @@ public class OfflineGameActivity extends Activity {
     /**
      *  Fragment containing game board, controls, and player turn indicator
      */
-    private static class OfflineGameFragment extends Fragment {
+    @SuppressLint("ValidFragment")
+    public static class OfflineGameFragment extends Fragment {
         private GameStateManager gameStateManager;
         private BoardUiEngine boardUiEngine;
-        private TextView currentPlayerName;
+        private Boolean isShowMoves; //preference whether or not to show available moves
         private Button resetMove;
         private Button doneMove;
-        private TextView titleBar;
+        private View rootView;
+        private Button titleBarButton;
 
-        private boolean moved = false;
-        private Position[] hints;
-        private Piece currentTouched;
+        private Player currentPlayer;
 
-        private Position start;
+        // Things for a human players turn
+        private MovePath movePath = new MovePath();
+        private Piece currentPiece;
+        private GameBoard board = null;
+        private Position[] possibleMoves;
+
+        public OfflineGameFragment() {}
+
+        /**
+         * Get a modifiable version of the current game board.
+         * @return
+         */
+        private GameBoard getModifiableBoard() {
+            if(board == null) {
+                board = gameStateManager.getGameBoard().getDeepCopy();
+            }
+
+            return board;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
+            rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
 
-            View rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
+            return rootView;
+        }
 
-            titleBar = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
+        @Override
+        public void onResume() {
+            super.onResume();
 
             gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
-
+            
             gameStateManager.setGameStateEventsHandler(new GameStateEventsHandler());
 
             // Setup Game Board
@@ -142,96 +239,176 @@ public class OfflineGameActivity extends Activity {
             boardUiEngine.setBoardEventsHandler(new BoardEventsHandler());
             boardUiEngine.initializeBoard(gameStateManager.getGameBoard());
 
+            //Get preference for showing possible moves
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            isShowMoves = sharedPrefs.getBoolean(MainActivity.PREF_SHOW_MOVES, true);
+
             // Bind Controls
-            currentPlayerName = (TextView)rootView.findViewById(R.id.offlineCurrentPlayerTextView);
-            resetMove = (Button)rootView.findViewById(R.id.offlineMoveResetButton);
-            doneMove = (Button)rootView.findViewById(R.id.offlineMoveDoneButton);
+            titleBarButton = (Button)rootView.findViewById(R.id.gamePlayerListButton);
+            resetMove = (Button)rootView.findViewById(R.id.gameMoveResetButton);
+            doneMove = (Button)rootView.findViewById(R.id.gameMoveDoneButton);
 
             // Bind Handlers
+            titleBarButton.setOnClickListener(new TitleBarButtonHandler());
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
             gameStateManager.startGame();
-
-            return rootView;
         }
 
+        /**
+         * Is the current player who's turn it is a Human.
+         * @return  True if the turn is for a human.
+         */
+        private boolean isHumanTurn() {
+            return (currentPlayer != null && currentPlayer instanceof HumanPlayer);
+        }
+
+        /** This is a getter method for the fragment's GameStateManager
+         *
+         * @return the GameStateManager
+         */
+        public GameStateManager getGameStateManager() {
+            return gameStateManager;
+        }
+
+        /**
+         * Set the color for the title bar based on the player.
+         * @param player    The The player who's turn it is.
+         */
+        private void setTitleBarButtonColor(Player player) {
+            switch (player.getPlayerColor()) {
+                case RED:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_red);
+                    break;
+                case PURPLE:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_purple);
+                    break;
+                case BLUE:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_blue);
+                    break;
+                case GREEN:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_green);
+                    break;
+                case YELLOW:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_yellow);
+                    break;
+                case ORANGE:
+                    titleBarButton.setBackgroundResource(R.drawable.chch_button_square_orange);
+                    break;
+            }
+        }
+
+        /**
+         * Handle the user clicking the title bar.
+         */
+        private class TitleBarButtonHandler implements View.OnClickListener {
+            @Override
+            public void onClick(View view) {
+                Popup playerListDialog = new Popup(getActivity());
+                playerListDialog
+                        .setTitleText("Players")
+                        .enablePlayerList(gameStateManager.getPlayers())
+                        .hideButtons(true)
+                        .show();
+            }
+        }
+
+        /**
+         * Handler the user clicking the reset button.
+         */
         private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                if(start != null) {
-                    gameStateManager.resetPiece(currentTouched, start);
+                if(isHumanTurn()) { // It must be a humans turn
+                    resetHumanState();
                     boardUiEngine.drawBoard(gameStateManager.getGameBoard());
+                    boardUiEngine.showHintPositions(null);
+                    boardUiEngine.highlightPiece(null);
                 }
-
-                currentTouched = null;
-                start = null;
-                moved = false;
-
-                boardUiEngine.showHintPositions(null);
-                boardUiEngine.highlightPiece(null);
             }
         }
 
+        /**
+         * Handle the user clicking the done button.
+         */
         private class DoneMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                moved = false;
-                currentTouched = null;
-                hints = null;
+                if(isHumanTurn()) { // Not a humans turn
+                    if(movePath.size() < 2) {
+                        // TODO: REPLACE THIS WITH A REAL MESSAGE
+                        Toast.makeText(getActivity(), "Make a move.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                boardUiEngine.showHintPositions(null);
-                boardUiEngine.highlightPiece(null);
-                gameStateManager.nextPlayer();
+                    ((HumanPlayer)currentPlayer)
+                            .getPlayerTurnState()
+                            .signalMove(currentPlayer, movePath);
+
+                    resetHumanState();
+                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
+                    boardUiEngine.showHintPositions(null);
+                    boardUiEngine.highlightPiece(null);
+                }
             }
+        }
+
+        /**
+         * Reset the objects related to the human move state
+         */
+        private void resetHumanState() {
+            currentPiece = null;
+            board = null;
+            possibleMoves = null;
+            movePath = new MovePath();
+        }
+
+        /**
+         * Set who the current player is.
+         *
+         * @param p The player to set as current.
+         */
+        private void setCurrentPlayer(Player p) {
+            currentPlayer = p;
+            if(isHumanTurn()) { resetHumanState(); }
         }
 
         /**
          * Handle the position be touched, and what to display when the user touches it.
          */
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
-
-
             @Override
             public void positionTouched(final Position position) {
-                GameBoard board = gameStateManager.getGameBoard();
-                Piece piece = board.getPiece(position);
+                if (isHumanTurn()) {
+                    GameBoard tempBoard = getModifiableBoard();
+                    Piece piece = tempBoard.getPiece(position);
 
-                // Did they touch their own piece.
-                if(!moved) {
-                    if(piece != null && Player.getPlayerColor(piece.getPlayerNumber()) == gameStateManager.getCurrentPlayer().getPlayerColor()) {
-                        if(currentTouched == null || !currentTouched.getPosition().equals(position)) {
-                            currentTouched = piece;
-                            hints = board.getPossibleMoves(piece);
-                            start = piece.getPosition();
-                        }
-                    } else if(piece == null) {
-                        // Did the player click a hint
-                        if(hints != null) {
-                            for(Position h : hints) {
-                                if(h.equals(position)) {
-                                    gameStateManager.movePiece(currentTouched, position);       // Move board
-                                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                                    moved = true;
-
-                                    Position[] hops = gameStateManager.getGameBoard().getPossibleHops(currentTouched);
-                                    if(hops != null) {
-                                        hints = hops;
-                                        boardUiEngine.showHintPositions(hops);
-                                        moved = false;
-                                    } else {
-                                        hints = null;
-                                    }
-
-                                    break;
-                                }
+                    if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
+                        for(Position p : possibleMoves) {
+                            if(p != null && position.equals(p)) { // User Clicked a valid piece
+                                tempBoard.movePiece(currentPiece, p);
+                                currentPiece = tempBoard.getPiece(p);
+                                possibleMoves = tempBoard.getPossibleHops(currentPiece);
+                                movePath.addToPath(p);
                             }
                         }
+                    } else if(piece != null && movePath.size() <= 1 && piece.getPlayerNumber() == currentPlayer.getPlayerNumber()) { // Selecting first valid piece
+                        resetHumanState();
+                        currentPiece = piece;
+                        possibleMoves = tempBoard.getPossibleMoves(currentPiece);
+                        movePath = new MovePath(new Position(piece.getPosition().getRow(), piece.getPosition().getIndex()));
+                    } else if(movePath.size() <= 1) {
+                        resetHumanState();
+                    }
+
+                    // Update Drawing
+                    boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
+                    boardUiEngine.highlightPiece(currentPiece);
+                    if(isShowMoves) { //show moves if enabled in preferences
+                        boardUiEngine.showHintPositions(possibleMoves);
                     }
                 }
-
-                boardUiEngine.highlightPiece(currentTouched);
-                boardUiEngine.showHintPositions(hints);
             }
         }
 
@@ -246,25 +423,60 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public void onPlayerTurn(Player player) {
-                titleBar.setBackgroundColor(getPlayerColor(getResources(), player.getPlayerColor(), ColorSate.NORMAL));
-                currentPlayerName.setText(gameStateManager.getCurrentPlayer().getName());
+                // Rotate the board an amount depending on num players
+                // Rotation needs to be calculated when it is a new players turn
+                // there is a special case for the very first turn
+                /*
+                int degreesToRotate = 0;
+                switch (gameStateManager.getNumberOfPlayers()) {
+                    case 2:
+                        degreesToRotate = -180;
+                        break;
+                    case 3:
+                        degreesToRotate = -120;
+                        break;
+                    case 4:
+                        switch (gameStateManager.getCurrentPlayer().getPlayerColor()) {
+                            case RED:
+                            case GREEN:
+                                degreesToRotate = -120;
+                                break;
+                            case BLUE:
+                            case ORANGE:
+                                degreesToRotate = -60;
+                                break;
+                        }
+                        break;
+                    case 6:
+                        degreesToRotate = -60;
+                        break;
+                }
+                */
+
+                setCurrentPlayer(player);
+
+                setTitleBarButtonColor(player);
+                titleBarButton.setText(gameStateManager.getCurrentPlayer().getName());
             }
 
             /**
              * Fired when a piece on the board is moved from one position to another.
              *
-             * @param player The player who made the move.
-             * @param move   The path describing the move.
+             * @param player        The player who modified the board
+             * @param originalBoard The original copied state of the board.
+             * @param movePath      The path describing the movePath.
              */
             @Override
-            public void onPieceMoved(Player player, Move move) {
-
+            public void onBoardModified(Player player, GameBoard originalBoard, MovePath movePath) {
+                // TODO: This will need to be overridden for online game play because
+                //       the state of the game board will have changed.
+                //       but because we're sharing it for offline this is useless.
             }
 
             /**
              * Occurs when a player forfeit the game.
              * <p/>
-             * TODO: Is this just because they quit, or could this be a result of them taking to long to make a move and being kicked out.
+             * TODO: Is this just because they quit, or could this be a result of them taking to long to make a movePath and being kicked out.
              *
              * @param player The player who forfeited.
              */
@@ -283,86 +495,6 @@ public class OfflineGameActivity extends Activity {
             public void onPlayerWon(Player player, int position) {
                 ((OfflineGameActivity)getActivity()).onEndGame(player);
             }
-        }
-
-        /** This is a getter method for the fragment's GameStateManager
-         *
-         * @return the GameStateManager
-         */
-        public GameStateManager getGameStateManager() {
-            return gameStateManager;
-        }
-    }
-
-    /**
-     * This class represents a custom dialog box which appears when there is a saved game. It
-     * prompts the user to decide whether to resume the game or quit it.
-     */
-    private class ResumeDialog extends Dialog {
-        public ResumeDialog(final Context context, int theme) {
-            super(context, theme);
-
-            setContentView(R.layout.fragment_offline_game_resume_dialog); //dialog layout
-
-            //Bind controls for the dialog options
-            Button resumeButton = (Button)findViewById(R.id.offlineAcceptContinuationButton);
-            Button quitButton = (Button)findViewById(R.id.offlineDeclineContinuationButton);
-
-            //Handler to close the dialog if option to resume is chosen
-            resumeButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-
-            //Handler to quit the current game and go to the config screen if quit is chosen
-            quitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
-                }
-            });
-        }
-    }
-
-    /**
-     * This class represents a custom dialog box which appears when someone wins. It prompts the
-     * user to decide whether to play a new game or go to the home screen.
-     */
-    private class EndOfGameDialog extends Dialog {
-        private TextView title; //the title of the Dialog (i.e. "<WINNER_NAME> Wins!")
-
-        public EndOfGameDialog(final Context context, int theme) {
-            super(context, theme);
-
-            setContentView(R.layout.fragment_offline_game_end_dialog); //dialog layout
-
-            //Bind controls for the dialog options and title
-            Button newGameButton = (Button)findViewById(R.id.offlineGameEndToNewButton);
-            Button homeButton = (Button)findViewById(R.id.offlineGameEndToHomeButton);
-            title = (TextView)findViewById(R.id.offlineGameEndTitle);
-
-            //Handler to close the dialog if option to play new game is chosen
-            newGameButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, OfflineConfigurationActivity.class));
-                }
-            });
-
-            //Handler for "Home" button to quit the current game and go to the main activity
-            homeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((Activity)context).finish();
-                    startActivity(new Intent(context, MainActivity.class));
-                }
-            });
-        }
-
-        public void setWinner(String winner) {
-            title.setText(winner + " Wins!!");
         }
     }
 }

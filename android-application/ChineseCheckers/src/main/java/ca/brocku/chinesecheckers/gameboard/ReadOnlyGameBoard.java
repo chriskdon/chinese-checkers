@@ -17,7 +17,7 @@ public class ReadOnlyGameBoard extends GameBoard {
     }
 
     /**
-     * Move a piece from one position to another.
+     * MovePath a piece from one position to another.
      *
      * @param piece The piece to move.
      * @param to    The new position of the piece.
@@ -117,13 +117,40 @@ public class ReadOnlyGameBoard extends GameBoard {
     }
 
     /**
-     * Moves a piece without validaing mvoe.
+     * Add a piece to the board.
      *
-     * @param piece
-     * @param to
+     * @param p
      */
     @Override
-    public void forceMove(Piece piece, Position to) {
-        throw new UnsupportedOperationException();
+    public void addPiece(Piece p) {
+        throw new UnsupportedOperationException("You can not add a piece to a Read-Only board.");
+    }
+
+    /**
+     * Returns a deep copied version of the gameboard.
+     *
+     * @return
+     */
+    @Override
+    public GameBoard getDeepCopy() {
+        return gameBoard.getDeepCopy();
+    }
+
+    /**
+     * Get the number of players
+     *
+     * @return
+     */
+    @Override
+    public int getPlayerCount() {
+        return gameBoard.getPlayerCount();
+    }
+
+    /**
+     * Reset the board to start state
+     */
+    @Override
+    public void reset() {
+        throw new UnsupportedOperationException("This board cannot be modified");
     }
 }

@@ -2,20 +2,11 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Parcel;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
 
-import java.net.NoRouteToHostException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +18,7 @@ import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.Move;
+import ca.brocku.chinesecheckers.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -48,11 +39,12 @@ import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine, SurfaceHolder.Callback {
     private GameBoardVisual gameBoard;                          // Root visual element
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
-    private Map<Position, Visual> pieces;                  // Pieces
+    private Map<Position, Visual> pieces;                       // Pieces
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
-    private float hintStrokeWidth;                              // Width of the hint stroke.
     private Piece currentHighlightedPiece;                      // Currently highlighted piece.
+    private float canvasWidth, canvasHeight;                      // Width/Height of the canvas
+    private float currentRotation;                              // Degrees canvas has rotated
 
     private transient BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
     private transient SurfaceHolder surfaceHolder;                        // Surface with canvas
@@ -84,8 +76,11 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             Canvas canvas = holder.lockCanvas();
             width = canvas.getWidth();
             height = canvas.getHeight();
+            canvasWidth = ((float)canvas.getWidth());//-0.0f;
+            canvasHeight = ((float)canvas.getHeight());//-1.75f;
             holder.unlockCanvasAndPost(canvas);
         }
+        currentRotation = 0;
 
         piecePositionSystem = new PiecePositionSystem(width, height);
         gameBoard = new GameBoardVisual(getContext(),
@@ -103,8 +98,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         if(init != null) {
             // Draw light home pieces
-            for(Piece p : init.getAllPieces()) {
-                gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.LIGHT)));
+            GameBoard temp = init.getDeepCopy();
+            temp.reset();
+            for(Piece p : temp.getAllPieces()) {
+                gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()),
+                        getPlayerColor(getResources(),
+                                Player.getPlayerColor(p.getPlayerNumber()), ColorSate.VERY_DARK)));
             }
 
             drawBoard(init);
@@ -129,7 +128,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      */
     {
         this.hintColor = getResources().getColor(R.color.hint_color);
-        this.hintStrokeWidth = getResources().getInteger(R.integer.hint_stroke_width);
 
         this.pieces = new HashMap<Position, Visual>();
 
@@ -183,7 +181,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
         if(piece != null) {
             PieceVisual pv = (PieceVisual)pieces.get(piece.getPosition());
             pv.setColor(getPlayerColor(getResources(), Player.getPlayerColor(piece.getPlayerNumber()),
-                                       ColorSate.DARK));
+                                       ColorSate.LIGHT));
         }
 
         currentHighlightedPiece = piece;
@@ -197,11 +195,27 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param onFinished Called when the rotation animation has completed.
      */
     @Override
-    public void rotateBoard(int degrees, FinishedRotatingBoardHandler onFinished) {
-        // TODO
+    public void rotateBoard(float degrees, FinishedRotatingBoardHandler onFinished) {
+        redraw();
+
+        currentRotation = (currentRotation + degrees)%360;
+
+        // Log.e("ROTATION", String.valueOf(currentRotation));
+
+        Canvas c = this.surfaceHolder.lockCanvas();
+
+        //TODO: make rotation more precise; remove clear canvas below to see issue
+        //TODO Cont'd: ISSUE IS PROB WITH THE PIECES NOT BEING DRAWN IN THE CENTER OF THE CANVAS
+        c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
+
+        c.rotate(currentRotation, canvasWidth/2.0f, canvasHeight /2.0f); // Clear canvas
+
+        gameBoard.draw(c);
+
+        this.surfaceHolder.unlockCanvasAndPost(c);
     }
 
-    /**
+ /**
      * TODO: Possibly put this in constructor
      * <p/>
      * Initialize the board with the current piece positions.
@@ -224,19 +238,6 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     }
 
     /**
-     * TODO: Possibly unneeded could be done with movePiece.
-     * <p/>
-     * Return a piece back to it's original position.
-     *
-     * @param move       The piece and path taken.
-     * @param onFinished Callback to fire when the animation has completed.
-     */
-    @Override
-    public void cancelMove(Move move, FinishedMovingPieceHandler onFinished) {
-
-    }
-
-    /**
      * Show hints on the board for positions the player could potentially move to.
      *
      * @param positions The positions to draw the hints on.
@@ -252,7 +253,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
             // Add Hint
             for(Position p : positions) {
-                Visual v = new HintVisual(piecePositionSystem.get(p), hintColor, hintStrokeWidth);
+                Visual v = new HintVisual(piecePositionSystem.get(p), this.hintColor);
 
                 this.hintPositions.add(v);
                 gameBoard.addChild(v);

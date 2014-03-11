@@ -10,4 +10,5 @@
     <dimen name="activity_xlarge_text_size">28dp</dimen>
     <dimen name="activity_xxlarge_text_size">32dp</dimen>
     <dimen name="dialog_margin">30dp</dimen>
+    <dimen name="input_field_height">36dp</dimen>
 </resources>

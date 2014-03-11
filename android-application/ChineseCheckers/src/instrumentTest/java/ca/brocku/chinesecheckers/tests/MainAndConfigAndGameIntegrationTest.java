@@ -51,7 +51,9 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
         MCGIntegrationRunnable mCGIR = new MCGIntegrationRunnable(this);
         synchronized (mCGIR){
             curAct.runOnUiThread(mCGIR);
-            mCGIR.wait();
+            ///////////////////////////////////////////////////////////HEADER COMMENTED OUT
+            //mCGIR.wait();
+            ((Object) mCGIR).wait();
         }
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
@@ -74,7 +76,11 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
         }
         public void run() {
             synchronized (this){
-                final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
+                ///////////////////////////////////////////////////////////HEADER COMMENTED OUT
+                //final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.offlineTwoPlayerButton);
+                final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.twoPlayerButton);
+
+
                 testHelper.ButtonTest(actInsTest, offlineTwoPlayerButton, true);
                 offlineTwoPlayerButton.performClick();
 
@@ -94,7 +100,9 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
                 offlineGreenPlayerNameEditText.setText("Green Bob");
                 offlineGameActivityButton.performClick();
 
-                notify();
+                ///////////////////////////////////////////////////////////HEADER COMMENTED OUT
+                //notify();
+                ((Object) this).notify();
             }
         }
 

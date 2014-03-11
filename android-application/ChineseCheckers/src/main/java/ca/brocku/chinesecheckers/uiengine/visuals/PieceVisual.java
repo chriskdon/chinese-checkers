@@ -3,6 +3,7 @@ package ca.brocku.chinesecheckers.uiengine.visuals;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
@@ -77,6 +78,7 @@ public class PieceVisual extends Visual {
      */
     @Override
     protected void onDraw(Canvas canvas) {
+        //Log.e("X- & Y-Center & Radius", getCenterX() + " " + getCenterY() + " " + pieceDrawingDetails.getRadius());
         canvas.drawCircle(getCenterX(), getCenterY(), pieceDrawingDetails.getRadius(), paint);
     }
 

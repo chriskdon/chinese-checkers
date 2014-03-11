@@ -20,7 +20,6 @@ public abstract class GameBoard implements Parcelable, Serializable {
      */
     public static final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1};
 
-
     /**
      * Total number of spaces on the board
      */
@@ -42,7 +41,7 @@ public abstract class GameBoard implements Parcelable, Serializable {
     }
 
     /**
-     * Move a piece from one position to another.
+     * MovePath a piece from one position to another.
      *
      * @param piece The piece to move.
      * @param to    The new position of the piece.
@@ -94,11 +93,28 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public abstract boolean isValidMove(Piece piece, Position to);
 
     /**
-     * Moves a piece without validaing mvoe.
-     * @param piece
-     * @param to
+     * Add a piece to the board.
+     *
+     * @param p
      */
-    public abstract void forceMove(Piece piece, Position to);
+    public abstract void addPiece(Piece p);
+
+    /**
+     * Returns a deep copied version of the gameboard.
+     * @return
+     */
+    public abstract GameBoard getDeepCopy();
+
+    /**
+     * Get the number of players
+     * @return
+     */
+    public abstract int getPlayerCount();
+
+    /**
+     * Reset the board to start state
+     */
+    public abstract void reset();
 
     /**
      * Describe the kinds of special objects contained in this Parcelable's

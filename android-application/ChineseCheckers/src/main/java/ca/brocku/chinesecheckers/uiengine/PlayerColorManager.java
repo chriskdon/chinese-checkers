@@ -19,6 +19,7 @@ public class PlayerColorManager {
     public static enum ColorSate {
         NORMAL,
         DARK,
+        VERY_DARK,
         LIGHT
     };
 
@@ -51,6 +52,17 @@ public class PlayerColorManager {
                     case GREEN: return resources.getColor(R.color.dark_green);
                     case YELLOW: return resources.getColor(R.color.dark_yellow);
                     case ORANGE: return resources.getColor(R.color.dark_orange);
+                }
+            }
+
+            case VERY_DARK: {
+                switch(playerColor) {
+                    case RED: return resources.getColor(R.color.very_dark_red);
+                    case PURPLE: return resources.getColor(R.color.very_dark_purple);
+                    case BLUE: return resources.getColor(R.color.very_dark_blue);
+                    case GREEN: return resources.getColor(R.color.very_dark_green);
+                    case YELLOW: return resources.getColor(R.color.very_dark_yellow);
+                    case ORANGE: return resources.getColor(R.color.very_dark_orange);
                 }
             }
 
