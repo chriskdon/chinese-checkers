@@ -56,8 +56,8 @@ public class SettingsActivity extends Activity {
      *
      */
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
 
         SharedPreferences.Editor editor = sharedPrefs.edit();
 
@@ -77,4 +77,5 @@ public class SettingsActivity extends Activity {
 
         editor.commit();
     }
+
 }

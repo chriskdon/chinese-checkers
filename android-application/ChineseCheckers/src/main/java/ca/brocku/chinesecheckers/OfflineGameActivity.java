@@ -4,7 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceCategory;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -184,6 +189,7 @@ public class OfflineGameActivity extends Activity {
     public static class OfflineGameFragment extends Fragment {
         private GameStateManager gameStateManager;
         private BoardUiEngine boardUiEngine;
+        private Boolean isShowMoves; //preference whether or not to show available moves
         private Button resetMove;
         private Button doneMove;
         private View rootView;
@@ -215,6 +221,7 @@ public class OfflineGameActivity extends Activity {
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_offline_game, container, false);
+
             return rootView;
         }
 
@@ -231,6 +238,10 @@ public class OfflineGameActivity extends Activity {
 
             boardUiEngine.setBoardEventsHandler(new BoardEventsHandler());
             boardUiEngine.initializeBoard(gameStateManager.getGameBoard());
+
+            //Get preference for showing possible moves
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            isShowMoves = sharedPrefs.getBoolean(MainActivity.PREF_SHOW_MOVES, true);
 
             // Bind Controls
             titleBarButton = (Button)rootView.findViewById(R.id.gamePlayerListButton);
@@ -394,7 +405,9 @@ public class OfflineGameActivity extends Activity {
                     // Update Drawing
                     boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
                     boardUiEngine.highlightPiece(currentPiece);
-                    boardUiEngine.showHintPositions(possibleMoves);
+                    if(isShowMoves) { //show moves if enabled in preferences
+                        boardUiEngine.showHintPositions(possibleMoves);
+                    }
                 }
             }
         }
