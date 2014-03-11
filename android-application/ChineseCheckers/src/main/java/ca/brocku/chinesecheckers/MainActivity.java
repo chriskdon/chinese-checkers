@@ -14,14 +14,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.UUID;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.gcm.GcmActivity;
 import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
+import ca.brocku.chinesecheckers.network.spice.SpicedActivity;
+import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
+import ca.brocku.chinesecheckers.network.spice.requests.FollowersRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
  *
@@ -30,7 +37,7 @@ import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
  *
  */
 @SuppressLint("all")
-public class MainActivity extends GcmActivity {
+public class MainActivity extends SpicedActivity {
     private Button offlineActivityButton;
     private Button onlineActivityButton;
     private Button helpActivityButton;
@@ -100,6 +107,29 @@ public class MainActivity extends GcmActivity {
                 .putString(PREF_USER_ID, UUID.randomUUID().toString())
                 .commit();
         }
+    }
+
+    // TODO: PLACEHOLDER EXAMPLE -- DELETE WHEN THERE IS A REAL API
+    private void performRequest(String user) {
+        this.setProgressBarIndeterminateVisibility(true);
+
+        FollowersRequest request = new FollowersRequest(user);
+
+        spiceManager.execute(request, new RequestListener<FollowerList>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                Toast.makeText(MainActivity.this, "SPICE FAILED", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRequestSuccess(FollowerList followers) {
+                if(followers.size() > 0) {
+                    Toast.makeText(MainActivity.this, "SPICE Result: " + followers.get(0).getLogin(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "SPICE Worked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /** Handles clicking on the "Offline" game button.
