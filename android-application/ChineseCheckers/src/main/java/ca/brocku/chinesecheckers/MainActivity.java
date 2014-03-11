@@ -37,7 +37,7 @@ import ca.brocku.chinesecheckers.network.spice.requests.FollowersRequest;
  *
  */
 @SuppressLint("all")
-public class MainActivity extends SpicedActivity {
+public class MainActivity extends SpicedGcmActivity {
     private Button offlineActivityButton;
     private Button onlineActivityButton;
     private Button helpActivityButton;

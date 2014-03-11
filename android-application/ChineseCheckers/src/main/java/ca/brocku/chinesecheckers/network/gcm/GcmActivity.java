@@ -16,6 +16,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
+import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
 import de.greenrobot.event.EventBus;
 
@@ -31,8 +32,6 @@ public class GcmActivity extends Activity {
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    private String SENDER_ID = "547231113091"; // Project Number
 
     private GoogleCloudMessaging gcm;
     private String gcmRegistrationId;
@@ -150,7 +149,7 @@ public class GcmActivity extends Activity {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
 
-                    gcmRegistrationId = gcm.register(SENDER_ID);
+                    gcmRegistrationId = gcm.register(getResources().getString(R.string.googleProjectNumber));
 
 
                     // You should send the registration ID to your server over HTTP,
