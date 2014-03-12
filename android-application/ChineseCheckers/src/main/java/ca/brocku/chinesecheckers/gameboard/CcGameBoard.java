@@ -214,17 +214,18 @@ public class CcGameBoard extends GameBoard {
             for(int j=0; j<i+1; j++) {
                 k = getOffsetRow(winArea, i);
                 h = getOffsetIndex(winArea, j);
-                if(board[k][h].getPlayerNumber()==playerNumber) {
-                    playerCheck=true;
-                }
                 if(board[k][h]==null){
                     winCheck = false;
                     break;
                 }
+                if( playerCheck==false && board[i][j].getPlayerNumber()==playerNumber) {
+                    playerCheck=true;
+                }
+
             }
         }
 
-        if(winCheck && playerCheck && this.gameBoardEventsHandler != null) {
+        if(winCheck==true && playerCheck==true && this.gameBoardEventsHandler != null) {
             this.gameBoardEventsHandler.onPlayerWon(playerNumber);
         }
     }
