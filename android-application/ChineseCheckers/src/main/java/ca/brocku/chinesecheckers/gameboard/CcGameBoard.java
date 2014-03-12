@@ -218,14 +218,13 @@ public class CcGameBoard extends GameBoard {
                     winCheck = false;
                     break;
                 }
-                if( playerCheck==false && board[i][j].getPlayerNumber()==playerNumber) {
+                if( playerCheck==false && board[k][h]!=null && board[i][j].getPlayerNumber()==playerNumber) {
                     playerCheck=true;
                 }
 
             }
         }
-
-        if(winCheck==true && playerCheck==true && this.gameBoardEventsHandler != null) {
+        if(winCheck && playerCheck && this.gameBoardEventsHandler != null) {
             this.gameBoardEventsHandler.onPlayerWon(playerNumber);
         }
     }
