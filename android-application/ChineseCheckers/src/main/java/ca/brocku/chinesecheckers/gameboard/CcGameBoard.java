@@ -201,6 +201,7 @@ public class CcGameBoard extends GameBoard {
      */
     private void checkWinCondition(int playerNumber) {
         boolean winCheck = true;
+        boolean playerCheck = false;
         int k, h;
         int winArea;
         if(playerNumber < 4) {
@@ -213,14 +214,17 @@ public class CcGameBoard extends GameBoard {
             for(int j=0; j<i+1; j++) {
                 k = getOffsetRow(winArea, i);
                 h = getOffsetIndex(winArea, j);
-                if(board[k][h]==null || board[k][h].getPlayerNumber()!=playerNumber){
+                if(board[k][h].getPlayerNumber()==playerNumber) {
+                    playerCheck=true;
+                }
+                if(board[k][h]==null){
                     winCheck = false;
                     break;
                 }
             }
         }
 
-        if(winCheck && this.gameBoardEventsHandler != null) {
+        if(winCheck && playerCheck && this.gameBoardEventsHandler != null) {
             this.gameBoardEventsHandler.onPlayerWon(playerNumber);
         }
     }
