@@ -218,7 +218,7 @@ public class CcGameBoard extends GameBoard {
                     winCheck = false;
                     break;
                 }
-                if( playerCheck==false && board[k][h]!=null && board[i][j].getPlayerNumber()==playerNumber) {
+                if( !playerCheck && board[k][h].getPlayerNumber()==playerNumber) {
                     playerCheck=true;
                 }
 
