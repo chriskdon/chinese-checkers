@@ -2,19 +2,19 @@ Q: How do I start a game by myself or with friends?
 A: Tap the Offline button on the main menu. This will bring you to a second screen where you can set up your game. Four buttons at the top of the screen allow you to change the number of players, including yourself and computer controlled players, or AI. By default, only the first player is set to human. You can enter your name in the text box, and tap the buttons on the others to change the AI difficulty. You can change the AI players to humans by tapping the picture of a robot to the right of each set of difficulty buttons. Tap Start Game to begin. At the end of each turn, pass the game to the next player.
 
 Q: How do I play?
-A: Once you have a game started, tap one of your game pieces. The spaces you can move it to will be highlighted. Tap one of these spaces to move your piece. If the piece is used to hop another, it may do so multiple times. You can click Reset to move it back, or tap Done to end your turn. If you tap Done without moving a piece, you will skip your turn. To win, move all your pieces into the opposite corner before your opponents do the same.
+A: Once you have a game started, tap one of your game pieces. The spaces you can move it to will be highlighted. Tap one of these spaces to move your piece. If the piece can be used to hop another, it may do so multiple times, even if you started by moving it one space. You can click Reset to move it back, or tap Done to end your turn. If you tap Done without moving a piece, you will skip your turn. To win, move all your pieces into the opposite corner before your opponents do the same. If an opponent is blocking any of your goal spaces, filling the rest will count as a win.
 
 Q: Can I watch a game to see how it's played?
-A: Yes. Just tap  the Offline button, tap the first player's human icon to change it to an AI, and then tap Start Game. Watch and learn.
+A: Yes. Just tap the Offline button, tap the first player's human icon to change it to an AI, and then tap Start Game. Watch and learn.
 
-Q: Why was I asked for a username?
+Q: Why do I have a username?
 A: This name is used for online games. This is the name other users will see when you play online. You can change it anytime your device is connected to the Internet by entering a new one in the settings menu.
 
 Q: How do I start a game over the Internet?
 A: Tap the Online button on the main menu. This will bring you to a second screen that lists your online games in progress. To start a new one, click the New Game button at the bottom of the screen. You can then select the number of players by tapping one of the buttons that appear. After a short time, the game will begin. If enough players are not found, AI players will be used to fill the game.
 
 Q: I got a notification telling me it's my turn. How do I take my turn?
-A: Tap the Online button, and then tap the game with an exclamation point next to it on the list.
+A: Tap the Online button, and then tap the game with an arrow next to it on the list.
 
 Q: How do I leave an online game?
 A: Tap the Online button, then press and hold the game you want to leave. You will be asked if you want to quit it. Tap Yes. You will be replaced by an AI, so the other players can keep playing.
