@@ -29,7 +29,7 @@ import de.greenrobot.event.EventBus;
  * Student #: 4810800
  * Date: 3/11/2014
  */
-public class GcmActivity extends Activity implements FailedToRegisterGcm {
+public class GcmActivity extends Activity {
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -142,7 +142,45 @@ public class GcmActivity extends Activity implements FailedToRegisterGcm {
      * @param context   The context of the registration.
      */
     private void registerInBackground(final Context context) {
-        new RegisterGcmInBackground(context, this).execute();
+        new AsyncTask<Void, Void, IOException>() {
+            @Override
+            protected IOException doInBackground(Void... voids) {
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+
+                    gcmRegistrationId = gcm.register(getResources().getString(R.string.googleProjectNumber));
+
+
+                    // You should send the registration ID to your server over HTTP,
+                    // so it can use GCM/HTTP or CCS to send messages to your app.
+                    // The request to your server should be authenticated if your app
+                    // is using accounts.
+                    sendRegistrationIdToBackend();
+
+                    // For this demo: we don't need to send it because the device
+                    // will send upstream messages to a server that echo back the
+                    // message using the 'from' address in the message.
+
+                    // Persist the regID - no need to register again.
+                    storeRegistrationId(context, gcmRegistrationId);
+                } catch (IOException ex) {
+                    return ex; // Failed
+                }
+
+                return null; // Registered
+            }
+
+            @Override
+            protected void onPostExecute(IOException e) {
+                super.onPostExecute(e);
+
+                if(e != null) {
+                    onCouldNotRegisterGcm(e);
+                }
+            }
+        }.execute();
     }
 
     /**
@@ -197,8 +235,7 @@ public class GcmActivity extends Activity implements FailedToRegisterGcm {
      * Fired when the activity was unable to register the device for GCM
      * @param ex
      */
-    @Override
-    public void onCouldNotRegisterGcm(IOException ex) {
+    protected void onCouldNotRegisterGcm(IOException ex) {
         // TODO: Handle this better
         Toast.makeText(this, "Could Not Register GCM", Toast.LENGTH_SHORT).show();
     }
@@ -206,50 +243,5 @@ public class GcmActivity extends Activity implements FailedToRegisterGcm {
     // TODO: PLACEHOLDER METHOD FOR DEV -- DELETE WHEN THERE IS A REAL API
     public void onEvent(TestMessage event) {
         Log.d("EVENT", event.getTestData());
-    }
-
-    private class RegisterGcmInBackground extends AsyncTask<Void, Void, Boolean> {
-        private Context context;
-        private FailedToRegisterGcm failed;
-
-        public RegisterGcmInBackground(Context context, FailedToRegisterGcm failed) {
-            if(failed == null) {
-                throw new IllegalArgumentException("There must be a failed to register GCM handler");
-            }
-
-            this.context = context;
-            this.failed = failed;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            try {
-                if (gcm == null) {
-                    gcm = GoogleCloudMessaging.getInstance(context);
-                }
-
-                gcmRegistrationId = gcm.register(getResources().getString(R.string.googleProjectNumber));
-
-
-                // You should send the registration ID to your server over HTTP,
-                // so it can use GCM/HTTP or CCS to send messages to your app.
-                // The request to your server should be authenticated if your app
-                // is using accounts.
-                sendRegistrationIdToBackend();
-
-                // For this demo: we don't need to send it because the device
-                // will send upstream messages to a server that echo back the
-                // message using the 'from' address in the message.
-
-                // Persist the regID - no need to register again.
-                storeRegistrationId(context, gcmRegistrationId);
-            } catch (IOException ex) {
-                //failed.onCouldNotRegisterGcm(ex);
-
-                return false; // Failed
-            }
-
-            return true; // Registered
-        }
     }
 }
