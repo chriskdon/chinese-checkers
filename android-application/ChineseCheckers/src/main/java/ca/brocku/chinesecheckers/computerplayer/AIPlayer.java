@@ -19,7 +19,6 @@ import ca.brocku.chinesecheckers.gamestate.PlayerTurnState;
 public class AIPlayer extends Player {
     private String AILevel;
     private int difficulty;
-    private transient PlayerTurnState playerTurnState;
 
     public AIPlayer(String AILevel, PlayerColor playerColor){
         super(playerColor);
@@ -63,19 +62,7 @@ public class AIPlayer extends Player {
      */
     @Override
     public void onTurn(PlayerTurnState state) {
-        this.playerTurnState = state;
-        state.signalMove(this, getMove(playerTurnState.getGameBoard()));
-    }
-
-    /**
-     * Get the turn state
-     * @return
-     */
-    public PlayerTurnState getPlayerTurnState() {
-        if(playerTurnState == null) {
-            throw new IllegalStateException("This player does not have a player turn state manager.");
-        }
-        return this.playerTurnState;
+        state.signalMove(this, getMove(state.getGameBoard()));
     }
 
     /**

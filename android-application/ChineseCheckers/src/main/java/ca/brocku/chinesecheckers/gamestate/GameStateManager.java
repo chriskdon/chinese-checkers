@@ -155,11 +155,13 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
      * @param p The player
      */
     private void triggerPlayerTurnEvent(Player p) {
-        this.getCurrentPlayer().onTurn(this);
+        checkState(p);
 
         if(this.gameStateEventsHandler != null) {
             this.gameStateEventsHandler.onPlayerTurn(p);
         }
+
+        p.onTurn(this);
     }
 
     public Player[] getPlayers() {
@@ -273,6 +275,12 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
         }
     }
 
+    private void checkState(Player p) {
+        if(p != getCurrentPlayer()) {
+            throw new IllegalStateException("It is not that player's turn.");
+        }
+    }
+
     /**
      * Signal that a move has been made.
      *
@@ -281,41 +289,40 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
      */
     @Override
     public void signalMove(Player p, MovePath m) {
-        if(p == getCurrentPlayer()) {
-            GameBoard originalBoard = gameBoard.getDeepCopy();
+        checkState(p);
 
-            // Move the sequence of pieces
-            Iterator<Position> it = m.getPath().iterator();
-            Position last = null;
-            while(it.hasNext()) {
-                if(last == null) {
-                    last = it.next();
-                }
+        GameBoard originalBoard = gameBoard.getDeepCopy();
 
-                Position current = it.next();
-
-                Piece piece = gameBoard.getPiece(last);
-
-                // Check for illegal moves
-                if(piece == null) {
-                    throw new IllegalMoveException("There is no piece at that position.");
-                } else if(piece.getPlayerNumber() != p.getPlayerNumber()) {
-                    throw new IllegalMoveException("Player<" + p.getName() + "> cannot move that piece.");
-                }
-
-                gameBoard.movePiece(piece, current);
-
-                last = current;
+        // Move the sequence of pieces
+        Iterator<Position> it = m.getPath().iterator();
+        Position last = null;
+        while(it.hasNext()) {
+            if(last == null) {
+                last = it.next();
             }
 
-            if(this.gameStateEventsHandler != null) {
-                this.gameStateEventsHandler.onBoardModified(p, originalBoard, m);
+            Position current = it.next();
+
+            Piece piece = gameBoard.getPiece(last);
+
+            // Check for illegal moves
+            if(piece == null) {
+                throw new IllegalMoveException("There is no piece at that position.");
+            } else if(piece.getPlayerNumber() != p.getPlayerNumber()) {
+                throw new IllegalMoveException("Player<" + p.getName() + "> cannot move that piece.");
             }
 
-            nextPlayer();
-        } else {
-            throw new IllegalStateException("It is not Player<" + p.getName() + ">'s turn, they can't make a move");
+            gameBoard.movePiece(piece, current);
+
+            last = current;
         }
+
+        if(this.gameStateEventsHandler != null) {
+            this.gameStateEventsHandler.onBoardModified(p, originalBoard, m);
+        }
+
+        nextPlayer();
+
     }
 
     /**
