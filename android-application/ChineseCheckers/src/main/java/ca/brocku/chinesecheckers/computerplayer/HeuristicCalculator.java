@@ -1,7 +1,8 @@
 package ca.brocku.chinesecheckers.computerplayer;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Piece;
+import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.MovePath;
 
 
 /**
@@ -18,6 +19,13 @@ public class HeuristicCalculator {
     public HeuristicCalculator(int playerNumber, GameBoard board){
         this.goalState = getGoalState(playerNumber, board);
     }
+
+    public int getDeltaDistanceHeuristic(MovePath path){
+        int initialPosition = getDistanceHeuristic(path.getStartPosition());
+        int finalPosition = getDistanceHeuristic(path.getEndPosition());
+
+        return (initialPosition - finalPosition);
+    }
     /**
      * Calculates the distance from a piece to the farthest corner of the goal state.
      * Gives distance to travel 2.5 times more weight than distance from center
@@ -26,53 +34,69 @@ public class HeuristicCalculator {
      * @param piece The piece to be checked.
      * @return The pathing heuristic of the piece.
      */
-    public int getDistanceHeuristic(Piece piece){
+    public int getDistanceHeuristic(Position piece){
         int distanceFromGoal = 0, rowCase = 0, indexCase = 0;
-
         //vertical displacement from the goal state
         if(goalState[0] == 16 || goalState[0] == 0)
             rowCase = 1;//up/down center
-        if(goalState[0] == 9 || goalState[0] == 9)
-            rowCase = 2;//up diagonal
         if(goalState[0] == 7 || goalState[0] == 7)
+            rowCase = 2;//up diagonal
+        if(goalState[0] == 9 || goalState[0] == 9)
             rowCase = 3;//down diagonal
+
         switch(rowCase){
             case 1:
-                distanceFromGoal += Math.abs(piece.getPosition().getRow() - goalState[0])*20;
+                distanceFromGoal += Math.abs(piece.getRow() - goalState[0])*20;
                 break;
             case 2:
-                distanceFromGoal += Math.abs(piece.getPosition().getRow() - (goalState[0]+3))*20;
+                distanceFromGoal += Math.abs(piece.getRow() - ((goalState[0]-3)))*16;
                 break;
             case 3:
-                distanceFromGoal += Math.abs(piece.getPosition().getRow() - (goalState[0]-3))*20;
+                distanceFromGoal += Math.abs(piece.getRow() - (goalState[0]+3))*16;
                 break;
             default:
                 break;
         }
 
         //horizontal displacement from the goal state
-        if(goalState[1] == 1 || goalState[1] == 4)
-            indexCase = 1;//up/down center
-        if(goalState[1] == 3 || goalState[1] == 5)
+        if(goalState[1] == 0 && goalState[0] == 0)
+            indexCase = 1;//up center
+        else if(goalState[1] == 0 && goalState[0] == 16)
+            indexCase = 1;//down center
+        else if(goalState[1] == 0)
             indexCase = 2;//leftward diagonal
-        if(goalState[1] == 5 || goalState[1] == 6)
+        else if(goalState[1] == 9)
             indexCase = 3;//rightward diagonal
         switch(indexCase){
             case 1:
                 //first three rows into one of the vertical goal states
-                if(piece.getPosition().getRow() < 4 && piece.getPosition().getRow() > 0)
-                    distanceFromGoal += Math.abs(piece.getPosition().getIndex() - 1) * 8;
-                else if(piece.getPosition().getRow() > 12 && piece.getPosition().getRow() < 16)
-                    distanceFromGoal += Math.abs(piece.getPosition().getIndex() - 1) * 8;
+                if(piece.getRow() < 4 && piece.getRow() >= 0)
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 8;
+                else if(piece.getRow() > 12 && piece.getRow() <= 16)
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 8;
                     //rows between the vertical goal states in the grid
-                else if(piece.getPosition().getRow() >= 4 && piece.getPosition().getRow() <= 12)
-                    distanceFromGoal += Math.abs((piece.getPosition().getIndex()) - (Math.abs(piece.getPosition().getIndex() - 8) / 2) + 4) * 8;
+                else if(piece.getRow() >= 4 && piece.getRow() <= 12)
+                    distanceFromGoal += Math.abs(piece.getIndex() - ((Math.abs(piece.getRow() - 8) / 2) + 4)) * 8;
                 break;
             case 2:
-                distanceFromGoal += Math.abs(piece.getPosition().getIndex() - goalState[1]) * 12;
+                //first three rows into one of the vertical goal states
+                if(piece.getRow() < 4 && piece.getRow() >= 0)
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                else if(piece.getRow() > 12 && piece.getRow() <= 16)
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                //rows between the vertical goal states in the grid
+                else if (piece.getRow() >= 4 && piece.getRow() <= 12)
+                    distanceFromGoal += Math.abs(piece.getIndex() - goalState[1]) * 12;
                 break;
-            case 3:
-                distanceFromGoal += Math.abs(piece.getPosition().getIndex() - (goalState[1]+3)) * 18;
+            case 3:    //(6,8) vs (4,6) FROM (8,4)
+                //first three rows into one of the vertical goal states
+                if(piece.getRow() < 4 && piece.getRow() >= 0)
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                else if(piece.getRow() > 12 && piece.getRow() <= 16)
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                    //rows between the vertical goal states in the grid
+                else if (piece.getRow() >= 4 && piece.getRow() <= 12)
+                    distanceFromGoal += Math.abs(piece.getIndex() - (goalState[1]+3)) * 18;
                 break;
             default:
                 break;
@@ -96,7 +120,7 @@ public class HeuristicCalculator {
             winLocation = playerNumber + 3;
         }
         else {
-            winLocation = playerNumber + 3 - 6;
+            winLocation = playerNumber - 3;
         }
 
         winPos[0] = getOffsetRow(winLocation);

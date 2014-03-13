@@ -521,16 +521,6 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         assertNotNull("Transition Back to OfflineGameActivity Failed",curAct);
     }
 
-    ///////////////////////////////////////////////////////////HEADER COMMENTED OUT
-    /*public void activityTestHelper(){
-        TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.offlineCurrentPlayerTextView);
-        testHelper.TextViewTest(this,offlineCurrentPlayerTextView,true,"Red Bob");
-
-        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.offlineMoveResetButton);
-        testHelper.ButtonTest(this,offlineMoveResetButton,true);
-
-        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.offlineMoveDoneButton);*/
-
     public void activityTestHelper(){
         TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.gamePlayerListButton);
         testHelper.TextViewTest(this,offlineCurrentPlayerTextView,true,"Red Bob");

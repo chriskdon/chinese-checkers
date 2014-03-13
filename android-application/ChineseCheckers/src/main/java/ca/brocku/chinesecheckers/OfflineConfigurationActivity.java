@@ -19,6 +19,7 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
+import ca.brocku.chinesecheckers.computerplayer.AIPlayer;
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
@@ -306,27 +307,69 @@ public class OfflineConfigurationActivity extends Activity {
                 //TODO: END TEMP CODE
 
                 if(redPlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
+                    if(redPlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
+                    else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.RED));
+                    else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.RED));
+                    else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.RED));
                 }
 
                 if(purplePlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
+                    if(purplePlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
+                    else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.PURPLE));
+                    else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.PURPLE));
+                    else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.PURPLE));
                 }
 
                 if(bluePlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
+                    if(bluePlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
+                    else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.BLUE));
+                    else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.BLUE));
+                    else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.BLUE));
                 }
 
                 if(greenPlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
+                    if(greenPlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
+                    else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.GREEN));
+                    else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.GREEN));
+                    else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.GREEN));
                 }
 
                 if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
+                    if(yellowPlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
+                    else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.YELLOW));
+                    else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.YELLOW));
+                    else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.YELLOW));
                 }
 
                 if(orangePlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
+                    if(orangePlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
+                    else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerEasyButton.isChecked())
+                        players.add(new AIPlayer("EASY", Player.PlayerColor.ORANGE));
+                    else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerMediumButton.isChecked())
+                        players.add(new AIPlayer("MEDIUM", Player.PlayerColor.ORANGE));
+                    else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerHardButton.isChecked())
+                        players.add(new AIPlayer("HARD", Player.PlayerColor.ORANGE));
                 }
 
                 GameBoard board = new CcGameBoard(players.size());

@@ -62,6 +62,13 @@ public class MovePath {
     }
 
     /**
+     * Removes the last position in the path.
+     */
+    public void removeEndPosition(){
+        path.remove(path.size()-1);
+    }
+
+    /**
      * @return The position of the piece's starting location before it was moved.
      */
     public Position getStartPosition() {
@@ -79,6 +86,13 @@ public class MovePath {
         if(path.size() > 0) {
             return path.get(path.size() - 1);
         }
+
+        throw new IllegalStateException("The path has not been added yet");
+    }
+
+    public Position getPosition(int position){
+        if(path.size() >= position)
+            return path.get(position);
 
         throw new IllegalStateException("The path has not been added yet");
     }

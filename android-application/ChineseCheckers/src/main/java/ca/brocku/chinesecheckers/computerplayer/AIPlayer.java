@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.gamestate.PlayerTurnState;
@@ -65,7 +64,7 @@ public class AIPlayer extends Player {
     @Override
     public void onTurn(PlayerTurnState state) {
         this.playerTurnState = state;
-        this.playerTurnState.signalMove(this, getMove(playerTurnState.getGameBoard()));
+        state.signalMove(this, getMove(playerTurnState.getGameBoard()));
     }
 
     /**

@@ -3,6 +3,7 @@ package ca.brocku.chinesecheckers.computerplayer;
 import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.GridPiece;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.MovePath;
@@ -18,7 +19,10 @@ import ca.brocku.chinesecheckers.gamestate.MovePath;
 public class EasyMove {
     private AIPlannedMove currentMove;
     private HeuristicCalculator cHeuristic;
+    MovePath path;
+    ArrayList<Position> visited;
 
+    //Position[] visited;
     /**
      * Calculates the move that an easy AI would make
      *
@@ -27,52 +31,36 @@ public class EasyMove {
      * @return The move the AI chooses to make.
      */
     public MovePath getEasyMove(int player, GameBoard board) {
-        Piece[] AIPieces = getPlayerPieces(player, board);
-        GameBoard tempBoard = board;
-        int tempHeuristic;
-        MovePath move;
+        visited = new ArrayList<Position>();
+        currentMove = new AIPlannedMove();
+        path = new MovePath();
         cHeuristic = new HeuristicCalculator(player, board);
-        ArrayList<Position> path;
+        GameBoard tempBoard = board.getDeepCopy();
 
-        /*
-        Gets each single step move for each player-owned piece.
-         */
+        GridPiece[] AIPieces = getPlayerPieces(player, tempBoard);
+
         for (Piece piece : AIPieces) {
-            path = null;
+            if(piece != null){
+                visited.clear();
 
-            Position[] initialPossible = board.getPossibleMoves(piece);
-            ArrayList<Position> hops = new ArrayList<Position>();
-            if (initialPossible != null) {
-                for (Position p : initialPossible) {
-                    if (Math.abs(p.getRow() - piece.getPosition().getRow()) == 2 ||
-                            Math.abs(p.getIndex() - piece.getPosition().getIndex()) == 2) {
+                if(path.size() > 0)
+                    for(int i = path.size() ; i > 0 ; i--)
+                        path.removeEndPosition();
 
-                        hops.add(p);
-                    }
-                }
+                path.addToPath(piece.getPosition());//path = starting position
+                visited.add(piece.getPosition());   //visited = starting position
+
+                Position[] initialPossible = board.getPossibleMoves(piece);
+
+                if(initialPossible != null && initialPossible.length > 0)
+                    for(Position pos : initialPossible)
+                        if(pos != null){
+                            visited.add(pos);
+                            checkHops(piece, pos, tempBoard);
+                        }
             }
-
-            //Compares the preference of the move to the currently favoured move
-            for (Position pos : initialPossible) {
-                tempBoard = board;
-                path.add(pos);
-                tempBoard.movePiece(piece, pos);
-                tempHeuristic = cHeuristic.getDistanceHeuristic(piece);
-                if (currentMove.getHeuristic() == 0) {
-                    currentMove.setPieceMoved(piece);
-                    currentMove.setPath(path);
-                    currentMove.setHeuristic(tempHeuristic);
-                } else if (tempHeuristic < currentMove.getHeuristic()) {
-                    currentMove.setHeuristic(tempHeuristic);
-                    currentMove.setPieceMoved(piece);
-                    currentMove.setPath(path);
-                }
-                path.remove(path.size() - 1); //remove the completed move
-            }
-            checkAllHops(piece, initialPossible, tempBoard, path);
         }
-        move = new MovePath(currentMove.getPath());
-        return move;
+    return new MovePath(currentMove.getPath());
     }
 
     /**
@@ -82,15 +70,15 @@ public class EasyMove {
      * @param board  is the gameboard containing pieces.
      * @return array of pieces belonging to the player.
      */
-    public Piece[] getPlayerPieces(int player, GameBoard board) {
-        Piece[] allPieces = board.getAllPieces(), playerPieces = new Piece[10];
+    public GridPiece[] getPlayerPieces(int player, GameBoard board) {
+        Piece[] allPieces = board.getAllPieces();
+        GridPiece[] playerPieces = new GridPiece[10];
         int j = 0;
-        for (int i = 0; i < allPieces.length; i++)
-            if (allPieces[i].getPlayerNumber() == player) {
-                playerPieces[j] = allPieces[i];
+        for (Piece piece : allPieces)
+            if (piece.getPlayerNumber() == player) {
+                playerPieces[j] = new GridPiece(piece.getPosition(), player);
                 j++;
             }
-
         return playerPieces;
     }
 
@@ -98,41 +86,40 @@ public class EasyMove {
      * Recursively calculates the heuristic and path of all hops of any distance for the provided piece
      *
      * @param current   Piece to calculate hop paths for
-     * @param listSoFar Current list of moves for the piece
+     * @param movingTo The new position for the piece on the gameboard
      * @param tempBoard The gameboard
-     * @param path      The path taken to the current position for the piece
-     * @return An array of positions that the piece can move to
+     *
      */
-    private void checkAllHops(Piece current, Position[] listSoFar, GameBoard tempBoard, ArrayList<Position> path) {
-        Boolean existingHop;
-        Position currentPosition = current.getPosition();
-        Position[] hops = tempBoard.getPossibleHops(current);
-        //ArrayList<Position> newHops = new ArrayList<Position>();
-        int thisHeuristic;
+    private void checkHops(Piece current, Position movingTo, GameBoard tempBoard) {
+        boolean alreadyVisited;
+        path.addToPath(movingTo);
+        visited.add(movingTo);
 
-        //remove duplicate hops
-        if (hops != null) {
-            for (Position position : hops) {                    //for each possible hop
-                existingHop = false;
-                for (Position existingPosition : listSoFar) {   //remove previously visited positions
-                    if (existingPosition == position)
-                        existingHop = true;
+        tempBoard.movePiece(current, movingTo);
+        Position[] availableMoves = tempBoard.getPossibleHops(tempBoard.getPiece(movingTo));
+
+        if (cHeuristic.getDeltaDistanceHeuristic(path) > currentMove.getHeuristic()) {
+                    Position[] toArrayList = path.getPath().toArray(new Position[path.size()]);
+            ArrayList<Position>  newArrayList = new ArrayList<Position>();
+            for(int i = 0 ; i < toArrayList.length ;  i++){
+                newArrayList.add(toArrayList[i]);
+            }
+            currentMove.setHeuristic(cHeuristic.getDeltaDistanceHeuristic(path));
+            currentMove.setPath(newArrayList);
+            currentMove.setPieceMoved(current);
+        }
+        if(availableMoves != null){
+            for(Position newHop : availableMoves){
+                alreadyVisited = false;
+                for(Position hasBeenVisited : visited){ //checks if the position has been visited by this piece in a previous move
+                    if(newHop.equals(hasBeenVisited))
+                        alreadyVisited = true;
                 }
-                if (!existingHop) {
-                    path.add(position);                         //check if this is the new best move
-                    thisHeuristic = cHeuristic.getDistanceHeuristic(current);
-                    if (thisHeuristic <= currentMove.getHeuristic()) {
-                        currentMove.setHeuristic(thisHeuristic);
-                        currentMove.setPath(path);
-                        currentMove.setPieceMoved(current);
-                    }
-                    listSoFar[listSoFar.length] = position;     //add to visited positions
-                    checkAllHops(current, listSoFar, tempBoard, path);  //recursive call
-                    path.remove(path.size() - 1);                 //remove latest hop
-                    tempBoard.movePiece(current, path.get(path.size() - 1));
-                }
+                if(alreadyVisited == false){
+                    checkHops(tempBoard.getPiece(movingTo), newHop, tempBoard);}
             }
         }
-
+        path.removeEndPosition();
+        tempBoard.movePiece(tempBoard.getPiece(movingTo), path.getEndPosition());
     }
 }
