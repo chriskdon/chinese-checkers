@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -25,7 +27,7 @@ import ca.brocku.chinesecheckers.gameboard.IllegalMoveException;
  * Student #: 4810800
  * Date: 2/22/2014
  */
-public class GameStateManager implements Parcelable, Serializable, PlayerTurnState {
+public class GameStateManager implements Parcelable, Serializable {
     public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
 
     private GameBoard gameBoard;
@@ -137,32 +139,64 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
     /**
      * Start the game
      */
-    public void startGame() {
-        triggerPlayerTurnEvent(getCurrentPlayer());
+    public void startGame(final Activity activity) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    final Player p = getCurrentPlayer();
+
+                    if(GameStateManager.this.gameStateEventsHandler != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                GameStateManager.this.gameStateEventsHandler.onPlayerTurn(p);
+                            }
+                        });
+                    }
+
+                    final MovePath m = p.onTurn(getGameBoard());
+                    final GameBoard originalBoard = gameBoard.getDeepCopy();
+
+                    // Move the sequence of pieces
+                    Iterator<Position> it = m.getPath().iterator();
+                    Position last = null;
+                    while(it.hasNext()) {
+                        if(last == null) {
+                            last = it.next();
+                        }
+
+                        Position current = it.next();
+
+                        Piece piece = gameBoard.getPiece(last);
+
+                        // Check for illegal moves
+                        if(piece == null) {
+                            throw new IllegalMoveException("There is no piece at that position.");
+                        } else if(piece.getPlayerNumber() != p.getPlayerNumber()) {
+                            throw new IllegalMoveException("Player<" + p.getName() + "> cannot move that piece.");
+                        }
+
+                        gameBoard.movePiece(piece, current);
+
+                        last = current;
+                    }
+
+                    if(GameStateManager.this.gameStateEventsHandler != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                GameStateManager.this.gameStateEventsHandler.onBoardModified(p, originalBoard, getGameBoard(), m);
+                            }
+                        });
+                    }
+
+                    currentPlayer = getNextPlayer(getCurrentPlayer().getPlayerColor());
+                }
+            }
+        }).start();
     }
 
-    /**
-     * Signal it's the next players turn.
-     */
-    public void nextPlayer() {
-        currentPlayer = getNextPlayer(currentPlayer);
-        triggerPlayerTurnEvent(getCurrentPlayer());
-    }
-
-    /**
-     * Trigger the on player turn event.
-     *
-     * @param p The player
-     */
-    private void triggerPlayerTurnEvent(Player p) {
-        checkState(p);
-
-        if(this.gameStateEventsHandler != null) {
-            this.gameStateEventsHandler.onPlayerTurn(p);
-        }
-
-        p.onTurn(this);
-    }
 
     public Player[] getPlayers() {
         Player[] playerArray = new Player[getNumberOfPlayers()];
@@ -198,7 +232,6 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
      * Return a gameboard that can only be looked at.
      * @return  The gameboard.
      */
-    @Override
     public ReadOnlyGameBoard getGameBoard() {
         return new ReadOnlyGameBoard(gameBoard);
     }
@@ -275,56 +308,6 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
         }
     }
 
-    private void checkState(Player p) {
-        if(p != getCurrentPlayer()) {
-            throw new IllegalStateException("It is not that player's turn.");
-        }
-    }
-
-    /**
-     * Signal that a move has been made.
-     *
-     * @param p     The player that is making the move.
-     * @param m     The path from start to end of the move that was made.
-     */
-    @Override
-    public void signalMove(Player p, MovePath m) {
-        checkState(p);
-
-        GameBoard originalBoard = gameBoard.getDeepCopy();
-
-        // Move the sequence of pieces
-        Iterator<Position> it = m.getPath().iterator();
-        Position last = null;
-        while(it.hasNext()) {
-            if(last == null) {
-                last = it.next();
-            }
-
-            Position current = it.next();
-
-            Piece piece = gameBoard.getPiece(last);
-
-            // Check for illegal moves
-            if(piece == null) {
-                throw new IllegalMoveException("There is no piece at that position.");
-            } else if(piece.getPlayerNumber() != p.getPlayerNumber()) {
-                throw new IllegalMoveException("Player<" + p.getName() + "> cannot move that piece.");
-            }
-
-            gameBoard.movePiece(piece, current);
-
-            last = current;
-        }
-
-        if(this.gameStateEventsHandler != null) {
-            this.gameStateEventsHandler.onBoardModified(p, originalBoard, m);
-        }
-
-        nextPlayer();
-
-    }
-
     /**
      * Events that the GameStateManager will throw throughout
      * the lifecycle of the game.
@@ -341,9 +324,10 @@ public class GameStateManager implements Parcelable, Serializable, PlayerTurnSta
          * Fired when a piece on the board is moved from one position to another.
          * @param player            The player who modified the board
          * @param originalBoard     The original copied state of the board.
+         * @param currentBoard      The current game board.
          * @param movePath          The path describing the movePath.
          */
-        public void onBoardModified(Player player, GameBoard originalBoard,  MovePath movePath);
+        public void onBoardModified(Player player, GameBoard originalBoard, ReadOnlyGameBoard currentBoard,  MovePath movePath);
 
         /**
          * Occurs when a player forfeit the game.

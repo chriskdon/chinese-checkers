@@ -49,7 +49,7 @@ public class OfflineGameActivity extends Activity {
         isEndCurrentGame = false;
 
         //passes player array to the offline game fragment
-        Fragment offlineGameFragment = new OfflineGameFragment();
+        Fragment offlineGameFragment = new OfflineGameFragment(this);
         Bundle offlineGameFragmentBundle = new Bundle();
         offlineGameFragmentBundle.putParcelable("GAME_STATE_MANAGER", gameStateManager);
         offlineGameFragment.setArguments(offlineGameFragmentBundle);
@@ -206,6 +206,12 @@ public class OfflineGameActivity extends Activity {
 
         public OfflineGameFragment() {}
 
+        public OfflineGameActivity activity;
+
+        public OfflineGameFragment(OfflineGameActivity activity) {
+            this.activity = activity;
+        }
+
         /**
          * Get a modifiable version of the current game board.
          * @return
@@ -254,7 +260,7 @@ public class OfflineGameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            gameStateManager.startGame();
+            gameStateManager.startGame(activity);
         }
 
         /**
@@ -344,13 +350,9 @@ public class OfflineGameActivity extends Activity {
                     }
 
                     ((HumanPlayer)currentPlayer)
-                            .getPlayerTurnState()
-                            .signalMove(currentPlayer, movePath);
+                            .signalMove(movePath);
 
                     resetHumanState();
-                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                    boardUiEngine.showHintPositions(null);
-                    boardUiEngine.highlightPiece(null);
                 }
             }
         }
@@ -465,13 +467,14 @@ public class OfflineGameActivity extends Activity {
              *
              * @param player        The player who modified the board
              * @param originalBoard The original copied state of the board.
+             * @param currentBoard  The current game board.
              * @param movePath      The path describing the movePath.
              */
             @Override
-            public void onBoardModified(Player player, GameBoard originalBoard, MovePath movePath) {
-                // TODO: This will need to be overridden for online game play because
-                //       the state of the game board will have changed.
-                //       but because we're sharing it for offline this is useless.
+            public void onBoardModified(Player player, GameBoard originalBoard, ReadOnlyGameBoard currentBoard, MovePath movePath) {
+                boardUiEngine.drawBoard(currentBoard);
+                boardUiEngine.showHintPositions(null);
+                boardUiEngine.highlightPiece(null);
             }
 
             /**
