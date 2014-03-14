@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers.gamestate;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -35,6 +36,7 @@ public class GameStateManager implements Parcelable, Serializable {
     private Player.PlayerColor currentPlayer;           // The current players turn
 
     private transient GameStateEvents gameStateEventsHandler;
+    private transient boolean isRunning = false;
 
     /**
      * Constructor
@@ -73,20 +75,18 @@ public class GameStateManager implements Parcelable, Serializable {
         } else {
             this.currentPlayer = currentPlayer;
         }
-
-        this.onStateReady();
     }
 
     /**
      * Called after all the non-transient objects are ready. This should be called after all
      * constructor code. And after deserialization.
      */
-    private void onStateReady() {
+    private void onStateReady(Activity activity) {
         if(this.gameBoard == null) {
             throw new IllegalStateException("GameBoard must be setup.");
         }
 
-        this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler());
+        this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler(activity));
     }
 
     /**
@@ -140,10 +140,14 @@ public class GameStateManager implements Parcelable, Serializable {
      * Start the game
      */
     public void startGame(final Activity activity) {
+        this.onStateReady(activity);
+
+        isRunning = true;
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while(true) {
+                while(isRunning) {
                     final Player p = getCurrentPlayer();
 
                     if(GameStateManager.this.gameStateEventsHandler != null) {
@@ -195,6 +199,10 @@ public class GameStateManager implements Parcelable, Serializable {
                 }
             }
         }).start();
+    }
+
+    public void stopGame() {
+        this.isRunning = false;
     }
 
 
@@ -300,10 +308,30 @@ public class GameStateManager implements Parcelable, Serializable {
      * Handles the events coming directly from the game board.
      */
     private class GameBoardEventsHandler implements GameBoard.GameBoardEvents {
+        private Activity activity;
+
+        public GameBoardEventsHandler(Activity activity) {
+            if(activity == null) {
+                throw new IllegalArgumentException("Activty cannot be null.");
+            }
+
+            this.activity = activity;
+        }
+
+        /**
+         * Fired when a player wins the game.
+         * @param playerNumber  The number of the player who won.
+         */
         @Override
-        public void onPlayerWon(int playerNumber) {
+        public void onPlayerWon(final int playerNumber) {
             if(GameStateManager.this.gameStateEventsHandler != null) {
-                GameStateManager.this.gameStateEventsHandler.onPlayerWon(getCurrentPlayer(), playerNumber);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GameStateManager.this.stopGame();
+                        GameStateManager.this.gameStateEventsHandler.onPlayerWon(getCurrentPlayer(), playerNumber);
+                    }
+                });
             }
         }
     }
@@ -359,7 +387,5 @@ public class GameStateManager implements Parcelable, Serializable {
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject(); //Deserializes the GameStateManager object
-
-        onStateReady(); //sets up the events the deserialized object will listen for
     }
 }

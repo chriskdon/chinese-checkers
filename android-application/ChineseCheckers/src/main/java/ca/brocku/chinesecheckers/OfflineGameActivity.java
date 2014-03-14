@@ -425,7 +425,7 @@ public class OfflineGameActivity extends Activity {
              * @param player The player who's turn it is.
              */
             @Override
-            public void onPlayerTurn(Player player) {
+            public synchronized void onPlayerTurn(Player player) {
                 // Rotate the board an amount depending on num players
                 // Rotation needs to be calculated when it is a new players turn
                 // there is a special case for the very first turn
@@ -471,7 +471,7 @@ public class OfflineGameActivity extends Activity {
              * @param movePath      The path describing the movePath.
              */
             @Override
-            public void onBoardModified(Player player, GameBoard originalBoard, ReadOnlyGameBoard currentBoard, MovePath movePath) {
+            public synchronized void onBoardModified(Player player, GameBoard originalBoard, ReadOnlyGameBoard currentBoard, MovePath movePath) {
                 boardUiEngine.drawBoard(currentBoard);
                 boardUiEngine.showHintPositions(null);
                 boardUiEngine.highlightPiece(null);
@@ -485,7 +485,7 @@ public class OfflineGameActivity extends Activity {
              * @param player The player who forfeited.
              */
             @Override
-            public void onForfeit(Player player) {
+            public synchronized void onForfeit(Player player) {
 
             }
 
@@ -496,7 +496,7 @@ public class OfflineGameActivity extends Activity {
              * @param position The position they finished in (1st, 2nd, 3rd, etc.).
              */
             @Override
-            public void onPlayerWon(Player player, int position) {
+            public synchronized void onPlayerWon(Player player, int position) {
                 ((OfflineGameActivity)getActivity()).onEndGame(player);
             }
         }
