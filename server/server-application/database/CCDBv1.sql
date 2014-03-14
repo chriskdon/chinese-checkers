@@ -34,7 +34,7 @@ CREATE TABLE `games` (
   PRIMARY KEY (`gameID`),
   KEY `winnerlink_idx` (`winnerID`),
   CONSTRAINT `winnerlink` FOREIGN KEY (`winnerID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `games` (
 
 LOCK TABLES `games` WRITE;
 /*!40000 ALTER TABLE `games` DISABLE KEYS */;
-INSERT INTO `games` VALUES (5,6,0,2,'9999-12-31 23:59:59',NULL);
+INSERT INTO `games` VALUES (5,6,0,2,'9999-12-31 23:59:59',NULL),(6,2,1,1,'2014-03-12 14:57:07',NULL),(7,2,0,1,'2014-03-12 14:59:34',NULL);
 /*!40000 ALTER TABLE `games` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -109,10 +109,10 @@ CREATE TABLE `gamesusers` (
   KEY `userlink_idx` (`username`,`userID`),
   KEY `gameslink_idx` (`gameID`),
   KEY `userlink_idx1` (`userID`),
-  CONSTRAINT `userlink` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `gamelink` FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `gameslink` FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+  CONSTRAINT `gameslink` FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `userlink` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,6 +121,7 @@ CREATE TABLE `gamesusers` (
 
 LOCK TABLES `gamesusers` WRITE;
 /*!40000 ALTER TABLE `gamesusers` DISABLE KEYS */;
+INSERT INTO `gamesusers` VALUES (18,1,6,'Pete',1),(19,3,6,'Tim',4),(20,3,7,'Tim',1);
 /*!40000 ALTER TABLE `gamesusers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -230,14 +231,13 @@ DROP TABLE IF EXISTS `pieces`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pieces` (
-  `pieceID` int(11) NOT NULL AUTO_INCREMENT,
   `guID` int(11) NOT NULL,
   `onRow` int(2) NOT NULL,
   `onIndex` int(2) NOT NULL,
-  PRIMARY KEY (`pieceID`),
+  PRIMARY KEY (`guID`,`onRow`,`onIndex`),
   KEY `gameuser_idx` (`guID`),
   CONSTRAINT `usersgameslink` FOREIGN KEY (`guID`) REFERENCES `gamesusers` (`guID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -314,7 +314,7 @@ CREATE TABLE `users` (
   `isAi` int(1) NOT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='Users table';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='Users table';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -371,9 +371,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `games.createGame`(numPl INT(1), timeAt DATETIME)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `games.createGame`(numPl INT(1))
 BEGIN
-	INSERT INTO games (numPlayer, created) values (numPl, timeAt);
+	INSERT INTO games (numPlayer, created) values (numPl, NOW());
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -399,7 +399,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `games.getCurrentTurn` */;
+/*!50003 DROP PROCEDURE IF EXISTS `games.getCurrentPlayer` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -409,9 +409,12 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `games.getCurrentTurn`(IN gID INT, OUT turn INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `games.getCurrentPlayer`(IN uID INT, IN gID INT)
 BEGIN
-	SELECT currentTurn into turn from games where gameID = gID;
+	DECLARE myPlayerNum, currentPlayerNum INT;
+	SELECT currentTurn into currentPlayerNum FROM games WHERE gameID = gID;
+	SELECT playerNumber into myPlayerNum FROM gamesusers WHERE gameID = gID;
+	SELECT myPlayerNum, currentPlayerNum;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -494,6 +497,35 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `games.matchMake` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `games.matchMake`(IN uID INT, IN numPlayers INT)
+BEGIN
+	DECLARE gID, playerNum INT;
+	SELECT gameID into gID FROM games WHERE numPlayer = numPlayers AND isReady=0;
+	IF gID IS NULL THEN
+		INSERT INTO games (numPlayer, created) values (numPlayers, NOW());
+		SELECT LAST_INSERT_ID() into gID;
+		CALL `GU.userJoinGame`(uID, gID);
+	ELSE
+		CALL `GU.userJoinGame`(uID, gID);
+	END IF;
+	SELECT playerNumber into playerNum FROM gamesusers WHERE gameID = gID AND userID = uID;
+	CALL `pieces.populateBoard`(gID, playerNum);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `games.nextTurn` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -530,6 +562,7 @@ BEGIN
 	SET nextTurn = 6;
 	END IF;
 	UPDATE games SET currentTurn = nextTurn WHERE gameID = gID;
+	SELECT currentTurn FROM games WHERE gameID = gID;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -574,6 +607,25 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GU.getGamePlayers` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GU.getGamePlayers`(IN gID INT)
+BEGIN
+	SELECT users.userID, users.username FROM users JOIN gamesusers ON users.userID = gamesusers.userID WHERE gamesusers.gameID=gID;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `GU.getGuID` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -612,6 +664,26 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GU.getUserGames` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GU.getUserGames`(IN uID INT)
+BEGIN
+	SELECT games.gameID, games.numPlayer, games.isReady, games.currentTurn, gamesusers.playerNum FROM gamesusers JOIN games 
+		ON gamesusers.gameID = games.gameID WHERE gamesusers.userID = uID;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `GU.getUserID` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -644,25 +716,6 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GU.getUsername`(IN gu INT, OUT usrname VARCHAR(255))
 BEGIN
 	SELECT username into usrname FROM gamesusers WHERE guID = gu;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `GU.getUsersGames` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GU.getUsersGames`(IN uID INT)
-BEGIN
-	SELECT gameID FROM gamesusers WHERE userID = uID;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -800,6 +853,97 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `pieces.populateBoard` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pieces.populateBoard`(IN gID INT, IN playNum INT)
+BEGIN
+	DECLARE id INT;
+	SELECT guID INTO id FROM gamesusers WHERE gameID = gID AND playerNumber = playNum;
+	CASE playNum
+	WHEN 1 THEN
+		INSERT INTO pieces values (id, 16, 0);
+		INSERT INTO pieces values (id, 15, 0);
+		INSERT INTO pieces values (id, 15, 1);
+		INSERT INTO pieces values (id, 14, 0);
+		INSERT INTO pieces values (id, 14, 1);
+		INSERT INTO pieces values (id, 14, 3);
+		INSERT INTO pieces values (id, 13, 0);
+		INSERT INTO pieces values (id, 13, 1);
+		INSERT INTO pieces values (id, 13, 3);
+		INSERT INTO pieces values (id, 13, 4);
+	WHEN 2 THEN
+		INSERT INTO pieces values (id, 9, 0);
+		INSERT INTO pieces values (id, 10, 0);
+		INSERT INTO pieces values (id, 10, 1);
+		INSERT INTO pieces values (id, 11, 0);
+		INSERT INTO pieces values (id, 11, 1);
+		INSERT INTO pieces values (id, 11, 3);
+		INSERT INTO pieces values (id, 12, 0);
+		INSERT INTO pieces values (id, 12, 1);
+		INSERT INTO pieces values (id, 12, 3);
+		INSERT INTO pieces values (id, 12, 4);
+	WHEN 3 THEN
+		INSERT INTO pieces values (id, 7, 0);
+		INSERT INTO pieces values (id, 6, 0);
+		INSERT INTO pieces values (id, 6, 1);
+		INSERT INTO pieces values (id, 5, 0);
+		INSERT INTO pieces values (id, 5, 1);
+		INSERT INTO pieces values (id, 5, 3);
+		INSERT INTO pieces values (id, 4, 0);
+		INSERT INTO pieces values (id, 4, 1);
+		INSERT INTO pieces values (id, 4, 3);
+		INSERT INTO pieces values (id, 4, 4);
+	WHEN 4 THEN
+		INSERT INTO pieces values (id, 0, 0);
+		INSERT INTO pieces values (id, 1, 0);
+		INSERT INTO pieces values (id, 1, 1);
+		INSERT INTO pieces values (id, 2, 0);
+		INSERT INTO pieces values (id, 2, 1);
+		INSERT INTO pieces values (id, 2, 3);
+		INSERT INTO pieces values (id, 3, 0);
+		INSERT INTO pieces values (id, 3, 1);
+		INSERT INTO pieces values (id, 3, 3);
+		INSERT INTO pieces values (id, 3, 4);
+	WHEN 5 THEN
+		INSERT INTO pieces values (id, 7, 9);
+		INSERT INTO pieces values (id, 6, 9);
+		INSERT INTO pieces values (id, 6, 10);
+		INSERT INTO pieces values (id, 5, 9);
+		INSERT INTO pieces values (id, 5, 10);
+		INSERT INTO pieces values (id, 5, 11);
+		INSERT INTO pieces values (id, 4, 9);
+		INSERT INTO pieces values (id, 4, 10);
+		INSERT INTO pieces values (id, 4, 11);
+		INSERT INTO pieces values (id, 4, 12);
+	WHEN 6 THEN
+		INSERT INTO pieces values (id, 9, 9);
+		INSERT INTO pieces values (id, 10, 9);
+		INSERT INTO pieces values (id, 10, 10);
+		INSERT INTO pieces values (id, 11, 9);
+		INSERT INTO pieces values (id, 11, 10);
+		INSERT INTO pieces values (id, 11, 11);
+		INSERT INTO pieces values (id, 12, 9);
+		INSERT INTO pieces values (id, 12, 10);
+		INSERT INTO pieces values (id, 12, 11);
+		INSERT INTO pieces values (id, 12, 12);
+	ELSE
+		SIGNAL SQLSTATE '12345'
+        SET MESSAGE_TEXT = 'invalid player number passed';
+	END CASE;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `pieces.updatePiece` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -829,15 +973,10 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `user.createUser`(OUT uID INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user.createUser`(IN usrname VARCHAR(50))
 BEGIN
-	DECLARE usrname VARCHAR(50);
-	DECLARE mID INT;
-	SELECT MAX(userID) into mID from Users;
-	SET usrname = concat("Anonymous", mID+1);
 	INSERT INTO users (username, isAi) values (usrname, 0);
-	SELECT userID into uID from Users where username=usrname;
-
+	SELECT userID from Users where username=usrname;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -979,4 +1118,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-10 19:17:44
+-- Dump completed on 2014-03-14  2:30:50
