@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -39,6 +40,7 @@ import ca.brocku.chinesecheckers.network.spice.requests.FollowersRequest;
 @SuppressLint("all")
 public class MainActivity extends SpicedGcmActivity {
     private Button offlineActivityButton;
+    private TextView onlineNotificationIcon;
     private Button onlineActivityButton;
     private Button helpActivityButton;
     private Button settingsActivityButton;
@@ -46,6 +48,7 @@ public class MainActivity extends SpicedGcmActivity {
     public static final String PREF_DONE_INITIAL_SETUP = "DONE_INITIAL_SETUP";
     public static final String PREF_SHOW_MOVES = "SHOW_MOVES";
     public static final String PREF_USER_ID = "USER_ID";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +59,33 @@ public class MainActivity extends SpicedGcmActivity {
 
         //Bind Controls
         offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
+        onlineNotificationIcon = (TextView)findViewById(R.id.onlineMoveNotificationTextView);
         onlineActivityButton = (Button)findViewById(R.id.onlineListActivityButton);
         helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
         settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
+
 
         //Bind Handlers
         offlineActivityButton.setOnClickListener(new OfflineActivityButtonHandler());
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //set the icon which shows the number of games in which it is your turn
+        //TODO: make API call HERE to get number of "current move" games and set variable
+        int numberOfCurrentMoveGames = 12;
+        if(numberOfCurrentMoveGames > 0) {
+            onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
+            onlineNotificationIcon.setVisibility(View.VISIBLE);
+        } else {
+            onlineNotificationIcon.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
