@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gamestate.Player;
-import ca.brocku.chinesecheckers.gamestate.PlayerTurnState;
 
 
 /**
@@ -58,11 +57,11 @@ public class AIPlayer extends Player {
     /**
      * Executed when it is this players turn to act.
      *
-     * @param state The current state.
+     * @param board
      */
     @Override
-    public void onTurn(PlayerTurnState state) {
-        state.signalMove(this, getMove(state.getGameBoard()));
+    public MovePath onTurn(ReadOnlyGameBoard board) {
+        return getMove(board);
     }
 
     /**

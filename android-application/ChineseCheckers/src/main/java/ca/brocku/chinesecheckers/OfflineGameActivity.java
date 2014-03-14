@@ -49,7 +49,7 @@ public class OfflineGameActivity extends Activity {
         isEndCurrentGame = false;
 
         //passes player array to the offline game fragment
-        Fragment offlineGameFragment = new OfflineGameFragment();
+        Fragment offlineGameFragment = new OfflineGameFragment(this);
         Bundle offlineGameFragmentBundle = new Bundle();
         offlineGameFragmentBundle.putParcelable("GAME_STATE_MANAGER", gameStateManager);
         offlineGameFragment.setArguments(offlineGameFragmentBundle);
@@ -206,6 +206,12 @@ public class OfflineGameActivity extends Activity {
 
         public OfflineGameFragment() {}
 
+        public OfflineGameActivity activity;
+
+        public OfflineGameFragment(OfflineGameActivity activity) {
+            this.activity = activity;
+        }
+
         /**
          * Get a modifiable version of the current game board.
          * @return
@@ -254,7 +260,7 @@ public class OfflineGameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            gameStateManager.startGame();
+            gameStateManager.startGame(activity);
         }
 
         /**
@@ -344,13 +350,9 @@ public class OfflineGameActivity extends Activity {
                     }
 
                     ((HumanPlayer)currentPlayer)
-                            .getPlayerTurnState()
-                            .signalMove(currentPlayer, movePath);
+                            .signalMove(movePath);
 
                     resetHumanState();
-                    boardUiEngine.drawBoard(gameStateManager.getGameBoard());
-                    boardUiEngine.showHintPositions(null);
-                    boardUiEngine.highlightPiece(null);
                 }
             }
         }
@@ -423,7 +425,7 @@ public class OfflineGameActivity extends Activity {
              * @param player The player who's turn it is.
              */
             @Override
-            public void onPlayerTurn(Player player) {
+            public synchronized void onPlayerTurn(Player player) {
                 // Rotate the board an amount depending on num players
                 // Rotation needs to be calculated when it is a new players turn
                 // there is a special case for the very first turn
@@ -465,13 +467,14 @@ public class OfflineGameActivity extends Activity {
              *
              * @param player        The player who modified the board
              * @param originalBoard The original copied state of the board.
+             * @param currentBoard  The current game board.
              * @param movePath      The path describing the movePath.
              */
             @Override
-            public void onBoardModified(Player player, GameBoard originalBoard, MovePath movePath) {
-                // TODO: This will need to be overridden for online game play because
-                //       the state of the game board will have changed.
-                //       but because we're sharing it for offline this is useless.
+            public synchronized void onBoardModified(Player player, GameBoard originalBoard, ReadOnlyGameBoard currentBoard, MovePath movePath) {
+                boardUiEngine.drawBoard(currentBoard);
+                boardUiEngine.showHintPositions(null);
+                boardUiEngine.highlightPiece(null);
             }
 
             /**
@@ -482,7 +485,7 @@ public class OfflineGameActivity extends Activity {
              * @param player The player who forfeited.
              */
             @Override
-            public void onForfeit(Player player) {
+            public synchronized void onForfeit(Player player) {
 
             }
 
@@ -493,7 +496,7 @@ public class OfflineGameActivity extends Activity {
              * @param position The position they finished in (1st, 2nd, 3rd, etc.).
              */
             @Override
-            public void onPlayerWon(Player player, int position) {
+            public synchronized void onPlayerWon(Player player, int position) {
                 ((OfflineGameActivity)getActivity()).onEndGame(player);
             }
         }
