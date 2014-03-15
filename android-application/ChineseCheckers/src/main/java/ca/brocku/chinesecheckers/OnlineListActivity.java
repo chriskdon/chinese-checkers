@@ -82,8 +82,8 @@ public class OnlineListActivity extends Activity {
         //TODO: server request for current games array
         GameItemData[] gameItemData = new GameItemData[2];
 
-        gameItemData[0] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED);
-        gameItemData[1] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null);
+        gameItemData[0] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null);
+        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED);
 
         for (GameItemData aGameItemData : gameItemData) { //for each game received
 
