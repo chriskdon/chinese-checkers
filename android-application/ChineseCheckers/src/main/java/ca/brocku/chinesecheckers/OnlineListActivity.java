@@ -93,17 +93,16 @@ public class OnlineListActivity extends Activity {
 
             if (newGame != null) {
 
+                //Set the margin at the bottom of the list item (in dp)
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-
                 int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         (float) 18, getResources().getDisplayMetrics());
-
                 layoutParams.bottomMargin = value;
-
                 newGame.setLayoutParams(layoutParams);
 
+                newGame.setOnClickListener(new startOnlineGameHandler());
                 newGame.setOnLongClickListener(new DeleteGameHandler());
 
                 //Set view tag as game ID
@@ -288,6 +287,30 @@ public class OnlineListActivity extends Activity {
         }
     }
 
+    /** This handler starts one of the online games.
+     *
+     * It makes a call to the server to gather the required state information, bundles any data that
+     * needs to be sent to the GameActivity, and then starts that activity.
+     *
+     */
+    private class startOnlineGameHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            //TODO: Make API call to get game state, set up Parcelable stuff and then start the activity
+            //OnlineListActivity.this.finish();
+            //OnlineListActivity.this.startActivity(new Intent(OnlineListActivity.this, GameActivity.class));
+        }
+    }
+
+    /** This class handles deleting a game from the online list of games.
+     *
+     * If the game is not over, the user will be notified that they will be forfeiting the game. If
+     * The game is over, they will still be asked to confirm the deletion.
+     *
+     * The game will only be removed from the list once the server confirms that removal was
+     * successful.
+     *
+     */
     private class DeleteGameHandler implements View.OnLongClickListener {
         @Override
         public boolean onLongClick(View view) {

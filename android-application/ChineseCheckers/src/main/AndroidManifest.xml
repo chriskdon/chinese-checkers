@@ -51,7 +51,7 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="ca.brocku.chinesecheckers.OfflineGameActivity"
+            android:name=".GameActivity"
             android:label="@string/title_activity_offline_game"
             android:parentActivityName="ca.brocku.chinesecheckers.OfflineConfigurationActivity"
             android:screenOrientation="portrait" >

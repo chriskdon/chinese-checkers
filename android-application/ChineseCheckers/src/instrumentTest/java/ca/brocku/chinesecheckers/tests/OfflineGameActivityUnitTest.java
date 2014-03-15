@@ -25,8 +25,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ca.brocku.chinesecheckers.GameActivity;
 import ca.brocku.chinesecheckers.HelpActivity;
-import ca.brocku.chinesecheckers.OfflineGameActivity;
 import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
@@ -37,7 +37,7 @@ import ca.brocku.chinesecheckers.gamestate.Player;
 /**
  * Created by Main on 2/18/14.
  */
-public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase2<OfflineGameActivity> {
+public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase2<GameActivity> {
 
     private TestHelpers testHelper;
 
@@ -47,12 +47,12 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
     private String[] players;
 
     public OfflineGameActivityUnitTest() {
-        super(OfflineGameActivity.class);
+        super(GameActivity.class);
         testHelper = new TestHelpers();
     }
 
     public OfflineGameActivityUnitTest(Activity curAct,Instrumentation curInstruments){
-        super(OfflineGameActivity.class);
+        super(GameActivity.class);
         this.curAct = curAct;
         this.curInstruments = curInstruments;
         testHelper = new TestHelpers();
@@ -512,13 +512,13 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         assertNotNull("Transition to HelpActivity Failed", curAct);
 
         curInstruments.removeMonitor(monitor);
-        monitor = curInstruments.addMonitor(OfflineGameActivity.class.getName(),null,false);
+        monitor = curInstruments.addMonitor(GameActivity.class.getName(),null,false);
 
         new HelpActivityUnitTest(curAct,curInstruments).activityTest();
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}
-        assertNotNull("Transition Back to OfflineGameActivity Failed",curAct);
+        assertNotNull("Transition Back to GameActivity Failed",curAct);
     }
 
     public void activityTestHelper(){
