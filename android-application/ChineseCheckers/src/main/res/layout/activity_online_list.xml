@@ -72,817 +72,817 @@
 
             <!--DELETE FROM HERE DOWN...THIS IS FOR TEMP DISPLAY-->
             <!--DELETE DELETE DELETE DELETE DELETE DELETE DELETE-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal"
-                android:id="@+id/onlineGameActivityButton">
-
-                <!-- the notification icon for this list item -->
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_notify"/>
-
-                <!-- The list item body -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="40dp"
-                    android:padding="5dp"
-                    android:background="@drawable/chch_container_rounded"
-                    android:orientation="vertical">
-
-                    <!-- top line in online game list item; stores game id & player pegs -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="#1234567"
-                            android:id="@+id/onlineGameIdTextView"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_red"
-                                android:id="@+id/onlineListItemRedIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_orange"
-                                android:id="@+id/onlineListItemOrangeIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_yellow"
-                                android:id="@+id/onlineListItemYellowIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_green"
-                                android:id="@+id/onlineListItemGreenIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_blue"
-                                android:id="@+id/onlineListItemBlueIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_purple"
-                                android:id="@+id/onlineListItemPurpleIcon"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- bottom line in online game list item; displays the winner -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:gravity="right"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_player_trophy_orange"
-                            android:id="@+id/onlineWinnerIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="curtesmith"
-                            android:id="@+id/onlineWinnerTextView"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal"
-                android:id="@+id/onlineGameActivityButton">
-
-                <!-- the notification icon for this list item -->
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_notify"
-                    android:visibility="invisible"/>
-
-                <!-- The list item body -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="40dp"
-                    android:padding="5dp"
-                    android:background="@drawable/chch_container_rounded"
-                    android:orientation="vertical">
-
-                    <!-- top line in online game list item; stores game id & player pegs -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="#1234567"
-                            android:id="@+id/onlineGameIdTextView"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_red"
-                                android:id="@+id/onlineListItemRedIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_orange"
-                                android:id="@+id/onlineListItemOrangeIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_yellow"
-                                android:id="@+id/onlineListItemYellowIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_green"
-                                android:id="@+id/onlineListItemGreenIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_blue"
-                                android:id="@+id/onlineListItemBlueIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_purple"
-                                android:id="@+id/onlineListItemPurpleIcon"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- bottom line in online game list item; displays the winner -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_player_trophy_orange"
-                            android:id="@+id/onlineWinnerIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="curtesmith"
-                            android:id="@+id/onlineWinnerTextView"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal"
-                android:id="@+id/onlineGameActivityButton">
-
-                <!-- the notification icon for this list item -->
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_notify"
-                    android:visibility="invisible"/>
-
-                <!-- The list item body -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="40dp"
-                    android:padding="5dp"
-                    android:background="@drawable/chch_container_rounded"
-                    android:orientation="vertical">
-
-                    <!-- top line in online game list item; stores game id & player pegs -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="#1234567"
-                            android:id="@+id/onlineGameIdTextView"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_red"
-                                android:id="@+id/onlineListItemRedIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_orange"
-                                android:id="@+id/onlineListItemOrangeIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_yellow"
-                                android:id="@+id/onlineListItemYellowIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_green"
-                                android:id="@+id/onlineListItemGreenIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_blue"
-                                android:id="@+id/onlineListItemBlueIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_purple"
-                                android:id="@+id/onlineListItemPurpleIcon"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- bottom line in online game list item; displays the winner -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_player_trophy_orange"
-                            android:id="@+id/onlineWinnerIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="curtesmith"
-                            android:id="@+id/onlineWinnerTextView"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal"
-                android:id="@+id/onlineGameActivityButton">
-
-                <!-- the notification icon for this list item -->
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_notify"
-                    android:visibility="invisible"/>
-
-                <!-- The list item body -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="40dp"
-                    android:padding="5dp"
-                    android:background="@drawable/chch_container_rounded"
-                    android:orientation="vertical">
-
-                    <!-- top line in online game list item; stores game id & player pegs -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="#1234567"
-                            android:id="@+id/onlineGameIdTextView"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_red"
-                                android:id="@+id/onlineListItemRedIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_orange"
-                                android:id="@+id/onlineListItemOrangeIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_yellow"
-                                android:id="@+id/onlineListItemYellowIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_green"
-                                android:id="@+id/onlineListItemGreenIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_blue"
-                                android:id="@+id/onlineListItemBlueIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_purple"
-                                android:id="@+id/onlineListItemPurpleIcon"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- bottom line in online game list item; displays the winner -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_player_trophy_orange"
-                            android:id="@+id/onlineWinnerIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="curtesmith"
-                            android:id="@+id/onlineWinnerTextView"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal"
-                android:id="@+id/onlineGameActivityButton">
-
-                <!-- the notification icon for this list item -->
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_notify"
-                    android:visibility="invisible"/>
-
-                <!-- The list item body -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="40dp"
-                    android:padding="5dp"
-                    android:background="@drawable/chch_container_rounded"
-                    android:orientation="vertical">
-
-                    <!-- top line in online game list item; stores game id & player pegs -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="#1234567"
-                            android:id="@+id/onlineGameIdTextView"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_red"
-                                android:id="@+id/onlineListItemRedIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_orange"
-                                android:id="@+id/onlineListItemOrangeIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_yellow"
-                                android:id="@+id/onlineListItemYellowIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_green"
-                                android:id="@+id/onlineListItemGreenIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_blue"
-                                android:id="@+id/onlineListItemBlueIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_purple"
-                                android:id="@+id/onlineListItemPurpleIcon"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- bottom line in online game list item; displays the winner -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_player_trophy_orange"
-                            android:id="@+id/onlineWinnerIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="curtesmith"
-                            android:id="@+id/onlineWinnerTextView"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal"
-                android:id="@+id/onlineGameActivityButton">
-
-                <!-- the notification icon for this list item -->
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_notify"
-                    android:visibility="invisible"/>
-
-                <!-- The list item body -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="40dp"
-                    android:padding="5dp"
-                    android:background="@drawable/chch_container_rounded"
-                    android:orientation="vertical">
-
-                    <!-- top line in online game list item; stores game id & player pegs -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="#1234567"
-                            android:id="@+id/onlineGameIdTextView"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_red"
-                                android:id="@+id/onlineListItemRedIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_orange"
-                                android:id="@+id/onlineListItemOrangeIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_yellow"
-                                android:id="@+id/onlineListItemYellowIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_green"
-                                android:id="@+id/onlineListItemGreenIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_blue"
-                                android:id="@+id/onlineListItemBlueIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_purple"
-                                android:id="@+id/onlineListItemPurpleIcon"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- bottom line in online game list item; displays the winner -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_player_trophy_orange"
-                            android:id="@+id/onlineWinnerIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="curtesmith"
-                            android:id="@+id/onlineWinnerTextView"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="18dp"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal"
-                android:id="@+id/onlineGameActivityButton">
-
-                <!-- the notification icon for this list item -->
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_action_notify"
-                    android:visibility="invisible"/>
-
-                <!-- The list item body -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="40dp"
-                    android:padding="5dp"
-                    android:background="@drawable/chch_container_rounded"
-                    android:orientation="vertical">
-
-                    <!-- top line in online game list item; stores game id & player pegs -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="#1234567"
-                            android:id="@+id/onlineGameIdTextView"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_red"
-                                android:id="@+id/onlineListItemRedIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_orange"
-                                android:id="@+id/onlineListItemOrangeIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_yellow"
-                                android:id="@+id/onlineListItemYellowIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_green"
-                                android:id="@+id/onlineListItemGreenIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_blue"
-                                android:id="@+id/onlineListItemBlueIcon"/>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="-6dp"
-                                android:src="@drawable/ic_player_peg_purple"
-                                android:id="@+id/onlineListItemPurpleIcon"/>
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- bottom line in online game list item; displays the winner -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:gravity="right"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_player_trophy_orange"
-                            android:id="@+id/onlineWinnerIcon"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_gravity="center_vertical"
-                            android:text="curtesmith"
-                            android:id="@+id/onlineWinnerTextView"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="18dp"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/onlineGameActivityButton">-->
+
+                <!--&lt;!&ndash; the notification icon for this list item &ndash;&gt;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:src="@drawable/ic_action_notify"/>-->
+
+                <!--&lt;!&ndash; The list item body &ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginRight="40dp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:background="@drawable/chch_container_rounded"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--&lt;!&ndash; top line in online game list item; stores game id & player pegs &ndash;&gt;-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="#1234567"-->
+                            <!--android:id="@+id/onlineGameIdTextView"/>-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentRight="true">-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_red"-->
+                                <!--android:id="@+id/onlineListItemRedIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_orange"-->
+                                <!--android:id="@+id/onlineListItemOrangeIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_yellow"-->
+                                <!--android:id="@+id/onlineListItemYellowIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_green"-->
+                                <!--android:id="@+id/onlineListItemGreenIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_blue"-->
+                                <!--android:id="@+id/onlineListItemBlueIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_purple"-->
+                                <!--android:id="@+id/onlineListItemPurpleIcon"/>-->
+                        <!--</LinearLayout>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--&lt;!&ndash; bottom line in online game list item; displays the winner &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="3dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:visibility="gone">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/ic_player_trophy_orange"-->
+                            <!--android:id="@+id/onlineWinnerIcon"/>-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:text="curtesmith"-->
+                            <!--android:id="@+id/onlineWinnerTextView"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="18dp"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/onlineGameActivityButton">-->
+
+                <!--&lt;!&ndash; the notification icon for this list item &ndash;&gt;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:src="@drawable/ic_action_notify"-->
+                    <!--android:visibility="invisible"/>-->
+
+                <!--&lt;!&ndash; The list item body &ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginRight="40dp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:background="@drawable/chch_container_rounded"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--&lt;!&ndash; top line in online game list item; stores game id & player pegs &ndash;&gt;-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="#1234567"-->
+                            <!--android:id="@+id/onlineGameIdTextView"/>-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentRight="true">-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_red"-->
+                                <!--android:id="@+id/onlineListItemRedIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_orange"-->
+                                <!--android:id="@+id/onlineListItemOrangeIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_yellow"-->
+                                <!--android:id="@+id/onlineListItemYellowIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_green"-->
+                                <!--android:id="@+id/onlineListItemGreenIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_blue"-->
+                                <!--android:id="@+id/onlineListItemBlueIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_purple"-->
+                                <!--android:id="@+id/onlineListItemPurpleIcon"/>-->
+                        <!--</LinearLayout>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--&lt;!&ndash; bottom line in online game list item; displays the winner &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="3dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/ic_player_trophy_orange"-->
+                            <!--android:id="@+id/onlineWinnerIcon"/>-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:text="curtesmith"-->
+                            <!--android:id="@+id/onlineWinnerTextView"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="18dp"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/onlineGameActivityButton">-->
+
+                <!--&lt;!&ndash; the notification icon for this list item &ndash;&gt;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:src="@drawable/ic_action_notify"-->
+                    <!--android:visibility="invisible"/>-->
+
+                <!--&lt;!&ndash; The list item body &ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginRight="40dp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:background="@drawable/chch_container_rounded"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--&lt;!&ndash; top line in online game list item; stores game id & player pegs &ndash;&gt;-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="#1234567"-->
+                            <!--android:id="@+id/onlineGameIdTextView"/>-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentRight="true">-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_red"-->
+                                <!--android:id="@+id/onlineListItemRedIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_orange"-->
+                                <!--android:id="@+id/onlineListItemOrangeIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_yellow"-->
+                                <!--android:id="@+id/onlineListItemYellowIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_green"-->
+                                <!--android:id="@+id/onlineListItemGreenIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_blue"-->
+                                <!--android:id="@+id/onlineListItemBlueIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_purple"-->
+                                <!--android:id="@+id/onlineListItemPurpleIcon"/>-->
+                        <!--</LinearLayout>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--&lt;!&ndash; bottom line in online game list item; displays the winner &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="3dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/ic_player_trophy_orange"-->
+                            <!--android:id="@+id/onlineWinnerIcon"/>-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:text="curtesmith"-->
+                            <!--android:id="@+id/onlineWinnerTextView"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="18dp"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/onlineGameActivityButton">-->
+
+                <!--&lt;!&ndash; the notification icon for this list item &ndash;&gt;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:src="@drawable/ic_action_notify"-->
+                    <!--android:visibility="invisible"/>-->
+
+                <!--&lt;!&ndash; The list item body &ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginRight="40dp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:background="@drawable/chch_container_rounded"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--&lt;!&ndash; top line in online game list item; stores game id & player pegs &ndash;&gt;-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="#1234567"-->
+                            <!--android:id="@+id/onlineGameIdTextView"/>-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentRight="true">-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_red"-->
+                                <!--android:id="@+id/onlineListItemRedIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_orange"-->
+                                <!--android:id="@+id/onlineListItemOrangeIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_yellow"-->
+                                <!--android:id="@+id/onlineListItemYellowIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_green"-->
+                                <!--android:id="@+id/onlineListItemGreenIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_blue"-->
+                                <!--android:id="@+id/onlineListItemBlueIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_purple"-->
+                                <!--android:id="@+id/onlineListItemPurpleIcon"/>-->
+                        <!--</LinearLayout>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--&lt;!&ndash; bottom line in online game list item; displays the winner &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="3dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/ic_player_trophy_orange"-->
+                            <!--android:id="@+id/onlineWinnerIcon"/>-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:text="curtesmith"-->
+                            <!--android:id="@+id/onlineWinnerTextView"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="18dp"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/onlineGameActivityButton">-->
+
+                <!--&lt;!&ndash; the notification icon for this list item &ndash;&gt;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:src="@drawable/ic_action_notify"-->
+                    <!--android:visibility="invisible"/>-->
+
+                <!--&lt;!&ndash; The list item body &ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginRight="40dp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:background="@drawable/chch_container_rounded"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--&lt;!&ndash; top line in online game list item; stores game id & player pegs &ndash;&gt;-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="#1234567"-->
+                            <!--android:id="@+id/onlineGameIdTextView"/>-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentRight="true">-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_red"-->
+                                <!--android:id="@+id/onlineListItemRedIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_orange"-->
+                                <!--android:id="@+id/onlineListItemOrangeIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_yellow"-->
+                                <!--android:id="@+id/onlineListItemYellowIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_green"-->
+                                <!--android:id="@+id/onlineListItemGreenIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_blue"-->
+                                <!--android:id="@+id/onlineListItemBlueIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_purple"-->
+                                <!--android:id="@+id/onlineListItemPurpleIcon"/>-->
+                        <!--</LinearLayout>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--&lt;!&ndash; bottom line in online game list item; displays the winner &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="3dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/ic_player_trophy_orange"-->
+                            <!--android:id="@+id/onlineWinnerIcon"/>-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:text="curtesmith"-->
+                            <!--android:id="@+id/onlineWinnerTextView"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="18dp"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/onlineGameActivityButton">-->
+
+                <!--&lt;!&ndash; the notification icon for this list item &ndash;&gt;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:src="@drawable/ic_action_notify"-->
+                    <!--android:visibility="invisible"/>-->
+
+                <!--&lt;!&ndash; The list item body &ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginRight="40dp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:background="@drawable/chch_container_rounded"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--&lt;!&ndash; top line in online game list item; stores game id & player pegs &ndash;&gt;-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="#1234567"-->
+                            <!--android:id="@+id/onlineGameIdTextView"/>-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentRight="true">-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_red"-->
+                                <!--android:id="@+id/onlineListItemRedIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_orange"-->
+                                <!--android:id="@+id/onlineListItemOrangeIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_yellow"-->
+                                <!--android:id="@+id/onlineListItemYellowIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_green"-->
+                                <!--android:id="@+id/onlineListItemGreenIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_blue"-->
+                                <!--android:id="@+id/onlineListItemBlueIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_purple"-->
+                                <!--android:id="@+id/onlineListItemPurpleIcon"/>-->
+                        <!--</LinearLayout>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--&lt;!&ndash; bottom line in online game list item; displays the winner &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="3dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/ic_player_trophy_orange"-->
+                            <!--android:id="@+id/onlineWinnerIcon"/>-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:text="curtesmith"-->
+                            <!--android:id="@+id/onlineWinnerTextView"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="18dp"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:id="@+id/onlineGameActivityButton">-->
+
+                <!--&lt;!&ndash; the notification icon for this list item &ndash;&gt;-->
+                <!--<ImageView-->
+                    <!--android:layout_width="32dp"-->
+                    <!--android:layout_marginRight="8dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:src="@drawable/ic_action_notify"-->
+                    <!--android:visibility="invisible"/>-->
+
+                <!--&lt;!&ndash; The list item body &ndash;&gt;-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginRight="40dp"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:background="@drawable/chch_container_rounded"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--&lt;!&ndash; top line in online game list item; stores game id & player pegs &ndash;&gt;-->
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentLeft="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:text="#1234567"-->
+                            <!--android:id="@+id/onlineGameIdTextView"/>-->
+
+                        <!--<LinearLayout-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignParentRight="true">-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_red"-->
+                                <!--android:id="@+id/onlineListItemRedIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_orange"-->
+                                <!--android:id="@+id/onlineListItemOrangeIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_yellow"-->
+                                <!--android:id="@+id/onlineListItemYellowIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_green"-->
+                                <!--android:id="@+id/onlineListItemGreenIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_blue"-->
+                                <!--android:id="@+id/onlineListItemBlueIcon"/>-->
+
+                            <!--<ImageView-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginRight="-6dp"-->
+                                <!--android:src="@drawable/ic_player_peg_purple"-->
+                                <!--android:id="@+id/onlineListItemPurpleIcon"/>-->
+                        <!--</LinearLayout>-->
+                    <!--</RelativeLayout>-->
+
+                    <!--&lt;!&ndash; bottom line in online game list item; displays the winner &ndash;&gt;-->
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="3dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="horizontal">-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:src="@drawable/ic_player_trophy_orange"-->
+                            <!--android:id="@+id/onlineWinnerIcon"/>-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_gravity="center_vertical"-->
+                            <!--android:text="curtesmith"-->
+                            <!--android:id="@+id/onlineWinnerTextView"/>-->
+
+                    <!--</LinearLayout>-->
+
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
             <!--DELETE DELETE DELETE DELETE DELETE DELETE DELETE-->
             <!--DELETE FROM HERE UP...THIS IS FOR TEMP DISPLAY-->
 

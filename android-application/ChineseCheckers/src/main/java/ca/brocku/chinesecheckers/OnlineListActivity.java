@@ -1,14 +1,27 @@
 package ca.brocku.chinesecheckers;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewManager;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.LinkedList;
+
+import ca.brocku.chinesecheckers.gamestate.Player;
 
 /**
  * Created by kubasub on 2014-03-06.
@@ -17,20 +30,13 @@ public class OnlineListActivity extends Activity {
     private LinearLayout gameListContainer;
     private Button newGameButton;
 
+    private ViewManager onlineGameViewManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_list);
-
-
-        //TODO: server request for current games
-        //for each current game:
-        ////inflate a fragment_online_list_item view into gameListContainer
-        ////set all of the item's elements:
-        //////gameID, player pegs, current turn peg, notification icon
-        //////if there is a winner set the trophy icon and winner name
-
 
         //Bind Controls
         newGameButton = (Button)findViewById(R.id.onlineNewGameButton);
@@ -39,9 +45,14 @@ public class OnlineListActivity extends Activity {
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
 
-        //TODO: make new game dialog appear if there are no games in the list
-        //  if(no games)
-        //      newGameButton.performClick();
+        //Creates a ViewManager for the list of games and populates the list
+        onlineGameViewManager = new OnlineListViewManager();
+        populateList();
+
+        //Opens the new game dialog if there are no games
+        if(gameListContainer.getChildCount() == 0) {
+            newGameButton.performClick();
+        }
     }
 
     @Override
@@ -61,6 +72,184 @@ public class OnlineListActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /** Gets and populates the list of current games.
+     *
+     *  Makes a server call to get the list of games. The list items are parsed into individual
+     *  views which are then added to the ViewManager.
+     *
+     */
+    private void populateList() {
+        //TODO: server request for current games array
+        GameItemData[] gameItemData = new GameItemData[2];
+
+        gameItemData[0] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED);
+        gameItemData[1] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null);
+
+        for (GameItemData aGameItemData : gameItemData) { //for each game received
+
+            //Inflate the game view
+            View newGame = getLayoutInflater().inflate(R.layout.fragment_online_list_item, null);
+            onlineGameViewManager.addView(newGame, null);
+
+            if (newGame != null) {
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                        (float) 18, getResources().getDisplayMetrics());
+
+                layoutParams.bottomMargin = value;
+
+                newGame.setLayoutParams(layoutParams);
+
+                newGame.setOnLongClickListener(new DeleteGameHandler());
+
+                //Set view tag as game ID
+                newGame.setTag(aGameItemData.getGameId());
+
+                //Set Game ID
+                ((TextView) newGame.findViewById(R.id.onlineGameIdTextView)).setText("#"+Integer.toString(aGameItemData.getGameId()));
+
+                //Set Player icons
+                switch (aGameItemData.getNumberOfPlayers()) {
+                    case 2:
+                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemYellowIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemOrangeIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
+                        break;
+                    case 6:
+                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemOrangeIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemYellowIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
+                        newGame.findViewById(R.id.onlineListItemPurpleIcon).setVisibility(View.VISIBLE);
+                        break;
+                }
+
+                //Sets User's icon (with star)
+                switch (aGameItemData.getPlayerColor()) {
+                    case RED:
+                        ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
+                        break;
+                    case PURPLE:
+                        ((ImageView) newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_star_purple);
+                        break;
+                    case BLUE:
+                        ((ImageView) newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_star_blue);
+                        break;
+                    case GREEN:
+                        ((ImageView) newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_star_green);
+                        break;
+                    case YELLOW:
+                        ((ImageView) newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_star_yellow);
+                        break;
+                    case ORANGE:
+                        ((ImageView) newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_star_orange);
+                        break;
+                }
+
+                //Set notification icon if this user's turn
+                if (aGameItemData.isPlayerTurn()) {
+                    newGame.findViewById(R.id.onlineListItemNotificationIcon).setVisibility(View.VISIBLE);
+                }
+
+                //Set winner section (if game has a winner)
+                if (aGameItemData.isWinner()) {
+                    ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText(aGameItemData.getWinnerUsername());
+
+                    //Sets the trophy colour
+                    switch (aGameItemData.getWinnerColor()) {
+                        case RED:
+                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_red);
+                            break;
+                        case PURPLE:
+                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_purple);
+                            break;
+                        case BLUE:
+                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_blue);
+                            break;
+                        case GREEN:
+                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_green);
+                            break;
+                        case YELLOW:
+                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_yellow);
+                            break;
+                        case ORANGE:
+                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_orange);
+                            break;
+                    }
+
+                    newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
+                }
+                gameListContainer.addView(newGame);
+            }
+        }
+    }
+
+    //TODO: see if this can be deleted after updating the list has been put in place
+    /** This class manages the list of online game views.
+     *
+     */
+    private class OnlineListViewManager implements ViewManager {
+        LinkedList<View> listItems = new LinkedList<View>();
+
+        @Override
+        public void addView(View view, ViewGroup.LayoutParams layoutParams) {
+            listItems.add(view);
+        }
+
+        @Override
+        public void updateViewLayout(View view, ViewGroup.LayoutParams layoutParams) {
+            int index = listItems.indexOf(view); //get index of view to be updated
+            listItems.get(index).setLayoutParams(layoutParams); //get the view and set layout params
+        }
+
+        @Override
+        public void removeView(View view) {
+            gameListContainer.removeView(view);
+            listItems.remove(view);
+        }
+
+        /** Removes a list item based on it's tag.
+         *
+         * @param gameIdTag the list items tag (it's game ID)
+         */
+        public void removeView(int gameIdTag) {
+            for(View view : listItems) {
+                if((Integer)view.getTag() == gameIdTag) { //delete the view with the given gameIdTag
+                    removeView(view);
+                }
+            }
+        }
+
+        /** Gets a list item based on it's tag. Returns null if it cannot find the specified view.
+         *
+         * @param gameIdTag the list items tag (it's game ID)
+         * @return the list item
+         */
+        public View getView(int gameIdTag) {
+            for(View view : listItems) {
+                if((Integer)view.getTag() == gameIdTag) {
+                    return view;
+                }
+            }
+            return null;
+        }
+    }
+
     /** This handler creates and manages a new-online-game dialog. The dialog contains radio buttons
      * for the number of players.
      *
@@ -71,9 +260,9 @@ public class OnlineListActivity extends Activity {
     private class NewGameHandler implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            final Popup newGamePopup = new Popup(OnlineListActivity.this);
+            final Popup newGameDialog = new Popup(OnlineListActivity.this);
 
-            newGamePopup
+            newGameDialog
                     .setTitleText("New Game")
                     .enableNewGameOptions()
                     .setAcceptButtonText("Join")
@@ -81,21 +270,122 @@ public class OnlineListActivity extends Activity {
                     .setCancelClickListener(new Button.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            newGamePopup.dismiss();
+                            newGameDialog.dismiss();
                         }
                     })
                     .setAcceptClickListener(new Button.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            int numberOfPlayers = newGamePopup.getNumberOfPlayers();
+                            int numberOfPlayers = newGameDialog.getNumberOfPlayers();
 
                             //TODO: make server call to join game, remove Toast
                             Toast.makeText(OnlineListActivity.this, Integer.toString(numberOfPlayers), Toast.LENGTH_LONG).show();
 
-                            newGamePopup.dismiss();
+                            newGameDialog.dismiss();
                         }
                     })
                     .show();
+        }
+    }
+
+    private class DeleteGameHandler implements View.OnLongClickListener {
+        @Override
+        public boolean onLongClick(View view) {
+            final View listItem = view;
+            final Popup deleteGameDialog = new Popup(OnlineListActivity.this);
+
+            //Set mutual dialog settings
+            deleteGameDialog
+                    .setCancelClickListener(new Button.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            deleteGameDialog.dismiss();
+                        }
+                    })
+                    .setAcceptClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            deleteGameDialog.dismiss();
+
+                            //TODO: make API call to request removal from game
+                            boolean isDeletionProcessed = true;
+                            if (isDeletionProcessed) {
+                                onlineGameViewManager.removeView(listItem);
+                                gameListContainer.removeView(listItem);
+                            }
+                        }
+                    });
+
+
+            if(view.findViewById(R.id.onlineWinnerContainer).getVisibility() == View.VISIBLE) { //construct plain delete dialog
+                deleteGameDialog
+                        .setTitleText("Delete Game?")
+                        .setMessageText("This game will be removed from your list of online games.")
+                        .setAcceptButtonText("Delete");
+
+            } else { //construct forfeit dialog
+                deleteGameDialog
+                        .setTitleText("Forfeit Game?")
+                        .setMessageText("If you delete this game, you will automatically forfeit and lose the game.")
+                        .setAcceptButtonText("Forfeit");
+            }
+            deleteGameDialog.show();
+
+            return true;
+        }
+    }
+
+
+    //TODO: delete
+    /** THIS IS A TEMP CLASS WHICH IS TO BE DELETE WHEN WE CAN MAKE AN API CALL AND GET A LIST OF
+     * EACH GAME ITEM'S DATA.
+     *
+     */
+    private class GameItemData {
+        private int gameId;
+        private boolean isPlayerTurn;
+        private int numberOfPlayers;
+        private Player.PlayerColor playerColor;
+        private boolean isWinner;
+        private String winnerUsername;
+        private Player.PlayerColor winnerColor;
+
+        private GameItemData(int gameId, boolean isPlayerTurn, int numberOfPlayers, Player.PlayerColor playerColor, boolean isWinner, String winnerUsername, Player.PlayerColor winnerColor) {
+            this.gameId = gameId;
+            this.isPlayerTurn = isPlayerTurn;
+            this.numberOfPlayers = numberOfPlayers;
+            this.playerColor = playerColor;
+            this.isWinner = isWinner;
+            this.winnerUsername = winnerUsername;
+            this.winnerColor = winnerColor;
+        }
+
+        public int getGameId() {
+            return gameId;
+        }
+
+        public boolean isPlayerTurn() {
+            return isPlayerTurn;
+        }
+
+        public int getNumberOfPlayers() {
+            return numberOfPlayers;
+        }
+
+        public Player.PlayerColor getPlayerColor() {
+            return playerColor;
+        }
+
+        public boolean isWinner() {
+            return isWinner;
+        }
+
+        public String getWinnerUsername() {
+            return winnerUsername;
+        }
+
+        public Player.PlayerColor getWinnerColor() {
+            return winnerColor;
         }
     }
 }
