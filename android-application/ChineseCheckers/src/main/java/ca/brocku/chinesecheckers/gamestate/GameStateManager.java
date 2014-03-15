@@ -162,29 +162,7 @@ public class GameStateManager implements Parcelable, Serializable {
                     final MovePath m = p.onTurn(getGameBoard());
                     final GameBoard originalBoard = gameBoard.getDeepCopy();
 
-                    // Move the sequence of pieces
-                    Iterator<Position> it = m.getPath().iterator();
-                    Position last = null;
-                    while(it.hasNext()) {
-                        if(last == null) {
-                            last = it.next();
-                        }
-
-                        Position current = it.next();
-
-                        Piece piece = gameBoard.getPiece(last);
-
-                        // Check for illegal moves
-                        if(piece == null) {
-                            throw new IllegalMoveException("There is no piece at that position.");
-                        } else if(piece.getPlayerNumber() != p.getPlayerNumber()) {
-                            throw new IllegalMoveException("Player<" + p.getName() + "> cannot move that piece.");
-                        }
-
-                        gameBoard.movePiece(piece, current);
-
-                        last = current;
-                    }
+                    writePathToBoard(p, m);
 
                     if(GameStateManager.this.gameStateEventsHandler != null) {
                         activity.runOnUiThread(new Runnable() {
@@ -201,6 +179,35 @@ public class GameStateManager implements Parcelable, Serializable {
         }).start();
     }
 
+    private void writePathToBoard(Player player, MovePath movePath) {
+        // Move the sequence of pieces
+        Iterator<Position> it = movePath.getPath().iterator();
+        Position last = null;
+        while(it.hasNext()) {
+            if(last == null) {
+                last = it.next();
+            }
+
+            Position current = it.next();
+
+            Piece piece = gameBoard.getPiece(last);
+
+            // Check for illegal moves
+            if(piece == null) {
+                throw new IllegalMoveException("There is no piece at that position.");
+            } else if(piece.getPlayerNumber() != player.getPlayerNumber()) {
+                throw new IllegalMoveException("Player<" + player.getName() + "> cannot move that piece.");
+            }
+
+            gameBoard.movePiece(piece, current);
+
+            last = current;
+        }
+    }
+
+    /**
+     * Stop the game. Don't forget to call this or thread will keep running.
+     */
     public void stopGame() {
         this.isRunning = false;
     }
@@ -284,6 +291,7 @@ public class GameStateManager implements Parcelable, Serializable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        this.stopGame();
         dest.writeParcelable(gameBoard, 0);
         dest.writeList(new ArrayList<Player>(players.values()));
         dest.writeString(currentPlayer.toString());

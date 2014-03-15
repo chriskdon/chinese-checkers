@@ -15,6 +15,10 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 public class HumanPlayer extends Player {
     private String name;
 
+    // This needs to be small enough that a human can't detect the difference between tapping
+    // the screen and seeing their piece move;
+    private static final int THREAD_SLEEP_TIME = 100;
+
     /**
      * Create a new player.
      *
@@ -54,7 +58,15 @@ public class HumanPlayer extends Player {
      */
     @Override
     public MovePath onTurn(ReadOnlyGameBoard board) {
-        while(m == null){ Thread.yield(); }
+        while(m == null){
+            try {
+                Thread.sleep(THREAD_SLEEP_TIME);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex); // Rethrow at runtime
+            }
+
+        }
+
         MovePath temp = m;
         m = null;
         return temp;

@@ -259,6 +259,13 @@ public class GameActivity extends Activity {
             gameStateManager.startGame(activity);
         }
 
+        @Override
+        public void onPause() {
+            super.onPause();
+
+            gameStateManager.stopGame();
+        }
+
         /**
          * Is the current player who's turn it is a Human.
          * @return  True if the turn is for a human.
@@ -494,6 +501,7 @@ public class GameActivity extends Activity {
             @Override
             public synchronized void onPlayerWon(Player player, int position) {
                 ((GameActivity)getActivity()).onEndGame(player);
+                gameStateManager.stopGame();
             }
         }
     }
