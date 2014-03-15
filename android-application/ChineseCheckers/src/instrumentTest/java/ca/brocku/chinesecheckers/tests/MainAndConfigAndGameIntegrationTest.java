@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
+import ca.brocku.chinesecheckers.GameActivity;
 import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
-import ca.brocku.chinesecheckers.OfflineGameActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -46,7 +46,7 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
         curInstruments = getInstrumentation();
         new OfflineConfigurationActivityUnitTest(curAct, curInstruments).testActivity();
         curInstruments.removeMonitor(monitor);
-        monitor = curInstruments.addMonitor(OfflineGameActivity.class.getName(), null, false);
+        monitor = curInstruments.addMonitor(GameActivity.class.getName(), null, false);
 
         MCGIntegrationRunnable mCGIR = new MCGIntegrationRunnable(this);
         synchronized (mCGIR){
@@ -56,7 +56,7 @@ public class MainAndConfigAndGameIntegrationTest extends ActivityInstrumentation
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch (Exception e){}
-        assertNotNull("Transition to OfflineGameActivity Failed", curAct);
+        assertNotNull("Transition to GameActivity Failed", curAct);
         curInstruments = getInstrumentation();
         new OfflineGameActivityUnitTest(curAct, curInstruments).testActivity();
     }

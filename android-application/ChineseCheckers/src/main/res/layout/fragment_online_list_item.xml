@@ -16,7 +16,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_action_notify"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:id="@+id/onlineListItemNotificationIcon"/>
 
     <!-- The list item body -->
     <LinearLayout
@@ -49,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="-6dp"
                     android:src="@drawable/ic_player_peg_red"
+                    android:visibility="gone"
                     android:id="@+id/onlineListItemRedIcon"/>
 
                 <ImageView
@@ -63,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="-6dp"
                     android:src="@drawable/ic_player_peg_yellow"
+                    android:visibility="gone"
                     android:id="@+id/onlineListItemYellowIcon"/>
 
                 <ImageView
@@ -70,6 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="-6dp"
                     android:src="@drawable/ic_player_peg_green"
+                    android:visibility="gone"
                     android:id="@+id/onlineListItemGreenIcon"/>
 
                 <ImageView
@@ -77,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="-6dp"
                     android:src="@drawable/ic_player_peg_blue"
+                    android:visibility="gone"
                     android:id="@+id/onlineListItemBlueIcon"/>
 
                 <ImageView
@@ -84,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="-6dp"
                     android:src="@drawable/ic_player_peg_purple"
+                    android:visibility="gone"
                     android:id="@+id/onlineListItemPurpleIcon"/>
             </LinearLayout>
         </RelativeLayout>
@@ -95,7 +101,8 @@
             android:layout_marginTop="3dp"
             android:gravity="right"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:id="@+id/onlineWinnerContainer">
 
             <ImageView
                 android:layout_width="wrap_content"

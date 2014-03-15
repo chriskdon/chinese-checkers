@@ -54,7 +54,7 @@ public class HumanPlayer extends Player {
      */
     @Override
     public MovePath onTurn(ReadOnlyGameBoard board) {
-        while(m == null){}
+        while(m == null){ Thread.yield(); }
         MovePath temp = m;
         m = null;
         return temp;

@@ -6,10 +6,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import ca.brocku.chinesecheckers.computerplayer.AIPlayer;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -36,7 +32,7 @@ import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 @SuppressLint("All")
-public class OfflineGameActivity extends Activity {
+public class GameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
     private Boolean isEndCurrentGame; //a boolean which can prevent saving the state
 
@@ -85,8 +81,8 @@ public class OfflineGameActivity extends Activity {
                             savedOfflineGame.delete();
 
                             resumeDialog.dismiss();
-                            OfflineGameActivity.this.finish();
-                            startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                            GameActivity.this.finish();
+                            startActivity(new Intent(GameActivity.this, OfflineConfigurationActivity.class));
                         }
                     })
                     .show();
@@ -103,9 +99,9 @@ public class OfflineGameActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_help) {
-            startActivity(new Intent(OfflineGameActivity.this, HelpActivity.class));
+            startActivity(new Intent(GameActivity.this, HelpActivity.class));
         } else if(id == R.id.action_settings) {
-            startActivity(new Intent(OfflineGameActivity.this, SettingsActivity.class));
+            startActivity(new Intent(GameActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -164,8 +160,8 @@ public class OfflineGameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
-                        OfflineGameActivity.this.finish();
-                        startActivity(new Intent(OfflineGameActivity.this, OfflineConfigurationActivity.class));
+                        GameActivity.this.finish();
+                        startActivity(new Intent(GameActivity.this, OfflineConfigurationActivity.class));
                     }
                 })
                 .setCancelClickListener(new Button.OnClickListener() {
@@ -173,8 +169,8 @@ public class OfflineGameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
-                        OfflineGameActivity.this.finish();
-                        startActivity(new Intent(OfflineGameActivity.this, MainActivity.class));
+                        GameActivity.this.finish();
+                        startActivity(new Intent(GameActivity.this, MainActivity.class));
                     }
                 })
                 .disableBackButton(true)
@@ -206,9 +202,9 @@ public class OfflineGameActivity extends Activity {
 
         public OfflineGameFragment() {}
 
-        public OfflineGameActivity activity;
+        public GameActivity activity;
 
-        public OfflineGameFragment(OfflineGameActivity activity) {
+        public OfflineGameFragment(GameActivity activity) {
             this.activity = activity;
         }
 
@@ -497,7 +493,7 @@ public class OfflineGameActivity extends Activity {
              */
             @Override
             public synchronized void onPlayerWon(Player player, int position) {
-                ((OfflineGameActivity)getActivity()).onEndGame(player);
+                ((GameActivity)getActivity()).onEndGame(player);
             }
         }
     }
