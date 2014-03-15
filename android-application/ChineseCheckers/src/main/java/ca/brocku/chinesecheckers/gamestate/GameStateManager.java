@@ -144,12 +144,14 @@ public class GameStateManager implements Parcelable, Serializable {
 
         isRunning = true;
 
+        // Game Loop
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while(isRunning) {
                     final Player p = getCurrentPlayer();
 
+                    // Pre Move
                     if(GameStateManager.this.gameStateEventsHandler != null) {
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -159,11 +161,14 @@ public class GameStateManager implements Parcelable, Serializable {
                         });
                     }
 
+                    // Get Move
                     final MovePath m = p.onTurn(getGameBoard());
                     final GameBoard originalBoard = gameBoard.getDeepCopy();
 
+                    // Save Move
                     writePathToBoard(p, m);
 
+                    // Tell Activity
                     if(GameStateManager.this.gameStateEventsHandler != null) {
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -173,12 +178,19 @@ public class GameStateManager implements Parcelable, Serializable {
                         });
                     }
 
+                    // Next Player
                     currentPlayer = getNextPlayer(getCurrentPlayer().getPlayerColor());
                 }
             }
         }).start();
     }
 
+    /**
+     * Save the path to the GameBoard.
+     *
+     * @param player        The player that made the move.
+     * @param movePath      The path the move took.
+     */
     private void writePathToBoard(Player player, MovePath movePath) {
         // Move the sequence of pieces
         Iterator<Position> it = movePath.getPath().iterator();
