@@ -144,12 +144,14 @@ public class GameStateManager implements Parcelable, Serializable {
 
         isRunning = true;
 
+        // Game Loop
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while(isRunning) {
                     final Player p = getCurrentPlayer();
 
+                    // Pre Move
                     if(GameStateManager.this.gameStateEventsHandler != null) {
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -159,33 +161,14 @@ public class GameStateManager implements Parcelable, Serializable {
                         });
                     }
 
+                    // Get Move
                     final MovePath m = p.onTurn(getGameBoard());
                     final GameBoard originalBoard = gameBoard.getDeepCopy();
 
-                    // Move the sequence of pieces
-                    Iterator<Position> it = m.getPath().iterator();
-                    Position last = null;
-                    while(it.hasNext()) {
-                        if(last == null) {
-                            last = it.next();
-                        }
+                    // Save Move
+                    writePathToBoard(p, m);
 
-                        Position current = it.next();
-
-                        Piece piece = gameBoard.getPiece(last);
-
-                        // Check for illegal moves
-                        if(piece == null) {
-                            throw new IllegalMoveException("There is no piece at that position.");
-                        } else if(piece.getPlayerNumber() != p.getPlayerNumber()) {
-                            throw new IllegalMoveException("Player<" + p.getName() + "> cannot move that piece.");
-                        }
-
-                        gameBoard.movePiece(piece, current);
-
-                        last = current;
-                    }
-
+                    // Tell Activity
                     if(GameStateManager.this.gameStateEventsHandler != null) {
                         activity.runOnUiThread(new Runnable() {
                             @Override
@@ -195,12 +178,48 @@ public class GameStateManager implements Parcelable, Serializable {
                         });
                     }
 
+                    // Next Player
                     currentPlayer = getNextPlayer(getCurrentPlayer().getPlayerColor());
                 }
             }
         }).start();
     }
 
+    /**
+     * Save the path to the GameBoard.
+     *
+     * @param player        The player that made the move.
+     * @param movePath      The path the move took.
+     */
+    private void writePathToBoard(Player player, MovePath movePath) {
+        // Move the sequence of pieces
+        Iterator<Position> it = movePath.getPath().iterator();
+        Position last = null;
+        while(it.hasNext()) {
+            if(last == null) {
+                last = it.next();
+            }
+
+            Position current = it.next();
+
+            Piece piece = gameBoard.getPiece(last);
+
+            // Check for illegal moves
+            if(piece == null) {
+                throw new IllegalMoveException("There is no piece at that position.");
+            } else if(piece.getPlayerNumber() != player.getPlayerNumber()) {
+                throw new IllegalMoveException("Player<" + player.getName() + "> cannot move that piece.");
+            }
+
+            gameBoard.movePiece(piece, current);
+
+            last = current;
+        }
+    }
+
+    /**
+     * Stop the game. Don't forget to call this or thread will keep running.
+     */
     public void stopGame() {
         this.isRunning = false;
     }
@@ -284,6 +303,7 @@ public class GameStateManager implements Parcelable, Serializable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        this.stopGame();
         dest.writeParcelable(gameBoard, 0);
         dest.writeList(new ArrayList<Player>(players.values()));
         dest.writeString(currentPlayer.toString());
