@@ -44,7 +44,6 @@ public class AIPlayer extends Player {
      */
     public MovePath getMove(ReadOnlyGameBoard gameBoard) {
         MovePath move;
-
         switch(this.difficulty){
             //case 3: move = HardAIMove();
             //case 2: move = MediumAIMove();

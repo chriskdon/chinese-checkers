@@ -20,6 +20,12 @@ public class HeuristicCalculator {
         this.goalState = getGoalState(playerNumber, board);
     }
 
+    /**
+     * Calculates the difference in Distance Heuristic between two points.
+     *
+     * @param path The path that the piece will move on
+     * @return The difference in distance to the goal the piece attains from this move
+     */
     public int getDeltaDistanceHeuristic(MovePath path){
         int initialPosition = getDistanceHeuristic(path.getStartPosition());
         int finalPosition = getDistanceHeuristic(path.getEndPosition());
@@ -28,8 +34,6 @@ public class HeuristicCalculator {
     }
     /**
      * Calculates the distance from a piece to the farthest corner of the goal state.
-     * Gives distance to travel 2.5 times more weight than distance from center
-     * of the board.
      *
      * @param piece The piece to be checked.
      * @return The pathing heuristic of the piece.
@@ -39,20 +43,25 @@ public class HeuristicCalculator {
         //vertical displacement from the goal state
         if(goalState[0] == 16 || goalState[0] == 0)
             rowCase = 1;//up/down center
-        if(goalState[0] == 7 || goalState[0] == 7)
+        if(goalState[0] == 7)
             rowCase = 2;//up diagonal
-        if(goalState[0] == 9 || goalState[0] == 9)
+        if(goalState[0] == 9)
             rowCase = 3;//down diagonal
 
         switch(rowCase){
             case 1:
                 distanceFromGoal += Math.abs(piece.getRow() - goalState[0])*20;
+                if(distanceFromGoal <= 60) distanceFromGoal = distanceFromGoal / 2;
                 break;
             case 2:
                 distanceFromGoal += Math.abs(piece.getRow() - ((goalState[0]-3)))*16;
+                if(piece.getRow() > 12 || piece.getRow() < 4) distanceFromGoal += 48;
+                if(piece.getRow() > 8) distanceFromGoal = distanceFromGoal*2;
                 break;
             case 3:
                 distanceFromGoal += Math.abs(piece.getRow() - (goalState[0]+3))*16;
+                if(piece.getRow() > 12 || piece.getRow() < 4) distanceFromGoal += 48;
+                if(piece.getRow() < 8) distanceFromGoal = distanceFromGoal*2;
                 break;
             default:
                 break;
@@ -70,33 +79,37 @@ public class HeuristicCalculator {
         switch(indexCase){
             case 1:
                 //first three rows into one of the vertical goal states
-                if(piece.getRow() < 4 && piece.getRow() >= 0)
+                if(piece.getRow() < 4 && piece.getRow() >= 0 && goalState[0] != 0)
                     distanceFromGoal += Math.abs(piece.getIndex() + 4) * 8;
-                else if(piece.getRow() > 12 && piece.getRow() <= 16)
+                else if(piece.getRow() > 12 && piece.getRow() <= 16 && goalState[0] != 16)
                     distanceFromGoal += Math.abs(piece.getIndex() + 4) * 8;
                     //rows between the vertical goal states in the grid
                 else if(piece.getRow() >= 4 && piece.getRow() <= 12)
-                    distanceFromGoal += Math.abs(piece.getIndex() - ((Math.abs(piece.getRow() - 8) / 2) + 4)) * 8;
+                    distanceFromGoal += Math.abs(piece.getIndex() - (Math.abs(piece.getRow() - 8) / 2 + 4)) * 8;
                 break;
             case 2:
                 //first three rows into one of the vertical goal states
                 if(piece.getRow() < 4 && piece.getRow() >= 0)
-                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 16;
                 else if(piece.getRow() > 12 && piece.getRow() <= 16)
-                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 16;
                 //rows between the vertical goal states in the grid
                 else if (piece.getRow() >= 4 && piece.getRow() <= 12)
-                    distanceFromGoal += Math.abs(piece.getIndex() - goalState[1]) * 12;
+                    distanceFromGoal += Math.abs(piece.getIndex()) * 16;
+                if(piece.getIndex() > (7 - piece.getRow())) distanceFromGoal += piece.getIndex()*8;
                 break;
-            case 3:    //(6,8) vs (4,6) FROM (8,4)
+            case 3:
                 //first three rows into one of the vertical goal states
                 if(piece.getRow() < 4 && piece.getRow() >= 0)
-                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                    distanceFromGoal += Math.abs((goalState[1]+3) - (piece.getIndex())) * 16;
                 else if(piece.getRow() > 12 && piece.getRow() <= 16)
-                    distanceFromGoal += Math.abs(piece.getIndex() + 4) * 12;
+                    distanceFromGoal += Math.abs((goalState[1]+3) - (piece.getIndex())) * 16;
                     //rows between the vertical goal states in the grid
-                else if (piece.getRow() >= 4 && piece.getRow() <= 12)
-                    distanceFromGoal += Math.abs(piece.getIndex() - (goalState[1]+3)) * 18;
+                else if (piece.getRow() >= 4 && piece.getRow() <= 12){
+                    int indexDist = Math.abs(piece.getIndex() - (goalState[1]+3));
+                    if (indexDist > 3) distanceFromGoal += 2*indexDist*16;
+                    else distanceFromGoal += indexDist * 16;
+                }
                 break;
             default:
                 break;

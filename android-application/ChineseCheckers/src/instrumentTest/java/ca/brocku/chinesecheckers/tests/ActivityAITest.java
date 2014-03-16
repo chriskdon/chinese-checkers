@@ -139,7 +139,6 @@ public class ActivityAITest extends AndroidTestCase  {
         CcGameBoard board = new CcGameBoard();
         HeuristicCalculator cHeuristic = new HeuristicCalculator(playerNumber, board);
 
-        //board.setPiece(newPosition(0,0),playerNumber);
         switch(playerNumber){
             case 1:
                 assertEquals("Distance heuristic at (0,0) should be 32.", 32, cHeuristic.getDistanceHeuristic(newPosition(0,0)));
@@ -161,7 +160,6 @@ public class ActivityAITest extends AndroidTestCase  {
                 break;
         }
 
-        //board.setPiece(newPosition(16,0), playerNumber);
         switch(playerNumber){
             case 1:
                 assertEquals("Distance heuristic at (16,0) should be 352.", 352, cHeuristic.getDistanceHeuristic(newPosition(16,0)));
@@ -183,7 +181,6 @@ public class ActivityAITest extends AndroidTestCase  {
                 break;
         }
 
-        //board.setPiece(newPosition(4,0), playerNumber);
         switch(playerNumber){
             case 1:
                 assertEquals("Distance heuristic at (4,0) should be 128.", 128, cHeuristic.getDistanceHeuristic(newPosition(4,0)));
@@ -205,7 +202,6 @@ public class ActivityAITest extends AndroidTestCase  {
                 break;
         }
 
-        //board.setPiece(newPosition(12,0), playerNumber);
         switch(playerNumber){
             case 1:
                 assertEquals("Distance heuristic at (12,0) should be 288.", 288, cHeuristic.getDistanceHeuristic(newPosition(12,0)));
@@ -227,11 +223,10 @@ public class ActivityAITest extends AndroidTestCase  {
                 break;
         }
 
-        //board.setPiece(newPosition(12,12), playerNumber);
         switch(playerNumber){
             case 1:
                 assertEquals("Distance heuristic at (12,12) should be 288.", 288, cHeuristic.getDistanceHeuristic(newPosition(12,12)));
-                break; //check to see if this should be 240
+                break;
             case 2:
                 assertEquals("Distance heuristic at (12,12) should be 128.", 128, cHeuristic.getDistanceHeuristic(newPosition(12,12)));
                 break;
@@ -249,7 +244,6 @@ public class ActivityAITest extends AndroidTestCase  {
                 break;
         }
 
-        //board.setPiece(newPosition(4,12), playerNumber);
         switch(playerNumber){
             case 1:
                 assertEquals("Distance heuristic at (4,12) should be 128.", 128, cHeuristic.getDistanceHeuristic(newPosition(4,12)));
@@ -271,7 +265,6 @@ public class ActivityAITest extends AndroidTestCase  {
                 break;
         }
 
-        //board.setPiece(newPosition(8,4), playerNumber);
         switch(playerNumber){
             case 1:
                 assertEquals("Distance heuristic at (8,4) should be 160.", 160, cHeuristic.getDistanceHeuristic(newPosition(8,4)));

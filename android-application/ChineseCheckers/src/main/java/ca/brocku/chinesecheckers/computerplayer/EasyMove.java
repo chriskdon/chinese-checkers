@@ -35,31 +35,34 @@ public class EasyMove {
         currentMove = new AIPlannedMove();
         path = new MovePath();
         cHeuristic = new HeuristicCalculator(player, board);
+        currentMove.setHeuristic(0);
         GameBoard tempBoard = board.getDeepCopy();
 
         GridPiece[] AIPieces = getPlayerPieces(player, tempBoard);
-
         for (Piece piece : AIPieces) {
             if(piece != null){
                 visited.clear();
-
+                //Log.wtf("myApp", piece.getPlayerNumber() + " - (" +    piece.getPosition().getRow() + "," + piece.getPosition().getIndex() + ")");
                 if(path.size() > 0)
                     for(int i = path.size() ; i > 0 ; i--)
                         path.removeEndPosition();
 
-                path.addToPath(piece.getPosition());//path = starting position
-                visited.add(piece.getPosition());   //visited = starting position
-
                 Position[] initialPossible = board.getPossibleMoves(piece);
 
-                if(initialPossible != null && initialPossible.length > 0)
+                if(initialPossible != null && initialPossible.length > 0){
+                    path.addToPath(piece.getPosition());//path = starting position
+                    visited.add(piece.getPosition());   //visited = starting position
                     for(Position pos : initialPossible)
                         if(pos != null){
                             visited.add(pos);
                             checkHops(piece, pos, tempBoard);
                         }
             }
+            }
         }
+
+
+        //Log.wtf("myApp", "Returning move from (" + currentMove.getPath().get(0).getRow() + "," + currentMove.getPath().get(0).getIndex() + ") to (" + currentMove.getPath().get(currentMove.getPath().size()-1).getRow() + "," + currentMove.getPath().get(currentMove.getPath().size()-1).getIndex() + ") with heuristic " + currentMove.getHeuristic() + ".");
     return new MovePath(currentMove.getPath());
     }
 
@@ -94,12 +97,13 @@ public class EasyMove {
         boolean alreadyVisited;
         path.addToPath(movingTo);
         visited.add(movingTo);
+        //Log.wtf("myApp", "Checking (" + movingTo.getRow() + "," + movingTo.getIndex() + ").");
 
         tempBoard.movePiece(current, movingTo);
         Position[] availableMoves = tempBoard.getPossibleHops(tempBoard.getPiece(movingTo));
 
-        if (cHeuristic.getDeltaDistanceHeuristic(path) > currentMove.getHeuristic()) {
-                    Position[] toArrayList = path.getPath().toArray(new Position[path.size()]);
+        if (cHeuristic.getDeltaDistanceHeuristic(path) > currentMove.getHeuristic() || currentMove.getHeuristic() == 0) {
+            Position[] toArrayList = path.getPath().toArray(new Position[path.size()]);
             ArrayList<Position>  newArrayList = new ArrayList<Position>();
             for(int i = 0 ; i < toArrayList.length ;  i++){
                 newArrayList.add(toArrayList[i]);
@@ -107,6 +111,7 @@ public class EasyMove {
             currentMove.setHeuristic(cHeuristic.getDeltaDistanceHeuristic(path));
             currentMove.setPath(newArrayList);
             currentMove.setPieceMoved(current);
+            //Log.wtf("myApp", "Current PlannedMove is (" + path.getStartPosition().getRow() + "," + path.getStartPosition().getIndex() +") to (" + path.getEndPosition().getRow() + "," + path.getEndPosition().getIndex() + ").");
         }
         if(availableMoves != null){
             for(Position newHop : availableMoves){
