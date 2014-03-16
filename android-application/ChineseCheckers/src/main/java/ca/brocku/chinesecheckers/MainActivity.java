@@ -1,13 +1,11 @@
 package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,9 +23,6 @@ import java.util.UUID;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
-import ca.brocku.chinesecheckers.network.gcm.GcmActivity;
-import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
-import ca.brocku.chinesecheckers.network.spice.SpicedActivity;
 import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
 import ca.brocku.chinesecheckers.network.spice.requests.FollowersRequest;
 
@@ -79,7 +74,7 @@ public class MainActivity extends SpicedGcmActivity {
 
         //set the icon which shows the number of games in which it is your turn
         //TODO: make API call HERE to get number of "current move" games and set variable
-        int numberOfCurrentMoveGames = 12;
+        int numberOfCurrentMoveGames = 1;
         if(numberOfCurrentMoveGames > 0) {
             onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
             onlineNotificationIcon.setVisibility(View.VISIBLE);
@@ -175,8 +170,8 @@ public class MainActivity extends SpicedGcmActivity {
                     ois.close();
                     fis.close();
 
-                    //Bundle information and start the OfflineGameActivity
-                    Intent intent = new Intent(MainActivity.this, OfflineGameActivity.class);
+                    //Bundle information and start the GameActivity
+                    Intent intent = new Intent(MainActivity.this, GameActivity.class);
                     intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
                     intent.putExtra("SAVED_GAME", true); //Store flag that this is a saved game
                     startActivity(intent);

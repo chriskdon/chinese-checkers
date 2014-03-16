@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.ToggleButton;
 
 import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
-import ca.brocku.chinesecheckers.OfflineGameActivity;
+import ca.brocku.chinesecheckers.GameActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 
@@ -42,7 +42,7 @@ public class HomeSeatAndGameTest extends ActivityInstrumentationTestCase2<MainAc
         curInstruments = getInstrumentation();
 //        new OfflineConfigurationActivityUnitTest(curAct, curInstruments).runTest();
         curInstruments.removeMonitor(monitor);
-        monitor = curInstruments.addMonitor(OfflineGameActivity.class.getName(), null, false);
+        monitor = curInstruments.addMonitor(GameActivity.class.getName(), null, false);
         final ToggleButton offlineTwoPlayerButton = (ToggleButton) curAct.findViewById(R.id.twoPlayerButton);
         assertNotNull("offlineTwoPlayerButton Not Found", offlineTwoPlayerButton);
         curAct.runOnUiThread(
@@ -80,7 +80,7 @@ public class HomeSeatAndGameTest extends ActivityInstrumentationTestCase2<MainAc
 
         Thread.sleep(20000);
         curAct = getInstrumentation().waitForMonitorWithTimeout(monitor, 30);
-        assertNotNull("Transition to OfflineGameActivity Failed", curAct);
+        assertNotNull("Transition to GameActivity Failed", curAct);
         curInstruments = getInstrumentation();
        // new OfflineGameActivityUnitTest(curAct, curInstruments).runTest();
     }

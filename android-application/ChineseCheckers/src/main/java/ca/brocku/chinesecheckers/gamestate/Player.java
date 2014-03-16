@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gamestate;
 import java.io.Serializable;
 import android.os.Parcelable;
 
+import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+
 /**
  * Represent a player on the board.
  *
@@ -32,7 +34,7 @@ public abstract class Player implements Serializable, Parcelable {
      * Executed when it is this players turn to act.
      * @param state The current state.
      */
-    public abstract void onTurn(PlayerTurnState state);
+    public abstract MovePath onTurn(ReadOnlyGameBoard board);
 
     /**
      * Get the name of this player.
@@ -84,16 +86,5 @@ public abstract class Player implements Serializable, Parcelable {
         }
 
         throw new IllegalArgumentException("Player number must be between 1 - 6");
-    }
-
-    /**
-     * Handles a player making a move.
-     */
-    public interface PlayerTurnHandler {
-        /**
-         * Fired when the player makes a movePath.
-         * @param movePath  The movePath that was made.
-         */
-        public void onMoveMade(MovePath movePath);
     }
 }

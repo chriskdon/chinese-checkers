@@ -288,7 +288,7 @@ public class OfflineConfigurationActivity extends Activity {
                     purplePlayerError.setVisibility(View.VISIBLE);
 
             } else {
-                Intent intent = new Intent(OfflineConfigurationActivity.this, OfflineGameActivity.class);
+                Intent intent = new Intent(OfflineConfigurationActivity.this, GameActivity.class);
 
                 // TODO: Handle Robots
                 //TODO: START TEMP CODE
