@@ -302,13 +302,18 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             throw new IllegalStateException("The surface is not ready.");
         }
 
-        Canvas c = this.surfaceHolder.lockCanvas();
+        try {
+            Canvas c = this.surfaceHolder.lockCanvas();
 
-        c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
+            c.drawColor(getResources().getColor(R.color.black)); // Clear canvas
 
-        gameBoard.draw(c);
+            gameBoard.draw(c);
 
-        this.surfaceHolder.unlockCanvasAndPost(c);
+            this.surfaceHolder.unlockCanvasAndPost(c);
+        } catch (NullPointerException ex) {
+            // Activity is exiting.
+            // TODO: Handle this cleanly
+        }
     }
 
     /**

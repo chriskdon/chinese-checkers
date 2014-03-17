@@ -108,6 +108,8 @@ public class GameActivity extends Activity {
 
     @Override
     protected void onPause() {
+        gameStateManager.stopGame();
+
         super.onPause();
 
         if(!isEndCurrentGame) { //only save the state if Quit Game was not selected form dialog
@@ -256,14 +258,15 @@ public class GameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
+            // TODO: This needs to be moved somewhere so that it is called after resume if the dialog is there, otherwise it's called automatically.
             gameStateManager.startGame(activity);
         }
 
         @Override
         public void onPause() {
-            super.onPause();
-
             gameStateManager.stopGame();
+
+            super.onPause();
         }
 
         /**

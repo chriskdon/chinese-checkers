@@ -137,7 +137,7 @@ public class GameStateManager implements Parcelable, Serializable {
     /**
      * Start the game
      */
-    public void startGame(final Activity activity) {
+    public synchronized void startGame(final Activity activity) {
         this.onStateReady(activity);
 
         isRunning = true;
@@ -208,6 +208,13 @@ public class GameStateManager implements Parcelable, Serializable {
     }
 
     /**
+     * Stop the game. Don't forget to call this or thread will keep running.
+     */
+    public synchronized void stopGame() {
+        this.isRunning = false;
+    }
+
+    /**
      * Save the path to the GameBoard.
      *
      * @param player        The player that made the move.
@@ -238,14 +245,6 @@ public class GameStateManager implements Parcelable, Serializable {
             last = current;
         }
     }
-
-    /**
-     * Stop the game. Don't forget to call this or thread will keep running.
-     */
-    public void stopGame() {
-        this.isRunning = false;
-    }
-
 
     public Player[] getPlayers() {
         Player[] playerArray = new Player[getNumberOfPlayers()];
