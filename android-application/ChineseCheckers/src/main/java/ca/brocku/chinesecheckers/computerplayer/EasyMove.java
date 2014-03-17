@@ -17,7 +17,7 @@ import ca.brocku.chinesecheckers.gamestate.MovePath;
  * Date: 2/24/2014
  */
 public class EasyMove {
-    private AiPlannedMove currentMove;
+    private AIPlannedMove currentMove;
     private HeuristicCalculator cHeuristic;
     MovePath path;
     ArrayList<Position> visited;
@@ -32,7 +32,7 @@ public class EasyMove {
      */
     public MovePath getEasyMove(int player, GameBoard board) {
         visited = new ArrayList<Position>();
-        currentMove = new AiPlannedMove();
+        currentMove = new AIPlannedMove();
         path = new MovePath();
         cHeuristic = new HeuristicCalculator(player, board);
         currentMove.setHeuristic(0);

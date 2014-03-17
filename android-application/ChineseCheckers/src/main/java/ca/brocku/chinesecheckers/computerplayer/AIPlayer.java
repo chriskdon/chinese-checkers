@@ -15,11 +15,11 @@ import ca.brocku.chinesecheckers.gamestate.Player;
  * Student #: 4366340
  * Date: 2/24/2014
  */
-public class AiPlayer extends Player {
+public class AIPlayer extends Player {
     private String AILevel;
     private int difficulty;
 
-    public AiPlayer(String AILevel, PlayerColor playerColor){
+    public AIPlayer(String AILevel, PlayerColor playerColor){
         super(playerColor);
         this.AILevel = AILevel;
         this.difficulty = getDifficulty(AILevel);
@@ -90,7 +90,7 @@ public class AiPlayer extends Player {
      *
      * @param parcel
      */
-    private AiPlayer(Parcel parcel) {
+    private AIPlayer(Parcel parcel) {
         this(parcel.readString(), PlayerColor.valueOf(parcel.readString()));
     }
 
@@ -103,11 +103,11 @@ public class AiPlayer extends Player {
     /**
      * Recreate this instance
      */
-    public static final Parcelable.Creator<AiPlayer> CREATOR =
-            new Parcelable.Creator<AiPlayer>() {
+    public static final Parcelable.Creator<AIPlayer> CREATOR =
+            new Parcelable.Creator<AIPlayer>() {
 
-                public AiPlayer createFromParcel(Parcel in) { return new AiPlayer(in); }
+                public AIPlayer createFromParcel(Parcel in) { return new AIPlayer(in); }
 
-                public AiPlayer[] newArray(int size) { return new AiPlayer[size]; }
+                public AIPlayer[] newArray(int size) { return new AIPlayer[size]; }
             };
 }
