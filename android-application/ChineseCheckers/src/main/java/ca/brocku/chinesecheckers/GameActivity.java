@@ -36,6 +36,9 @@ public class GameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
     private Boolean isEndCurrentGame; //a boolean which can prevent saving the state
 
+    private Popup resumeDialog; //dialog that appears when there is a saved game
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +62,7 @@ public class GameActivity extends Activity {
         //Show the Resume Game dialog box if we are loading a saves game
         if(getIntent().getBooleanExtra("SAVED_GAME", false)) {
 
-            final Popup resumeDialog = new Popup(this);
+            resumeDialog = new Popup(this);
             resumeDialog.setTitleText(R.string.offline_resume_title)
                     .setMessageText(R.string.offline_resume_message)
                     .setAcceptButtonText(R.string.offline_resume_accept)
@@ -68,6 +71,8 @@ public class GameActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             resumeDialog.dismiss();
+
+                            ((OfflineGameFragment)getFragmentManager().findFragmentByTag("OfflineGameFragment")).startGame(); //start the saved game after the resume game dialog is closed
                         }
                     })
                     .setCancelClickListener(new Button.OnClickListener() {
@@ -258,8 +263,10 @@ public class GameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            // TODO: This needs to be moved somewhere so that it is called after resume if the dialog is there, otherwise it's called automatically.
-            gameStateManager.startGame(activity);
+            //start the game if the resume dialog is not showing
+            if(activity.resumeDialog == null || !activity.resumeDialog.isShowing()) {
+                gameStateManager.startGame(activity);
+            }
         }
 
         @Override
@@ -385,6 +392,10 @@ public class GameActivity extends Activity {
         private void setCurrentPlayer(Player p) {
             currentPlayer = p;
             if(isHumanTurn()) { resetHumanState(); }
+        }
+
+        private void startGame() {
+            gameStateManager.startGame(activity);
         }
 
         /**
