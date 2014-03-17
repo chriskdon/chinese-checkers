@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import ca.brocku.chinesecheckers.computerplayer.AIPlayer;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -30,6 +31,7 @@ import ca.brocku.chinesecheckers.gameboard.IllegalMoveException;
  */
 public class GameStateManager implements Parcelable, Serializable {
     public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
+    private static final int MIN_AI_MOVE_SPEED = 1000; // The minimum speed an AI can move at
 
     private GameBoard gameBoard;
     private Map<Player.PlayerColor, Player> players;    // Players in the game
@@ -162,8 +164,20 @@ public class GameStateManager implements Parcelable, Serializable {
                     }
 
                     // Get Move
+                    long start = System.currentTimeMillis();
+
                     final MovePath m = p.onTurn(getGameBoard());
                     final GameBoard originalBoard = gameBoard.getDeepCopy();
+
+                    // Make AIs draw slower
+                    long diff = System.currentTimeMillis() - start;
+                    if(p instanceof AIPlayer && diff < MIN_AI_MOVE_SPEED && GameStateManager.this.gameStateEventsHandler != null) {
+                        try {
+                            Thread.sleep(MIN_AI_MOVE_SPEED - diff);
+                        } catch (InterruptedException ex) {
+                            // Skip sleeping
+                        }
+                    }
 
                     // Save Move
                     writePathToBoard(p, m);
