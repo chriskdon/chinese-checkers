@@ -283,30 +283,34 @@ public class GameActivity extends Activity {
         }
 
         /**
-         * Set the color for the title bar based on the player.
+         * Set the color and name for the title bar based on the player.
          * @param player    The The player who's turn it is.
          */
-        private void setTitleBarButtonColor(Player player) {
+        private void setTitleBar(Player player) {
+            titleBarButton.setText(player.getName());
+
             switch (player.getPlayerColor()) {
                 case RED:
                     titleBarButton.setBackgroundResource(R.drawable.chch_button_square_red);
-                    break;
+                    return;
                 case PURPLE:
                     titleBarButton.setBackgroundResource(R.drawable.chch_button_square_purple);
-                    break;
+                    return;
                 case BLUE:
                     titleBarButton.setBackgroundResource(R.drawable.chch_button_square_blue);
-                    break;
+                    return;
                 case GREEN:
                     titleBarButton.setBackgroundResource(R.drawable.chch_button_square_green);
-                    break;
+                    return;
                 case YELLOW:
                     titleBarButton.setBackgroundResource(R.drawable.chch_button_square_yellow);
-                    break;
+                    return;
                 case ORANGE:
                     titleBarButton.setBackgroundResource(R.drawable.chch_button_square_orange);
-                    break;
+                    return;
             }
+
+            throw new IllegalArgumentException("A valid playe rmust be specified.");
         }
 
         /**
@@ -460,9 +464,7 @@ public class GameActivity extends Activity {
                 */
 
                 setCurrentPlayer(player);
-
-                setTitleBarButtonColor(player);
-                titleBarButton.setText(gameStateManager.getCurrentPlayer().getName());
+                setTitleBar(player);
             }
 
             /**
@@ -500,8 +502,8 @@ public class GameActivity extends Activity {
              */
             @Override
             public synchronized void onPlayerWon(Player player, int position) {
+                setTitleBar(player);
                 ((GameActivity)getActivity()).onEndGame(player);
-                gameStateManager.stopGame();
             }
         }
     }

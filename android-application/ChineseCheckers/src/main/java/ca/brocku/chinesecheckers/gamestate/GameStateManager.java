@@ -344,12 +344,15 @@ public class GameStateManager implements Parcelable, Serializable {
          */
         @Override
         public void onPlayerWon(final int playerNumber) {
+            GameStateManager.this.stopGame();
+
             if(GameStateManager.this.gameStateEventsHandler != null) {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        GameStateManager.this.stopGame();
-                        GameStateManager.this.gameStateEventsHandler.onPlayerWon(getCurrentPlayer(), playerNumber);
+                        GameStateManager.this
+                                .gameStateEventsHandler
+                                .onPlayerWon(players.get(Player.getPlayerColor(playerNumber)), playerNumber);
                     }
                 });
             }
