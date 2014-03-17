@@ -9,7 +9,7 @@ import android.os.Parcel;
  * Student #: 4810800
  * Date: 2/22/2014
  */
-public class ReadOnlyGameBoard extends GameBoard {
+public class ReadOnlyGameBoard implements GameBoard {
     private GameBoard gameBoard;
 
     public ReadOnlyGameBoard(GameBoard gameBoard) {
@@ -152,5 +152,16 @@ public class ReadOnlyGameBoard extends GameBoard {
     @Override
     public void reset() {
         throw new UnsupportedOperationException("This board cannot be modified");
+    }
+
+    /**
+     * Has the specified player won the game.
+     *
+     * @param playerNumber The player number.
+     * @return True if they have won, false otherwise.
+     */
+    @Override
+    public boolean hasPlayerWon(int playerNumber) {
+        return gameBoard.hasPlayerWon(playerNumber);
     }
 }

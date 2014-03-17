@@ -14,28 +14,12 @@ import java.util.List;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class CcGameBoard extends GameBoard {
+public class CcGameBoard implements GameBoard {
     /**
      * Total number of spaces on the board
      */
     private GridPiece[][] board;
     private int numPlayers = 0;
-
-    /**
-     * Construct a new board for a specified number of players.
-     * @param numPlayers    The number of players in the game.
-     */
-    public CcGameBoard(int numPlayers) {
-        this(numPlayers, null);
-    }
-
-    /**
-     * Load a game that has already been started.
-     * @param pieceList The state of all the pieces from the existing games.
-     */
-    public CcGameBoard(Piece[] pieceList) {
-        this(pieceList, null);
-    }
 
     /**
      * Constructs an empty board, used for testing purposes
@@ -57,9 +41,8 @@ public class CcGameBoard extends GameBoard {
     /**
      * Initialize a new game with the specified number of players.
      * @param numPlayers    The number of players in the game. {2,3,4,6}
-     * @param handler       The event handler to set for the game.
      */
-    public CcGameBoard(int numPlayers, GameBoardEvents handler) {
+    public CcGameBoard(int numPlayers) {
         // Check to make sure the numPlayers argument is in range.
         if(!Arrays.asList(2, 3, 4, 6).contains(numPlayers)) {
             throw new IllegalArgumentException("The number of players must be {2,3,4,6}.");
@@ -69,22 +52,19 @@ public class CcGameBoard extends GameBoard {
 
         board = constructBoard();
         populateNewGame(numPlayers);
-        setGameBoardEventsHandler(handler);
     }
 
     /**
      * Load a game board from an initial set of pieces.
      * @param pieceList The list of pieces to initialize the board with.
-     * @param handler   The event handler to set for the game.
      */
-    public CcGameBoard(Piece[] pieceList, GameBoardEvents handler) {
+    public CcGameBoard(Piece[] pieceList) {
         if((pieceList.length%10) != 0 || pieceList.length > 60) {
             throw new IllegalArgumentException("The number of pieces on the board doesn't match the number of players playing.");
         }
 
         board = constructBoard();
         loadBoard(pieceList);
-        setGameBoardEventsHandler(handler);
     }
 
     /**
@@ -199,7 +179,8 @@ public class CcGameBoard extends GameBoard {
      * @param  playerNumber The player for which checking of win condition is required.
      *
      */
-    private void checkWinCondition(int playerNumber) {
+    @Override
+    public boolean hasPlayerWon(int playerNumber) {
         boolean winCheck = true;
         boolean playerCheck = false;
         int k, h;
@@ -224,9 +205,8 @@ public class CcGameBoard extends GameBoard {
 
             }
         }
-        if(winCheck && playerCheck && this.gameBoardEventsHandler != null) {
-            this.gameBoardEventsHandler.onPlayerWon(playerNumber);
-        }
+
+        return (winCheck && playerCheck);
     }
 
     /**
@@ -270,7 +250,6 @@ public class CcGameBoard extends GameBoard {
     public void movePiece(Piece piece, Position to) {
         if(isValidMove(piece, to)) {
             forceMove((GridPiece)getPiece(piece.getPosition()), to);
-            this.checkWinCondition(piece.getPlayerNumber());
         }
         else{
             throw new IllegalMoveException("This piece cannot move to this position");
@@ -717,7 +696,7 @@ public class CcGameBoard extends GameBoard {
     }
 
     /**
-     * An assisting function for checkWinCondition and populateBoard that returns an offset row value
+     * An assisting function for hasPlayerWon and populateBoard that returns an offset row value
      * based on the location of the targeted area and the current iteration of the loop.
      *
      * @param  location The targeted area, see supporting location documentation.
@@ -737,7 +716,7 @@ public class CcGameBoard extends GameBoard {
     }
 
     /**
-     * An assisting function for checkWinCondition and populateBoard that returns an offset column or index value
+     * An assisting function for hasPlayerWon and populateBoard that returns an offset column or index value
      * based on the location of the targeted area and the current iteration of the loop.
      *
      * @param  location The targeted area, see supporting location documentation.

@@ -1,8 +1,6 @@
 package ca.brocku.chinesecheckers.gamestate;
 
 import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,7 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import ca.brocku.chinesecheckers.computerplayer.AIPlayer;
+import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -31,7 +29,7 @@ import ca.brocku.chinesecheckers.gameboard.IllegalMoveException;
  */
 public class GameStateManager implements Parcelable, Serializable {
     public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
-    private static final int MIN_AI_MOVE_SPEED = 1000; // The minimum speed an AI can move at
+    private static final int MIN_AI_MOVE_SPEED = 500; // The minimum speed an AI can move at
 
     private GameBoard gameBoard;
     private Map<Player.PlayerColor, Player> players;    // Players in the game
@@ -87,8 +85,6 @@ public class GameStateManager implements Parcelable, Serializable {
         if(this.gameBoard == null) {
             throw new IllegalStateException("GameBoard must be setup.");
         }
-
-        this.gameBoard.setGameBoardEventsHandler(new GameBoardEventsHandler(activity));
     }
 
     /**
@@ -171,7 +167,7 @@ public class GameStateManager implements Parcelable, Serializable {
 
                     // Make AIs draw slower
                     long diff = System.currentTimeMillis() - start;
-                    if(p instanceof AIPlayer && diff < MIN_AI_MOVE_SPEED && GameStateManager.this.gameStateEventsHandler != null) {
+                    if(p instanceof AiPlayer && diff < MIN_AI_MOVE_SPEED && gameStateEventsHandler != null) {
                         try {
                             Thread.sleep(MIN_AI_MOVE_SPEED - diff);
                         } catch (InterruptedException ex) {
@@ -182,18 +178,30 @@ public class GameStateManager implements Parcelable, Serializable {
                     // Save Move
                     writePathToBoard(p, m);
 
+                    final boolean hasPlayerWon = gameBoard.hasPlayerWon(p.getPlayerNumber());
+
                     // Tell Activity
-                    if(GameStateManager.this.gameStateEventsHandler != null) {
+                    if(gameStateEventsHandler != null) {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                GameStateManager.this.gameStateEventsHandler.onBoardModified(p, originalBoard, getGameBoard(), m);
+                               gameStateEventsHandler.onBoardModified(p, originalBoard, getGameBoard(), m);
+
+                               // Notify player winning
+                               if(hasPlayerWon) {
+                                   gameStateEventsHandler.onPlayerWon(p, 1);
+                               }
                             }
                         });
                     }
 
-                    // Next Player
-                    currentPlayer = getNextPlayer(getCurrentPlayer().getPlayerColor());
+                    // Check if somebody won
+                    if(hasPlayerWon) {
+                        stopGame();
+                    } else {
+                        // Next Player
+                        currentPlayer = getNextPlayer(getCurrentPlayer().getPlayerColor());
+                    }
                 }
             }
         }).start();
@@ -337,41 +345,6 @@ public class GameStateManager implements Parcelable, Serializable {
             return new GameStateManager[size];
         }
     };
-
-    /**
-     * Handles the events coming directly from the game board.
-     */
-    private class GameBoardEventsHandler implements GameBoard.GameBoardEvents {
-        private Activity activity;
-
-        public GameBoardEventsHandler(Activity activity) {
-            if(activity == null) {
-                throw new IllegalArgumentException("Activty cannot be null.");
-            }
-
-            this.activity = activity;
-        }
-
-        /**
-         * Fired when a player wins the game.
-         * @param playerNumber  The number of the player who won.
-         */
-        @Override
-        public void onPlayerWon(final int playerNumber) {
-            GameStateManager.this.stopGame();
-
-            if(GameStateManager.this.gameStateEventsHandler != null) {
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        GameStateManager.this
-                                .gameStateEventsHandler
-                                .onPlayerWon(players.get(Player.getPlayerColor(playerNumber)), playerNumber);
-                    }
-                });
-            }
-        }
-    }
 
     /**
      * Events that the GameStateManager will throw throughout

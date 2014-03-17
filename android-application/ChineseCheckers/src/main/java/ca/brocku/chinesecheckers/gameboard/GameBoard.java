@@ -12,9 +12,7 @@ import java.io.Serializable;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public abstract class GameBoard implements Parcelable, Serializable {
-    protected transient GameBoardEvents gameBoardEventsHandler;    // Various game event handlers.
-
+public interface GameBoard extends Parcelable, Serializable {
     /**
      * The number of available positions in each row.
      */
@@ -29,16 +27,6 @@ public abstract class GameBoard implements Parcelable, Serializable {
      * Maximum number of pieces on a row
      */
     public static final int MAXIMUM_PIECES_PER_ROW = 13;
-
-    /**
-     * Set the handler for the game board events callbacks.
-     *
-     * @param gameBoardEventsHandler    The handler.
-     */
-    public void setGameBoardEventsHandler(GameBoardEvents gameBoardEventsHandler) {
-
-        this.gameBoardEventsHandler = gameBoardEventsHandler;
-    }
 
     /**
      * MovePath a piece from one position to another.
@@ -137,13 +125,9 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public abstract void writeToParcel(Parcel dest, int flags);
 
     /**
-     * Events that can be fired from the game board.
+     * Has the specified player won the game.
+     * @param playerNumber  The player number.
+     * @return  True if they have won, false otherwise.
      */
-    public static interface GameBoardEvents {
-        /**
-         * Fired when a player gets all their pieces into the desired goal.
-         * @param playerNumber  The number of the player who won.
-         */
-        public void onPlayerWon(int playerNumber);
-    }
+    public abstract boolean hasPlayerWon(int playerNumber);
 }

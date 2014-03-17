@@ -2,7 +2,7 @@ package ca.brocku.chinesecheckers.tests;
 
 import android.test.AndroidTestCase;
 
-import ca.brocku.chinesecheckers.computerplayer.AIPlayer;
+import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
 import ca.brocku.chinesecheckers.computerplayer.HeuristicCalculator;
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -50,7 +50,7 @@ public class ActivityAITest extends AndroidTestCase  {
     public void directionEvaluation(String AILevel, int playerNumber, Player.PlayerColor color) {
         CcGameBoard board = new CcGameBoard();
         int opponentNumber;
-        AIPlayer computerPlayer = new AIPlayer(AILevel, color);
+        AiPlayer computerPlayer = new AiPlayer(AILevel, color);
 
         board.setPiece(newPosition(8, 4), playerNumber);
         if(playerNumber<6) opponentNumber = 6;
@@ -111,7 +111,7 @@ public class ActivityAITest extends AndroidTestCase  {
 
     public void hoppingEvaluation(String AILevel, Player.PlayerColor color){
         CcGameBoard board = new CcGameBoard();
-        AIPlayer computerPlayer = new AIPlayer(AILevel, color);
+        AiPlayer computerPlayer = new AiPlayer(AILevel, color);
 
         board.setPiece(newPosition(5, 5), 1);
         board.setPiece(newPosition(7, 5), 1);
