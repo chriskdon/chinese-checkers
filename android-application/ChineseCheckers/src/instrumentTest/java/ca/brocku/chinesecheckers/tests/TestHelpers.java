@@ -4,6 +4,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -56,6 +57,25 @@ public class TestHelpers{
         }
         withThis.assertTrue(editTextName +  " Not Enabled",toTest.isEnabled()); //Test if enabled
         withThis.assertEquals(editTextName + " Initalized With Improper Text", "", toTest.getText().toString()); //Checks proper text initialization
+    }
+
+    public void RadioButtonTest(ActivityInstrumentationTestCase2 withThis,RadioButton toTest,Boolean shouldBeVisible,Boolean shouldBeClicked){
+        String radioButtonName = toTest.getResources().getResourceName(toTest.getId());
+
+        if(shouldBeVisible){ //Test visibility
+            withThis.assertTrue(radioButtonName + " Not Shown", toTest.isShown());
+        }
+        else{
+            withThis.assertFalse(radioButtonName + " Shown When Shouldn't", toTest.isShown());
+        }
+        if(shouldBeClicked){ //Test visibility
+            withThis.assertTrue(radioButtonName + " Not Checked", toTest.isChecked());
+        }
+        else{
+            withThis.assertFalse(radioButtonName + " Checked When Shouldn't", toTest.isChecked());
+        }
+
+        withThis.assertTrue(radioButtonName +  " Not Clickable",toTest.isClickable()); //Test if enabled
     }
 
     public void EditTextTest(ActivityInstrumentationTestCase2 withThis,EditText toTest,Boolean shouldBeVisible,String shouldRead){

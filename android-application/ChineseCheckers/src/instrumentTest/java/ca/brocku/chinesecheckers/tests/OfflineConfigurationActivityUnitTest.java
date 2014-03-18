@@ -2,15 +2,8 @@ package ca.brocku.chinesecheckers.tests;
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.test.ActivityInstrumentationTestCase2;
-import android.view.ActionProvider;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.view.SubMenu;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,6 +13,7 @@ import android.widget.ToggleButton;
 import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.SettingsActivity;
 
 /**
  * Created by Main on 2/18/14.
@@ -282,6 +276,28 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}
         assertNotNull("Transition Back to OfflineConfigurationActivity Failed",curAct);
+
+
+
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(SettingsActivity.class.getName(),null,false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_settings,0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition to SettingsActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(),null,false);
+
+        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition Back to MainActivity Failed",curAct);
     }
 
     public void activityTestHelper() throws Exception{

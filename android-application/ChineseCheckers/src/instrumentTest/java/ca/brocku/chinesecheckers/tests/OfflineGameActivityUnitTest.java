@@ -27,7 +27,9 @@ import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.GameActivity;
 import ca.brocku.chinesecheckers.HelpActivity;
+import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.SettingsActivity;
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
@@ -519,6 +521,27 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}
         assertNotNull("Transition Back to GameActivity Failed",curAct);
+
+
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(SettingsActivity.class.getName(),null,false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_settings,0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition to SettingsActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(GameActivity.class.getName(),null,false);
+
+        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition Back to MainActivity Failed",curAct);
     }
 
     public void activityTestHelper(){

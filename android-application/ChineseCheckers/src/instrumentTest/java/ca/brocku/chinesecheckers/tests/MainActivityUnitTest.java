@@ -16,6 +16,7 @@ import android.widget.Button;
 import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.SettingsActivity;
 
 /**
  * Created by Main on 2/18/14.
@@ -279,11 +280,35 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}
         assertNotNull("Transition Back to MainActivity Failed",curAct);
+
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(SettingsActivity.class.getName(),null,false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_settings,0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition to SettingsActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(MainActivity.class.getName(),null,false);
+
+        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition Back to MainActivity Failed",curAct);
+
     }
 
     public void activityTestHelper(){
         assertNotNull("MainActivity Not Started", curAct);
         testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton), true);
+        testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.onlineListActivityButton), true);
+        testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.helpActivityButton), true);
+        testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.settingsActivityButton), true);
     }
 
 }
