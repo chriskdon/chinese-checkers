@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         android:layout_marginRight="40dp"
         android:padding="5dp"
-        android:background="@drawable/chch_container_rounded"
+        android:background="@drawable/chch_button_rounded"
         android:orientation="vertical">
 
         <!-- top line in online game list item; stores game id & player pegs -->
