@@ -263,6 +263,8 @@ public class GameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
+            setTitleBar(gameStateManager.getCurrentPlayer());
+
             //start the game if the resume dialog is not showing
             if(activity.resumeDialog == null || !activity.resumeDialog.isShowing()) {
                 gameStateManager.startGame(activity);
