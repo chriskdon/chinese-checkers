@@ -537,7 +537,7 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         curInstruments.removeMonitor(monitor);
         monitor = curInstruments.addMonitor(GameActivity.class.getName(),null,false);
 
-        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+        new SettingsActivityUnitTest(curAct,curInstruments).activityTest();
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}

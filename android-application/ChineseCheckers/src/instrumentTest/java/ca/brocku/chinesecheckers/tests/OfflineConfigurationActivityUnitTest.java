@@ -293,7 +293,7 @@ public class OfflineConfigurationActivityUnitTest extends ActivityInstrumentatio
         curInstruments.removeMonitor(monitor);
         monitor = curInstruments.addMonitor(OfflineConfigurationActivity.class.getName(),null,false);
 
-        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
+        new SettingsActivityUnitTest(curAct,curInstruments).activityTest();
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}

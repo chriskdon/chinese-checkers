@@ -13,11 +13,12 @@ import android.widget.RadioGroup;
 import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.SettingsActivity;
 
 /**
  * Created by Main on 3/18/14.
  */
-public class SettingsActivityUnitTest extends ActivityInstrumentationTestCase2<HelpActivity> {
+public class SettingsActivityUnitTest extends ActivityInstrumentationTestCase2<SettingsActivity> {
 
     private TestHelpers testHelper;
 
@@ -26,12 +27,12 @@ public class SettingsActivityUnitTest extends ActivityInstrumentationTestCase2<H
     private Instrumentation.ActivityMonitor monitor;
 
     public SettingsActivityUnitTest() {
-        super(HelpActivity.class);
+        super(SettingsActivity.class);
         testHelper = new TestHelpers();
     }
 
-    public SettingsActivityUnitTest(Activity curAct,Instrumentation curInstruments){
-        super(HelpActivity.class);
+    public SettingsActivityUnitTest(Activity curAct, Instrumentation curInstruments) {
+        super(SettingsActivity.class);
         this.curAct = curAct;
         this.curInstruments = curInstruments;
         testHelper = new TestHelpers();
@@ -45,44 +46,53 @@ public class SettingsActivityUnitTest extends ActivityInstrumentationTestCase2<H
     }
 
     public void activityTest() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(curAct);
-        assertNotNull("SettingsActivity Not Started",curAct);
+        final ActivityInstrumentationTestCase2 actInsTest = this;
+        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(curAct);
+        assertNotNull("SettingsActivity Not Started", curAct);
+
+        synchronized (curAct) {
+            curAct.runOnUiThread(new Runnable() {
+
+                public void run() {
+                    RadioButton showMoveOn = (RadioButton) curAct.findViewById(R.id.settingsShowMoveOnButton);
+                    RadioButton showMoveOff = (RadioButton) curAct.findViewById(R.id.settingsShowMoveOffButton);
+                    RadioGroup showMoveGroup = (RadioGroup) curAct.findViewById(R.id.settingsShowMovesRadioGroup);
+
+                    showMoveGroup.clearCheck();
+                    showMoveGroup.check(R.id.settingsShowMoveOnButton);
+                    try{Thread.sleep(1000);}catch (Exception e){}
+                    testHelper.RadioButtonTest(actInsTest, showMoveOn, true, true);
+                    testHelper.RadioButtonTest(actInsTest, showMoveOff, true, false);
+
+                    showMoveGroup.check(R.id.settingsShowMoveOffButton);
+                    try{Thread.sleep(1000);}catch (Exception e){}
+                    testHelper.RadioButtonTest(actInsTest, showMoveOn, true, false);
+                    testHelper.RadioButtonTest(actInsTest, showMoveOff, true, true);
+
+                    showMoveGroup.check(R.id.settingsShowMoveOnButton);
+                    try{Thread.sleep(1000);}catch (Exception e){}
+                    testHelper.RadioButtonTest(actInsTest, showMoveOn, true, true);
+                    testHelper.RadioButtonTest(actInsTest, showMoveOff, true, false);
+
+                    String username = sharedPrefs.getString(MainActivity.PREF_USER_ID, "");
+                    testHelper.EditTextTest(actInsTest, (EditText) curAct.findViewById(R.id.settingsUsernameEditText), true,username);
+                }
+            });
+        }
+
         SettingsRunnable sR = new SettingsRunnable();
-        RadioButton showMoveOn = (RadioButton)curAct.findViewById(R.id.settingsShowMoveOnButton);
-        RadioButton showMoveOff = (RadioButton)curAct.findViewById(R.id.settingsShowMoveOnButton);
-
-        TouchUtils.clickView(this, showMoveOn);
-        testHelper.RadioButtonTest(this, showMoveOn, true, true);
-        testHelper.RadioButtonTest(this,showMoveOn,true,false);
-        Boolean showMoves = sharedPrefs.getBoolean(MainActivity.PREF_SHOW_MOVES, true);
-        assertTrue("Show Moves saved False When Should Be True",showMoves);
-
-        TouchUtils.clickView(this, showMoveOff);
-        testHelper.RadioButtonTest(this,showMoveOn,true,false);
-        testHelper.RadioButtonTest(this,showMoveOn,true,true);
-        showMoves = sharedPrefs.getBoolean(MainActivity.PREF_SHOW_MOVES, true);
-        assertFalse("Show Moves saved True When Should Be False", showMoves);
-
-        TouchUtils.clickView(this, showMoveOn);
-        testHelper.RadioButtonTest(this,showMoveOn,true,true);
-        testHelper.RadioButtonTest(this,showMoveOn,true,false);
-        showMoves = sharedPrefs.getBoolean(MainActivity.PREF_SHOW_MOVES, true);
-        assertTrue("Show Moves saved False When Should Be True",showMoves);
-
-        testHelper.EditTextTest(this,(EditText)curAct.findViewById(R.id.settingsUsernameEditText),true);
-
-        synchronized (sR){
-            try{
+        synchronized (sR) {
+            try {
                 curAct.runOnUiThread(sR);
                 ((Object) sR).wait();
+            } catch (Exception e) {
             }
-            catch(Exception e){}
         }
     }
 
-    class SettingsRunnable implements Runnable{
-        public void run(){
-            synchronized (this){
+    class SettingsRunnable implements Runnable {
+        public void run() {
+            synchronized (this) {
                 curAct.onBackPressed();
                 ((Object) this).notify();
             }

@@ -13,10 +13,13 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.File;
+
 import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.SettingsActivity;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 
 /**
  * Created by Main on 2/18/14.
@@ -49,6 +52,8 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     }
 
     public void testActivity() {
+        File savedOfflineGame = curAct.getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+        savedOfflineGame.delete();
         activityTestHelper();
         helpActivityTransitionTest();
         activityTestHelper();
@@ -291,11 +296,10 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}
         assertNotNull("Transition to SettingsActivity Failed", curAct);
+        new SettingsActivityUnitTest(curAct,curInstruments).activityTest();
 
         curInstruments.removeMonitor(monitor);
         monitor = curInstruments.addMonitor(MainActivity.class.getName(),null,false);
-
-        new HelpActivityUnitTest(curAct,curInstruments).activityTest();
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}

@@ -126,14 +126,14 @@ public class ActivityAITest extends AndroidTestCase  {
         assertEquals("Final index should be 6", 6, position.getIndex());//got 0
     }
 
-    public void testHeuristics(){
-        testDistanceHeuristic(1);
-        testDistanceHeuristic(2);
-        testDistanceHeuristic(3);
-        testDistanceHeuristic(4);
-        testDistanceHeuristic(5);
-        testDistanceHeuristic(6);
-    }
+//    public void testHeuristics(){
+//        testDistanceHeuristic(1);
+//        testDistanceHeuristic(2);
+//        testDistanceHeuristic(3);
+//        testDistanceHeuristic(4);
+//        testDistanceHeuristic(5);
+//        testDistanceHeuristic(6);
+//    }
 
     public void testDistanceHeuristic(int playerNumber){
         CcGameBoard board = new CcGameBoard();
