@@ -32,9 +32,9 @@ public abstract class Player implements Serializable, Parcelable {
 
     /**
      * Executed when it is this players turn to act.
-     * @param gameBoard The current game board.
+     * @param state The current state.
      */
-    public abstract Move onTurn(ReadOnlyGameBoard gameBoard);
+    public abstract MovePath onTurn(ReadOnlyGameBoard board);
 
     /**
      * Get the name of this player.
@@ -49,6 +49,23 @@ public abstract class Player implements Serializable, Parcelable {
      */
     public final PlayerColor getPlayerColor() {
         return playerColor;
+    }
+
+    /**
+     * Return the number of this player.
+     * @return  The number.
+     */
+    public final int getPlayerNumber() {
+        switch (getPlayerColor()) {
+            case RED: return 1;
+            case PURPLE: return 2;
+            case BLUE: return 3;
+            case GREEN: return 4;
+            case YELLOW: return 5;
+            case ORANGE: return 6;
+        }
+
+        throw new IllegalStateException("Invalid Player Color");
     }
 
     /**
@@ -69,16 +86,5 @@ public abstract class Player implements Serializable, Parcelable {
         }
 
         throw new IllegalArgumentException("Player number must be between 1 - 6");
-    }
-
-    /**
-     * Handles a player making a move.
-     */
-    public interface PlayerTurnHandler {
-        /**
-         * Fired when the player makes a move.
-         * @param move  The move that was made.
-         */
-        public void onMoveMade(Move move);
     }
 }

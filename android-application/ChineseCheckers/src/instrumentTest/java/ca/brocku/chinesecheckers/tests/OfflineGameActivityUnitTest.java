@@ -3,7 +3,9 @@ package ca.brocku.chinesecheckers.tests;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+
+///////////////////////////////////////////////////////////HEADER COMMENTED OUT
+/*import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.ActionProvider;
@@ -11,15 +13,23 @@ import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.SubMenu;
-import android.view.View;
+import android.view.View;*/
+
+import android.os.Parcelable;
+import android.test.ActivityInstrumentationTestCase2;
+import android.view.KeyEvent;
+
+
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ca.brocku.chinesecheckers.GameActivity;
 import ca.brocku.chinesecheckers.HelpActivity;
-import ca.brocku.chinesecheckers.OfflineGameActivity;
+import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.SettingsActivity;
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
@@ -29,7 +39,7 @@ import ca.brocku.chinesecheckers.gamestate.Player;
 /**
  * Created by Main on 2/18/14.
  */
-public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase2<OfflineGameActivity> {
+public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase2<GameActivity> {
 
     private TestHelpers testHelper;
 
@@ -39,12 +49,12 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
     private String[] players;
 
     public OfflineGameActivityUnitTest() {
-        super(OfflineGameActivity.class);
+        super(GameActivity.class);
         testHelper = new TestHelpers();
     }
 
     public OfflineGameActivityUnitTest(Activity curAct,Instrumentation curInstruments){
-        super(OfflineGameActivity.class);
+        super(GameActivity.class);
         this.curAct = curAct;
         this.curInstruments = curInstruments;
         testHelper = new TestHelpers();
@@ -76,6 +86,219 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
 
         curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
         curInstruments.invokeMenuActionSync(curAct, R.id.action_help, 0);
+
+        ///////////////////////////////////////////////////////////HEADER COMMENTED OUT
+
+//
+//        MenuItem item = new MenuItem() {
+//            @Override
+//            public int getItemId() {
+//                return R.id.action_help;
+//            }
+//
+//            @Override
+//            public int getGroupId() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public int getOrder() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public MenuItem setTitle(CharSequence charSequence) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setTitle(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public CharSequence getTitle() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setTitleCondensed(CharSequence charSequence) {
+//                return null;
+//            }
+//
+//            @Override
+//            public CharSequence getTitleCondensed() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setIcon(Drawable drawable) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setIcon(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public Drawable getIcon() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setIntent(Intent intent) {
+//                return null;
+//            }
+//
+//            @Override
+//            public Intent getIntent() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setShortcut(char c, char c2) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setNumericShortcut(char c) {
+//                return null;
+//            }
+//
+//            @Override
+//            public char getNumericShortcut() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public MenuItem setAlphabeticShortcut(char c) {
+//                return null;
+//            }
+//
+//            @Override
+//            public char getAlphabeticShortcut() {
+//                return 0;
+//            }
+//
+//            @Override
+//            public MenuItem setCheckable(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isCheckable() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setChecked(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isChecked() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setVisible(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isVisible() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setEnabled(boolean b) {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean isEnabled() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean hasSubMenu() {
+//                return false;
+//            }
+//
+//            @Override
+//            public SubMenu getSubMenu() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setOnMenuItemClickListener(OnMenuItemClickListener onMenuItemClickListener) {
+//                return null;
+//            }
+//
+//            @Override
+//            public ContextMenu.ContextMenuInfo getMenuInfo() {
+//                return null;
+//            }
+//
+//            @Override
+//            public void setShowAsAction(int i) {
+//
+//            }
+//
+//            @Override
+//            public MenuItem setShowAsActionFlags(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setActionView(View view) {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setActionView(int i) {
+//                return null;
+//            }
+//
+//            @Override
+//            public View getActionView() {
+//                return null;
+//            }
+//
+//            @Override
+//            public MenuItem setActionProvider(ActionProvider actionProvider) {
+//                return null;
+//            }
+//
+//            @Override
+//            public ActionProvider getActionProvider() {
+//                return null;
+//            }
+//
+//            @Override
+//            public boolean expandActionView() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean collapseActionView() {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean isActionViewExpanded() {
+//                return false;
+//            }
+//
+//            @Override
+//            public MenuItem setOnActionExpandListener(OnActionExpandListener onActionExpandListener) {
+//                return null;
+//            }
+//        };
+//        curAct.onOptionsItemSelected(item);
+
+
 
 //
 //        MenuItem item = new MenuItem() {
@@ -291,23 +514,45 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         assertNotNull("Transition to HelpActivity Failed", curAct);
 
         curInstruments.removeMonitor(monitor);
-        monitor = curInstruments.addMonitor(OfflineGameActivity.class.getName(),null,false);
+        monitor = curInstruments.addMonitor(GameActivity.class.getName(),null,false);
 
         new HelpActivityUnitTest(curAct,curInstruments).activityTest();
 
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}
-        assertNotNull("Transition Back to OfflineGameActivity Failed",curAct);
+        assertNotNull("Transition Back to GameActivity Failed",curAct);
+
+
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(SettingsActivity.class.getName(),null,false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_settings,0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition to SettingsActivity Failed", curAct);
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(GameActivity.class.getName(),null,false);
+
+        new SettingsActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition Back to MainActivity Failed",curAct);
     }
 
     public void activityTestHelper(){
-        TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.offlineCurrentPlayerTextView);
+        TextView offlineCurrentPlayerTextView = (TextView) curAct.findViewById(R.id.gamePlayerListButton);
         testHelper.TextViewTest(this,offlineCurrentPlayerTextView,true,"Red Bob");
 
-        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.offlineMoveResetButton);
+        Button offlineMoveResetButton = (Button) curAct.findViewById(R.id.gameMoveResetButton);
         testHelper.ButtonTest(this,offlineMoveResetButton,true);
 
-        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.offlineMoveDoneButton);
+        Button offlineMoveDoneButton = (Button) curAct.findViewById(R.id.gameMoveDoneButton);
+
         testHelper.ButtonTest(this,offlineMoveDoneButton,true);
     }
 

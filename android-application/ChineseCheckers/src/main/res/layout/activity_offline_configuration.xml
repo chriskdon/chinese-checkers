@@ -2,7 +2,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +23,7 @@
             android:textSize="@dimen/activity_xxlarge_text_size"
             android:textStyle="bold"
             android:textAllCaps="true"
-            android:text="@string/offline" />
+            android:text="@string/play_offline" />
 
         <ImageView
             android:layout_width="24dp"
@@ -58,7 +60,7 @@
             android:textOn="2 Players"
             android:textOff="2 Players"
             android:checked="true"
-            android:id="@+id/offlineTwoPlayerButton"
+            android:id="@+id/twoPlayerButton"
             android:singleLine="false" />
 
         <Space
@@ -79,7 +81,7 @@
             android:textColor="@color/app_button_text"
             android:textOn="3 Players"
             android:textOff="3 Players"
-            android:id="@+id/offlineThreePlayerButton"/>
+            android:id="@+id/threePlayerButton"/>
 
         <Space
             android:layout_weight="1"
@@ -99,7 +101,7 @@
             android:textColor="@color/app_button_text"
             android:textOn="4 Players"
             android:textOff="4 Players"
-            android:id="@+id/offlineFourPlayerButton"/>
+            android:id="@+id/fourPlayerButton"/>
 
         <Space
             android:layout_weight="1"
@@ -119,7 +121,7 @@
             android:textColor="@color/app_button_text"
             android:textOn="6 Players"
             android:textOff="6 Players"
-            android:id="@+id/offlineSixPlayerButton"/>
+            android:id="@+id/sixPlayerButton"/>
 
         <Space
             android:layout_weight="1"
@@ -134,7 +136,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:orientation="horizontal"
@@ -216,7 +218,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -299,7 +301,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -382,7 +384,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -464,7 +466,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -547,7 +549,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="@dimen/input_field_height"
         android:layout_marginTop="18dp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"

@@ -3,8 +3,6 @@ package ca.brocku.chinesecheckers.gamestate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import ca.brocku.chinesecheckers.gameboard.GridPiece;
-import ca.brocku.chinesecheckers.gameboard.GridPosition;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 
 /**
@@ -16,6 +14,10 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  */
 public class HumanPlayer extends Player {
     private String name;
+
+    // This needs to be small enough that a human can't detect the difference between tapping
+    // the screen and seeing their piece move;
+    private static final int THREAD_SLEEP_TIME = 100;
 
     /**
      * Create a new player.
@@ -47,14 +49,31 @@ public class HumanPlayer extends Player {
         return name;
     }
 
+    private MovePath m;
+
     /**
      * Executed when it is this players turn to act.
      *
-     * @param gameBoard The current game board.
+     * @param board
      */
     @Override
-    public Move onTurn(ReadOnlyGameBoard gameBoard) {
-        return new Move(gameBoard.getPiece(new GridPosition(0, 0)));
+    public MovePath onTurn(ReadOnlyGameBoard board) {
+        while(m == null){
+            try {
+                Thread.sleep(THREAD_SLEEP_TIME);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex); // Rethrow at runtime
+            }
+
+        }
+
+        MovePath temp = m;
+        m = null;
+        return temp;
+    }
+
+    public void signalMove(MovePath movePath) {
+        m = movePath;
     }
 
     /**

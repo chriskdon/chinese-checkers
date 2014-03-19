@@ -1,5 +1,6 @@
 package ca.brocku.chinesecheckers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
 import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
@@ -33,6 +34,7 @@ import static android.view.View.OnFocusChangeListener;
  * starts the offline game activity.
  *
  */
+@SuppressLint("all")
 public class OfflineConfigurationActivity extends Activity {
     private ToggleButton twoPlayerButton, threePlayerButton, fourPlayerButton, sixPlayerButton;
     private ToggleButton redPlayerEasyButton, redPlayerMediumButton, redPlayerHardButton,
@@ -58,28 +60,26 @@ public class OfflineConfigurationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline_configuration);
 
-        //Bind UI Controls
-        bindControls();
+        bindControls(); //bind UI controls
 
-        //Bind Handlers
-        bindHandlers();
+        bindHandlers(); //bind handlers
 
         currentSelection = twoPlayerButton;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if(id == R.id.action_help) {
             startActivity(new Intent(OfflineConfigurationActivity.this, HelpActivity.class));
+        } else if(id == R.id.action_settings) {
+            startActivity(new Intent(OfflineConfigurationActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -128,7 +128,7 @@ public class OfflineConfigurationActivity extends Activity {
 
                 //shows and labels the name fields based on the number of players option
                 switch(view.getId()) {
-                    case R.id.offlineTwoPlayerButton:
+                    case R.id.twoPlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
                         greenPlayerEditText.setHint("Player 2");
@@ -136,7 +136,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.GONE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineThreePlayerButton:
+                    case R.id.threePlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
                         yellowPlayerEditText.setHint("Player 2");
                         yellowPlayerNameContainer.setVisibility(View.VISIBLE);
@@ -145,7 +145,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineFourPlayerButton:
+                    case R.id.fourPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
@@ -155,7 +155,7 @@ public class OfflineConfigurationActivity extends Activity {
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
-                    case R.id.offlineSixPlayerButton:
+                    case R.id.sixPlayerButton:
                         orangePlayerEditText.setHint("Player 2");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerEditText.setHint("Player 3");
@@ -288,32 +288,88 @@ public class OfflineConfigurationActivity extends Activity {
                     purplePlayerError.setVisibility(View.VISIBLE);
 
             } else {
-                Intent intent = new Intent(OfflineConfigurationActivity.this, OfflineGameActivity.class);
+                Intent intent = new Intent(OfflineConfigurationActivity.this, GameActivity.class);
 
                 // TODO: Handle Robots
+                //TODO: START TEMP CODE
+                if(redPlayerTypeButton.getTag().equals("robot"))
+                    redPlayerEditText.setText("AI Robbie");
+                if(purplePlayerTypeButton.getTag().equals("robot"))
+                    purplePlayerEditText.setText("AI Roboto");
+                if(bluePlayerTypeButton.getTag().equals("robot"))
+                    bluePlayerEditText.setText("AI Roomba");
+                if(greenPlayerTypeButton.getTag().equals("robot"))
+                    greenPlayerEditText.setText("AI Roberto");
+                if(yellowPlayerTypeButton.getTag().equals("robot"))
+                    yellowPlayerEditText.setText("AI Robeye");
+                if(orangePlayerTypeButton.getTag().equals("robot"))
+                    orangePlayerEditText.setText("AI Robber");
+                //TODO: END TEMP CODE
 
                 if(redPlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
+                    if(redPlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
+                    else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerEasyButton.isChecked())
+                        players.add(new AiPlayer("EASY", Player.PlayerColor.RED));
+                    else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerMediumButton.isChecked())
+                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.RED));
+                    else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerHardButton.isChecked())
+                        players.add(new AiPlayer("HARD", Player.PlayerColor.RED));
                 }
 
                 if(purplePlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
+                    if(purplePlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
+                    else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerEasyButton.isChecked())
+                        players.add(new AiPlayer("EASY", Player.PlayerColor.PURPLE));
+                    else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerMediumButton.isChecked())
+                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.PURPLE));
+                    else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerHardButton.isChecked())
+                        players.add(new AiPlayer("HARD", Player.PlayerColor.PURPLE));
                 }
 
                 if(bluePlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
+                    if(bluePlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
+                    else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerEasyButton.isChecked())
+                        players.add(new AiPlayer("EASY", Player.PlayerColor.BLUE));
+                    else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerMediumButton.isChecked())
+                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.BLUE));
+                    else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerHardButton.isChecked())
+                        players.add(new AiPlayer("HARD", Player.PlayerColor.BLUE));
                 }
 
                 if(greenPlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
+                    if(greenPlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
+                    else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerEasyButton.isChecked())
+                        players.add(new AiPlayer("EASY", Player.PlayerColor.GREEN));
+                    else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerMediumButton.isChecked())
+                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.GREEN));
+                    else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerHardButton.isChecked())
+                        players.add(new AiPlayer("HARD", Player.PlayerColor.GREEN));
                 }
 
                 if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
+                    if(yellowPlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
+                    else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerEasyButton.isChecked())
+                        players.add(new AiPlayer("EASY", Player.PlayerColor.YELLOW));
+                    else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerMediumButton.isChecked())
+                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.YELLOW));
+                    else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerHardButton.isChecked())
+                        players.add(new AiPlayer("HARD", Player.PlayerColor.YELLOW));
                 }
 
                 if(orangePlayerNameContainer.getVisibility() == View.VISIBLE) {
-                    players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
+                    if(orangePlayerTypeButton.getTag().equals("human"))
+                        players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
+                    else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerEasyButton.isChecked())
+                        players.add(new AiPlayer("EASY", Player.PlayerColor.ORANGE));
+                    else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerMediumButton.isChecked())
+                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.ORANGE));
+                    else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerHardButton.isChecked())
+                        players.add(new AiPlayer("HARD", Player.PlayerColor.ORANGE));
                 }
 
                 GameBoard board = new CcGameBoard(players.size());
@@ -341,10 +397,10 @@ public class OfflineConfigurationActivity extends Activity {
      */
     private void bindControls() {
         //Number of player buttons
-        twoPlayerButton = (ToggleButton) findViewById(R.id.offlineTwoPlayerButton);
-        threePlayerButton = (ToggleButton) findViewById(R.id.offlineThreePlayerButton);
-        fourPlayerButton = (ToggleButton) findViewById(R.id.offlineFourPlayerButton);
-        sixPlayerButton = (ToggleButton) findViewById(R.id.offlineSixPlayerButton);
+        twoPlayerButton = (ToggleButton) findViewById(R.id.twoPlayerButton);
+        threePlayerButton = (ToggleButton) findViewById(R.id.threePlayerButton);
+        fourPlayerButton = (ToggleButton) findViewById(R.id.fourPlayerButton);
+        sixPlayerButton = (ToggleButton) findViewById(R.id.sixPlayerButton);
 
         //Player info containers
         redPlayerNameContainer = (LinearLayout)findViewById(R.id.offlineRedPlayerNameContainer);

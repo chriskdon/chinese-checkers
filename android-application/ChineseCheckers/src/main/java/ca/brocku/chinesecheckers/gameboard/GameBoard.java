@@ -12,14 +12,11 @@ import java.io.Serializable;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public abstract class GameBoard implements Parcelable, Serializable {
-    protected transient GameBoardEvents gameBoardEventsHandler;    // Various game event handlers.
-
+public interface GameBoard extends Parcelable, Serializable {
     /**
      * The number of available positions in each row.
      */
     public static final int[] ROW_POSITION_COUNT = {1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1};
-
 
     /**
      * Total number of spaces on the board
@@ -32,17 +29,7 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public static final int MAXIMUM_PIECES_PER_ROW = 13;
 
     /**
-     * Set the handler for the game board events callbacks.
-     *
-     * @param gameBoardEventsHandler    The handler.
-     */
-    public void setGameBoardEventsHandler(GameBoardEvents gameBoardEventsHandler) {
-
-        this.gameBoardEventsHandler = gameBoardEventsHandler;
-    }
-
-    /**
-     * Move a piece from one position to another.
+     * MovePath a piece from one position to another.
      *
      * @param piece The piece to move.
      * @param to    The new position of the piece.
@@ -94,11 +81,28 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public abstract boolean isValidMove(Piece piece, Position to);
 
     /**
-     * Moves a piece without validaing mvoe.
-     * @param piece
-     * @param to
+     * Add a piece to the board.
+     *
+     * @param p
      */
-    public abstract void forceMove(Piece piece, Position to);
+    public abstract void addPiece(Piece p);
+
+    /**
+     * Returns a deep copied version of the gameboard.
+     * @return
+     */
+    public abstract GameBoard getDeepCopy();
+
+    /**
+     * Get the number of players
+     * @return
+     */
+    public abstract int getPlayerCount();
+
+    /**
+     * Reset the board to start state
+     */
+    public abstract void reset();
 
     /**
      * Describe the kinds of special objects contained in this Parcelable's
@@ -121,13 +125,9 @@ public abstract class GameBoard implements Parcelable, Serializable {
     public abstract void writeToParcel(Parcel dest, int flags);
 
     /**
-     * Events that can be fired from the game board.
+     * Has the specified player won the game.
+     * @param playerNumber  The player number.
+     * @return  True if they have won, false otherwise.
      */
-    public static interface GameBoardEvents {
-        /**
-         * Fired when a player gets all their pieces into the desired goal.
-         * @param playerNumber  The number of the player who won.
-         */
-        public void onPlayerWon(int playerNumber);
-    }
+    public abstract boolean hasPlayerWon(int playerNumber);
 }

@@ -23,7 +23,7 @@ public class GridUnitTest extends AndroidTestCase  {
     }
 
     private Position newPosition(int row, int index) {
-        return new GridPosition(row, index);
+        return new Position(row, index);
     }
 
     //Testing that board creation does not result in a null object
@@ -146,19 +146,19 @@ public class GridUnitTest extends AndroidTestCase  {
 //   Testing that retrieving a nonexistant piece results in a null
     public void testGetPieceEmpty() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
+    	Position temp = new Position(5,5);
     	assertNull(board.getPiece(temp));
     }
 //  Testing placement of a piece out of bounds and getting said piece results in a null
     public void testOutOfBoundsPiece() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(20,10);
+    	Position temp = new Position(20,10);
     	assertNull(board.getPiece(temp));
     }
 //  Testing the setting and getting of a valid piece
     public void testSetandGetPiece() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
+    	Position temp = new Position(5,5);
     	board.setPiece(temp, 1);
     	//assertEquals(board.getPiece(temp).getPlayer().getName(), "TEST");
     	assertEquals(board.getPiece(temp).getPosition().getRow(), 5);
@@ -167,7 +167,7 @@ public class GridUnitTest extends AndroidTestCase  {
 //  Testing to see if setting a piece out of bounds is not retreived by getAllPieces
     public void testSetOutOfBounds() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(20,5);
+    	Position temp = new Position(20,5);
     	board.setPiece(temp, 1);
     	Piece[] tt = board.getAllPieces();
 
@@ -182,7 +182,7 @@ public class GridUnitTest extends AndroidTestCase  {
 // Testing to see if a piece is placed where another piece already exists, the piece is not overwritten
     public void testDoubleSet() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
+    	Position temp = new Position(5,5);
         board.setPiece(temp, 1);
         board.setPiece(temp, 2);
     	Piece t = board.getPiece(temp);
@@ -191,7 +191,7 @@ public class GridUnitTest extends AndroidTestCase  {
 //  Testing to see that all moves retrieved by getPossibleMoves is valid
     public void testValidMoves() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
+    	Position temp = new Position(5,5);
     	Piece t = new GridPiece(temp, 1);
     	Position[] possibleMoves = board.getPossibleMoves(t);
     	for(int i=0; i<possibleMoves.length; i++) {
@@ -212,16 +212,16 @@ public class GridUnitTest extends AndroidTestCase  {
 //  Testing to see that a move outside of possibleMoves is invalid
     public void testInvalidMove() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
+    	Position temp = new Position(5,5);
     	Piece t = new GridPiece(temp, 1);
-    	Position m = new GridPosition(9,9);
+    	Position m = new Position(9,9);
     	assertEquals(board.isValidMove(t, m), false);
     }
 //  Testing to see if moving a piece on a position that already has a piece is not valid
     public void testMoveOnExistingPiece() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
-    	Position temp2 = new GridPosition(5,6);
+    	Position temp = new Position(5,5);
+    	Position temp2 = new Position(5,6);
     	board.setPiece(temp2, 1);
     	Piece t = new GridPiece(temp, 1);
     	assertEquals(board.isValidMove(t, temp2), false);
@@ -234,7 +234,7 @@ public class GridUnitTest extends AndroidTestCase  {
 //  Testing to see that a piece retrieved by getAllPieces is valid
     public void testGetPiecesValid() {
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
+    	Position temp = new Position(5,5);
     	Piece t = new GridPiece(temp, 1);
     	board.setPiece(temp, 1);
     	Piece[] tt = board.getAllPieces();
@@ -250,11 +250,11 @@ public class GridUnitTest extends AndroidTestCase  {
 //  Testing to see if movePiece changes the Position correctly
     public void testMovePieceValid() { // TODO: FIX THIS
     	CcGameBoard board = new CcGameBoard(2);
-    	Position temp = new GridPosition(5,5);
+    	Position temp = new Position(5,5);
     	Piece t = new GridPiece(temp, 1);
     	board.setPiece(temp, 1);
-    	board.movePiece(t, new GridPosition(5,6));
-    	Piece m = board.getPiece(new GridPosition(5,6));
+    	board.movePiece(t, new Position(5,6));
+    	Piece m = board.getPiece(new Position(5,6));
     	assertEquals(m.getPosition().getRow(), 5);
     	assertEquals(m.getPosition().getIndex(), 6);
     	assertNull(board.getPiece(temp));
@@ -277,105 +277,1573 @@ public class GridUnitTest extends AndroidTestCase  {
         }
     }
     public void testAccuracyOfGetPossibleMoves() {
-        CcGameBoard board = new CcGameBoard(2);
         Position[] possibleMoves;
         Position[] testPositions = {
-                new GridPosition(2,1),
-                new GridPosition(3,1),
-                new GridPosition(4,6),
-                new GridPosition(5,5),
-                new GridPosition(7,4),
-                new GridPosition(8,4),
-                new GridPosition(9,4),
-                new GridPosition(11,5),
-                new GridPosition(12,6),
-                new GridPosition(13,1),
-                new GridPosition(14,0)
+                new Position(0,0),
+                new Position(1,0),
+                new Position(1,1),
+                new Position(2,0),
+                new Position(2,1),
+                new Position(2,2),
+                new Position(3,0),
+                new Position(3,1),
+                new Position(3,2),
+                new Position(3,3),
+                new Position(4,0),
+                new Position(4,1),
+                new Position(4,2),
+                new Position(4,3),
+                new Position(4,4),
+                new Position(4,5),
+                new Position(4,6),
+                new Position(4,7),
+                new Position(4,8),
+                new Position(4,9),
+                new Position(4,10),
+                new Position(4,11),
+                new Position(4,12),
+                new Position(5,0),
+                new Position(5,1),
+                new Position(5,2),
+                new Position(5,3),
+                new Position(5,4),
+                new Position(5,5),
+                new Position(5,6),
+                new Position(5,7),
+                new Position(5,8),
+                new Position(5,9),
+                new Position(5,10),
+                new Position(5,11),
+                new Position(6,0),
+                new Position(6,1),
+                new Position(6,2),
+                new Position(6,3),
+                new Position(6,4),
+                new Position(6,5),
+                new Position(6,6),
+                new Position(6,7),
+                new Position(6,8),
+                new Position(6,9),
+                new Position(6,10),
+                new Position(7,0),
+                new Position(7,1),
+                new Position(7,2),
+                new Position(7,3),
+                new Position(7,4),
+                new Position(7,5),
+                new Position(7,6),
+                new Position(7,7),
+                new Position(7,8),
+                new Position(7,9),
+                new Position(8,0),
+                new Position(8,1),
+                new Position(8,2),
+                new Position(8,3),
+                new Position(8,4),
+                new Position(8,5),
+                new Position(8,6),
+                new Position(8,7),
+                new Position(8,8),
+                new Position(9,0),
+                new Position(9,1),
+                new Position(9,2),
+                new Position(9,3),
+                new Position(9,4),
+                new Position(9,5),
+                new Position(9,6),
+                new Position(9,7),
+                new Position(9,8),
+                new Position(9,9),
+                new Position(10,0),
+                new Position(10,1),
+                new Position(10,2),
+                new Position(10,3),
+                new Position(10,4),
+                new Position(10,5),
+                new Position(10,6),
+                new Position(10,7),
+                new Position(10,8),
+                new Position(10,9),
+                new Position(10,10),
+                new Position(11,0),
+                new Position(11,1),
+                new Position(11,2),
+                new Position(11,3),
+                new Position(11,4),
+                new Position(11,5),
+                new Position(11,6),
+                new Position(11,7),
+                new Position(11,8),
+                new Position(11,9),
+                new Position(11,10),
+                new Position(11,11),
+                new Position(12,0),
+                new Position(12,1),
+                new Position(12,2),
+                new Position(12,3),
+                new Position(12,4),
+                new Position(12,5),
+                new Position(12,6),
+                new Position(12,7),
+                new Position(12,8),
+                new Position(12,9),
+                new Position(12,10),
+                new Position(12,11),
+                new Position(12,12),
+                new Position(13,0),
+                new Position(13,1),
+                new Position(13,2),
+                new Position(13,3),
+                new Position(14,0),
+                new Position(14,1),
+                new Position(14,2),
+                new Position(15,0),
+                new Position(15,1),
+                new Position(16,0)
         };
-        board.setPiece(new GridPosition(4,6), 1);
-        board.setPiece(new GridPosition(5,5), 1);
-        board.setPiece(new GridPosition(7,4), 1);
-        board.setPiece(new GridPosition(8,4), 1);
-        board.setPiece(new GridPosition(9,4), 1);
-        board.setPiece(new GridPosition(11,5), 1);
-        board.setPiece(new GridPosition(12,6), 1);
         Position[][] verifyMoves ={
+                { // verify 0,0
+                        new Position(1,0),
+                        new Position(1,1),
+                        new Position(2,0),
+                        new Position(2,2)
+                },
+                { // verify 1,0
+                        new Position(0,0),
+                        new Position(1,1),
+                        new Position(2,0),
+                        new Position(2,1),
+                        new Position(3,0),
+                        new Position(3,2)
+                },
+                { // verify 1,1
+                        new Position(0,0),
+                        new Position(1,0),
+                        new Position(2,1),
+                        new Position(2,2),
+                        new Position(3,1),
+                        new Position(3,3)
+                },
+                { // verify 2,0
+                        new Position(1,0),
+                        new Position(2,1),
+                        new Position(3,0),
+                        new Position(3,1),
+                        new Position(4,4),
+                        new Position(4,6),
+                        new Position(0,0),
+                        new Position(2,2)
+                },
                 { // verify 2,1
-                        new GridPosition(4,5),
-                        new GridPosition(4,7)
+                        new Position(1,0),
+                        new Position(1,1),
+                        new Position(2,0),
+                        new Position(2,2),
+                        new Position(3,1),
+                        new Position(3,2),
+                        new Position(4,5),
+                        new Position(4,7)
                 },
-                { //verify 3,1
-                        new GridPosition(4,5),
-                        new GridPosition(5,6)
+                { // verify 2,2
+                        new Position(1,1),
+                        new Position(2,1),
+                        new Position(3,2),
+                        new Position(3,3),
+                        new Position(4,6),
+                        new Position(4,8),
+                        new Position(0,0),
+                        new Position(2,0)
                 },
-                { //verify 4,6
-                        new GridPosition(4,5),
-                        new GridPosition(4,7),
-                        new GridPosition(5,6),
-                        new GridPosition(6,4)
+                { // verify 3,0
+                        new Position(2,0),
+                        new Position(3,1),
+                        new Position(4,4),
+                        new Position(4,5),
+                        new Position(5,3),
+                        new Position(5,5),
+                        new Position(1,0),
+                        new Position(3,2)
                 },
-                { //verify 5,5
-                        new GridPosition(4,5),
-                        new GridPosition(5,4),
-                        new GridPosition(5,6),
-                        new GridPosition(6,4),
-                        new GridPosition(6,5)
+                { // verify 3,1
+                        new Position(2,0),
+                        new Position(2,1),
+                        new Position(3,0),
+                        new Position(3,2),
+                        new Position(4,5),
+                        new Position(4,6),
+                        new Position(5,4),
+                        new Position(5,6),
+                        new Position(1,1),
+                        new Position(3,3)
                 },
-                { //verify 7,4
-                        new GridPosition(6,4),
-                        new GridPosition(6,5),
-                        new GridPosition(7,3),
-                        new GridPosition(7,5),
-                        new GridPosition(8,3),
-                        new GridPosition(9,5)
+                { // verify 3,2
+                        new Position(2,1),
+                        new Position(2,2),
+                        new Position(3,1),
+                        new Position(3,3),
+                        new Position(4,6),
+                        new Position(4,7),
+                        new Position(5,5),
+                        new Position(5,7),
+                        new Position(1,0),
+                        new Position(3,0)
                 },
-                { //verify 8,4
-                        new GridPosition(7,5),
-                        new GridPosition(8,3),
-                        new GridPosition(8,5),
-                        new GridPosition(9,5),
-                        new GridPosition(10,4),
-                        new GridPosition(6,4)
+                { // verify 3,3
+                        new Position(2,2),
+                        new Position(3,2),
+                        new Position(4,7),
+                        new Position(4,8),
+                        new Position(5,6),
+                        new Position(5,8),
+                        new Position(1,1),
+                        new Position(3,1)
                 },
-                { //verify 9,4
-                        new GridPosition(8,3),
-                        new GridPosition(9,3),
-                        new GridPosition(9,5),
-                        new GridPosition(10,4),
-                        new GridPosition(10,5),
-                        new GridPosition(7,5),
+                { // verify 4,0
+                        new Position(4,1),
+                        new Position(5,0),
+                        new Position(6,0),
+                        new Position(4,2)
                 },
-                { //verify 11,5
-                        new GridPosition(10,4),
-                        new GridPosition(10,5),
-                        new GridPosition(11,4),
-                        new GridPosition(11,6),
-                        new GridPosition(12,5),
+                { // verify 4,1
+                        new Position(4,0),
+                        new Position(4,2),
+                        new Position(5,0),
+                        new Position(5,1),
+                        new Position(6,1),
+                        new Position(4,3)
                 },
-                { //verify 12,6
-                        new GridPosition(11,6),
-                        new GridPosition(12,5),
-                        new GridPosition(12,7),
-                        new GridPosition(10,4),
+                { // verify 4,2
+                        new Position(4,1),
+                        new Position(4,3),
+                        new Position(5,1),
+                        new Position(5,2),
+                        new Position(6,0),
+                        new Position(6,2),
+                        new Position(4,0),
+                        new Position(4,4)
                 },
-                { //verify 13,1
-                        new GridPosition(12,5),
-                        new GridPosition(11,6)
+                { // verify 4,3
+                        new Position(4,2),
+                        new Position(4,4),
+                        new Position(5,2),
+                        new Position(5,3),
+                        new Position(6,1),
+                        new Position(6,3),
+                        new Position(4,1),
+                        new Position(4,5)
                 },
-                { //verify 14,0
-                        new GridPosition(12,4)
+                { // verify 4,4
+                        new Position(3,0),
+                        new Position(4,3),
+                        new Position(4,5),
+                        new Position(5,3),
+                        new Position(5,4),
+                        new Position(6,2),
+                        new Position(6,4),
+                        new Position(2,0),
+                        new Position(4,2),
+                        new Position(4,6)
+                },
+                { // verify 4,5
+                        new Position(3,0),
+                        new Position(3,1),
+                        new Position(4,4),
+                        new Position(4,6),
+                        new Position(5,4),
+                        new Position(5,5),
+                        new Position(6,3),
+                        new Position(6,5),
+                        new Position(2,1),
+                        new Position(4,3),
+                        new Position(4,7)
+                },
+                { // verify 4,6
+                        new Position(3,1),
+                        new Position(3,2),
+                        new Position(4,5),
+                        new Position(4,7),
+                        new Position(5,5),
+                        new Position(5,6),
+                        new Position(6,4),
+                        new Position(6,6),
+                        new Position(2,0),
+                        new Position(2,2),
+                        new Position(4,4),
+                        new Position(4,8)
+                },
+                { // verify 4,7
+                        new Position(3,2),
+                        new Position(3,3),
+                        new Position(4,6),
+                        new Position(4,8),
+                        new Position(5,6),
+                        new Position(5,7),
+                        new Position(6,5),
+                        new Position(6,7),
+                        new Position(2,1),
+                        new Position(4,5),
+                        new Position(4,9)
+                },
+                { // verify 4,8
+                        new Position(3,3),
+                        new Position(4,7),
+                        new Position(4,9),
+                        new Position(5,7),
+                        new Position(5,8),
+                        new Position(6,6),
+                        new Position(6,8),
+                        new Position(2,2),
+                        new Position(4,6),
+                        new Position(4,10)
+                },
+                { // verify 4,9
+                        new Position(4,8),
+                        new Position(4,10),
+                        new Position(5,8),
+                        new Position(5,9),
+                        new Position(6,7),
+                        new Position(6,9),
+                        new Position(4,7),
+                        new Position(4,11)
+                },
+                { // verify 4,10
+                        new Position(4,9),
+                        new Position(4,11),
+                        new Position(5,9),
+                        new Position(5,10),
+                        new Position(6,8),
+                        new Position(6,10),
+                        new Position(4,8),
+                        new Position(4,12)
+                },
+                { // verify 4,11
+                        new Position(4,10),
+                        new Position(4,12),
+                        new Position(5,10),
+                        new Position(5,11),
+                        new Position(6,9),
+                        new Position(4,9)
+                },
+                { // verify 4,12
+                        new Position(4,11),
+                        new Position(5,11),
+                        new Position(6,10),
+                        new Position(4,10)
+                },
+                { // verify 5,0
+                        new Position(4,0),
+                        new Position(4,1),
+                        new Position(5,1),
+                        new Position(6,0),
+                        new Position(7,0),
+                        new Position(5,2)
+                },
+                { // verify 5,1
+                        new Position(4,1),
+                        new Position(4,2),
+                        new Position(5,0),
+                        new Position(5,2),
+                        new Position(6,0),
+                        new Position(6,1),
+                        new Position(7,1),
+                        new Position(5,3)
+                },
+                { // verify 5,2
+                        new Position(4,2),
+                        new Position(4,3),
+                        new Position(5,1),
+                        new Position(5,3),
+                        new Position(6,1),
+                        new Position(6,2),
+                        new Position(7,0),
+                        new Position(7,2),
+                        new Position(5,0),
+                        new Position(5,4)
+                },
+                { // verify 5,3
+                        new Position(4,3),
+                        new Position(4,4),
+                        new Position(5,2),
+                        new Position(5,4),
+                        new Position(6,2),
+                        new Position(6,3),
+                        new Position(7,1),
+                        new Position(7,3),
+                        new Position(3,0),
+                        new Position(5,1),
+                        new Position(5,5)
+                },
+                { // verify 5,4
+                        new Position(4,4),
+                        new Position(4,5),
+                        new Position(5,3),
+                        new Position(5,5),
+                        new Position(6,3),
+                        new Position(6,4),
+                        new Position(7,2),
+                        new Position(7,4),
+                        new Position(3,1),
+                        new Position(5,2),
+                        new Position(5,6)
+                },
+                { // verify 5,5
+                        new Position(4,5),
+                        new Position(4,6),
+                        new Position(5,4),
+                        new Position(5,6),
+                        new Position(6,4),
+                        new Position(6,5),
+                        new Position(7,3),
+                        new Position(7,5),
+                        new Position(3,0),
+                        new Position(3,2),
+                        new Position(5,3),
+                        new Position(5,7)
+                },
+                { // verify 5,6
+                        new Position(4,6),
+                        new Position(4,7),
+                        new Position(5,5),
+                        new Position(5,7),
+                        new Position(6,5),
+                        new Position(6,6),
+                        new Position(7,4),
+                        new Position(7,6),
+                        new Position(3,1),
+                        new Position(3,3),
+                        new Position(5,4),
+                        new Position(5,8)
+                },
+                { // verify 5,7
+                        new Position(4,7),
+                        new Position(4,8),
+                        new Position(5,6),
+                        new Position(5,8),
+                        new Position(6,6),
+                        new Position(6,7),
+                        new Position(7,5),
+                        new Position(7,7),
+                        new Position(3,2),
+                        new Position(5,5),
+                        new Position(5,9)
+                },
+                { // verify 5,8
+                        new Position(4,8),
+                        new Position(4,9),
+                        new Position(5,7),
+                        new Position(5,9),
+                        new Position(6,7),
+                        new Position(6,8),
+                        new Position(7,6),
+                        new Position(7,8),
+                        new Position(3,3),
+                        new Position(5,6),
+                        new Position(5,10)
+                },
+                { // verify 5,9
+                        new Position(4,9),
+                        new Position(4,10),
+                        new Position(5,8),
+                        new Position(5,10),
+                        new Position(6,8),
+                        new Position(6,9),
+                        new Position(7,7),
+                        new Position(7,9),
+                        new Position(5,7),
+                        new Position(5,11)
+                },
+                { // verify 5,10
+                        new Position(4,10),
+                        new Position(4,11),
+                        new Position(5,9),
+                        new Position(5,11),
+                        new Position(6,9),
+                        new Position(6,10),
+                        new Position(7,8),
+                        new Position(5,8)
+                },
+                { // verify 5,11
+                        new Position(4,11),
+                        new Position(4,12),
+                        new Position(5,10),
+                        new Position(6,10),
+                        new Position(7,9),
+                        new Position(5,9)
+                },
+                { // verify 6,0
+                        new Position(5,0),
+                        new Position(5,1),
+                        new Position(6,1),
+                        new Position(7,0),
+                        new Position(8,0),
+                        new Position(4,0),
+                        new Position(4,2),
+                        new Position(6,2)
+                },
+                { // verify 6,1
+                        new Position(5,1),
+                        new Position(5,2),
+                        new Position(6,0),
+                        new Position(6,2),
+                        new Position(7,0),
+                        new Position(7,1),
+                        new Position(8,1),
+                        new Position(4,1),
+                        new Position(4,3),
+                        new Position(6,3)
+                },
+                { // verify 6,2
+                        new Position(5,2),
+                        new Position(5,3),
+                        new Position(6,1),
+                        new Position(6,3),
+                        new Position(7,1),
+                        new Position(7,2),
+                        new Position(8,0),
+                        new Position(8,2),
+                        new Position(4,2),
+                        new Position(4,4),
+                        new Position(6,0),
+                        new Position(6,4)
+                },
+                { // verify 6,3
+                        new Position(5,3),
+                        new Position(5,4),
+                        new Position(6,2),
+                        new Position(6,4),
+                        new Position(7,2),
+                        new Position(7,3),
+                        new Position(8,1),
+                        new Position(8,3),
+                        new Position(4,3),
+                        new Position(4,5),
+                        new Position(6,1),
+                        new Position(6,5)
+                },
+                { // verify 6,4
+                        new Position(5,4),
+                        new Position(5,5),
+                        new Position(6,3),
+                        new Position(6,5),
+                        new Position(7,3),
+                        new Position(7,4),
+                        new Position(8,2),
+                        new Position(8,4),
+                        new Position(4,4),
+                        new Position(4,6),
+                        new Position(6,2),
+                        new Position(6,6)
+                },
+                { // verify 6,5
+                        new Position(5,5),
+                        new Position(5,6),
+                        new Position(6,4),
+                        new Position(6,6),
+                        new Position(7,4),
+                        new Position(7,5),
+                        new Position(8,3),
+                        new Position(8,5),
+                        new Position(4,5),
+                        new Position(4,7),
+                        new Position(6,3),
+                        new Position(6,7)
+                },
+                { // verify 6,6
+                        new Position(5,6),
+                        new Position(5,7),
+                        new Position(6,5),
+                        new Position(6,7),
+                        new Position(7,5),
+                        new Position(7,6),
+                        new Position(8,4),
+                        new Position(8,6),
+                        new Position(4,6),
+                        new Position(4,8),
+                        new Position(6,4),
+                        new Position(6,8)
+                },
+                { // verify 6,7
+                        new Position(5,7),
+                        new Position(5,8),
+                        new Position(6,6),
+                        new Position(6,8),
+                        new Position(7,6),
+                        new Position(7,7),
+                        new Position(8,5),
+                        new Position(8,7),
+                        new Position(4,7),
+                        new Position(4,9),
+                        new Position(6,5),
+                        new Position(6,9)
+                },
+                { // verify 6,8
+                        new Position(5,8),
+                        new Position(5,9),
+                        new Position(6,7),
+                        new Position(6,9),
+                        new Position(7,7),
+                        new Position(7,8),
+                        new Position(8,6),
+                        new Position(8,8),
+                        new Position(4,8),
+                        new Position(4,10),
+                        new Position(6,6),
+                        new Position(6,10)
+                },
+                { // verify 6,9
+                        new Position(5,9),
+                        new Position(5,10),
+                        new Position(6,8),
+                        new Position(6,10),
+                        new Position(7,8),
+                        new Position(7,9),
+                        new Position(8,7),
+                        new Position(4,9),
+                        new Position(4,11),
+                        new Position(6,7)
+                },
+                { // verify 6,10
+                        new Position(5,10),
+                        new Position(5,11),
+                        new Position(6,9),
+                        new Position(7,9),
+                        new Position(8,8),
+                        new Position(4,10),
+                        new Position(4,12),
+                        new Position(6,8)
+                },
+                { // verify 7,0
+                        new Position(6,0),
+                        new Position(6,1),
+                        new Position(7,1),
+                        new Position(8,0),
+                        new Position(9,1),
+                        new Position(5,0),
+                        new Position(5,2),
+                        new Position(7,2)
+                },
+                { // verify 7,1
+                        new Position(6,1),
+                        new Position(6,2),
+                        new Position(7,0),
+                        new Position(7,2),
+                        new Position(8,0),
+                        new Position(8,1),
+                        new Position(9,0),
+                        new Position(9,2),
+                        new Position(5,1),
+                        new Position(5,3),
+                        new Position(7,3)
+                },
+                { // verify 7,2
+                        new Position(6,2),
+                        new Position(6,3),
+                        new Position(7,1),
+                        new Position(7,3),
+                        new Position(8,1),
+                        new Position(8,2),
+                        new Position(9,1),
+                        new Position(9,3),
+                        new Position(5,2),
+                        new Position(5,4),
+                        new Position(7,0),
+                        new Position(7,4)
+                },
+                { // verify 7,3
+                        new Position(6,3),
+
+                        new Position(6,4),
+                        new Position(7,2),
+                        new Position(7,4),
+                        new Position(8,2),
+                        new Position(8,3),
+                        new Position(9,2),
+                        new Position(9,4),
+                        new Position(5,3),
+                        new Position(5,5),
+                        new Position(7,1),
+                        new Position(7,5)
+                },
+                { // verify 7,4
+                        new Position(6,4),
+                        new Position(6,5),
+                        new Position(7,3),
+                        new Position(7,5),
+                        new Position(8,3),
+                        new Position(8,4),
+                        new Position(9,3),
+                        new Position(9,5),
+                        new Position(5,4),
+                        new Position(5,6),
+                        new Position(7,2),
+                        new Position(7,6)
+                },
+                { // verify 7,5
+                        new Position(6,5),
+                        new Position(6,6),
+                        new Position(7,4),
+                        new Position(7,6),
+                        new Position(8,4),
+                        new Position(8,5),
+                        new Position(9,4),
+                        new Position(9,6),
+                        new Position(5,5),
+                        new Position(5,7),
+                        new Position(7,3),
+                        new Position(7,7)
+                },
+                { // verify 7,6
+                        new Position(6,6),
+                        new Position(6,7),
+                        new Position(7,5),
+                        new Position(7,7),
+                        new Position(8,5),
+                        new Position(8,6),
+                        new Position(9,5),
+                        new Position(9,7),
+                        new Position(5,6),
+                        new Position(5,8),
+                        new Position(7,4),
+                        new Position(7,8)
+                },
+                { // verify 7,7
+                        new Position(6,7),
+                        new Position(6,8),
+                        new Position(7,6),
+                        new Position(7,8),
+                        new Position(8,6),
+                        new Position(8,7),
+                        new Position(9,6),
+                        new Position(9,8),
+                        new Position(5,7),
+                        new Position(5,9),
+                        new Position(7,5),
+                        new Position(7,9)
+                },
+                { // verify 7,8
+                        new Position(6,8),
+                        new Position(6,9),
+                        new Position(7,7),
+                        new Position(7,9),
+                        new Position(8,7),
+                        new Position(8,8),
+                        new Position(9,7),
+                        new Position(9,9),
+                        new Position(5,8),
+                        new Position(5,10),
+                        new Position(7,6)
+                },
+                { // verify 7,9
+                        new Position(6,9),
+                        new Position(6,10),
+                        new Position(7,8),
+                        new Position(8,8),
+                        new Position(9,8),
+                        new Position(5,9),
+                        new Position(5,11),
+
+                        new Position(7,7)
+                },
+                { // verify 8,0
+                        new Position(7,0),
+                        new Position(7,1),
+                        new Position(8,1),
+                        new Position(9,0),
+                        new Position(9,1),
+                        new Position(10,0),
+                        new Position(10,2),
+                        new Position(6,0),
+                        new Position(6,2),
+                        new Position(8,2)
+                },
+                { // verify 8,1
+                        new Position(7,1),
+                        new Position(7,2),
+                        new Position(8,0),
+                        new Position(8,2),
+                        new Position(9,1),
+                        new Position(9,2),
+                        new Position(10,1),
+                        new Position(10,3),
+                        new Position(6,1),
+                        new Position(6,3),
+                        new Position(8,3)
+                },
+                { // verify 8,2
+                        new Position(7,2),
+                        new Position(7,3),
+                        new Position(8,1),
+                        new Position(8,3),
+                        new Position(9,2),
+                        new Position(9,3),
+                        new Position(10,2),
+                        new Position(10,4),
+                        new Position(6,2),
+                        new Position(6,4),
+                        new Position(8,0),
+                        new Position(8,4)
+                },
+                { // verify 8,3
+                        new Position(7,3),
+                        new Position(7,4),
+                        new Position(8,2),
+                        new Position(8,4),
+                        new Position(9,3),
+                        new Position(9,4),
+                        new Position(10,3),
+                        new Position(10,5),
+                        new Position(6,3),
+                        new Position(6,5),
+                        new Position(8,1),
+                        new Position(8,5)
+                },
+                { // verify 8,4
+                        new Position(7,4),
+                        new Position(7,5),
+                        new Position(8,3),
+                        new Position(8,5),
+                        new Position(9,4),
+                        new Position(9,5),
+                        new Position(10,4),
+                        new Position(10,6),
+                        new Position(6,4),
+                        new Position(6,6),
+                        new Position(8,2),
+                        new Position(8,6)
+                },
+                { // verify 8,5
+                        new Position(7,5),
+                        new Position(7,6),
+                        new Position(8,4),
+                        new Position(8,6),
+                        new Position(9,5),
+                        new Position(9,6),
+                        new Position(10,5),
+                        new Position(10,7),
+                        new Position(6,5),
+                        new Position(6,7),
+                        new Position(8,3),
+                        new Position(8,7)
+                },
+                { // verify 8,6
+                        new Position(7,6),
+                        new Position(7,7),
+                        new Position(8,5),
+                        new Position(8,7),
+                        new Position(9,6),
+                        new Position(9,7),
+                        new Position(10,6),
+                        new Position(10,8),
+                        new Position(6,6),
+                        new Position(6,8),
+                        new Position(8,4),
+                        new Position(8,8)
+                },
+                { // verify 8,7
+                        new Position(7,7),
+                        new Position(7,8),
+                        new Position(8,6),
+                        new Position(8,8),
+                        new Position(9,7),
+                        new Position(9,8),
+                        new Position(10,7),
+                        new Position(10,9),
+                        new Position(6,7),
+                        new Position(6,9),
+                        new Position(8,5)
+                },
+                { // verify 8,8
+                        new Position(7,8),
+                        new Position(7,9),
+                        new Position(8,7),
+                        new Position(9,8),
+                        new Position(9,9),
+                        new Position(10,8),
+                        new Position(10,10),
+                        new Position(6,8),
+                        new Position(6,10),
+                        new Position(8,6)
+                },
+                { // verify 9,0
+                        new Position(8,0),
+                        new Position(9,1),
+                        new Position(10,0),
+                        new Position(10,1),
+                        new Position(11,0),
+                        new Position(11,2),
+                        new Position(7,1),
+                        new Position(9,2)
+                },
+                { // verify 9,1
+                        new Position(8,0),
+                        new Position(8,1),
+                        new Position(9,0),
+                        new Position(9,2),
+                        new Position(10,1),
+                        new Position(10,2),
+                        new Position(11,1),
+                        new Position(11,3),
+                        new Position(7,0),
+                        new Position(7,2),
+                        new Position(9,3)
+                },
+                { // verify 9,2
+                        new Position(8,1),
+                        new Position(8,2),
+                        new Position(9,1),
+                        new Position(9,3),
+                        new Position(10,2),
+                        new Position(10,3),
+                        new Position(11,2),
+                        new Position(11,4),
+                        new Position(7,1),
+                        new Position(7,3),
+                        new Position(9,0),
+                        new Position(9,4)
+                },
+                { // verify 9,3
+                        new Position(8,2),
+                        new Position(8,3),
+                        new Position(9,2),
+                        new Position(9,4),
+                        new Position(10,3),
+                        new Position(10,4),
+                        new Position(11,3),
+                        new Position(11,5),
+                        new Position(7,2),
+                        new Position(7,4),
+                        new Position(9,1),
+                        new Position(9,5)
+                },
+                { // verify 9,4
+                        new Position(8,3),
+                        new Position(8,4),
+                        new Position(9,3),
+                        new Position(9,5),
+                        new Position(10,4),
+                        new Position(10,5),
+                        new Position(11,4),
+                        new Position(11,6),
+                        new Position(7,3),
+                        new Position(7,5),
+                        new Position(9,2),
+                        new Position(9,6)
+                },
+                { // verify 9,5
+                        new Position(8,4),
+                        new Position(8,5),
+                        new Position(9,4),
+                        new Position(9,6),
+                        new Position(10,5),
+                        new Position(10,6),
+                        new Position(11,5),
+                        new Position(11,7),
+                        new Position(7,4),
+                        new Position(7,6),
+                        new Position(9,3),
+                        new Position(9,7)
+                },
+                { // verify 9,6
+                        new Position(8,5),
+                        new Position(8,6),
+                        new Position(9,5),
+                        new Position(9,7),
+                        new Position(10,6),
+                        new Position(10,7),
+                        new Position(11,6),
+                        new Position(11,8),
+                        new Position(7,5),
+                        new Position(7,7),
+                        new Position(9,4),
+                        new Position(9,8)
+                },
+                { // verify 9,7
+                        new Position(8,6),
+                        new Position(8,7),
+                        new Position(9,6),
+                        new Position(9,8),
+                        new Position(10,7),
+                        new Position(10,8),
+                        new Position(11,7),
+                        new Position(11,9),
+                        new Position(7,6),
+                        new Position(7,8),
+                        new Position(9,5),
+                        new Position(9,9)
+                },
+                { // verify 9,8
+                        new Position(8,7),
+                        new Position(8,8),
+                        new Position(9,7),
+                        new Position(9,9),
+                        new Position(10,8),
+                        new Position(10,9),
+                        new Position(11,8),
+                        new Position(11,10),
+                        new Position(7,7),
+                        new Position(7,9),
+                        new Position(9,6)
+                },
+                { // verify 9,9
+                        new Position(8,8),
+                        new Position(9,8),
+                        new Position(10,9),
+                        new Position(10,10),
+                        new Position(11,9),
+                        new Position(11,11),
+                        new Position(7,8),
+                        new Position(9,7)
+                },
+                { // verify 10,0
+                        new Position(9,0),
+                        new Position(10,1),
+                        new Position(11,0),
+                        new Position(11,1),
+                        new Position(12,0),
+                        new Position(12,2),
+                        new Position(8,0),
+                        new Position(10,2)
+                },
+                { // verify 10,1
+                        new Position(9,0),
+                        new Position(9,1),
+                        new Position(10,0),
+                        new Position(10,2),
+                        new Position(11,1),
+
+                        new Position(11,2),
+                        new Position(12,1),
+                        new Position(12,3),
+                        new Position(8,1),
+                        new Position(10,3)
+                },
+                { // verify 10,2
+                        new Position(9,1),
+                        new Position(9,2),
+                        new Position(10,1),
+                        new Position(10,3),
+                        new Position(11,2),
+                        new Position(11,3),
+                        new Position(12,2),
+                        new Position(12,4),
+                        new Position(8,0),
+                        new Position(8,2),
+                        new Position(10,0),
+                        new Position(10,4)
+                },
+                { // verify 10,3
+                        new Position(9,2),
+                        new Position(9,3),
+                        new Position(10,2),
+                        new Position(10,4),
+                        new Position(11,3),
+                        new Position(11,4),
+                        new Position(12,3),
+                        new Position(12,5),
+                        new Position(8,1),
+                        new Position(8,3),
+                        new Position(10,1),
+                        new Position(10,5)
+                },
+                { // verify 10,4
+                        new Position(9,3),
+                        new Position(9,4),
+                        new Position(10,3),
+                        new Position(10,5),
+                        new Position(11,4),
+                        new Position(11,5),
+                        new Position(12,4),
+                        new Position(12,6),
+                        new Position(8,2),
+                        new Position(8,4),
+                        new Position(10,2),
+                        new Position(10,6)
+                },
+                { // verify 10,5
+                        new Position(9,4),
+                        new Position(9,5),
+                        new Position(10,4),
+                        new Position(10,6),
+                        new Position(11,5),
+                        new Position(11,6),
+                        new Position(12,5),
+                        new Position(12,7),
+                        new Position(8,3),
+                        new Position(8,5),
+                        new Position(10,3),
+                        new Position(10,7)
+                },
+                { // verify 10,6
+                        new Position(9,5),
+                        new Position(9,6),
+                        new Position(10,5),
+                        new Position(10,7),
+                        new Position(11,6),
+                        new Position(11,7),
+                        new Position(12,6),
+                        new Position(12,8),
+                        new Position(8,4),
+                        new Position(8,6),
+                        new Position(10,4),
+                        new Position(10,8)
+                },
+                { // verify 10,7
+                        new Position(9,6),
+                        new Position(9,7),
+                        new Position(10,6),
+                        new Position(10,8),
+                        new Position(11,7),
+                        new Position(11,8),
+                        new Position(12,7),
+                        new Position(12,9),
+                        new Position(8,5),
+                        new Position(8,7),
+                        new Position(10,5),
+                        new Position(10,9)
+                },
+                { // verify 10,8
+                        new Position(9,7),
+                        new Position(9,8),
+                        new Position(10,7),
+                        new Position(10,9),
+                        new Position(11,8),
+                        new Position(11,9),
+                        new Position(12,8),
+                        new Position(12,10),
+                        new Position(8,6),
+                        new Position(8,8),
+                        new Position(10,6),
+                        new Position(10,10)
+                },
+                { // verify 10,9
+                        new Position(9,8),
+                        new Position(9,9),
+                        new Position(10,8),
+                        new Position(10,10),
+                        new Position(11,9),
+                        new Position(11,10),
+                        new Position(12,9),
+                        new Position(12,11),
+                        new Position(8,7),
+                        new Position(10,7)
+                },
+                { // verify 10,10
+                        new Position(9,9),
+                        new Position(10,9),
+                        new Position(11,10),
+                        new Position(11,11),
+                        new Position(12,10),
+                        new Position(12,12),
+                        new Position(8,8),
+                        new Position(10,8)
+                },
+                { // verify 11,0
+                        new Position(10,0),
+                        new Position(11,1),
+                        new Position(12,0),
+                        new Position(12,1),
+
+                        new Position(9,0),
+                        new Position(11,2)
+                },
+                { // verify 11,1
+                        new Position(10,0),
+                        new Position(10,1),
+                        new Position(11,0),
+                        new Position(11,2),
+                        new Position(12,1),
+                        new Position(12,2),
+                        new Position(9,1),
+                        new Position(11,3)
+                },
+                { // verify 11,2
+                        new Position(10,1),
+                        new Position(10,2),
+                        new Position(11,1),
+                        new Position(11,3),
+                        new Position(12,2),
+                        new Position(12,3),
+                        new Position(9,0),
+                        new Position(9,2),
+                        new Position(11,0),
+                        new Position(11,4)
+                },
+                { // verify 11,3
+                        new Position(10,2),
+                        new Position(10,3),
+                        new Position(11,2),
+                        new Position(11,4),
+                        new Position(12,3),
+                        new Position(12,4),
+                        new Position(13,0),
+                        new Position(9,1),
+                        new Position(9,3),
+                        new Position(11,1),
+                        new Position(11,5)
+                },
+                { // verify 11,4
+                        new Position(10,3),
+                        new Position(10,4),
+                        new Position(11,3),
+                        new Position(11,5),
+                        new Position(12,4),
+                        new Position(12,5),
+                        new Position(13,1),
+                        new Position(9,2),
+                        new Position(9,4),
+                        new Position(11,2),
+                        new Position(11,6)
+                },
+                { // verify 11,5
+                        new Position(10,4),
+                        new Position(10,5),
+                        new Position(11,4),
+                        new Position(11,6),
+                        new Position(12,5),
+                        new Position(12,6),
+                        new Position(13,0),
+                        new Position(13,2),
+                        new Position(9,3),
+                        new Position(9,5),
+                        new Position(11,3),
+                        new Position(11,7)
+                },
+                { // verify 11,6
+                        new Position(10,5),
+                        new Position(10,6),
+                        new Position(11,5),
+                        new Position(11,7),
+                        new Position(12,6),
+                        new Position(12,7),
+                        new Position(13,1),
+                        new Position(13,3),
+                        new Position(9,4),
+                        new Position(9,6),
+                        new Position(11,4),
+                        new Position(11,8)
+                },
+                { // verify 11,7
+                        new Position(10,6),
+                        new Position(10,7),
+                        new Position(11,6),
+                        new Position(11,8),
+                        new Position(12,7),
+                        new Position(12,8),
+                        new Position(13,2),
+                        new Position(9,5),
+                        new Position(9,7),
+                        new Position(11,5),
+                        new Position(11,9)
+                },
+                { // verify 11,8
+                        new Position(10,7),
+                        new Position(10,8),
+                        new Position(11,7),
+                        new Position(11,9),
+                        new Position(12,8),
+                        new Position(12,9),
+                        new Position(13,3),
+                        new Position(9,6),
+                        new Position(9,8),
+                        new Position(11,6),
+                        new Position(11,10)
+                },
+                { // verify 11,9
+                        new Position(10,8),
+                        new Position(10,9),
+                        new Position(11,8),
+                        new Position(11,10),
+                        new Position(12,9),
+                        new Position(12,10),
+                        new Position(9,7),
+                        new Position(9,9),
+                        new Position(11,7),
+                        new Position(11,11)
+                },
+                { // verify 11,10
+                        new Position(10,9),
+                        new Position(10,10),
+                        new Position(11,9),
+                        new Position(11,11),
+                        new Position(12,10),
+                        new Position(12,11),
+                        new Position(9,8),
+                        new Position(11,8)
+                },
+                { // verify 11,11
+                        new Position(10,10),
+                        new Position(11,10),
+                        new Position(12,11),
+                        new Position(12,12),
+                        new Position(9,9),
+                        new Position(11,9)
+                },
+                { // verify 12,0
+                        new Position(11,0),
+                        new Position(12,1),
+                        new Position(10,0),
+                        new Position(12,2)
+                },
+                { // verify 12,1
+                        new Position(11,0),
+                        new Position(11,1),
+                        new Position(12,0),
+                        new Position(12,2),
+                        new Position(10,1),
+                        new Position(12,3)
+                },
+                { // verify 12,2
+                        new Position(11,1),
+                        new Position(11,2),
+                        new Position(12,1),
+                        new Position(12,3),
+                        new Position(10,0),
+                        new Position(10,2),
+                        new Position(12,0),
+                        new Position(12,4)
+                },
+                { // verify 12,3
+                        new Position(11,2),
+                        new Position(11,3),
+                        new Position(12,2),
+                        new Position(12,4),
+                        new Position(10,1),
+                        new Position(10,3),
+                        new Position(12,1),
+                        new Position(12,5)
+                },
+                { // verify 12,4
+                        new Position(11,3),
+                        new Position(11,4),
+                        new Position(12,3),
+                        new Position(12,5),
+                        new Position(13,0),
+                        new Position(14,0),
+                        new Position(10,2),
+                        new Position(10,4),
+                        new Position(12,2),
+                        new Position(12,6)
+                },
+                { // verify 12,5
+                        new Position(11,4),
+                        new Position(11,5),
+                        new Position(12,4),
+                        new Position(12,6),
+                        new Position(13,0),
+                        new Position(13,1),
+                        new Position(14,1),
+                        new Position(10,3),
+                        new Position(10,5),
+                        new Position(12,3),
+                        new Position(12,7)
+                },
+                { // verify 12,6
+                        new Position(11,5),
+                        new Position(11,6),
+                        new Position(12,5),
+                        new Position(12,7),
+                        new Position(13,1),
+                        new Position(13,2),
+                        new Position(14,0),
+                        new Position(14,2),
+                        new Position(10,4),
+                        new Position(10,6),
+                        new Position(12,4),
+                        new Position(12,8)
+                },
+                { // verify 12,7
+                        new Position(11,6),
+                        new Position(11,7),
+                        new Position(12,6),
+                        new Position(12,8),
+                        new Position(13,2),
+                        new Position(13,3),
+                        new Position(14,1),
+                        new Position(10,5),
+                        new Position(10,7),
+                        new Position(12,5),
+                        new Position(12,9)
+                },
+                { // verify 12,8
+                        new Position(11,7),
+                        new Position(11,8),
+                        new Position(12,7),
+                        new Position(12,9),
+                        new Position(13,3),
+                        new Position(14,2),
+                        new Position(10,6),
+                        new Position(10,8),
+                        new Position(12,6),
+                        new Position(12,10)
+                },
+                { // verify 12,9
+                        new Position(11,8),
+                        new Position(11,9),
+                        new Position(12,8),
+                        new Position(12,10),
+                        new Position(10,7),
+                        new Position(10,9),
+                        new Position(12,7),
+                        new Position(12,11)
+                },
+                { // verify 12,10
+                        new Position(11,9),
+                        new Position(11,10),
+                        new Position(12,9),
+                        new Position(12,11),
+                        new Position(10,8),
+                        new Position(10,10),
+                        new Position(12,8),
+                        new Position(12,12)
+                },
+                { // verify 12,11
+                        new Position(11,10),
+                        new Position(11,11),
+                        new Position(12,10),
+                        new Position(12,12),
+                        new Position(10,9),
+                        new Position(12,9)
+                },
+                { // verify 12,12
+                        new Position(11,11),
+                        new Position(12,11),
+                        new Position(10,10),
+                        new Position(12,10)
+                },
+                { // verify 13,0
+                        new Position(12,4),
+                        new Position(12,5),
+                        new Position(13,1),
+                        new Position(14,0),
+                        new Position(15,0),
+                        new Position(11,3),
+                        new Position(11,5),
+                        new Position(13,2)
+                },
+                { // verify 13,1
+                        new Position(12,5),
+                        new Position(12,6),
+                        new Position(13,0),
+                        new Position(13,2),
+                        new Position(14,0),
+                        new Position(14,1),
+                        new Position(15,1),
+                        new Position(11,4),
+                        new Position(11,6),
+                        new Position(13,3)
+                },
+                { // verify 13,2
+                        new Position(12,6),
+                        new Position(12,7),
+                        new Position(13,1),
+                        new Position(13,3),
+                        new Position(14,1),
+                        new Position(14,2),
+                        new Position(15,0),
+                        new Position(11,5),
+                        new Position(11,7),
+                        new Position(13,0)
+                },
+                { // verify 13,3
+                        new Position(12,7),
+                        new Position(12,8),
+                        new Position(13,2),
+                        new Position(14,2),
+                        new Position(15,1),
+                        new Position(11,6),
+                        new Position(11,8),
+                        new Position(13,1)
+                },
+                { // verify 14,0
+                        new Position(13,0),
+                        new Position(13,1),
+                        new Position(14,1),
+                        new Position(15,0),
+                        new Position(16,0),
+                        new Position(12,4),
+                        new Position(12,6),
+                        new Position(14,2)
+                },
+                { // verify 14,1
+                        new Position(13,1),
+                        new Position(13,2),
+                        new Position(14,0),
+                        new Position(14,2),
+                        new Position(15,0),
+                        new Position(15,1),
+                        new Position(12,5),
+                        new Position(12,7)
+                },
+                { // verify 14,2
+                        new Position(13,2),
+                        new Position(13,3),
+                        new Position(14,1),
+                        new Position(15,1),
+                        new Position(16,0),
+                        new Position(12,6),
+                        new Position(12,8),
+                        new Position(14,0)
+                },
+                { // verify 15,0
+                        new Position(14,0),
+                        new Position(14,1),
+                        new Position(15,1),
+                        new Position(16,0),
+                        new Position(13,0),
+                        new Position(13,2)
+                },
+                { // verify 15,1
+                        new Position(14,1),
+                        new Position(14,2),
+                        new Position(15,0),
+                        new Position(16,0),
+                        new Position(13,1),
+                        new Position(13,3)
+                },
+                { // verify 16,0
+                        new Position(15,0),
+                        new Position(15,1),
+                        new Position(14,0),
+                        new Position(14,2)
                 }
         };
 
+        int check;
+        // Tests immediate neighbours
         for(int i=0; i<testPositions.length; i++) {
+            CcGameBoard board = new CcGameBoard();
+            board.setPiece(testPositions[i], 1);
             possibleMoves = board.getPossibleMoves(board.getPiece(testPositions[i]));
             for(int j=0; j<possibleMoves.length; j++) {
-                assertEquals(possibleMoves[j].getRow(), verifyMoves[i][j].getRow());
-                assertEquals(possibleMoves[j].getIndex(), verifyMoves[i][j].getIndex());
+                check=0;
+                for(int k=0; k<verifyMoves[i].length;k++){
+                    if(possibleMoves[j].getRow() == verifyMoves[i][j].getRow() && possibleMoves[j].getIndex() == verifyMoves[i][j].getIndex()) {
+                        check=1;
+                    }
+                }
+                assertEquals(check, 1);
             }
         }
-
+        //Tests hopping positions
+        for(int i=0; i<testPositions.length; i++) {
+            CcGameBoard board = new CcGameBoard();
+            board.setPiece(testPositions[i], 1);
+            possibleMoves = board.getPossibleMoves(board.getPiece(testPositions[i]));
+            for(int w=0; w<possibleMoves.length; w++) {
+                board.setPiece(possibleMoves[w], 1);
+            }
+            for(int j=0; j<possibleMoves.length; j++) {
+                check=0;
+                for(int k=0; k<verifyMoves[i].length;k++){
+                    if(possibleMoves[j].getRow() == verifyMoves[i][j].getRow() && possibleMoves[j].getIndex() == verifyMoves[i][j].getIndex()) {
+                        check=1;
+                    }
+                }
+                assertEquals(check, 1);
+            }
+        }
     }
+
 //   Currently disabled. Tests to see if the win condition is triggered appropriately.
     // Call back should be tested by GameState??
 /*    public void testWinCondition() {
@@ -388,32 +1856,32 @@ public class GridUnitTest extends AndroidTestCase  {
     	int p6 = 6;
     	for(int i=0; i<4; i++) {
     		for(int j=0; j<i+1; j++) {
-    			board.setPiece(new GridPosition(i, j), p1);
+    			board.setPiece(new Position(i, j), p1);
     		}
     	}
     	for(int i=0; i<4; i++) {
     		for(int j=0; j<i+1; j++) {
-    			board.setPiece(new GridPosition(7-i, j+9), p2);
+    			board.setPiece(new Position(7-i, j+9), p2);
     		}
     	}
     	for(int i=0; i<4; i++) {
     		for(int j=0; j<i+1; j++) {
-    			board.setPiece(new GridPosition(i+9, j+9), p3);
+    			board.setPiece(new Position(i+9, j+9), p3);
     		}
     	}
     	for(int i=0; i<4; i++) {
     		for(int j=0; j<i+1; j++) {
-    			board.setPiece(new GridPosition(16-i, j), p4);
+    			board.setPiece(new Position(16-i, j), p4);
     		}
     	}
     	for(int i=0; i<4; i++) {
     		for(int j=0; j<i+1; j++) {
-    			board.setPiece(new GridPosition(i+9, j), p5);
+    			board.setPiece(new Position(i+9, j), p5);
     		}
     	}
     	for(int i=0; i<4; i++) {
     		for(int j=0; j<i+1; j++) {
-    			board.setPiece(new GridPosition(7-i, j), p6);
+    			board.setPiece(new Position(7-i, j), p6);
     		}
     	}
     	assertEquals(board.checkWinCondition(p1), true);
@@ -422,8 +1890,8 @@ public class GridUnitTest extends AndroidTestCase  {
     	assertEquals(board.checkWinCondition(p4), true);
     	assertEquals(board.checkWinCondition(p5), true);
     	assertEquals(board.checkWinCondition(p6), true);
-    	Position temp = new GridPosition(3,0);
-    	board.movePiece(board.getPiece(temp), new GridPosition(4,4));
+    	Position temp = new Position(3,0);
+    	board.movePiece(board.getPiece(temp), new Position(4,4));
     	assertEquals(board.checkWinCondition(p1), false);
     }*/
 }

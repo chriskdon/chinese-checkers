@@ -13,9 +13,13 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.File;
+
 import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.SettingsActivity;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 
 /**
  * Created by Main on 2/18/14.
@@ -48,6 +52,8 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     }
 
     public void testActivity() {
+        File savedOfflineGame = curAct.getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
+        savedOfflineGame.delete();
         activityTestHelper();
         helpActivityTransitionTest();
         activityTestHelper();
@@ -279,11 +285,34 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
         try{Thread.sleep(1000);}catch(Exception e){}
         assertNotNull("Transition Back to MainActivity Failed",curAct);
+
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(SettingsActivity.class.getName(),null,false);
+
+        curInstruments.sendKeyDownUpSync(KeyEvent.KEYCODE_MENU);
+        curInstruments.invokeMenuActionSync(curAct, R.id.action_settings,0);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor, testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition to SettingsActivity Failed", curAct);
+        new SettingsActivityUnitTest(curAct,curInstruments).activityTest();
+
+        curInstruments.removeMonitor(monitor);
+        monitor = curInstruments.addMonitor(MainActivity.class.getName(),null,false);
+
+        curAct = curInstruments.waitForMonitorWithTimeout(monitor,testHelper.timeoutForActivityTransition);
+        try{Thread.sleep(1000);}catch(Exception e){}
+        assertNotNull("Transition Back to MainActivity Failed",curAct);
+
     }
 
     public void activityTestHelper(){
         assertNotNull("MainActivity Not Started", curAct);
         testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.offlineConfigurationActivityButton), true);
+        testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.onlineListActivityButton), true);
+        testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.helpActivityButton), true);
+        testHelper.ButtonTest(this, (Button) curAct.findViewById(R.id.settingsActivityButton), true);
     }
 
 }
