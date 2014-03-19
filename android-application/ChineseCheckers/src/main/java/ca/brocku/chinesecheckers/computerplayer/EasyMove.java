@@ -1,7 +1,5 @@
 package ca.brocku.chinesecheckers.computerplayer;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
@@ -19,7 +17,7 @@ import ca.brocku.chinesecheckers.gamestate.MovePath;
  * Date: 2/24/2014
  */
 public class EasyMove {
-    private AIPlannedMove currentMove;
+    private AiPlannedMove currentMove;
     private HeuristicCalculator cHeuristic;
     MovePath path;
     ArrayList<Position> visited;
@@ -34,7 +32,7 @@ public class EasyMove {
     public MovePath getEasyMove(int player, GameBoard board) {
         int maximumPathLength = (int)(Math.random()*3) + 2;
         visited = new ArrayList<Position>();
-        currentMove = new AIPlannedMove();
+        currentMove = new AiPlannedMove();
         path = new MovePath();
         cHeuristic = new HeuristicCalculator(player, board);
         currentMove.setHeuristic(0);
