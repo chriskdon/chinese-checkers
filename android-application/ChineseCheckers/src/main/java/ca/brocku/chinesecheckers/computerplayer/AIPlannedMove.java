@@ -13,7 +13,7 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  * Date: 2/22/2014
  */
 
-public class AiPlannedMove {
+public class AIPlannedMove {
     private int heuristic;
     private Piece pieceMoved;
     private ArrayList<Position> path;
