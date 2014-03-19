@@ -1,7 +1,11 @@
 chinese-checkers
 ================
 
+<<<<<<< HEAD
 [![Build Status](https://travis-ci.org/kubasub/chinese-checkers.png?branch=easteregg/KonamiCode)](https://travis-ci.org/kubasub/chinese-checkers)
+=======
+[![Build Status](https://travis-ci.org/kubasub/chinese-checkers.png?branch=develop)](https://travis-ci.org/kubasub/chinese-checkers)
+>>>>>>> origin/develop
 
 COSC 3F00 Group Project
 
