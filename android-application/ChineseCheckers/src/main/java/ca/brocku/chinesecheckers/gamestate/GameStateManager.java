@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import ca.brocku.chinesecheckers.computerplayer.AIPlayer;
+import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
@@ -184,7 +184,7 @@ public class GameStateManager implements Parcelable, Serializable {
 
                     // Make AIs draw slower
                     long diff = System.currentTimeMillis() - start;
-                    if (p instanceof AIPlayer && diff < MIN_AI_MOVE_SPEED && gameStateEventsHandler != null) {
+                    if (p instanceof AiPlayer && diff < MIN_AI_MOVE_SPEED && gameStateEventsHandler != null) {
                         try {
                             Thread.sleep(MIN_AI_MOVE_SPEED - diff);
                         } catch (InterruptedException ex) {

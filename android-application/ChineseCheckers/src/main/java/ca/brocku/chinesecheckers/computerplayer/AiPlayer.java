@@ -2,7 +2,6 @@ package ca.brocku.chinesecheckers.computerplayer;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.MovePath;
@@ -16,11 +15,11 @@ import ca.brocku.chinesecheckers.gamestate.Player;
  * Student #: 4366340
  * Date: 2/24/2014
  */
-public class AIPlayer extends Player {
+public class AiPlayer extends Player {
     private String AILevel;
     private int difficulty;
 
-    public AIPlayer(String AILevel, PlayerColor playerColor){
+    public AiPlayer(String AILevel, PlayerColor playerColor){
         super(playerColor);
         this.AILevel = AILevel;
         this.difficulty = getDifficulty(AILevel);
@@ -96,7 +95,7 @@ public class AIPlayer extends Player {
      *
      * @param parcel
      */
-    private AIPlayer(Parcel parcel) {
+    private AiPlayer(Parcel parcel) {
         this(parcel.readString(), PlayerColor.valueOf(parcel.readString()));
     }
 
@@ -109,11 +108,11 @@ public class AIPlayer extends Player {
     /**
      * Recreate this instance
      */
-    public static final Parcelable.Creator<AIPlayer> CREATOR =
-            new Parcelable.Creator<AIPlayer>() {
+    public static final Parcelable.Creator<AiPlayer> CREATOR =
+            new Parcelable.Creator<AiPlayer>() {
 
-                public AIPlayer createFromParcel(Parcel in) { return new AIPlayer(in); }
+                public AiPlayer createFromParcel(Parcel in) { return new AiPlayer(in); }
 
-                public AIPlayer[] newArray(int size) { return new AIPlayer[size]; }
+                public AiPlayer[] newArray(int size) { return new AiPlayer[size]; }
             };
 }
