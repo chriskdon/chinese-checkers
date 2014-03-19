@@ -48,11 +48,10 @@ public class AiPlayer extends Player {
             //case 3: hardMove myHardMove = new HardAIMove();
             //  move = myHardMove.getHardMove(getPlayerNumber(), gameBoard.getDeepCopy()
             case 2:
-                Log.wtf("myApp", "Player " + getPlayerColor() + "making an medium move");
                 MediumMove myMediumMove = new MediumMove();
                 move = myMediumMove.getMediumMove(getPlayerNumber(), gameBoard.getDeepCopy());
+                break;
             default:
-                Log.wtf("myApp", "Player " + getPlayerColor() + "making an easy move");
                 EasyMove myEasyMove = new EasyMove();
                 move = myEasyMove.getEasyMove(getPlayerNumber(), gameBoard.getDeepCopy());
                 break;
