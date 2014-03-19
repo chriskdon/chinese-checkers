@@ -2,6 +2,7 @@ package ca.brocku.chinesecheckers.computerplayer;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.MovePath;
@@ -44,9 +45,15 @@ public class AiPlayer extends Player {
     public MovePath getMove(ReadOnlyGameBoard gameBoard) {
         MovePath move;
         switch(this.difficulty){
-            //case 3: move = HardAIMove();
-            //case 2: move = MediumAIMove();
-            default: EasyMove myEasyMove = new EasyMove();
+            //case 3: hardMove myHardMove = new HardAIMove();
+            //  move = myHardMove.getHardMove(getPlayerNumber(), gameBoard.getDeepCopy()
+            case 2:
+                Log.wtf("myApp", "Player " + getPlayerColor() + "making an medium move");
+                MediumMove myMediumMove = new MediumMove();
+                move = myMediumMove.getMediumMove(getPlayerNumber(), gameBoard.getDeepCopy());
+            default:
+                Log.wtf("myApp", "Player " + getPlayerColor() + "making an easy move");
+                EasyMove myEasyMove = new EasyMove();
                 move = myEasyMove.getEasyMove(getPlayerNumber(), gameBoard.getDeepCopy());
                 break;
         }
