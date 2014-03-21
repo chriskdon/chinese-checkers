@@ -34,7 +34,7 @@ import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 @SuppressLint("All")
 public class GameActivity extends Activity {
     private GameStateManager gameStateManager;  // Manages everything in the game
-    private Boolean isEndCurrentGame; //a boolean which can prevent saving the state
+    private Boolean isGameOver; //a boolean which can prevent saving the state
 
     private Popup resumeDialog; //dialog that appears when there is a saved game
 
@@ -45,7 +45,7 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_offline_game);
 
         gameStateManager = getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
-        isEndCurrentGame = false;
+        isGameOver = false;
 
         //passes player array to the offline game fragment
         Fragment offlineGameFragment = new OfflineGameFragment(this);
@@ -79,7 +79,7 @@ public class GameActivity extends Activity {
                         //Handler to quit the current game and go to the config screen if quit is chosen
                         @Override
                         public void onClick(View view) {
-                            isEndCurrentGame = true; //set to not save the state (as we are quitting the current game)
+                            isGameOver = true; //set to not save the state (as we are quitting the current game)
 
                             //Delete the current saved game
                             File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
@@ -90,6 +90,7 @@ public class GameActivity extends Activity {
                             startActivity(new Intent(GameActivity.this, OfflineConfigurationActivity.class));
                         }
                     })
+                    .disableBackButton(true)
                     .show();
         }
     }
@@ -117,7 +118,7 @@ public class GameActivity extends Activity {
 
         super.onPause();
 
-        if(!isEndCurrentGame) { //only save the state if Quit Game was not selected form dialog
+        if(!isGameOver) { //only save the state if Quit Game was not selected form dialog
 
             try { //try to serialize the GameStateManager
 
@@ -150,7 +151,7 @@ public class GameActivity extends Activity {
      * @return whether or not this was handled
      */
     public Boolean onEndGame(Player p) {
-        isEndCurrentGame = true; //prevent saving this (finished) game
+        isGameOver = true; //prevent saving this (finished) game
 
         //Delete the current saved game
         File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
@@ -180,10 +181,17 @@ public class GameActivity extends Activity {
                         startActivity(new Intent(GameActivity.this, MainActivity.class));
                     }
                 })
-                .disableBackButton(true)
                 .show();
 
+        //disable the Reset and Done buttons
+        ((OfflineGameFragment)getFragmentManager()
+                .findFragmentByTag("OfflineGameFragment")).disableButtons();
+
         return true;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 
     /**
@@ -207,9 +215,9 @@ public class GameActivity extends Activity {
         private GameBoard board = null;
         private Position[] possibleMoves;
 
-        public OfflineGameFragment() {}
-
         public GameActivity activity;
+
+        public OfflineGameFragment() {}
 
         public OfflineGameFragment(GameActivity activity) {
             this.activity = activity;
@@ -322,7 +330,12 @@ public class GameActivity extends Activity {
                     return;
             }
 
-            throw new IllegalArgumentException("A valid playe rmust be specified.");
+            throw new IllegalArgumentException("A valid player must be specified.");
+        }
+
+        public void disableButtons() {
+            doneMove.setClickable(false);
+            resetMove.setClickable(false);
         }
 
         /**
@@ -406,33 +419,35 @@ public class GameActivity extends Activity {
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
             @Override
             public void positionTouched(final Position position) {
-                if (isHumanTurn()) {
-                    GameBoard tempBoard = getModifiableBoard();
-                    Piece piece = tempBoard.getPiece(position);
+                if(!activity.isGameOver()) { //disable board events if game is over
+                    if (isHumanTurn()) {
+                        GameBoard tempBoard = getModifiableBoard();
+                        Piece piece = tempBoard.getPiece(position);
 
-                    if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
-                        for(Position p : possibleMoves) {
-                            if(p != null && position.equals(p)) { // User Clicked a valid piece
-                                tempBoard.movePiece(currentPiece, p);
-                                currentPiece = tempBoard.getPiece(p);
-                                possibleMoves = tempBoard.getPossibleHops(currentPiece);
-                                movePath.addToPath(p);
+                        if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
+                            for(Position p : possibleMoves) {
+                                if(p != null && position.equals(p)) { // User Clicked a valid piece
+                                    tempBoard.movePiece(currentPiece, p);
+                                    currentPiece = tempBoard.getPiece(p);
+                                    possibleMoves = tempBoard.getPossibleHops(currentPiece);
+                                    movePath.addToPath(p);
+                                }
                             }
+                        } else if(piece != null && movePath.size() <= 1 && piece.getPlayerNumber() == currentPlayer.getPlayerNumber()) { // Selecting first valid piece
+                            resetHumanState();
+                            currentPiece = piece;
+                            possibleMoves = tempBoard.getPossibleMoves(currentPiece);
+                            movePath = new MovePath(new Position(piece.getPosition().getRow(), piece.getPosition().getIndex()));
+                        } else if(movePath.size() <= 1) {
+                            resetHumanState();
                         }
-                    } else if(piece != null && movePath.size() <= 1 && piece.getPlayerNumber() == currentPlayer.getPlayerNumber()) { // Selecting first valid piece
-                        resetHumanState();
-                        currentPiece = piece;
-                        possibleMoves = tempBoard.getPossibleMoves(currentPiece);
-                        movePath = new MovePath(new Position(piece.getPosition().getRow(), piece.getPosition().getIndex()));
-                    } else if(movePath.size() <= 1) {
-                        resetHumanState();
-                    }
 
-                    // Update Drawing
-                    boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
-                    boardUiEngine.highlightPiece(currentPiece);
-                    if(isShowMoves) { //show moves if enabled in preferences
-                        boardUiEngine.showHintPositions(possibleMoves);
+                        // Update Drawing
+                        boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
+                        boardUiEngine.highlightPiece(currentPiece);
+                        if(isShowMoves) { //show moves if enabled in preferences
+                            boardUiEngine.showHintPositions(possibleMoves);
+                        }
                     }
                 }
             }

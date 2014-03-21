@@ -49,10 +49,18 @@ public class Popup extends Dialog {
 
         isBackButtonDisabled = false;
 
-        //Needed so that clicking the transluscent background doesn't percolate up
-        dialogContainer.setOnClickListener(new View.OnClickListener() {
+        //Bind Handlers
+        root.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {}
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+        root.setClickable(false);
+        dialogContainer.setOnClickListener(new View.OnClickListener() {
+            //Needed so that clicking the translucent background doesn't percolate up
+            @Override
+            public void onClick(View view) { }
         });
     }
 
@@ -72,23 +80,18 @@ public class Popup extends Dialog {
         return this;
     }
 
+    /** Hides buttons and enables clicking on the translucent background to dismiss the dialog.
+     *
+     * @param b
+     * @return
+     */
     public Popup hideButtons(boolean b) {
         if(b) {
             buttonContainer.setVisibility(View.GONE);
-
-            root.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dismiss();
-                }
-            });
+            root.setClickable(true);
         } else {
             buttonContainer.setVisibility(View.VISIBLE);
-
-            root.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {}
-            });
+            root.setClickable(false);
         }
         return this;
     }
