@@ -76,6 +76,12 @@ public class SettingsActivity extends Activity {
         editor.putBoolean(MainActivity.PREF_SHOW_MOVES, showMoves);
 
         editor.commit();
+        BoomBoomMusic.pause();
+    }
+
+    protected void onResume(){
+        super.onResume();
+        BoomBoomMusic.start(this);
     }
 
 }

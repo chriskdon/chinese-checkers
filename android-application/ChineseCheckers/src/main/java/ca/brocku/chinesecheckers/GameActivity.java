@@ -58,7 +58,6 @@ public class GameActivity extends Activity {
                     .add(R.id.container, offlineGameFragment, "OfflineGameFragment")
                     .commit();
         }
-
         //Show the Resume Game dialog box if we are loading a saves game
         if(getIntent().getBooleanExtra("SAVED_GAME", false)) {
 
@@ -94,6 +93,8 @@ public class GameActivity extends Activity {
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -114,6 +115,8 @@ public class GameActivity extends Activity {
     @Override
     protected void onPause() {
         gameStateManager.stopGame();
+
+//        mMediaPlayer.pause();
 
         super.onPause();
 
@@ -141,6 +144,12 @@ public class GameActivity extends Activity {
             }
         }
     }
+
+    protected void onResume(){
+        super.onResume();
+        BoomBoomMusic.start(this);
+    }
+
 
     /** This function handles the end of game state.
      *
@@ -269,13 +278,14 @@ public class GameActivity extends Activity {
             if(activity.resumeDialog == null || !activity.resumeDialog.isShowing()) {
                 gameStateManager.startGame(activity);
             }
+
         }
 
         @Override
         public void onPause() {
             gameStateManager.stopGame();
-
             super.onPause();
+            BoomBoomMusic.pause();
         }
 
         /**

@@ -16,6 +16,16 @@ public class HelpActivity extends Activity {
         setContentView(R.layout.activity_help);
     }
 
+    protected void onResume(){
+        super.onResume();
+        BoomBoomMusic.start(this);
+    }
+
+    protected void onPause(){
+        super.onPause();
+        BoomBoomMusic.pause();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.help, menu);

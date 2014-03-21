@@ -81,6 +81,12 @@ public class MainActivity extends SpicedGcmActivity {
         } else {
             onlineNotificationIcon.setVisibility(View.INVISIBLE);
         }
+        BoomBoomMusic.start(this);
+    }
+
+    protected void onPause(){
+        super.onPause();
+        BoomBoomMusic.pause();
     }
 
     @Override
