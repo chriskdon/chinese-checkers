@@ -356,7 +356,8 @@ public class GameActivity extends Activity {
                         .setDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {
-                                gameStateManager.startGame(activity);
+                                if (!activity.isGameOver()) {
+                                    gameStateManager.startGame(activity);                              }
                             }
                         })
                         .show();
