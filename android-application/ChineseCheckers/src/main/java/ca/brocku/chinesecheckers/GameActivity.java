@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -344,11 +346,19 @@ public class GameActivity extends Activity {
         private class TitleBarButtonHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
+                gameStateManager.stopGame();
+
                 Popup playerListDialog = new Popup(getActivity());
                 playerListDialog
                         .setTitleText("Players")
                         .enablePlayerList(gameStateManager.getPlayers())
                         .hideButtons(true)
+                        .setDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                gameStateManager.startGame(activity);
+                            }
+                        })
                         .show();
             }
         }

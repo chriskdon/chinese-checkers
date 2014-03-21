@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
@@ -226,5 +227,10 @@ public class Popup extends Dialog {
 
     public Button getDeclineButton() {
         return declineButton;
+    }
+
+    public Popup setDismissListener(OnDismissListener onDismissListener) {
+        super.setOnDismissListener(onDismissListener);
+        return this;
     }
 }
