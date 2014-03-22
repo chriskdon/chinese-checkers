@@ -32,7 +32,7 @@ public class BoomBoomMusic {
     }
 
     private static void setupMP(Context c) {
-        mp = MediaPlayer.create(c, R.raw.eis);
+        mp = MediaPlayer.create(c, R.raw.eisl);
         mp.setVolume(sharedPrefs.getInt(BACKSOUNDPREF, 100) / 100.0f, sharedPrefs.getInt(BACKSOUNDPREF, 100) / 100.0f);
         mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mp.setLooping(true);
