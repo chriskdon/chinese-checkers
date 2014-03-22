@@ -1,13 +1,15 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ca.brocku.chinesecheckers.gamestate.Player;
 
@@ -17,6 +19,8 @@ import ca.brocku.chinesecheckers.gamestate.Player;
 public class Popup extends Dialog {
     private Context context;
 
+    private FrameLayout root;
+    private LinearLayout dialogContainer;
     private LinearLayout titleContainer;
     private TextView title;
     private LinearLayout bodyContainer;
@@ -26,7 +30,7 @@ public class Popup extends Dialog {
     private Button declineButton;
     private boolean isBackButtonDisabled;
 
-    public Popup(Context context) {
+    public Popup(final Context context) {
         super(context, R.style.CustomDialogTheme);
 
         setContentView(R.layout.fragment_dialog); //dialog layout
@@ -34,6 +38,8 @@ public class Popup extends Dialog {
         this.context = context;
 
         //Bind Controls
+        root = (FrameLayout)findViewById(android.R.id.content);
+        dialogContainer = (LinearLayout)findViewById(R.id.dialogContainer);
         titleContainer = (LinearLayout)findViewById(R.id.dialogTitleContainer);
         title = (TextView)findViewById(R.id.dialogTitle);
         bodyContainer = (LinearLayout)findViewById(R.id.dialogBodyContainer);
@@ -44,7 +50,19 @@ public class Popup extends Dialog {
 
         isBackButtonDisabled = false;
 
-
+        //Bind Handlers
+        root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+        root.setClickable(false);
+        dialogContainer.setOnClickListener(new View.OnClickListener() {
+            //Needed so that clicking the translucent background doesn't percolate up
+            @Override
+            public void onClick(View view) { }
+        });
     }
 
     @Override
@@ -63,11 +81,18 @@ public class Popup extends Dialog {
         return this;
     }
 
+    /** Hides buttons and enables clicking on the translucent background to dismiss the dialog.
+     *
+     * @param b
+     * @return
+     */
     public Popup hideButtons(boolean b) {
         if(b) {
             buttonContainer.setVisibility(View.GONE);
+            root.setClickable(true);
         } else {
             buttonContainer.setVisibility(View.VISIBLE);
+            root.setClickable(false);
         }
         return this;
     }
@@ -202,5 +227,10 @@ public class Popup extends Dialog {
 
     public Button getDeclineButton() {
         return declineButton;
+    }
+
+    public Popup setDismissListener(OnDismissListener onDismissListener) {
+        super.setOnDismissListener(onDismissListener);
+        return this;
     }
 }
