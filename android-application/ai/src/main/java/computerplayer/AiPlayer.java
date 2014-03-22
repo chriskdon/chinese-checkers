@@ -13,7 +13,7 @@ import gamestate.Player;
  * Student #: 4366340
  * Date: 2/24/2014
  */
-public class AiPlayer extends gamestate.Player {
+public class AiPlayer extends Player {
     private String AILevel;
     private int difficulty;
 
