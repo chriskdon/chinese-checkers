@@ -29,7 +29,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="48dp"
-            android:src="@drawable/logo_image"/>
+            android:src="@drawable/logo_image" />
     </LinearLayout>
 
     <ScrollView
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/settings_show_possible_moves"/>
+                    android:text="@string/settings_show_possible_moves" />
 
                 <RadioGroup
                     android:layout_width="match_parent"
@@ -69,7 +69,7 @@
                         android:textColor="@color/app_background"
                         android:textStyle="bold"
                         android:text="ON"
-                        android:id="@+id/settingsShowMoveOnButton"/>
+                        android:id="@+id/settingsShowMoveOnButton" />
 
                     <RadioButton
                         android:layout_width="40dp"
@@ -80,7 +80,7 @@
                         android:textColor="@color/app_background"
                         android:textStyle="bold"
                         android:text="OFF"
-                        android:id="@+id/settingsShowMoveOffButton"/>
+                        android:id="@+id/settingsShowMoveOffButton" />
 
                 </RadioGroup>
             </LinearLayout>
@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="@string/settings_your_username"/>
+                android:text="@string/settings_your_username" />
 
             <EditText
                 android:textColorHint="@color/app_background"
@@ -108,8 +108,77 @@
                 android:singleLine="true"
                 android:background="@drawable/chch_edittext"
                 android:textColor="@color/app_text"
-                android:id="@+id/settingsUsernameEditText"/>
+                android:id="@+id/settingsUsernameEditText" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="26dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:text="Background Sound Levels" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp">
+
+                    <SeekBar
+                        android:id="@+id/settingsBackSoundSlider"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_weight="3"
+                        android:layout_height="36dp" />
+
+                    <TextView
+                        android:id="@+id/settingsBackSoundText"
+                        android:layout_weight="1"
+                        android:minEms="4"
+                        android:maxEms="4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="26dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:text="Sound Effects Levels" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp">
+
+                    <SeekBar
+                        android:id="@+id/settingsEffectSoundSlider"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_weight="3"
+                        android:layout_height="36dp" />
+
+                    <TextView
+                        android:id="@+id/settingsEffectSoundText"
+                        android:layout_weight="1"
+                        android:minEms="4"
+                        android:maxEms="4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp" />
+
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
