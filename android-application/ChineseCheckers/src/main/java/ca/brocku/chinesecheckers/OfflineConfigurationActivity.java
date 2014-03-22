@@ -3,8 +3,10 @@ package ca.brocku.chinesecheckers;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,6 +67,15 @@ public class OfflineConfigurationActivity extends Activity {
         bindHandlers(); //bind handlers
 
         currentSelection = twoPlayerButton;
+
+        //Set red's name to the global username if it isn't a UUID
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String username = sharedPreferences.getString(MainActivity.PREF_USER_ID, "");
+        boolean isUuidUsername = username.matches("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
+
+        if(!isUuidUsername) {
+            redPlayerEditText.setText(username);
+        }
     }
 
     @Override

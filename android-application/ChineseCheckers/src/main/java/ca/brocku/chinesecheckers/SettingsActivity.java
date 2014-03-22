@@ -70,6 +70,7 @@ public class SettingsActivity extends Activity {
         if(!newUsername.equals(sharedPrefs.getString(MainActivity.PREF_USER_ID, ""))) {
             //TODO: make server request to accept new username
             //TODO: save username or show Toast with error
+            editor.putString(MainActivity.PREF_USER_ID, newUsername);
         }
 
         //save the show possible moves setting
