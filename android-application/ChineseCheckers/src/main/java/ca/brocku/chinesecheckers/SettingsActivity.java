@@ -12,20 +12,25 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by kubasub on 2014-03-06.
  */
 public class SettingsActivity extends Activity {
     private RadioGroup showMovesRadio;
+    private TextView usernameErrorTextView;
     private EditText usernameEditText;
     private SharedPreferences sharedPrefs;
     private LinearLayout networkConnectivityContainer;
 
+    private boolean isConnected;
     private NetworkStateReceiver networkStateReceiver; //for connectivity changes
 
 
@@ -38,6 +43,7 @@ public class SettingsActivity extends Activity {
 
         //Bind Controls
         showMovesRadio = (RadioGroup)findViewById(R.id.settingsShowMovesRadioGroup);
+        usernameErrorTextView = (TextView)findViewById(R.id.settingsUsernameErrorTextView);
         usernameEditText = (EditText)findViewById(R.id.settingsUsernameEditText);
         networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
 
@@ -85,11 +91,21 @@ public class SettingsActivity extends Activity {
         boolean showMoves = (showMovesRadio.indexOfChild(checkedChild) == 0);
         String newUsername = usernameEditText.getText().toString();
 
+
         //try to save username if it has changed
         if(!newUsername.equals(sharedPrefs.getString(MainActivity.PREF_USER_ID, ""))) {
-            //TODO: make server request to accept new username
-            //TODO: save username or show Toast with error
-            editor.putString(MainActivity.PREF_USER_ID, newUsername);
+            if(isConnected) {
+                //TODO: make server request to accept new username
+
+                if(true) { //TODO: Change "true" to --> if server saved username
+                    editor.putString(MainActivity.PREF_USER_ID, newUsername);
+                } else {
+                    //TODO: add error message to toast
+                    Toast.makeText(this, "Some error message.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Couldn't save username.", Toast.LENGTH_SHORT).show();
+            }
         }
 
         //save the show possible moves setting
@@ -109,12 +125,29 @@ public class SettingsActivity extends Activity {
                 NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                 if((mobile!=null && mobile.isConnected()) || (wifi!=null && wifi.isConnected())) {
+                    isConnected = true;
                     networkConnectivityContainer.setVisibility(View.GONE);
+                    usernameErrorTextView.setVisibility(View.GONE);
+
+                    usernameEditText.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            return false;
+                        }
+                    });
                 } else {
+                    isConnected = false;
                     networkConnectivityContainer.setVisibility(View.VISIBLE);
+
+                    usernameEditText.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+                            usernameErrorTextView.setVisibility(View.VISIBLE);
+                            return true;
+                        }
+                    });
                 }
             }
         }
     }
-
 }
