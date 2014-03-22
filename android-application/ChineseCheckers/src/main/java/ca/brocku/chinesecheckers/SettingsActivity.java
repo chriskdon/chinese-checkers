@@ -1,14 +1,20 @@
 package ca.brocku.chinesecheckers;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 /**
@@ -18,6 +24,9 @@ public class SettingsActivity extends Activity {
     private RadioGroup showMovesRadio;
     private EditText usernameEditText;
     private SharedPreferences sharedPrefs;
+    private LinearLayout networkConnectivityContainer;
+
+    private NetworkStateReceiver networkStateReceiver; //for connectivity changes
 
 
     @Override
@@ -25,9 +34,12 @@ public class SettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        networkStateReceiver = new NetworkStateReceiver();
+
         //Bind Controls
         showMovesRadio = (RadioGroup)findViewById(R.id.settingsShowMovesRadioGroup);
         usernameEditText = (EditText)findViewById(R.id.settingsUsernameEditText);
+        networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
 
         //Set Controls with currently set preferences
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -50,6 +62,13 @@ public class SettingsActivity extends Activity {
             startActivity(new Intent(SettingsActivity.this, HelpActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for changes in connectivity
     }
 
     /** Updates the preferences.
@@ -77,6 +96,25 @@ public class SettingsActivity extends Activity {
         editor.putBoolean(MainActivity.PREF_SHOW_MOVES, showMoves);
 
         editor.commit();
+
+        unregisterReceiver(networkStateReceiver);
+    }
+
+    private class NetworkStateReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getExtras()!=null) {
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if((mobile!=null && mobile.isConnected()) || (wifi!=null && wifi.isConnected())) {
+                    networkConnectivityContainer.setVisibility(View.GONE);
+                } else {
+                    networkConnectivityContainer.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
 }
