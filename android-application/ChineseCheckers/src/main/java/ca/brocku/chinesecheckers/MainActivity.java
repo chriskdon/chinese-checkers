@@ -64,20 +64,13 @@ public class MainActivity extends SpicedGcmActivity {
         networkStateReceiver = new NetworkStateReceiver();
 
         //Bind Controls
-<<<<<<< HEAD
-        offlineActivityButton = (Button) findViewById(R.id.offlineConfigurationActivityButton);
-        onlineNotificationIcon = (TextView) findViewById(R.id.onlineMoveNotificationTextView);
-        onlineActivityButton = (Button) findViewById(R.id.onlineListActivityButton);
-        helpActivityButton = (Button) findViewById(R.id.helpActivityButton);
-        settingsActivityButton = (Button) findViewById(R.id.settingsActivityButton);
-=======
+
         offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
         onlineNotificationIcon = (TextView)findViewById(R.id.onlineMoveNotificationTextView);
         onlineActivityButton = (Button)findViewById(R.id.onlineListActivityButton);
         helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
         settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
         networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
->>>>>>> origin/develop
 
 
         //Bind Handlers
@@ -90,7 +83,7 @@ public class MainActivity extends SpicedGcmActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
+        BoomBoomMusic.pause();
         unregisterReceiver(networkStateReceiver); //for connectivity change
     }
 
@@ -107,17 +100,9 @@ public class MainActivity extends SpicedGcmActivity {
         } else {
             onlineNotificationIcon.setVisibility(View.INVISIBLE);
         }
-<<<<<<< HEAD
         BoomBoomMusic.start(this);
-    }
-
-    protected void onPause() {
-        super.onPause();
-        BoomBoomMusic.pause();
-=======
 
         registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
->>>>>>> origin/develop
     }
 
     @Override

@@ -17,13 +17,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-<<<<<<< HEAD
 import android.widget.SeekBar;
 import android.widget.TextView;
-=======
 import android.widget.TextView;
 import android.widget.Toast;
->>>>>>> origin/develop
 
 /**
  * Created by kubasub on 2014-03-06.
@@ -48,19 +45,16 @@ public class SettingsActivity extends Activity {
         networkStateReceiver = new NetworkStateReceiver();
 
         //Bind Controls
-<<<<<<< HEAD
         showMovesRadio = (RadioGroup) findViewById(R.id.settingsShowMovesRadioGroup);
         usernameEditText = (EditText) findViewById(R.id.settingsUsernameEditText);
         backgroundSlider = (SeekBar) findViewById(R.id.settingsBackSoundSlider);
         effectsSlider = (SeekBar) findViewById(R.id.settingsEffectSoundSlider);
         backPerText = (TextView) findViewById(R.id.settingsBackSoundText);
         effectPerText = (TextView) findViewById(R.id.settingsEffectSoundText);
-=======
         showMovesRadio = (RadioGroup)findViewById(R.id.settingsShowMovesRadioGroup);
         usernameErrorTextView = (TextView)findViewById(R.id.settingsUsernameErrorTextView);
         usernameEditText = (EditText)findViewById(R.id.settingsUsernameEditText);
         networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
->>>>>>> origin/develop
 
         //Set Controls with currently set preferences
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -127,10 +121,8 @@ public class SettingsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-<<<<<<< HEAD
     /**
      * Updates the preferences.
-=======
     @Override
     protected void onResume() {
         super.onResume();
@@ -140,7 +132,6 @@ public class SettingsActivity extends Activity {
 
     /** Updates the preferences.
      *
->>>>>>> origin/develop
      */
     @Override
     protected void onPause() {
@@ -155,11 +146,6 @@ public class SettingsActivity extends Activity {
 
 
         //try to save username if it has changed
-<<<<<<< HEAD
-        if (!newUsername.equals(sharedPrefs.getString(MainActivity.PREF_USER_ID, ""))) {
-            //TODO: make server request to accept new username
-            //TODO: save username or show Toast with error
-=======
         if(!newUsername.equals(sharedPrefs.getString(MainActivity.PREF_USER_ID, ""))) {
             if(isConnected) {
                 //TODO: make server request to accept new username
@@ -173,24 +159,19 @@ public class SettingsActivity extends Activity {
             } else {
                 Toast.makeText(this, "Couldn't save username.", Toast.LENGTH_SHORT).show();
             }
->>>>>>> origin/develop
         }
 
         //save the show possible moves setting
         editor.putBoolean(MainActivity.PREF_SHOW_MOVES, showMoves);
 
         editor.commit();
-<<<<<<< HEAD
         BoomBoomMusic.pause();
     }
 
     protected void onResume() {
         super.onResume();
         BoomBoomMusic.start(this);
-=======
-
         unregisterReceiver(networkStateReceiver);
->>>>>>> origin/develop
     }
 
     private class NetworkStateReceiver extends BroadcastReceiver {
