@@ -1,78 +1,107 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin">
-
-
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+    
+    <!-- unavailable network header -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:gravity="right"
-        android:orientation="horizontal"
-        android:id="@+id/titleHeaderContainer">
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:background="@color/app_button"
+        android:visibility="gone"
+        android:id="@+id/networkConnectivityContainer">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="-2dp"
+            android:src="@drawable/ic_action_wifi_light"/>
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="center_horizontal"
-            android:padding="5dp"
-            android:gravity="center_vertical|left"
-            android:textSize="@dimen/activity_xxlarge_text_size"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:text="@string/play_online" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="48dp"
-            android:src="@drawable/logo_image"/>
-    </LinearLayout>
-
-    <!-- This is the button which is displayed at the bottom. It has to be declared here as it is referenced below -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/onlineNewGameButtonContainer"
-        android:orientation="vertical">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/app_background"/>
-
-        <Button
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:gravity="right|center_horizontal"
-            android:drawableLeft="@drawable/ic_action_new"
-            android:textSize="@dimen/activity_xlarge_text_size"
-            android:textAllCaps="true"
-            android:text="@string/online_new_game"
-            android:id="@+id/onlineNewGameButton" />
+            android:layout_marginLeft="5dp"
+            android:text="@string/network_unavailable"/>
+
     </LinearLayout>
 
-
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/titleHeaderContainer"
-        android:layout_above="@id/onlineNewGameButtonContainer">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="40dp"
-            android:orientation="vertical"
-            android:id="@+id/onlineGameListContainer">
+            android:layout_alignParentTop="true"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:id="@+id/titleHeaderContainer">
 
-            <!-- Online games will be added here -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:padding="5dp"
+                android:gravity="center_vertical|left"
+                android:textSize="@dimen/activity_xxlarge_text_size"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:text="@string/play_online" />
 
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="48dp"
+                android:src="@drawable/logo_image"/>
         </LinearLayout>
-    </ScrollView>
 
-</RelativeLayout>
+        <!-- This is the button which is displayed at the bottom. It has to be declared here as it is referenced below -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/onlineNewGameButtonContainer"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/app_background"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:gravity="right|center_horizontal"
+                android:drawableLeft="@drawable/ic_action_new"
+                android:textSize="@dimen/activity_xlarge_text_size"
+                android:textAllCaps="true"
+                android:text="@string/online_new_game"
+                android:id="@+id/onlineNewGameButton" />
+        </LinearLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleHeaderContainer"
+            android:layout_above="@id/onlineNewGameButtonContainer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:orientation="vertical"
+                android:id="@+id/onlineGameListContainer">
+
+                <!-- Online games will be added here -->
+
+            </LinearLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+</LinearLayout>

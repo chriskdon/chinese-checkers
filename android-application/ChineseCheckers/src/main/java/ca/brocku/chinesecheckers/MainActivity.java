@@ -1,8 +1,13 @@
 package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -10,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +45,9 @@ public class MainActivity extends SpicedGcmActivity {
     private Button onlineActivityButton;
     private Button helpActivityButton;
     private Button settingsActivityButton;
+    private LinearLayout networkConnectivityContainer;
+
+    private NetworkStateReceiver networkStateReceiver; //for connectivity changes
 
     public static final String PREF_DONE_INITIAL_SETUP = "DONE_INITIAL_SETUP";
     public static final String PREF_SHOW_MOVES = "SHOW_MOVES";
@@ -52,12 +61,23 @@ public class MainActivity extends SpicedGcmActivity {
 
         setInitialPreferences(); //only sets the prefs on first launch
 
+        networkStateReceiver = new NetworkStateReceiver();
+
         //Bind Controls
+<<<<<<< HEAD
         offlineActivityButton = (Button) findViewById(R.id.offlineConfigurationActivityButton);
         onlineNotificationIcon = (TextView) findViewById(R.id.onlineMoveNotificationTextView);
         onlineActivityButton = (Button) findViewById(R.id.onlineListActivityButton);
         helpActivityButton = (Button) findViewById(R.id.helpActivityButton);
         settingsActivityButton = (Button) findViewById(R.id.settingsActivityButton);
+=======
+        offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
+        onlineNotificationIcon = (TextView)findViewById(R.id.onlineMoveNotificationTextView);
+        onlineActivityButton = (Button)findViewById(R.id.onlineListActivityButton);
+        helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
+        settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
+        networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
+>>>>>>> origin/develop
 
 
         //Bind Handlers
@@ -65,7 +85,13 @@ public class MainActivity extends SpicedGcmActivity {
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unregisterReceiver(networkStateReceiver); //for connectivity change
     }
 
     @Override
@@ -81,12 +107,17 @@ public class MainActivity extends SpicedGcmActivity {
         } else {
             onlineNotificationIcon.setVisibility(View.INVISIBLE);
         }
+<<<<<<< HEAD
         BoomBoomMusic.start(this);
     }
 
     protected void onPause() {
         super.onPause();
         BoomBoomMusic.pause();
+=======
+
+        registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
+>>>>>>> origin/develop
     }
 
     @Override
@@ -211,6 +242,23 @@ public class MainActivity extends SpicedGcmActivity {
         @Override
         public void onClick(View view) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+        }
+    }
+
+    private class NetworkStateReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getExtras()!=null) {
+                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if((mobile!=null && mobile.isConnected()) || (wifi!=null && wifi.isConnected())) {
+                    networkConnectivityContainer.setVisibility(View.GONE);
+                } else {
+                    networkConnectivityContainer.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 }

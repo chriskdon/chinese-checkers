@@ -9,7 +9,8 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:background="@color/app_button"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:id="@+id/networkConnectivityContainer">
 
         <ImageView
             android:layout_width="20dp"

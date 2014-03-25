@@ -3,8 +3,10 @@ package ca.brocku.chinesecheckers;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,6 +55,8 @@ public class OfflineConfigurationActivity extends Activity {
             greenPlayerEditText, bluePlayerEditText, purplePlayerEditText;
     private Button startOfflineGameButton;
 
+    private String username; //stores the username
+
     private ToggleButton currentSelection; //stores the current selection for number of players
 
     @Override
@@ -63,6 +67,14 @@ public class OfflineConfigurationActivity extends Activity {
         bindControls(); //bind UI controls
 
         bindHandlers(); //bind handlers
+
+        //Stores the username from the SharedPrefs file
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        username = sharedPreferences.getString(MainActivity.PREF_USER_ID, "");
+        boolean isUuidUsername = username.matches("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
+        if(!isUuidUsername) {
+            redPlayerEditText.setText(username);
+        }
 
         currentSelection = twoPlayerButton;
     }
@@ -78,8 +90,15 @@ public class OfflineConfigurationActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        setRedPlayerName();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -134,7 +153,9 @@ public class OfflineConfigurationActivity extends Activity {
 
             if(currentSelection.getId() != view.getId()) { //if the current button was not pressed
 
-                resetPlayOptions(); //resets all of the player's options
+                resetPlayerOptions(); //resets all of the player's options
+
+                setRedPlayerName();
 
                 //shows and labels the name fields based on the number of players option
                 switch(view.getId()) {
@@ -148,33 +169,33 @@ public class OfflineConfigurationActivity extends Activity {
                         break;
                     case R.id.threePlayerButton:
                         orangePlayerNameContainer.setVisibility(View.GONE);
-                        yellowPlayerEditText.setHint("Player 2");
+                        yellowPlayerEditText.setHint("Player 3");
                         yellowPlayerNameContainer.setVisibility(View.VISIBLE);
                         greenPlayerNameContainer.setVisibility(View.GONE);
-                        bluePlayerEditText.setHint("Player 3");
+                        bluePlayerEditText.setHint("Player 2");
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
                     case R.id.fourPlayerButton:
-                        orangePlayerEditText.setHint("Player 2");
+                        orangePlayerEditText.setHint("Player 4");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
                         yellowPlayerNameContainer.setVisibility(View.GONE);
                         greenPlayerEditText.setHint("Player 3");
                         greenPlayerNameContainer.setVisibility(View.VISIBLE);
-                        bluePlayerEditText.setHint("Player 4");
+                        bluePlayerEditText.setHint("Player 2");
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
                         purplePlayerNameContainer.setVisibility(View.GONE);
                         break;
                     case R.id.sixPlayerButton:
-                        orangePlayerEditText.setHint("Player 2");
+                        orangePlayerEditText.setHint("Player 6");
                         orangePlayerNameContainer.setVisibility(View.VISIBLE);
-                        yellowPlayerEditText.setHint("Player 3");
+                        yellowPlayerEditText.setHint("Player 5");
                         yellowPlayerNameContainer.setVisibility(View.VISIBLE);
                         greenPlayerEditText.setHint("Player 4");
                         greenPlayerNameContainer.setVisibility(View.VISIBLE);
-                        bluePlayerEditText.setHint("Player 5");
+                        bluePlayerEditText.setHint("Player 3");
                         bluePlayerNameContainer.setVisibility(View.VISIBLE);
-                        purplePlayerEditText.setHint("Player 6");
+                        purplePlayerEditText.setHint("Player 2");
                         purplePlayerNameContainer.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -189,7 +210,7 @@ public class OfflineConfigurationActivity extends Activity {
         /** This method resets the player options for each player
          *
          */
-        private void resetPlayOptions() {
+        private void resetPlayerOptions() {
             hideWarnings();
 
             //clears the names if another option is selected for number of players
@@ -390,6 +411,26 @@ public class OfflineConfigurationActivity extends Activity {
         }
    }
 
+    /** Set the red player's name name to the global username.
+     *
+     * This method only sets it if:
+     *  The current username --> isn't a UUID and
+     *  The red player's field --> is blank or is set to something other than the old username (i.e. manually modified by the user)
+     *
+     */
+    private void setRedPlayerName() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String newUsername = sharedPreferences.getString(MainActivity.PREF_USER_ID, "");
+        boolean isUuidUsername = newUsername.matches("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
+        if(!isUuidUsername && (redPlayerEditText.getText()!=null && (redPlayerEditText.getText().toString().equals("") || redPlayerEditText.getText().toString().equals(username)))) {
+            //Update the username in case it was changed in settings
+            username = newUsername;
+
+            //Set the username to the most current stored in the SharedPrefs file
+            redPlayerEditText.setText(username);
+        }
+    }
+
     /** Hides all of the warning symbols associated with required input.
      *
      */
@@ -512,4 +553,6 @@ public class OfflineConfigurationActivity extends Activity {
 
         startOfflineGameButton.setOnClickListener(new StartGameHandler());
     }
+
+
 }
