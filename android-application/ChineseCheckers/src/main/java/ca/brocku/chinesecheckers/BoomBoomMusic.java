@@ -13,7 +13,6 @@ import android.util.Log;
  * Created by Main on 3/20/14.
  */
 public class BoomBoomMusic {
-
     static MediaPlayer mp;
     static SoundPool sp;
     private static Boolean started = false;

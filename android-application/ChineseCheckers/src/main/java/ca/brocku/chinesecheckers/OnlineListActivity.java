@@ -66,27 +66,18 @@ public class OnlineListActivity extends Activity {
         }
     }
 
-    protected void onResume(){
-        super.onResume();
-        BoomBoomMusic.start(this);
-    }
-
-    protected void onPause(){
-        super.onPause();
-        BoomBoomMusic.pause();
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        BoomBoomMusic.start(this);
         registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        BoomBoomMusic.pause();
         unregisterReceiver(networkStateReceiver);
     }
 
