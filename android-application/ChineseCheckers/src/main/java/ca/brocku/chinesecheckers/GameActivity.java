@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -151,7 +152,6 @@ public class GameActivity extends Activity {
         super.onResume();
         BoomBoomMusic.start(this);
     }
-
 
     /**
      * This function handles the end of game state.
@@ -411,7 +411,47 @@ public class GameActivity extends Activity {
                     ((HumanPlayer) currentPlayer)
                             .signalMove(movePath);
 
+                    if (movePath.getPath().size() >= 9) {
+                        checkKonamiCode(currentPlayer, movePath);
+                    }
+
                     resetHumanState();
+                }
+            }
+        }
+
+        /*
+        * checkKonamiCode
+        * Sees if the player's name and path adds up to the Konami Code
+        */
+        private void checkKonamiCode(Player p, MovePath m) {
+//        Log.e("Holla", "Entered");
+            if ((m.getPosition(0).getRow() > m.getPosition(1).getRow())) { // && //Up
+//            Log.e("Holla","Up");
+                if (m.getPosition(1).getRow() > m.getPosition(2).getRow()) { // && //Up
+//                Log.e("Holla","Up");
+                    if (m.getPosition(2).getRow() < m.getPosition(3).getRow()) { //&& //Down
+//                    Log.e("Holla","Down");
+                        if (m.getPosition(3).getRow() < m.getPosition(4).getRow()) { //&& //Down
+//                        Log.e("Holla","Down");
+                            if (m.getPosition(4).getIndex() > m.getPosition(5).getIndex()) { // && //Left
+//                            Log.e("Holla","Left");
+                                if (m.getPosition(5).getIndex() < m.getPosition(6).getIndex()) { // && //Right
+//                                Log.e("Holla","Right");
+                                    if (m.getPosition(6).getIndex() > m.getPosition(7).getIndex()) { // && //Left
+//                                    Log.e("Holla","Left");
+                                        if (m.getPosition(7).getIndex() < m.getPosition(8).getIndex()) { // && //Right
+//                                        Log.e("Holla","Right");
+                                            if (p.getName().contains("ba")) {//){
+//                                              Log.e("Holla", "Winn");
+                                                BoomBoomMusic.konamiCodeEntered(getActivity().getApplicationContext());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

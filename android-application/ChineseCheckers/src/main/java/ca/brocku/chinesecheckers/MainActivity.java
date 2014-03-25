@@ -26,11 +26,11 @@ import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
 import ca.brocku.chinesecheckers.network.spice.requests.FollowersRequest;
 
-/** This is the activity for the home screen of Chinese Checkers.
- *
+/**
+ * This is the activity for the home screen of Chinese Checkers.
+ * <p/>
  * It controls navigation to the different parts of the application including the different game
  * modes and user settings.
- *
  */
 @SuppressLint("all")
 public class MainActivity extends SpicedGcmActivity {
@@ -53,11 +53,11 @@ public class MainActivity extends SpicedGcmActivity {
         setInitialPreferences(); //only sets the prefs on first launch
 
         //Bind Controls
-        offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
-        onlineNotificationIcon = (TextView)findViewById(R.id.onlineMoveNotificationTextView);
-        onlineActivityButton = (Button)findViewById(R.id.onlineListActivityButton);
-        helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
-        settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
+        offlineActivityButton = (Button) findViewById(R.id.offlineConfigurationActivityButton);
+        onlineNotificationIcon = (TextView) findViewById(R.id.onlineMoveNotificationTextView);
+        onlineActivityButton = (Button) findViewById(R.id.onlineListActivityButton);
+        helpActivityButton = (Button) findViewById(R.id.helpActivityButton);
+        settingsActivityButton = (Button) findViewById(R.id.settingsActivityButton);
 
 
         //Bind Handlers
@@ -75,7 +75,7 @@ public class MainActivity extends SpicedGcmActivity {
         //set the icon which shows the number of games in which it is your turn
         //TODO: make API call HERE to get number of "current move" games and set variable
         int numberOfCurrentMoveGames = 1;
-        if(numberOfCurrentMoveGames > 0) {
+        if (numberOfCurrentMoveGames > 0) {
             onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
             onlineNotificationIcon.setVisibility(View.VISIBLE);
         } else {
@@ -84,34 +84,34 @@ public class MainActivity extends SpicedGcmActivity {
         BoomBoomMusic.start(this);
     }
 
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         BoomBoomMusic.pause();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_help) {
+        if (id == R.id.action_help) {
             startActivity(new Intent(MainActivity.this, HelpActivity.class));
-        } else if(id == R.id.action_settings) {
+        } else if (id == R.id.action_settings) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /** Sets initial preferences if it is the first time the application is launched.
-     *
+    /**
+     * Sets initial preferences if it is the first time the application is launched.
+     * <p/>
      * The preferences set are:
-     *      Show possible moves to true
-     *      user's ID to a generated UUID
-     *
+     * Show possible moves to true
+     * user's ID to a generated UUID
      */
     private void setInitialPreferences() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -120,14 +120,14 @@ public class MainActivity extends SpicedGcmActivity {
         Boolean isInitialSetupDone = sharedPref.getBoolean(PREF_DONE_INITIAL_SETUP, false);
 
         //Sets the default preferences. This is only ran the first time application is launched.
-        if(!isInitialSetupDone) {
+        if (!isInitialSetupDone) {
             SharedPreferences.Editor editor = sharedPref.edit(); //editor for the prefs
 
             editor
-                .putBoolean(PREF_DONE_INITIAL_SETUP, true)
-                .putBoolean(PREF_SHOW_MOVES, true)
-                .putString(PREF_USER_ID, UUID.randomUUID().toString())
-                .commit();
+                    .putBoolean(PREF_DONE_INITIAL_SETUP, true)
+                    .putBoolean(PREF_SHOW_MOVES, true)
+                    .putString(PREF_USER_ID, UUID.randomUUID().toString())
+                    .commit();
         }
     }
 
@@ -145,7 +145,7 @@ public class MainActivity extends SpicedGcmActivity {
 
             @Override
             public void onRequestSuccess(FollowerList followers) {
-                if(followers.size() > 0) {
+                if (followers.size() > 0) {
                     Toast.makeText(MainActivity.this, "SPICE Result: " + followers.get(0).getLogin(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this, "SPICE Worked", Toast.LENGTH_SHORT).show();
@@ -154,12 +154,13 @@ public class MainActivity extends SpicedGcmActivity {
         });
     }
 
-    /** Handles clicking on the "Offline" game button.
-     *
+    /**
+     * Handles clicking on the "Offline" game button.
      */
     private class OfflineActivityButtonHandler implements Button.OnClickListener {
 
-        /** OnClick event which starts the OfflineConfigurationActivity activity.
+        /**
+         * OnClick event which starts the OfflineConfigurationActivity activity.
          *
          * @param view the Offline button
          */
@@ -167,12 +168,12 @@ public class MainActivity extends SpicedGcmActivity {
         public void onClick(View view) {
             File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME); //get the serialized file
 
-            if(savedOfflineGame.exists()) { //if there is a saved game file
+            if (savedOfflineGame.exists()) { //if there is a saved game file
                 try {
                     //Load the GameStateManager from storage
                     FileInputStream fis = openFileInput(GameStateManager.SERIALIZED_FILENAME);
                     ObjectInputStream ois = new ObjectInputStream(fis);
-                    GameStateManager gameStateManager = (GameStateManager)ois.readObject();
+                    GameStateManager gameStateManager = (GameStateManager) ois.readObject();
                     ois.close();
                     fis.close();
 
