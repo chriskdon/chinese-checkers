@@ -171,7 +171,33 @@ public class CcGameBoard implements GameBoard {
         else throw new BoardNotEmptyException("Board is not empty, game cannot be loaded.");
 
     }
-
+    public Position[] getGoalPositions(int playerNumber) {
+        int k, h, winArea;
+        List<Position> goalPositions = new ArrayList<Position>();
+        if(playerNumber < 4) {
+            winArea = playerNumber + 3;
+        }
+        else {
+            winArea = playerNumber + 3 - 6;
+        }
+        for(int i=0; i<4;i++) {
+            for(int j=0; j<i+1; j++) {
+                k = getOffsetRow(winArea, i);
+                h = getOffsetIndex(winArea, j);
+                goalPositions.add(new Position(k,h));
+            }
+        }
+        return goalPositions.toArray(new Position[goalPositions.size()]);
+    }
+    public boolean isInGoal(Piece forPiece) {
+        Position[] goalPositions = getGoalPositions(forPiece.getPlayerNumber());
+        for(int i=0; i<goalPositions.length; i++) {
+            if(forPiece.getPosition().getRow()==goalPositions[i].getRow() && forPiece.getPosition().getIndex()==goalPositions[i].getIndex()) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Checks to see if a player satisfies the win condition by checking that all positions in their
      * goal area have one of their pieces in that position.
@@ -595,7 +621,9 @@ public class CcGameBoard implements GameBoard {
                 possibleMoves[posindex] = checkPosition(new Position(row, index+2));
             }
         } // end leftAndRight
-
+        if(isInGoal(forPiece)) {
+            return trimToGoal(forPiece, assistPossibleMoves(possibleMoves));
+        }
         return assistPossibleMoves(possibleMoves);
     }
 
@@ -608,7 +636,6 @@ public class CcGameBoard implements GameBoard {
     @Override
     public Position[] getPossibleHops(Piece forPiece) {
         Position[] allPossible = getPossibleMoves(forPiece);
-
         ArrayList<Position> hops = new ArrayList<Position>();
         if(allPossible != null) {
             for(Position p : allPossible) {
@@ -623,6 +650,21 @@ public class CcGameBoard implements GameBoard {
         return (hops.size() > 0 ? hops.toArray(new Position[hops.size()]) : null);
     }
 
+    private Position[] trimToGoal (Piece forPiece, Position[] possibleMoves) {
+        List<Position> trimmedPossibleMoves = new ArrayList<Position>();
+        Position[] goalPositions = getGoalPositions(forPiece.getPlayerNumber());
+        for(int i=0; i<goalPositions.length; i++) {
+            for(int j=0; j<possibleMoves.length; j++) {
+                if(goalPositions[i].getRow()==possibleMoves[j].getRow() && goalPositions[i].getIndex()==possibleMoves[j].getIndex()) {
+                    trimmedPossibleMoves.add(possibleMoves[j]);
+                }
+            }
+        }
+
+        Position[] temp = trimmedPossibleMoves.toArray(new Position[trimmedPossibleMoves.size()]);
+
+        return (temp.length <= 0 ? null : temp);
+    }
     /*
         Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
         than the alternative.
