@@ -79,6 +79,11 @@ public class OfflineConfigurationActivity extends Activity {
         currentSelection = twoPlayerButton;
     }
 
+    protected void onResume(){
+        super.onResume();
+        BoomBoomMusic.start(this);
+    }
+
     protected void onPause(){
         super.onPause();
         BoomBoomMusic.pause();
@@ -87,7 +92,7 @@ public class OfflineConfigurationActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        BoomBoomMusic.start(this);
+
         setRedPlayerName();
     }
 

@@ -49,9 +49,9 @@ public class OnlineListActivity extends Activity {
         networkStateReceiver = new NetworkStateReceiver(); //for connectivity change
 
         //Bind Controls
-        newGameButton = (Button) findViewById(R.id.onlineNewGameButton);
-        gameListContainer = (LinearLayout) findViewById(R.id.onlineGameListContainer);
-        networkConnectivityContainer = (LinearLayout) findViewById(R.id.networkConnectivityContainer);
+        newGameButton = (Button)findViewById(R.id.onlineNewGameButton);
+        gameListContainer = (LinearLayout)findViewById(R.id.onlineGameListContainer);
+        networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
 
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
@@ -61,48 +61,57 @@ public class OnlineListActivity extends Activity {
         populateList();
 
         //Opens the new game dialog if there are no games
-        if (gameListContainer.getChildCount() == 0) {
+        if(gameListContainer.getChildCount() == 0) {
             newGameButton.performClick();
         }
+    }
+
+    protected void onResume(){
+        super.onResume();
+        BoomBoomMusic.start(this);
+    }
+
+    protected void onPause(){
+        super.onPause();
+        BoomBoomMusic.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        BoomBoomMusic.start(this);
+
         registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        BoomBoomMusic.pause();
+
         unregisterReceiver(networkStateReceiver);
     }
 
     @Override
-
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_help) {
+        if(id == R.id.action_help) {
             startActivity(new Intent(OnlineListActivity.this, HelpActivity.class));
-        } else if (id == R.id.action_settings) {
+        } else if(id == R.id.action_settings) {
             startActivity(new Intent(OnlineListActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Gets and populates the list of current games.
-     * <p/>
-     * Makes a server call to get the list of games. The list items are parsed into individual
-     * views which are then added to the ViewManager.
+    /** Gets and populates the list of current games.
+     *
+     *  Makes a server call to get the list of games. The list items are parsed into individual
+     *  views which are then added to the ViewManager.
+     *
      */
     private void populateList() {
         //TODO: server request for current games array
@@ -135,7 +144,7 @@ public class OnlineListActivity extends Activity {
                 newGame.setTag(aGameItemData.getGameId());
 
                 //Set Game ID
-                ((TextView) newGame.findViewById(R.id.onlineGameIdTextView)).setText("#" + Integer.toString(aGameItemData.getGameId()));
+                ((TextView) newGame.findViewById(R.id.onlineGameIdTextView)).setText("#"+Integer.toString(aGameItemData.getGameId()));
 
                 //Set Player icons
                 switch (aGameItemData.getNumberOfPlayers()) {
@@ -225,9 +234,8 @@ public class OnlineListActivity extends Activity {
     }
 
     //TODO: see if this can be deleted after updating the list has been put in place
-
-    /**
-     * This class manages the list of online game views.
+    /** This class manages the list of online game views.
+     *
      */
     private class OnlineListViewManager implements ViewManager {
         LinkedList<View> listItems = new LinkedList<View>();
@@ -249,28 +257,26 @@ public class OnlineListActivity extends Activity {
             listItems.remove(view);
         }
 
-        /**
-         * Removes a list item based on it's tag.
+        /** Removes a list item based on it's tag.
          *
          * @param gameIdTag the list items tag (it's game ID)
          */
         public void removeView(int gameIdTag) {
-            for (View view : listItems) {
-                if ((Integer) view.getTag() == gameIdTag) { //delete the view with the given gameIdTag
+            for(View view : listItems) {
+                if((Integer)view.getTag() == gameIdTag) { //delete the view with the given gameIdTag
                     removeView(view);
                 }
             }
         }
 
-        /**
-         * Gets a list item based on it's tag. Returns null if it cannot find the specified view.
+        /** Gets a list item based on it's tag. Returns null if it cannot find the specified view.
          *
          * @param gameIdTag the list items tag (it's game ID)
          * @return the list item
          */
         public View getView(int gameIdTag) {
-            for (View view : listItems) {
-                if ((Integer) view.getTag() == gameIdTag) {
+            for(View view : listItems) {
+                if((Integer)view.getTag() == gameIdTag) {
                     return view;
                 }
             }
@@ -278,12 +284,12 @@ public class OnlineListActivity extends Activity {
         }
     }
 
-    /**
-     * This handler creates and manages a new-online-game dialog. The dialog contains radio buttons
+    /** This handler creates and manages a new-online-game dialog. The dialog contains radio buttons
      * for the number of players.
-     * <p/>
+     *
      * When join is clicked, this class makes a request to the server to be added to a game with the
      * number of players which was selected.
+     *
      */
     private class NewGameHandler implements View.OnClickListener {
         @Override
@@ -316,11 +322,11 @@ public class OnlineListActivity extends Activity {
         }
     }
 
-    /**
-     * This handler starts one of the online games.
-     * <p/>
+    /** This handler starts one of the online games.
+     *
      * It makes a call to the server to gather the required state information, bundles any data that
      * needs to be sent to the GameActivity, and then starts that activity.
+     *
      */
     private class startOnlineGameHandler implements View.OnClickListener {
         @Override
@@ -331,14 +337,14 @@ public class OnlineListActivity extends Activity {
         }
     }
 
-    /**
-     * This class handles deleting a game from the online list of games.
-     * <p/>
+    /** This class handles deleting a game from the online list of games.
+     *
      * If the game is not over, the user will be notified that they will be forfeiting the game. If
      * The game is over, they will still be asked to confirm the deletion.
-     * <p/>
+     *
      * The game will only be removed from the list once the server confirms that removal was
      * successful.
+     *
      */
     private class DeleteGameHandler implements View.OnLongClickListener {
         @Override
@@ -369,7 +375,7 @@ public class OnlineListActivity extends Activity {
                     });
 
 
-            if (view.findViewById(R.id.onlineWinnerContainer).getVisibility() == View.VISIBLE) { //construct plain delete dialog
+            if(view.findViewById(R.id.onlineWinnerContainer).getVisibility() == View.VISIBLE) { //construct plain delete dialog
                 deleteGameDialog
                         .setTitleText("Delete Game?")
                         .setMessageText("This game will be removed from your list of online games.")
@@ -390,12 +396,12 @@ public class OnlineListActivity extends Activity {
     private class NetworkStateReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getExtras() != null) {
+            if(intent.getExtras()!=null) {
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
                 NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
                 NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                if ((mobile != null && mobile.isConnected()) || (wifi != null && wifi.isConnected())) {
+                if((mobile!=null && mobile.isConnected()) || (wifi!=null && wifi.isConnected())) {
                     networkConnectivityContainer.setVisibility(View.GONE);
                 } else {
                     networkConnectivityContainer.setVisibility(View.VISIBLE);
@@ -406,10 +412,9 @@ public class OnlineListActivity extends Activity {
 
 
     //TODO: delete
-
-    /**
-     * THIS IS A TEMP CLASS WHICH IS TO BE DELETE WHEN WE CAN MAKE AN API CALL AND GET A LIST OF
+    /** THIS IS A TEMP CLASS WHICH IS TO BE DELETE WHEN WE CAN MAKE AN API CALL AND GET A LIST OF
      * EACH GAME ITEM'S DATA.
+     *
      */
     private class GameItemData {
         private int gameId;
