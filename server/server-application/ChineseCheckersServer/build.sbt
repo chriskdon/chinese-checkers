@@ -1,11 +1,7 @@
+import play.Project._
+
 name := "ChineseCheckersServer"
 
-version := "1.0-SNAPSHOT"
+version := "1.0"
 
-libraryDependencies ++= Seq(
-  javaJdbc,
-  javaEbean,
-  cache
-)     
-
-play.Project.playJavaSettings
+playScalaSettings
