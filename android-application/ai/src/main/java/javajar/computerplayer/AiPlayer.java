@@ -14,7 +14,7 @@ import javajar.gamestate.Player;
  * Date: 2/24/2014
  */
 public class AiPlayer extends Player {
-    private String AILevel;
+    public String AILevel;
     private int difficulty;
 
     public AiPlayer(String AILevel, PlayerColor playerColor){
