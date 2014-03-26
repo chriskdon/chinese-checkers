@@ -18,6 +18,8 @@ import java.io.Serializable;
 public class Position implements Serializable {
     int row, index;
 
+    public Position(){}
+
     public Position(int row, int index) {
         this.row = row;
         this.index = index;

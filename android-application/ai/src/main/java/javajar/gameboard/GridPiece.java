@@ -14,6 +14,8 @@ public class GridPiece implements Piece, Serializable {
     private Position position;
     private int player;
 
+    public GridPiece(){}
+
     public GridPiece (Position pos, int pl) {
         position = pos;
         player = pl;

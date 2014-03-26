@@ -10,6 +10,8 @@ package javajar.gameboard;
 public class ReadOnlyGameBoard implements GameBoard {
     private GameBoard gameBoard;
 
+    public ReadOnlyGameBoard(){}
+
     public ReadOnlyGameBoard(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
     }

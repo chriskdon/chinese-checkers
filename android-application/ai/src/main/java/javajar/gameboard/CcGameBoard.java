@@ -141,7 +141,7 @@ public class CcGameBoard implements GameBoard {
      *
      * @return  A ragged two dimensional Piece array representing a chinese checkers board
      */
-    private GridPiece[][] constructBoard() {
+    public GridPiece[][] constructBoard() {
         GridPiece[][] board = new GridPiece[17][];
         for(int i=0; i<board.length;i++) {
             board[i] = new GridPiece[ROW_POSITION_COUNT[i]];
