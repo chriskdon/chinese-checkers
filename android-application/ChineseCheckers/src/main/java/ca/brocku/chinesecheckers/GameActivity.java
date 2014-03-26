@@ -168,6 +168,15 @@ public class GameActivity extends Activity {
         File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
         savedOfflineGame.delete();
 
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sharedPrefs.getString(MainActivity.PREF_USER_ID, "").equals(p.getPlayerNumber())){
+            BoomBoomMusic.onPlayerWin();
+        }
+        else{
+            BoomBoomMusic.onPlayerLose();
+        }
+
         //Show the end of game dialog
         final Popup endGameDialog = new Popup(this);
         endGameDialog.setTitleText(p.getName() + " Wins!!")
@@ -179,6 +188,7 @@ public class GameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
+                        BoomBoomMusic.stopSP();
                         GameActivity.this.finish();
                         startActivity(new Intent(GameActivity.this, OfflineConfigurationActivity.class));
                     }
@@ -188,6 +198,7 @@ public class GameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
+                        BoomBoomMusic.stopSP();
                         GameActivity.this.finish();
                         startActivity(new Intent(GameActivity.this, MainActivity.class));
                     }

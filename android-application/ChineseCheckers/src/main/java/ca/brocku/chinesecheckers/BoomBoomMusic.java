@@ -17,7 +17,7 @@ public class BoomBoomMusic {
     static SoundPool sp;
     private static Boolean started = false;
     private static Boolean loaded = false;
-    private static int piecepopsound;
+    private static int piecepop, gamewin, gamelose, curSPclip;
     final static String BACKSOUNDPREF = "BackgroundSoundPref";
     final static String EFFCTSOUNDPREF = "EffectsSoundPrefs";
     private static SharedPreferences sharedPrefs;
@@ -25,11 +25,15 @@ public class BoomBoomMusic {
 
     public static void start(Context c) {
         gContext = c;
-        if (started && !mp.isPlaying()) {
-            mp.start();
-        } else if (!started) {
-            sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
-            setupMP(c);
+        if (!(((AudioManager) c.getSystemService(Context.AUDIO_SERVICE)).isMusicActive())) {
+            if (started && !mp.isPlaying()) {
+                mp.start();
+            } else if (!started) {
+                sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
+                setupMP(c);
+            }
+        }
+        if (!loaded) {
             setupSP(c);
         }
     }
@@ -98,7 +102,9 @@ public class BoomBoomMusic {
                 loaded = true;
             }
         });
-        piecepopsound = sp.load(c, R.raw.piecepopsound, 1); //http://soundbible.com/2067-Blop.html
+        piecepop = sp.load(c, R.raw.piece_pop, 1); //http://soundbible.com/2067-Blop.html
+        gamewin = sp.load(c, R.raw.gameover_win, 1);
+        gamelose = sp.load(c, R.raw.gameover_lose, 1);
     }
 
     public static void setBackgroundVolume(int setTo) {
@@ -114,13 +120,34 @@ public class BoomBoomMusic {
     }
 
     public static void onPieceTap() {
-        if(loaded){
-            sp.play(piecepopsound, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, 1, 0, 1f);
+        if (loaded) {
+            curSPclip = sp.play(piecepop, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, 1, 0, 1f);
+        }
+    }
+
+    public static void onPlayerWin() {
+        if (loaded) {
+            curSPclip = sp.play(gamewin, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, 1, 0, 1f);
+        }
+    }
+
+    public static void onPlayerLose() {
+        if (loaded) {
+            curSPclip = sp.play(gamelose, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, 1, 0, 1f);
+        }
+    }
+
+    public static void stopSP() {
+        if(sp != null){
+            sp.stop(curSPclip);
         }
     }
 
     public static void stop() {
-        mp.stop();
-        started = false;
+        if (mp != null) {
+            mp.stop();
+            started = false;
+        }
     }
+
 }
