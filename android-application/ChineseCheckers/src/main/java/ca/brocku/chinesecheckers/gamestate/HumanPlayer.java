@@ -3,7 +3,9 @@ package ca.brocku.chinesecheckers.gamestate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
+import javajar.gamestate.Player;
+import javajar.gameboard.ReadOnlyGameBoard;
 
 /**
  * The implementation of Player that is used to represent a chinese checkers player.
@@ -12,7 +14,7 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class HumanPlayer extends Player {
+public class HumanPlayer extends Player implements Parcelable{
     private String name;
 
     // This needs to be small enough that a human can't detect the difference between tapping
@@ -49,7 +51,7 @@ public class HumanPlayer extends Player {
         return name;
     }
 
-    private MovePath m;
+    private AndroidMovePath m;
 
     /**
      * Executed when it is this players turn to act.
@@ -57,7 +59,7 @@ public class HumanPlayer extends Player {
      * @param board
      */
     @Override
-    public MovePath onTurn(ReadOnlyGameBoard board) {
+    public AndroidMovePath onTurn(ReadOnlyGameBoard board) {
         while(m == null){
             try {
                 Thread.sleep(THREAD_SLEEP_TIME);
@@ -67,12 +69,12 @@ public class HumanPlayer extends Player {
 
         }
 
-        MovePath temp = m;
+        AndroidMovePath temp = m;
         m = null;
         return temp;
     }
 
-    public void signalMove(MovePath movePath) {
+    public void signalMove(AndroidMovePath movePath) {
         m = movePath;
     }
 
