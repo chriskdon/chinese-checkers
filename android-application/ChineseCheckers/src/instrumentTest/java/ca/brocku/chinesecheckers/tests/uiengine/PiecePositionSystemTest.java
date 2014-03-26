@@ -1,10 +1,8 @@
 package ca.brocku.chinesecheckers.tests.uiengine;
 
-import android.os.Parcel;
-
 import junit.framework.TestCase;
 
-import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
 import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
 
@@ -18,8 +16,8 @@ public class PiecePositionSystemTest extends TestCase {
         return new PiecePositionSystem(1200, 1594);
     }
 
-    private Position createPosition(final int row, final int index) {
-        return new Position(row, index);
+    private AndroidPosition createPosition(final int row, final int index) {
+        return new AndroidPosition(row, index);
     }
 
     /**

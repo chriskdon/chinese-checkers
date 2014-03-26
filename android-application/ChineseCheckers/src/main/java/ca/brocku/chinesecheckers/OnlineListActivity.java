@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gamestate.Player;
 
 /**
  * Created by kubasub on 2014-03-06.

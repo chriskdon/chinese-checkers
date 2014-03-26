@@ -1,8 +1,6 @@
 package ca.brocku.chinesecheckers.uiengine;
 
 import android.graphics.Canvas;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -10,8 +8,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 
 /**
  * Handles all the location of items drawn for the game board.
@@ -21,7 +19,7 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  * Date: 2/3/2014
  */
 public class PiecePositionSystem implements Serializable {
-    private transient Map<Position, PieceDrawingDetails> positionDetails; // Position mapping
+    private transient Map<AndroidPosition, PieceDrawingDetails> positionDetails; // AndroidPosition mapping
 
     /**
      * Create the instance, and calculate all the board positions.
@@ -39,7 +37,7 @@ public class PiecePositionSystem implements Serializable {
      * @param height    The height of the canvas that this system is for.
      */
     public PiecePositionSystem(int width, int height) {
-        positionDetails = new HashMap<Position, PieceDrawingDetails>(GameBoard.TOTAL_PIECE_COUNT);
+        positionDetails = new HashMap<AndroidPosition, PieceDrawingDetails>(AndroidGameBoard.TOTAL_PIECE_COUNT);
 
         mapIntoPositionDetails(positionDetails, width, height);
     }
@@ -47,7 +45,7 @@ public class PiecePositionSystem implements Serializable {
     /**
      * @return  Return an unmodifiable position system mapping.
      */
-    public Map<Position, PieceDrawingDetails> getPositionDetailsMapping() {
+    public Map<AndroidPosition, PieceDrawingDetails> getPositionDetailsMapping() {
         return Collections.unmodifiableMap(positionDetails);
     }
 
@@ -64,12 +62,12 @@ public class PiecePositionSystem implements Serializable {
      * @param position  The row-index position on the board.
      * @return          The details for that position or null if there was no match.
      */
-    public PieceDrawingDetails get(Position position) {
+    public PieceDrawingDetails get(AndroidPosition position) {
         return positionDetails.get(position);
     }
 
     /**
-     * Calculate how <code>Position</code> (row-index) coordinates relate to actual
+     * Calculate how <code>AndroidPosition</code> (row-index) coordinates relate to actual
      * pixel positions on the screen.
      *
      * @param dest      The destination map to fill with positions.
@@ -77,8 +75,8 @@ public class PiecePositionSystem implements Serializable {
      * @param height    The height tof the drawing area.
      * @return          The position information
      */
-    private void mapIntoPositionDetails(Map<Position, PieceDrawingDetails> dest, int width, int height) {
-        final int rows = GameBoard.ROW_POSITION_COUNT.length;
+    private void mapIntoPositionDetails(Map<AndroidPosition, PieceDrawingDetails> dest, int width, int height) {
+        final int rows = AndroidGameBoard.ROW_POSITION_COUNT.length;
 
         // Settings
         int shrink = 5;     // In Display Pixels
@@ -86,7 +84,7 @@ public class PiecePositionSystem implements Serializable {
 
         // Radius without shrink
         int squareSide = (width < height ? width : height);
-        int radiusArea = (squareSide/(GameBoard.MAXIMUM_PIECES_PER_ROW+scaleDown))/2;
+        int radiusArea = (squareSide/(AndroidGameBoard.MAXIMUM_PIECES_PER_ROW+scaleDown))/2;
 
         // Calculate Gap
         double length = radiusArea*2;
@@ -99,7 +97,7 @@ public class PiecePositionSystem implements Serializable {
 
         // Calculate positions
         for(int row = 0; row < rows; row++) {
-            int indexCount = GameBoard.ROW_POSITION_COUNT[row];
+            int indexCount = AndroidGameBoard.ROW_POSITION_COUNT[row];
 
             int x = radiusArea + (squareSide/2) - (radiusArea*indexCount);
             int y = topOffset + (int)(gap*row);
@@ -108,7 +106,7 @@ public class PiecePositionSystem implements Serializable {
                 final int posRow = row;
                 final int posIndex = i;
 
-                final Position position = new Position(posRow, posIndex);
+                final AndroidPosition position = new AndroidPosition(posRow, posIndex);
 
                 // Store in the hash map
                 dest.put(position, new PieceDrawingDetails(position, x, y, radiusArea - shrink));

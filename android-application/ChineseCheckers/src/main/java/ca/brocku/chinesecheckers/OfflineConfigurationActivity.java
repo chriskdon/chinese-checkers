@@ -21,12 +21,12 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
-import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.computerplayer.AndroidAiPlayer;
+import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gamestate.Player;
 
 import static android.view.View.OnFocusChangeListener;
 
@@ -321,70 +321,70 @@ public class OfflineConfigurationActivity extends Activity {
                     if(redPlayerTypeButton.getTag().equals("human"))
                         players.add(new HumanPlayer(redPlayerEditText.getText().toString(), Player.PlayerColor.RED));
                     else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerEasyButton.isChecked())
-                        players.add(new AiPlayer("EASY", Player.PlayerColor.RED));
+                        players.add(new AndroidAiPlayer("EASY", Player.PlayerColor.RED));
                     else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerMediumButton.isChecked())
-                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.RED));
+                        players.add(new AndroidAiPlayer("MEDIUM", Player.PlayerColor.RED));
                     else if(redPlayerTypeButton.getTag().equals("robot") && redPlayerHardButton.isChecked())
-                        players.add(new AiPlayer("HARD", Player.PlayerColor.RED));
+                        players.add(new AndroidAiPlayer("HARD", Player.PlayerColor.RED));
                 }
 
                 if(purplePlayerNameContainer.getVisibility() == View.VISIBLE) {
                     if(purplePlayerTypeButton.getTag().equals("human"))
                         players.add(new HumanPlayer(purplePlayerEditText.getText().toString(), Player.PlayerColor.PURPLE));
                     else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerEasyButton.isChecked())
-                        players.add(new AiPlayer("EASY", Player.PlayerColor.PURPLE));
+                        players.add(new AndroidAiPlayer("EASY", Player.PlayerColor.PURPLE));
                     else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerMediumButton.isChecked())
-                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.PURPLE));
+                        players.add(new AndroidAiPlayer("MEDIUM", Player.PlayerColor.PURPLE));
                     else if(purplePlayerTypeButton.getTag().equals("robot") && purplePlayerHardButton.isChecked())
-                        players.add(new AiPlayer("HARD", Player.PlayerColor.PURPLE));
+                        players.add(new AndroidAiPlayer("HARD", Player.PlayerColor.PURPLE));
                 }
 
                 if(bluePlayerNameContainer.getVisibility() == View.VISIBLE) {
                     if(bluePlayerTypeButton.getTag().equals("human"))
                         players.add(new HumanPlayer(bluePlayerEditText.getText().toString(), Player.PlayerColor.BLUE));
                     else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerEasyButton.isChecked())
-                        players.add(new AiPlayer("EASY", Player.PlayerColor.BLUE));
+                        players.add(new AndroidAiPlayer("EASY", Player.PlayerColor.BLUE));
                     else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerMediumButton.isChecked())
-                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.BLUE));
+                        players.add(new AndroidAiPlayer("MEDIUM", Player.PlayerColor.BLUE));
                     else if(bluePlayerTypeButton.getTag().equals("robot") && bluePlayerHardButton.isChecked())
-                        players.add(new AiPlayer("HARD", Player.PlayerColor.BLUE));
+                        players.add(new AndroidAiPlayer("HARD", Player.PlayerColor.BLUE));
                 }
 
                 if(greenPlayerNameContainer.getVisibility() == View.VISIBLE) {
                     if(greenPlayerTypeButton.getTag().equals("human"))
                         players.add(new HumanPlayer(greenPlayerEditText.getText().toString(), Player.PlayerColor.GREEN));
                     else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerEasyButton.isChecked())
-                        players.add(new AiPlayer("EASY", Player.PlayerColor.GREEN));
+                        players.add(new AndroidAiPlayer("EASY", Player.PlayerColor.GREEN));
                     else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerMediumButton.isChecked())
-                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.GREEN));
+                        players.add(new AndroidAiPlayer("MEDIUM", Player.PlayerColor.GREEN));
                     else if(greenPlayerTypeButton.getTag().equals("robot") && greenPlayerHardButton.isChecked())
-                        players.add(new AiPlayer("HARD", Player.PlayerColor.GREEN));
+                        players.add(new AndroidAiPlayer("HARD", Player.PlayerColor.GREEN));
                 }
 
                 if(yellowPlayerNameContainer.getVisibility() == View.VISIBLE) {
                     if(yellowPlayerTypeButton.getTag().equals("human"))
                         players.add(new HumanPlayer(yellowPlayerEditText.getText().toString(), Player.PlayerColor.YELLOW));
                     else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerEasyButton.isChecked())
-                        players.add(new AiPlayer("EASY", Player.PlayerColor.YELLOW));
+                        players.add(new AndroidAiPlayer("EASY", Player.PlayerColor.YELLOW));
                     else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerMediumButton.isChecked())
-                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.YELLOW));
+                        players.add(new AndroidAiPlayer("MEDIUM", Player.PlayerColor.YELLOW));
                     else if(yellowPlayerTypeButton.getTag().equals("robot") && yellowPlayerHardButton.isChecked())
-                        players.add(new AiPlayer("HARD", Player.PlayerColor.YELLOW));
+                        players.add(new AndroidAiPlayer("HARD", Player.PlayerColor.YELLOW));
                 }
 
                 if(orangePlayerNameContainer.getVisibility() == View.VISIBLE) {
                     if(orangePlayerTypeButton.getTag().equals("human"))
                         players.add(new HumanPlayer(orangePlayerEditText.getText().toString(), Player.PlayerColor.ORANGE));
                     else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerEasyButton.isChecked())
-                        players.add(new AiPlayer("EASY", Player.PlayerColor.ORANGE));
+                        players.add(new AndroidAiPlayer("EASY", Player.PlayerColor.ORANGE));
                     else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerMediumButton.isChecked())
-                        players.add(new AiPlayer("MEDIUM", Player.PlayerColor.ORANGE));
+                        players.add(new AndroidAiPlayer("MEDIUM", Player.PlayerColor.ORANGE));
                     else if(orangePlayerTypeButton.getTag().equals("robot") && orangePlayerHardButton.isChecked())
-                        players.add(new AiPlayer("HARD", Player.PlayerColor.ORANGE));
+                        players.add(new AndroidAiPlayer("HARD", Player.PlayerColor.ORANGE));
                 }
 
-                GameBoard board = new CcGameBoard(players.size());
-                intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager(board, players));
+                AndroidCcGameBoard board = new AndroidCcGameBoard(players.size());
+                intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager((AndroidGameBoard)board, players));
                 OfflineConfigurationActivity.this.finish();
                 startActivity(intent);
             }

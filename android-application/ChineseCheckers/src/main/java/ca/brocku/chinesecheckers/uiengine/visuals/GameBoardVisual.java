@@ -1,16 +1,12 @@
 package ca.brocku.chinesecheckers.uiengine.visuals;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.MotionEvent;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
 import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
-import ca.brocku.chinesecheckers.uiengine.PixelPosition;
 
 /**
  * Game board with blank positions
@@ -34,7 +30,7 @@ public class GameBoardVisual extends Visual {
             @Override
             public boolean onTouch(Visual v, MotionEvent e) {
                 if(GameBoardVisual.this.positionTouchedHandler != null) {
-                    Position pos = ((PieceVisual) v).getPositionOnBoard();
+                    AndroidPosition pos = ((PieceVisual) v).getPositionOnBoard();
                     GameBoardVisual.this.positionTouchedHandler.onPositionTouched(pos);
                     return false;
                 }
@@ -61,6 +57,6 @@ public class GameBoardVisual extends Visual {
      * Occurs when a position on the board is touched.
      */
     public static interface PositionTouchedHandler {
-        public void onPositionTouched(Position position);
+        public void onPositionTouched(AndroidPosition position);
     }
 }

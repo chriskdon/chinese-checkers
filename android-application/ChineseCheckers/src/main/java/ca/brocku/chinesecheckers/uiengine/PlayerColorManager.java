@@ -3,7 +3,7 @@ package ca.brocku.chinesecheckers.uiengine;
 import android.content.res.Resources;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gamestate.Player;
 
 /**
  * Handle the colors associated with players.

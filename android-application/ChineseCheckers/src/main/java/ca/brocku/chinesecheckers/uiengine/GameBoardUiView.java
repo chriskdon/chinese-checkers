@@ -13,14 +13,12 @@ import java.util.HashSet;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.MovePath;
-import ca.brocku.chinesecheckers.gamestate.Player;
-import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
+import javajar.gameboard.Piece;
+import javajar.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 import ca.brocku.chinesecheckers.uiengine.visuals.GameBoardVisual;
 import ca.brocku.chinesecheckers.uiengine.visuals.HintVisual;
@@ -39,7 +37,7 @@ import static ca.brocku.chinesecheckers.uiengine.PlayerColorManager.*;
 public class GameBoardUiView extends SurfaceView implements BoardUiEngine, SurfaceHolder.Callback {
     private GameBoardVisual gameBoard;                          // Root visual element
     private PiecePositionSystem piecePositionSystem;            // Positioning of pieces
-    private Map<Position, Visual> pieces;                       // Pieces
+    private Map<AndroidPosition, Visual> pieces;                       // Pieces
     private Collection<Visual> hintPositions;                   // Positions of the currently
     private int hintColor;                                      // Displayed hint color.
     private Piece currentHighlightedPiece;                      // Currently highlighted piece.
@@ -49,7 +47,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     private transient BoardUiEventsHandler boardUiEventsHandler;          // Board events handler
     private transient SurfaceHolder surfaceHolder;                        // Surface with canvas
 
-    private ReadOnlyGameBoard init;
+    private AndroidReadOnlyGameBoard init;
 
     public GameBoardUiView(Context context) {
         super(context);
@@ -89,7 +87,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         gameBoard.setPositionTouchedHandler(new GameBoardVisual.PositionTouchedHandler() {
             @Override
-            public void onPositionTouched(Position position) {
+            public void onPositionTouched(AndroidPosition position) {
                 if(boardUiEventsHandler != null) {
                     boardUiEventsHandler.positionTouched(position);
                 }
@@ -98,10 +96,10 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         if(init != null) {
             // Draw light home pieces
-            GameBoard temp = init.getDeepCopy();
+            AndroidGameBoard temp = (AndroidGameBoard)init.getDeepCopy();
             temp.reset();
             for(Piece p : temp.getAllPieces()) {
-                gameBoard.addChild(new PieceVisual(piecePositionSystem.get(p.getPosition()),
+                gameBoard.addChild(new PieceVisual(piecePositionSystem.get((AndroidPosition)p.getPosition()),
                         getPlayerColor(getResources(),
                                 Player.getPlayerColor(p.getPlayerNumber()), ColorSate.VERY_DARK)));
             }
@@ -129,7 +127,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
     {
         this.hintColor = getResources().getColor(R.color.hint_color);
 
-        this.pieces = new HashMap<Position, Visual>();
+        this.pieces = new HashMap<AndroidPosition, Visual>();
 
         getHolder().addCallback(this);
     }
@@ -156,12 +154,12 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param board@return Returns true if a piece could be successfully moved.
      */
     @Override
-    public void drawBoard(ReadOnlyGameBoard board) {
+    public void drawBoard(AndroidReadOnlyGameBoard board) {
         gameBoard.removeChildren(pieces.values());
 
         for(Piece p : board.getAllPieces()) {
-            PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
-            this.pieces.put(p.getPosition(), pv);
+            PieceVisual pv = new PieceVisual(piecePositionSystem.get((AndroidPosition)p.getPosition()), getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
+            this.pieces.put((AndroidPosition)p.getPosition(), pv);
             gameBoard.addChild(pv);
         }
     }
@@ -172,7 +170,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param piece The position to highlight. Or NULL to clear any highlighted position
      */
     @Override
-    public void highlightPiece(Piece piece) {
+    public void highlightPiece(AndroidPiece piece) {
         if(currentHighlightedPiece != null) {
             ((PieceVisual)pieces.get(currentHighlightedPiece.getPosition()))
                     .setColor(getPlayerColor(getResources(),Player.getPlayerColor(currentHighlightedPiece.getPlayerNumber()), ColorSate.NORMAL));
@@ -223,7 +221,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param board
      */
     @Override
-    public void initializeBoard(ReadOnlyGameBoard board) {
+    public void initializeBoard(AndroidReadOnlyGameBoard board) {
         init = board;
     }
 
@@ -243,7 +241,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      * @param positions The positions to draw the hints on.
      */
     @Override
-    public void showHintPositions(Position[] positions) {
+    public void showHintPositions(AndroidPosition[] positions) {
         if(this.hintPositions != null) {
             gameBoard.removeChildren(hintPositions);
         }
@@ -252,7 +250,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
             this.hintPositions = new HashSet<Visual>(positions.length);
 
             // Add Hint
-            for(Position p : positions) {
+            for(AndroidPosition p : positions) {
                 Visual v = new HintVisual(piecePositionSystem.get(p), this.hintColor);
 
                 this.hintPositions.add(v);
@@ -271,14 +269,14 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      */
     private void loadBoardPieces(Piece[] pieces) {
         if(piecePositionSystem == null) {
-            throw new IllegalStateException("The Piece Position System is not ready.");
+            throw new IllegalStateException("The AndroidPiece AndroidPosition System is not ready.");
         }
 
         for(Piece p : pieces) {
-            PieceVisual pv = new PieceVisual(piecePositionSystem.get(p.getPosition()),
+            PieceVisual pv = new PieceVisual(piecePositionSystem.get((AndroidPosition)p.getPosition()),
                                              getPlayerColor(getResources(), Player.getPlayerColor(p.getPlayerNumber()), ColorSate.NORMAL));
 
-            this.pieces.put(p.getPosition(), pv);
+            this.pieces.put((AndroidPosition)p.getPosition(), pv);
 
             gameBoard.addChild(pv);
         }

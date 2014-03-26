@@ -12,12 +12,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gameboard.IllegalMoveException;
+import ca.brocku.chinesecheckers.computerplayer.AndroidAiPlayer;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
+import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
+import javajar.gameboard.IllegalMoveException;
+
+import javajar.gamestate.Player;
+import javajar.gameboard.Position;
 
 /**
  * Handles coordinating the game between multiple players and keeping the game
@@ -31,7 +34,7 @@ public class GameStateManager implements Parcelable, Serializable {
     public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
     private static final int MIN_AI_MOVE_SPEED = 500; // The minimum speed an AI can move at
 
-    private GameBoard gameBoard;
+    private AndroidGameBoard gameBoard;
     private Map<Player.PlayerColor, Player> players;    // Players in the game
     private Player.PlayerColor currentPlayer;           // The current players turn
 
@@ -44,7 +47,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param gameBoard The game board to use to manage the rules and state of the game.
      * @param players   The players in the game.
      */
-    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players) {
+    public GameStateManager(AndroidGameBoard gameBoard, ArrayList<Player> players) {
         this(gameBoard, players, null);
     }
 
@@ -55,7 +58,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param players       The players in the game.
      * @param currentPlayer The current player's turn.
      */
-    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players, Player.PlayerColor currentPlayer) {
+    public GameStateManager(AndroidGameBoard gameBoard, ArrayList<Player> players, Player.PlayerColor currentPlayer) {
         if (gameBoard == null) {
             throw new IllegalArgumentException("Board must be defined.");
         }
@@ -85,7 +88,7 @@ public class GameStateManager implements Parcelable, Serializable {
      */
     private void onStateReady(Activity activity) {
         if (this.gameBoard == null) {
-            throw new IllegalStateException("GameBoard must be setup.");
+            throw new IllegalStateException("AndroidGameBoard must be setup.");
         }
     }
 
@@ -179,12 +182,12 @@ public class GameStateManager implements Parcelable, Serializable {
                     // Get Move
                     long start = System.currentTimeMillis();
 
-                    final MovePath m = p.onTurn(getGameBoard());
-                    final GameBoard originalBoard = gameBoard.getDeepCopy();
+                    final AndroidMovePath m = (AndroidMovePath)p.onTurn(getGameBoard());
+                    final AndroidGameBoard originalBoard = (AndroidGameBoard)gameBoard.getDeepCopy();
 
                     // Make AIs draw slower
                     long diff = System.currentTimeMillis() - start;
-                    if (p instanceof AiPlayer && diff < MIN_AI_MOVE_SPEED && gameStateEventsHandler != null) {
+                    if (p instanceof AndroidAiPlayer && diff < MIN_AI_MOVE_SPEED && gameStateEventsHandler != null) {
                         try {
                             Thread.sleep(MIN_AI_MOVE_SPEED - diff);
                         } catch (InterruptedException ex) {
@@ -236,12 +239,12 @@ public class GameStateManager implements Parcelable, Serializable {
     }
 
     /**
-     * Save the path to the GameBoard.
+     * Save the path to the AndroidGameBoard.
      *
      * @param player   The player that made the move.
      * @param movePath The path the move took.
      */
-    private void writePathToBoard(Player player, MovePath movePath) {
+    private void writePathToBoard(Player player, AndroidMovePath movePath) {
         // Move the sequence of pieces
         Iterator<Position> it = movePath.getPath().iterator();
         Position last = null;
@@ -252,7 +255,7 @@ public class GameStateManager implements Parcelable, Serializable {
 
             Position current = it.next();
 
-            Piece piece = gameBoard.getPiece(last);
+            AndroidPiece piece = (AndroidPiece)gameBoard.getPiece(last);
 
             // Check for illegal moves
             if (piece == null) {
@@ -271,7 +274,7 @@ public class GameStateManager implements Parcelable, Serializable {
     * checkKonamiCode
     * Sees if the player's name and path adds up to the Konami Code
     */
-    private void checkKonamiCode(Player p, MovePath m) {
+    private void checkKonamiCode(Player p, AndroidMovePath m) {
 //        Log.e("Holla", "Entered");
         if ((m.getPosition(0).getRow() > m.getPosition(1).getRow())) { // && //Up
 //            Log.e("Holla","Up");
@@ -341,8 +344,8 @@ public class GameStateManager implements Parcelable, Serializable {
      *
      * @return The gameboard.
      */
-    public ReadOnlyGameBoard getGameBoard() {
-        return new ReadOnlyGameBoard(gameBoard);
+    public AndroidReadOnlyGameBoard getGameBoard() {
+        return new AndroidReadOnlyGameBoard(gameBoard);
     }
 
     /**
@@ -351,7 +354,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param parcel The parcel instance to generate the instance from.
      */
     private GameStateManager(Parcel parcel) {
-        this((GameBoard) parcel.readParcelable(GameBoard.class.getClassLoader()),
+        this((AndroidGameBoard) parcel.readParcelable(AndroidGameBoard.class.getClassLoader()),
                 parcel.readArrayList(Player.class.getClassLoader()),
                 Player.PlayerColor.valueOf(parcel.readString()));
     }
@@ -427,7 +430,7 @@ public class GameStateManager implements Parcelable, Serializable {
          * @param currentBoard  The current game board.
          * @param movePath      The path describing the movePath.
          */
-        public void onBoardModified(Player player, GameBoard originalBoard, ReadOnlyGameBoard currentBoard, MovePath movePath);
+        public void onBoardModified(Player player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath);
 
         /**
          * Occurs when a player forfeit the game.

@@ -2,13 +2,14 @@ package ca.brocku.chinesecheckers.tests;
 
 import android.test.AndroidTestCase;
 
-import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
-import ca.brocku.chinesecheckers.computerplayer.HeuristicCalculator;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.MovePath;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import ca.brocku.chinesecheckers.computerplayer.AndroidAiPlayer;
+import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
+import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
+import javajar.computerplayer.HeuristicCalculator;
+import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
+import javajar.gamestate.Player;
 
 /**
  * Created by Administrator on 10/03/14.
@@ -25,9 +26,9 @@ public class ActivityAITest extends AndroidTestCase  {
     }
 
     public void directionEvaluation(String AILevel, int playerNumber, Player.PlayerColor color) {
-        CcGameBoard board = new CcGameBoard();
+        AndroidCcGameBoard board = new AndroidCcGameBoard();
         int opponentNumber;
-        AiPlayer computerPlayer = new AiPlayer(AILevel, color);
+        AndroidAiPlayer computerPlayer = new AndroidAiPlayer(AILevel, color);
 
         board.setPiece(newPosition(8, 4), playerNumber);
         if(playerNumber<6) opponentNumber = 6;
@@ -45,8 +46,8 @@ public class ActivityAITest extends AndroidTestCase  {
         board.setPiece(newPosition(9, 7), opponentNumber);
         board.setPiece(newPosition(11, 5), opponentNumber);
 
-        MovePath move = computerPlayer.getMove(new ReadOnlyGameBoard(board));
-        Position position = move.getEndPosition();
+        AndroidMovePath move = (AndroidMovePath)computerPlayer.getMove(new AndroidReadOnlyGameBoard((AndroidGameBoard)board));
+        AndroidPosition position = (AndroidPosition)move.getEndPosition();
 
         switch(playerNumber){
             case 1:
@@ -85,8 +86,8 @@ public class ActivityAITest extends AndroidTestCase  {
     }
 
     public void hoppingEvaluation(String AILevel, Player.PlayerColor color){
-        CcGameBoard board = new CcGameBoard();
-        AiPlayer computerPlayer = new AiPlayer(AILevel, color);
+        AndroidCcGameBoard board = new AndroidCcGameBoard();
+        AndroidAiPlayer computerPlayer = new AndroidAiPlayer(AILevel, color);
 
         board.setPiece(newPosition(5, 5), 1);
         board.setPiece(newPosition(7, 5), 1);
@@ -99,8 +100,8 @@ public class ActivityAITest extends AndroidTestCase  {
         board.setPiece(newPosition(15,1), 1);
         board.setPiece(newPosition(14,1), 1);
 
-        MovePath move = computerPlayer.getMove(new ReadOnlyGameBoard(board));
-        Position position = move.getEndPosition();
+        AndroidMovePath move = (AndroidMovePath)computerPlayer.getMove(new AndroidReadOnlyGameBoard((AndroidGameBoard)board));
+        AndroidPosition position = (AndroidPosition)move.getEndPosition();
         assertEquals("Final row should be 4", 4, position.getRow());
         assertEquals("Final index should be 6", 6, position.getIndex());
     }
@@ -115,7 +116,7 @@ public class ActivityAITest extends AndroidTestCase  {
 //    }
 
     public void testDistanceHeuristic(int playerNumber){
-        CcGameBoard board = new CcGameBoard();
+        AndroidCcGameBoard board = new AndroidCcGameBoard();
         HeuristicCalculator cHeuristic = new HeuristicCalculator(playerNumber, board);
 
         switch(playerNumber){
@@ -266,7 +267,7 @@ public class ActivityAITest extends AndroidTestCase  {
         }
     }
 
-    private Position newPosition(int row, int index) {
-        return new Position(row, index);
+    private AndroidPosition newPosition(int row, int index) {
+        return new AndroidPosition(row, index);
     }
 }

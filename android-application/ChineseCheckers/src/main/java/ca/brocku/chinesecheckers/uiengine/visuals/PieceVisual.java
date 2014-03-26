@@ -1,11 +1,9 @@
 package ca.brocku.chinesecheckers.uiengine.visuals;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
-import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
 import ca.brocku.chinesecheckers.uiengine.PixelPosition;
 
@@ -82,7 +80,7 @@ public class PieceVisual extends Visual {
         canvas.drawCircle(getCenterX(), getCenterY(), pieceDrawingDetails.getRadius(), paint);
     }
 
-    public Position getPositionOnBoard() {
+    public AndroidPosition getPositionOnBoard() {
         return this.pieceDrawingDetails.getPosition();
     }
 }

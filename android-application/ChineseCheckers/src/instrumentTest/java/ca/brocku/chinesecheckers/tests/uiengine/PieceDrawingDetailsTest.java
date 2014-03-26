@@ -1,10 +1,8 @@
 package ca.brocku.chinesecheckers.tests.uiengine;
 
-import android.os.Parcel;
-
 import junit.framework.TestCase;
 
-import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
 
 /**
@@ -18,7 +16,7 @@ public class PieceDrawingDetailsTest extends TestCase {
      * @return The object
      */
     private PieceDrawingDetails init() {
-        return new PieceDrawingDetails(new Position(0, 0) , 10, 10, 50);
+        return new PieceDrawingDetails(new AndroidPosition(0, 0) , 10, 10, 50);
     }
 
     /**
@@ -36,7 +34,7 @@ public class PieceDrawingDetailsTest extends TestCase {
     public void testGetterPosition() {
         PieceDrawingDetails d = init();
 
-        assertEquals("Position Row not equal", 0, d.getPosition().getRow());
-        assertEquals("Position Index not equal", 0, d.getPosition().getIndex());
+        assertEquals("AndroidPosition Row not equal", 0, d.getPosition().getRow());
+        assertEquals("AndroidPosition Index not equal", 0, d.getPosition().getIndex());
     }
 }

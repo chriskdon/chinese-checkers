@@ -27,14 +27,13 @@ import java.util.ArrayList;
 
 import ca.brocku.chinesecheckers.GameActivity;
 import ca.brocku.chinesecheckers.HelpActivity;
-import ca.brocku.chinesecheckers.OfflineConfigurationActivity;
 import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.SettingsActivity;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gamestate.Player;
 
 /**
  * Created by Main on 2/18/14.
@@ -67,8 +66,8 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         ArrayList<Player> players = new ArrayList<Player>(6);
         players.add(new HumanPlayer("Red Bob", Player.PlayerColor.RED));
         players.add(new HumanPlayer("Green Bob",Player.PlayerColor.GREEN));
-        GameBoard board = new CcGameBoard(players.size());
-        intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager(board, players));
+        AndroidCcGameBoard board = new AndroidCcGameBoard(players.size());
+        intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager((AndroidGameBoard)board, players));
         setActivityIntent(intent);
         setActivityInitialTouchMode(false);
         curAct = getActivity();

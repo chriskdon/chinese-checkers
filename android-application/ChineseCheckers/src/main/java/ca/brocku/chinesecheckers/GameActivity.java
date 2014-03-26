@@ -3,7 +3,6 @@ package ca.brocku.chinesecheckers;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,15 +22,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
+import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
+import javajar.gameboard.Piece;
+import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
-import ca.brocku.chinesecheckers.gamestate.MovePath;
-import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
+
+import javajar.gamestate.Player;
 
 @SuppressLint("All")
 public class GameActivity extends Activity {
@@ -212,10 +213,10 @@ public class GameActivity extends Activity {
         private Player currentPlayer;
 
         // Things for a human players turn
-        private MovePath movePath = new MovePath();
+        private AndroidMovePath movePath = new AndroidMovePath();
         private Piece currentPiece;
-        private GameBoard board = null;
-        private Position[] possibleMoves;
+        private AndroidGameBoard board = null;
+        private AndroidPosition[] possibleMoves;
 
         public GameActivity activity;
 
@@ -229,9 +230,9 @@ public class GameActivity extends Activity {
          * Get a modifiable version of the current game board.
          * @return
          */
-        private GameBoard getModifiableBoard() {
+        private AndroidGameBoard getModifiableBoard() {
             if(board == null) {
-                board = gameStateManager.getGameBoard().getDeepCopy();
+                board = (AndroidGameBoard)gameStateManager.getGameBoard().getDeepCopy();
             }
 
             return board;
@@ -407,7 +408,7 @@ public class GameActivity extends Activity {
             currentPiece = null;
             board = null;
             possibleMoves = null;
-            movePath = new MovePath();
+            movePath = new AndroidMovePath();
         }
 
         /**
@@ -429,33 +430,33 @@ public class GameActivity extends Activity {
          */
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
             @Override
-            public void positionTouched(final Position position) {
+            public void positionTouched(final AndroidPosition position) {
                 if(!activity.isGameOver()) { //disable board events if game is over
                     if (isHumanTurn()) {
-                        GameBoard tempBoard = getModifiableBoard();
+                        AndroidGameBoard tempBoard = getModifiableBoard();
                         Piece piece = tempBoard.getPiece(position);
 
                         if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
-                            for(Position p : possibleMoves) {
+                            for(AndroidPosition p : possibleMoves) {
                                 if(p != null && position.equals(p)) { // User Clicked a valid piece
                                     tempBoard.movePiece(currentPiece, p);
                                     currentPiece = tempBoard.getPiece(p);
-                                    possibleMoves = tempBoard.getPossibleHops(currentPiece);
+                                    possibleMoves = (AndroidPosition[])tempBoard.getPossibleHops(currentPiece);
                                     movePath.addToPath(p);
                                 }
                             }
                         } else if(piece != null && movePath.size() <= 1 && piece.getPlayerNumber() == currentPlayer.getPlayerNumber()) { // Selecting first valid piece
                             resetHumanState();
                             currentPiece = piece;
-                            possibleMoves = tempBoard.getPossibleMoves(currentPiece);
-                            movePath = new MovePath(new Position(piece.getPosition().getRow(), piece.getPosition().getIndex()));
+                            possibleMoves = (AndroidPosition[])tempBoard.getPossibleMoves(currentPiece);
+                            movePath = new AndroidMovePath(new AndroidPosition(piece.getPosition().getRow(), piece.getPosition().getIndex()));
                         } else if(movePath.size() <= 1) {
                             resetHumanState();
                         }
 
                         // Update Drawing
-                        boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
-                        boardUiEngine.highlightPiece(currentPiece);
+                        boardUiEngine.drawBoard(new AndroidReadOnlyGameBoard(tempBoard));
+                        boardUiEngine.highlightPiece((AndroidPiece) currentPiece);
                         if(isShowMoves) { //show moves if enabled in preferences
                             boardUiEngine.showHintPositions(possibleMoves);
                         }
@@ -518,7 +519,7 @@ public class GameActivity extends Activity {
              * @param movePath      The path describing the movePath.
              */
             @Override
-            public synchronized void onBoardModified(Player player, GameBoard originalBoard, ReadOnlyGameBoard currentBoard, MovePath movePath) {
+            public synchronized void onBoardModified(Player player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath) {
                 boardUiEngine.drawBoard(currentBoard);
                 boardUiEngine.showHintPositions(null);
                 boardUiEngine.highlightPiece(null);

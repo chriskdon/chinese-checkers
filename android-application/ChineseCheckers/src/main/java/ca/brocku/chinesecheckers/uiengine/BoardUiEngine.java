@@ -1,11 +1,9 @@
 package ca.brocku.chinesecheckers.uiengine;
 
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.MovePath;
-import ca.brocku.chinesecheckers.gamestate.Player;
-import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
+import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
+import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
+import javajar.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 
 /**
@@ -22,14 +20,14 @@ public interface BoardUiEngine {
      * @param board
      * @return              Returns true if a piece could be successfully moved.
      */
-    public void drawBoard(ReadOnlyGameBoard board);
+    public void drawBoard(AndroidReadOnlyGameBoard board);
 
     /**
      * Highlight a piece on the board.
      *
      * @param piece The position to highlight.
      */
-    public void highlightPiece(Piece piece);
+    public void highlightPiece(AndroidPiece piece);
 
     /**
      * Rotate the board a certain number of <code>degrees</code>.
@@ -51,7 +49,7 @@ public interface BoardUiEngine {
      *
      * @param positions The positions to draw the hints on.
      */
-    public void showHintPositions(Position[] positions);
+    public void showHintPositions(AndroidPosition[] positions);
 
     /**
      * TODO: Possibly put this in constructor
@@ -60,7 +58,7 @@ public interface BoardUiEngine {
      *
      * @param board    The pieces that represent the initial state of the board.
      */
-    public void initializeBoard(ReadOnlyGameBoard board);
+    public void initializeBoard(AndroidReadOnlyGameBoard board);
 
     /**
      * Add a handler to receive any events that occur on the board.
@@ -73,6 +71,6 @@ public interface BoardUiEngine {
      * Events caused by the BoardUiEngine
      */
     public static interface BoardUiEventsHandler {
-        public void positionTouched(Position position);
+        public void positionTouched(AndroidPosition position);
     }
 }

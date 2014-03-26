@@ -1,8 +1,6 @@
 package ca.brocku.chinesecheckers.uiengine;
 
-import java.io.Serializable;
-
-import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 
 /**
  * Store information about where a piece is on the board, and how big it is.
@@ -13,7 +11,7 @@ import ca.brocku.chinesecheckers.gameboard.Position;
  */
 public class PieceDrawingDetails extends PixelPosition {
     private float radius;       // Radius of the piece
-    private Position position;  // The position on the board
+    private AndroidPosition position;  // The position on the board
 
     /**
      * Create a piece.
@@ -23,7 +21,7 @@ public class PieceDrawingDetails extends PixelPosition {
      * @param y         The y coordinate on the canvas.
      * @param radius    The radius of the piece.
      */
-    public PieceDrawingDetails( Position position,float x, float y, float radius) {
+    public PieceDrawingDetails( AndroidPosition position,float x, float y, float radius) {
         super(x, y);
 
         this.position = position;
@@ -40,7 +38,7 @@ public class PieceDrawingDetails extends PixelPosition {
     /**
      * @return  The position of the piece in row-index form.
      */
-    public Position getPosition() {
+    public AndroidPosition getPosition() {
         return position;
     }
 
