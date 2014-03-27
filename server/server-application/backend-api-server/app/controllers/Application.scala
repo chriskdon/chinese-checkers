@@ -4,14 +4,19 @@ import play.api._
 import play.api.mvc._
 
 import com.test._
+import org.codehaus.jackson.map.ObjectMapper;
+import com.ccapp._;
 
 object Application extends Controller {
 
   def index = Action {
-  	var x = new TestJar();
-  	x.test();
+  	var x = new TestJar()
+  	x.test()
 
-    Ok(views.html.index("Your new application is ready."))
+  	var mapper = new ObjectMapper()
+  	var y = new RegisterUserRequest();
+
+    Ok(mapper.writeValueAsString(y))
   }
 
 }
