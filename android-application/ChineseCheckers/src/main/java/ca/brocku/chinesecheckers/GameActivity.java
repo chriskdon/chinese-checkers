@@ -168,9 +168,9 @@ public class GameActivity extends Activity {
         File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
         savedOfflineGame.delete();
 
-
+        //Plays game over sound depending on if device owner won
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if(sharedPrefs.getString(MainActivity.PREF_USER_ID, "").equals(p.getPlayerNumber())){
+        if(sharedPrefs.getString(MainActivity.PREF_USER_ID, "").equals(p.getName())){
             BoomBoomMusic.onPlayerWin();
         }
         else{

@@ -25,11 +25,11 @@ public class BoomBoomMusic {
 
     public static void start(Context c) {
         gContext = c;
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
         if (!(((AudioManager) c.getSystemService(Context.AUDIO_SERVICE)).isMusicActive())) {
             if (started && !mp.isPlaying()) {
                 mp.start();
             } else if (!started) {
-                sharedPrefs = PreferenceManager.getDefaultSharedPreferences(c);
                 setupMP(c);
             }
         }
@@ -103,8 +103,8 @@ public class BoomBoomMusic {
             }
         });
         piecepop = sp.load(c, R.raw.piece_pop, 1); //http://soundbible.com/2067-Blop.html
-        gamewin = sp.load(c, R.raw.gameover_win, 1);
-        gamelose = sp.load(c, R.raw.gameover_lose, 1);
+        gamewin = sp.load(c, R.raw.gameover_win, 1); //http://themushroomkingdom.net/sounds/wav/smb/smb_stage_clear.wav
+        gamelose = sp.load(c, R.raw.gameover_lose, 1); //http://themushroomkingdom.net/sounds/wav/smb/smb_gameover.wav
     }
 
     public static void setBackgroundVolume(int setTo) {
