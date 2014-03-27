@@ -1,0 +1,13 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "backend-api-server"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/Users/chriskellendonk/Development/School/COSC3F00/chinese-checkers/cc-api-lib"
+		}
+	]
+}
