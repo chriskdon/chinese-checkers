@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 
+import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
 import javajar.gamestate.Player;
 
 /**
@@ -83,7 +84,7 @@ public class OnlineListActivity extends Activity {
         GameItemData[] gameItemData = new GameItemData[2];
 
         gameItemData[0] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null);
-        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED);
+        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", AndroidPlayer.PlayerColor.RED);
 
         for (GameItemData aGameItemData : gameItemData) { //for each game received
 

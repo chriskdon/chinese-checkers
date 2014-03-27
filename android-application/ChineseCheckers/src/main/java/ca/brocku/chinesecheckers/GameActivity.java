@@ -26,15 +26,15 @@ import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
 import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
-import javajar.gameboard.Piece;
-import javajar.gamestate.MovePath;
+//import javajar.gameboard.Piece;
+//import javajar.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
-import javajar.gamestate.Player;
+//import javajar.gamestate.Player;
 
 @SuppressLint("All")
 public class GameActivity extends Activity {
@@ -216,7 +216,7 @@ public class GameActivity extends Activity {
 
         // Things for a human players turn
         private AndroidMovePath movePath = new AndroidMovePath();
-        private Piece currentPiece;
+        private AndroidPiece currentPiece;
         private AndroidGameBoard board = null;
         private AndroidPosition[] possibleMoves;
 
@@ -296,7 +296,7 @@ public class GameActivity extends Activity {
          * @return  True if the turn is for a human.
          */
         private boolean isHumanTurn() {
-            return (currentPlayer != null && (Player)currentPlayer instanceof HumanPlayer);
+            return (currentPlayer != null && currentPlayer instanceof HumanPlayer);
         }
 
         /** This is a getter method for the fragment's GameStateManager
@@ -436,13 +436,13 @@ public class GameActivity extends Activity {
                 if(!activity.isGameOver()) { //disable board events if game is over
                     if (isHumanTurn()) {
                         AndroidGameBoard tempBoard = getModifiableBoard();
-                        Piece piece = tempBoard.getPiece(position);
+                        AndroidPiece piece = (AndroidPiece)tempBoard.getPiece(position);
 
                         if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
                             for(AndroidPosition p : possibleMoves) {
                                 if(p != null && position.equals(p)) { // User Clicked a valid piece
                                     tempBoard.movePiece(currentPiece, p);
-                                    currentPiece = tempBoard.getPiece(p);
+                                    currentPiece = (AndroidPiece)tempBoard.getPiece(p);
                                     possibleMoves = (AndroidPosition[])tempBoard.getPossibleHops(currentPiece);
                                     movePath.addToPath(p);
                                 }

@@ -3,7 +3,13 @@ package ca.brocku.chinesecheckers.computerplayer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
+import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
+import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
+
 import javajar.computerplayer.*;
+import javajar.gameboard.ReadOnlyGameBoard;
+//import javajar.gamestate.MovePath;
 
 
 /**
@@ -13,10 +19,75 @@ import javajar.computerplayer.*;
  * Student #: 4366340
  * Date: 2/24/2014
  */
-public class AndroidAiPlayer extends javajar.computerplayer.AiPlayer implements Parcelable{
+public class AndroidAiPlayer extends AndroidPlayer implements Parcelable{
+
+    public String AILevel;
+    private int difficulty;
 
     public AndroidAiPlayer(String AILevel, PlayerColor playerColor){
-        super(AILevel,playerColor);
+        super(playerColor);
+        this.AILevel = AILevel;
+        this.difficulty = getDifficulty(AILevel);
+    }
+
+    public static final int getDifficulty(String level) {
+        if(level.equals("EASY")) return 1;
+        if(level.equals("MEDIUM")) return 2;
+        if(level.equals("HARD")) return 3;
+
+        throw new IllegalArgumentException("Difficulty must be EASY, MEDIUM, or HARD.");
+    }
+
+    public int getDifficulty(){ return difficulty; }
+
+    /**
+     * Executed when it is this players turn to act.
+     *
+     * @param gameBoard The current game board.
+     * @return The move that the AI chooses to make.
+     */
+    public AndroidMovePath getMove(AndroidReadOnlyGameBoard gameBoard) {
+        AndroidMovePath move;
+        switch(this.difficulty){
+            //case 3: hardMove myHardMove = new HardAIMove();
+            //  move = myHardMove.getHardMove(getPlayerNumber(), gameBoard.getDeepCopy()
+            case 2:
+                MediumMove myMediumMove = new MediumMove();
+                move = (AndroidMovePath)myMediumMove.getMediumMove(getPlayerNumber(), gameBoard.getDeepCopy());
+                break;
+            default:
+                EasyMove myEasyMove = new EasyMove();
+                move = (AndroidMovePath)myEasyMove.getEasyMove(getPlayerNumber(), gameBoard.getDeepCopy());
+                break;
+        }
+        return move;
+    }
+
+    /**
+     * Executed when it is this players turn to act.
+     *
+     * @param board
+     */
+    @Override
+    public AndroidMovePath onTurn(ReadOnlyGameBoard board) {
+        return getMove((AndroidReadOnlyGameBoard)board);
+    }
+
+    /**
+     * Returns the name of a player
+     *
+     * @return  Player's name
+     */
+    public String getName() {
+        switch(getPlayerColor()){
+            case RED: return "AI Robbie";
+            case PURPLE: return  "AI Roboto";
+            case BLUE: return "AI Roomba";
+            case GREEN: return "AI Roberto";
+            case YELLOW: return "AI Robeye";
+            case ORANGE: return "AI Robber";
+        }
+        throw new IllegalStateException("Invalid Player Color");
     }
 
     @Override

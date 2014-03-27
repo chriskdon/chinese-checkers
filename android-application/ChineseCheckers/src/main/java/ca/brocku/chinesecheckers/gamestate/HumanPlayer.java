@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
-import javajar.gamestate.Player;
+//import javajar.gamestate.Player;
 import javajar.gameboard.ReadOnlyGameBoard;
 
 /**
@@ -14,7 +14,7 @@ import javajar.gameboard.ReadOnlyGameBoard;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class HumanPlayer extends Player implements Parcelable{
+public class HumanPlayer extends AndroidPlayer implements Parcelable{
     private String name;
 
     // This needs to be small enough that a human can't detect the difference between tapping
