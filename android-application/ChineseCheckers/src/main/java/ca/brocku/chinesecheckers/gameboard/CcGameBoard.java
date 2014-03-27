@@ -288,7 +288,7 @@ public class CcGameBoard implements GameBoard {
      * @param piece Piece to be moved
      * @param to Location that the piece is moving to
      */
-    private void forceMove(GridPiece piece, Position to) {
+    public void forceMove(GridPiece piece, Position to) {
         int oldRow = piece.getPosition().getRow();
         int oldIndex = piece.getPosition().getIndex();
         piece.setPosition(to);
