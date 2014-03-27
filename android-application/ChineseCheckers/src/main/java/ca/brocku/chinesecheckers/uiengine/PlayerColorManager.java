@@ -78,6 +78,6 @@ public class PlayerColorManager {
             }
         }
 
-        throw new IllegalArgumentException("Player Number must be between 1 and 6");
+        throw new IllegalArgumentException("AndroidPlayer Number must be between 1 and 6");
     }
 }

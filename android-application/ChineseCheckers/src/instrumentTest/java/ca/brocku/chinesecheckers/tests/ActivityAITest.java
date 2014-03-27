@@ -82,7 +82,7 @@ public class ActivityAITest extends AndroidTestCase  {
     public void testChainHopping(){
         hoppingEvaluation("EASY", Player.PlayerColor.RED);
         hoppingEvaluation("MEDIUM", Player.PlayerColor.RED);
-        //hoppingEvaluation("HARD", Player.PlayerColor.RED);
+        //hoppingEvaluation("HARD", AndroidPlayer.PlayerColor.RED);
     }
 
     public void hoppingEvaluation(String AILevel, Player.PlayerColor color){

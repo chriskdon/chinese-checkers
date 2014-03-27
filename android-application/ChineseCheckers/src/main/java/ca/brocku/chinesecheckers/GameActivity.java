@@ -27,8 +27,10 @@ import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
 import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
 import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
 import javajar.gameboard.Piece;
+import javajar.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
@@ -153,7 +155,7 @@ public class GameActivity extends Activity {
      * @param p the player who won
      * @return whether or not this was handled
      */
-    public Boolean onEndGame(Player p) {
+    public Boolean onEndGame(AndroidPlayer p) {
         isGameOver = true; //prevent saving this (finished) game
 
         //Delete the current saved game
@@ -210,7 +212,7 @@ public class GameActivity extends Activity {
         private View rootView;
         private Button titleBarButton;
 
-        private Player currentPlayer;
+        private AndroidPlayer currentPlayer;
 
         // Things for a human players turn
         private AndroidMovePath movePath = new AndroidMovePath();
@@ -274,7 +276,7 @@ public class GameActivity extends Activity {
             resetMove.setOnClickListener(new ResetMoveHandler());
             doneMove.setOnClickListener(new DoneMoveHandler());
 
-            setTitleBar(gameStateManager.getCurrentPlayer());
+            setTitleBar((AndroidPlayer)gameStateManager.getCurrentPlayer());
 
             //start the game if the resume dialog is not showing
             if(activity.resumeDialog == null || !activity.resumeDialog.isShowing()) {
@@ -294,7 +296,7 @@ public class GameActivity extends Activity {
          * @return  True if the turn is for a human.
          */
         private boolean isHumanTurn() {
-            return (currentPlayer != null && currentPlayer instanceof HumanPlayer);
+            return (currentPlayer != null && (Player)currentPlayer instanceof HumanPlayer);
         }
 
         /** This is a getter method for the fragment's GameStateManager
@@ -309,7 +311,7 @@ public class GameActivity extends Activity {
          * Set the color and name for the title bar based on the player.
          * @param player    The The player who's turn it is.
          */
-        private void setTitleBar(Player player) {
+        private void setTitleBar(AndroidPlayer player) {
             titleBarButton.setText(player.getName());
 
             switch (player.getPlayerColor()) {
@@ -393,7 +395,7 @@ public class GameActivity extends Activity {
                         return;
                     }
 
-                    ((HumanPlayer)currentPlayer)
+                    (currentPlayer)
                             .signalMove(movePath);
 
                     resetHumanState();
@@ -416,7 +418,7 @@ public class GameActivity extends Activity {
          *
          * @param p The player to set as current.
          */
-        private void setCurrentPlayer(Player p) {
+        private void setCurrentPlayer(AndroidPlayer p) {
             currentPlayer = p;
             if(isHumanTurn()) { resetHumanState(); }
         }
@@ -475,7 +477,7 @@ public class GameActivity extends Activity {
              * @param player The player who's turn it is.
              */
             @Override
-            public synchronized void onPlayerTurn(Player player) {
+            public synchronized void onPlayerTurn(AndroidPlayer player) {
                 // Rotate the board an amount depending on num players
                 // Rotation needs to be calculated when it is a new players turn
                 // there is a special case for the very first turn
@@ -519,7 +521,7 @@ public class GameActivity extends Activity {
              * @param movePath      The path describing the movePath.
              */
             @Override
-            public synchronized void onBoardModified(Player player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath) {
+            public synchronized void onBoardModified(AndroidPlayer player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath) {
                 boardUiEngine.drawBoard(currentBoard);
                 boardUiEngine.showHintPositions(null);
                 boardUiEngine.highlightPiece(null);
@@ -533,7 +535,7 @@ public class GameActivity extends Activity {
              * @param player The player who forfeited.
              */
             @Override
-            public synchronized void onForfeit(Player player) {
+            public synchronized void onForfeit(AndroidPlayer player) {
 
             }
 
@@ -544,7 +546,7 @@ public class GameActivity extends Activity {
              * @param position The position they finished in (1st, 2nd, 3rd, etc.).
              */
             @Override
-            public synchronized void onPlayerWon(Player player, int position) {
+            public synchronized void onPlayerWon(AndroidPlayer player, int position) {
                 setTitleBar(player);
                 ((GameActivity)getActivity()).onEndGame(player);
             }

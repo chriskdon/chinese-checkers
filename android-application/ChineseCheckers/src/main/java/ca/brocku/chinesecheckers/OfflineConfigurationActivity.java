@@ -27,6 +27,7 @@ import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
 import javajar.gamestate.Player;
+import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
 
 import static android.view.View.OnFocusChangeListener;
 
@@ -384,7 +385,7 @@ public class OfflineConfigurationActivity extends Activity {
                 }
 
                 AndroidCcGameBoard board = new AndroidCcGameBoard(players.size());
-                intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager((AndroidGameBoard)board, players));
+                intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager(board, players));
                 OfflineConfigurationActivity.this.finish();
                 startActivity(intent);
             }

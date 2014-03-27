@@ -13,9 +13,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.computerplayer.AndroidAiPlayer;
-import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import javajar.gameboard.GameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
 import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
 import javajar.gameboard.IllegalMoveException;
 
@@ -35,8 +37,8 @@ public class GameStateManager implements Parcelable, Serializable {
     private static final int MIN_AI_MOVE_SPEED = 500; // The minimum speed an AI can move at
 
     private AndroidGameBoard gameBoard;
-    private Map<Player.PlayerColor, Player> players;    // Players in the game
-    private Player.PlayerColor currentPlayer;           // The current players turn
+    private Map<AndroidPlayer.PlayerColor, Player> players;    // Players in the game
+    private AndroidPlayer.PlayerColor currentPlayer;           // The current players turn
 
     private transient GameStateEvents gameStateEventsHandler;
     private transient boolean isRunning = false;
@@ -58,7 +60,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param players       The players in the game.
      * @param currentPlayer The current player's turn.
      */
-    public GameStateManager(AndroidGameBoard gameBoard, ArrayList<Player> players, Player.PlayerColor currentPlayer) {
+    public GameStateManager(AndroidGameBoard gameBoard, ArrayList<Player> players, AndroidPlayer.PlayerColor currentPlayer) {
         if (gameBoard == null) {
             throw new IllegalArgumentException("Board must be defined.");
         }
@@ -68,13 +70,13 @@ public class GameStateManager implements Parcelable, Serializable {
 
         this.gameBoard = gameBoard;
 
-        this.players = new HashMap<Player.PlayerColor, Player>(players.size());
+        this.players = new HashMap<AndroidPlayer.PlayerColor, Player>(players.size());
         for (Player p : players) {
             this.players.put(p.getPlayerColor(), p);
         }
 
         if (currentPlayer == null) {
-            this.currentPlayer = Player.FIRST_PLAYER;
+            this.currentPlayer = AndroidPlayer.FIRST_PLAYER;
         } else if (!this.players.containsKey(currentPlayer)) {
             throw new IllegalArgumentException("Current Player must be in Players list");
         } else {
@@ -98,55 +100,55 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param currentPlayer Get the color after this.
      * @return Color after currentPlayer
      */
-    private Player.PlayerColor getNextPlayer(Player.PlayerColor currentPlayer) {
+    private AndroidPlayer.PlayerColor getNextPlayer(AndroidPlayer.PlayerColor currentPlayer) {
         switch (players.size()) {
             case 2: {
                 switch (currentPlayer) {
                     case RED:
-                        return Player.PlayerColor.GREEN;
+                        return AndroidPlayer.PlayerColor.GREEN;
                     case GREEN:
-                        return Player.PlayerColor.RED;
+                        return AndroidPlayer.PlayerColor.RED;
                 }
             }
 
             case 3: {
                 switch (currentPlayer) {
                     case RED:
-                        return Player.PlayerColor.BLUE;
+                        return AndroidPlayer.PlayerColor.BLUE;
                     case BLUE:
-                        return Player.PlayerColor.YELLOW;
+                        return AndroidPlayer.PlayerColor.YELLOW;
                     case YELLOW:
-                        return Player.PlayerColor.RED;
+                        return AndroidPlayer.PlayerColor.RED;
                 }
             }
 
             case 4: {
                 switch (currentPlayer) {
                     case RED:
-                        return Player.PlayerColor.BLUE;
+                        return AndroidPlayer.PlayerColor.BLUE;
                     case BLUE:
-                        return Player.PlayerColor.GREEN;
+                        return AndroidPlayer.PlayerColor.GREEN;
                     case GREEN:
-                        return Player.PlayerColor.ORANGE;
+                        return AndroidPlayer.PlayerColor.ORANGE;
                     case ORANGE:
-                        return Player.PlayerColor.RED;
+                        return AndroidPlayer.PlayerColor.RED;
                 }
             }
 
             case 6: {
                 switch (currentPlayer) {
                     case RED:
-                        return Player.PlayerColor.PURPLE;
+                        return AndroidPlayer.PlayerColor.PURPLE;
                     case PURPLE:
-                        return Player.PlayerColor.BLUE;
+                        return AndroidPlayer.PlayerColor.BLUE;
                     case BLUE:
-                        return Player.PlayerColor.GREEN;
+                        return AndroidPlayer.PlayerColor.GREEN;
                     case GREEN:
-                        return Player.PlayerColor.YELLOW;
+                        return AndroidPlayer.PlayerColor.YELLOW;
                     case YELLOW:
-                        return Player.PlayerColor.ORANGE;
+                        return AndroidPlayer.PlayerColor.ORANGE;
                     case ORANGE:
-                        return Player.PlayerColor.RED;
+                        return AndroidPlayer.PlayerColor.RED;
                 }
             }
         }
@@ -167,7 +169,7 @@ public class GameStateManager implements Parcelable, Serializable {
             @Override
             public void run() {
                 while (isRunning) {
-                    final Player p = getCurrentPlayer();
+                    final AndroidPlayer p = (AndroidPlayer)getCurrentPlayer();
 
                     // Pre Move
                     if (GameStateManager.this.gameStateEventsHandler != null) {
@@ -187,7 +189,7 @@ public class GameStateManager implements Parcelable, Serializable {
 
                     // Make AIs draw slower
                     long diff = System.currentTimeMillis() - start;
-                    if (p instanceof AndroidAiPlayer && diff < MIN_AI_MOVE_SPEED && gameStateEventsHandler != null) {
+                    if ((Player)p instanceof AndroidAiPlayer && diff < MIN_AI_MOVE_SPEED && gameStateEventsHandler != null) {
                         try {
                             Thread.sleep(MIN_AI_MOVE_SPEED - diff);
                         } catch (InterruptedException ex) {
@@ -205,7 +207,7 @@ public class GameStateManager implements Parcelable, Serializable {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                gameStateEventsHandler.onBoardModified(p, originalBoard, getGameBoard(), m);
+                                gameStateEventsHandler.onBoardModified(p, (AndroidGameBoard)originalBoard, getGameBoard(), m);
 
                                 // Notify player winning
                                 if (hasPlayerWon) {
@@ -244,7 +246,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param player   The player that made the move.
      * @param movePath The path the move took.
      */
-    private void writePathToBoard(Player player, AndroidMovePath movePath) {
+    private void writePathToBoard(AndroidPlayer player, AndroidMovePath movePath) {
         // Move the sequence of pieces
         Iterator<Position> it = movePath.getPath().iterator();
         Position last = null;
@@ -261,7 +263,7 @@ public class GameStateManager implements Parcelable, Serializable {
             if (piece == null) {
                 throw new IllegalMoveException("There is no piece at that position.");
             } else if (piece.getPlayerNumber() != player.getPlayerNumber()) {
-                throw new IllegalMoveException("Player<" + player.getName() + "> cannot move that piece.");
+                throw new IllegalMoveException("AndroidPlayer<" + player.getName() + "> cannot move that piece.");
             }
 
             gameBoard.movePiece(piece, current);
@@ -274,7 +276,7 @@ public class GameStateManager implements Parcelable, Serializable {
     * checkKonamiCode
     * Sees if the player's name and path adds up to the Konami Code
     */
-    private void checkKonamiCode(Player p, AndroidMovePath m) {
+    private void checkKonamiCode(AndroidPlayer p, AndroidMovePath m) {
 //        Log.e("Holla", "Entered");
         if ((m.getPosition(0).getRow() > m.getPosition(1).getRow())) { // && //Up
 //            Log.e("Holla","Up");
@@ -307,14 +309,14 @@ public class GameStateManager implements Parcelable, Serializable {
         }
     }
 
-    public Player[] getPlayers() {
-        Player[] playerArray = new Player[getNumberOfPlayers()];
+    public AndroidPlayer[] getPlayers() {
+        AndroidPlayer[] playerArray = new AndroidPlayer[getNumberOfPlayers()];
         Iterator it = players.entrySet().iterator();
 
         int counter = 0;
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry) it.next();
-            playerArray[counter++] = (Player) pairs.getValue();
+            playerArray[counter++] = (AndroidPlayer) pairs.getValue();
             //it.remove();
         }
 
@@ -355,8 +357,8 @@ public class GameStateManager implements Parcelable, Serializable {
      */
     private GameStateManager(Parcel parcel) {
         this((AndroidGameBoard) parcel.readParcelable(AndroidGameBoard.class.getClassLoader()),
-                parcel.readArrayList(Player.class.getClassLoader()),
-                Player.PlayerColor.valueOf(parcel.readString()));
+                parcel.readArrayList(AndroidPlayer.class.getClassLoader()),
+                AndroidPlayer.PlayerColor.valueOf(parcel.readString()));
     }
 
     /**
@@ -390,7 +392,7 @@ public class GameStateManager implements Parcelable, Serializable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         this.stopGame();
-        dest.writeParcelable(gameBoard, 0);
+        dest.writeParcelable((AndroidCcGameBoard)gameBoard, 0);
         dest.writeList(new ArrayList<Player>(players.values()));
         dest.writeString(currentPlayer.toString());
     }
@@ -420,7 +422,7 @@ public class GameStateManager implements Parcelable, Serializable {
          *
          * @param player The player who's turn it is.
          */
-        public void onPlayerTurn(Player player);
+        public void onPlayerTurn(AndroidPlayer player);
 
         /**
          * Fired when a piece on the board is moved from one position to another.
@@ -430,7 +432,7 @@ public class GameStateManager implements Parcelable, Serializable {
          * @param currentBoard  The current game board.
          * @param movePath      The path describing the movePath.
          */
-        public void onBoardModified(Player player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath);
+        public void onBoardModified(AndroidPlayer player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath);
 
         /**
          * Occurs when a player forfeit the game.
@@ -439,7 +441,7 @@ public class GameStateManager implements Parcelable, Serializable {
          *
          * @param player The player who forfeited.
          */
-        public void onForfeit(Player player);
+        public void onForfeit(AndroidPlayer player);
 
         /**
          * Occurs when a player wins the game.
@@ -447,7 +449,7 @@ public class GameStateManager implements Parcelable, Serializable {
          * @param player   The player that won.
          * @param position The position they finished in (1st, 2nd, 3rd, etc.).
          */
-        public void onPlayerWon(Player player, int position);
+        public void onPlayerWon(AndroidPlayer player, int position);
     }
 
 

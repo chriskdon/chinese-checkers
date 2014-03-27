@@ -12,7 +12,7 @@ import java.util.Arrays;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements Parcelable{
+public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements Parcelable, AndroidGameBoard{
     /**
      * Total number of spaces on the board
      */
@@ -31,7 +31,15 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
      * @param numPlayers    The number of players in the game. {2,3,4,6}
      */
     public AndroidCcGameBoard(int numPlayers) {
-        super(numPlayers);
+        // Check to make sure the numPlayers argument is in range.
+        if(!Arrays.asList(2, 3, 4, 6).contains(numPlayers)) {
+            throw new IllegalArgumentException("The number of players must be {2,3,4,6}.");
+        }
+
+        this.numPlayers = numPlayers;
+
+        board = constructBoard();
+        populateNewGame(numPlayers);
     }
 
     /**
@@ -40,6 +48,26 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
      */
     public AndroidCcGameBoard(AndroidPiece[] pieceList) {
         super(pieceList);
+    }
+
+    /**
+     * Populates the board with pieces in the starting location for each player.
+     *
+     * @param  playerNum Number of players playing.
+     */
+    public void populateNewGame(int playerNum) {
+        int k, h, start;
+        int[] playerList = generatePlayerList(playerNum);
+        for(int x = 0; x<playerList.length; x++) {
+            start = playerList[x];
+            for(int i=0; i<4;i++) {
+                for(int j=0; j<i+1; j++) {
+                    k = getOffsetRow(start, i);
+                    h = getOffsetIndex(start, j);
+                    setPiece(new AndroidPosition(k, h), playerList[x]);
+                }
+            }
+        }
     }
 
     /**
@@ -53,6 +81,21 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
             board[i] = new AndroidGridPiece[ROW_POSITION_COUNT[i]];
         }
         return board;
+    }
+
+    /**
+     * Sets a piece at a given position for a given player. This method will mostly be used for
+     * unit testing, and once unit testing is complete, for assistance in setting up the board.
+     *
+     * @param at    The Position that the player wishes to set the piece.
+     * @param pl    The player that has ownership of the Piece.
+     */
+    public void setPiece(AndroidPosition at, int pl) {
+        int row = at.getRow();
+        int index = at.getIndex();
+        if(!isOccupied(at)) {
+            board[row][index] = new AndroidGridPiece(at, pl);
+        }
     }
 
     /**

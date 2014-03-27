@@ -70,7 +70,7 @@ public class CcGameBoard implements GameBoard {
      *
      * @param  playerNum Number of players playing.
      */
-    private void populateNewGame(int playerNum) {
+    public void populateNewGame(int playerNum) {
         int k, h, start;
         int[] playerList = generatePlayerList(playerNum);
         for(int x = 0; x<playerList.length; x++) {
@@ -595,7 +595,7 @@ public class CcGameBoard implements GameBoard {
      * @return      True if the position is out of bounds or occupied by another piece, false
      * otherwise
      */
-    private boolean isOccupied (Position at) {
+    public boolean isOccupied (Position at) {
         int row = at.getRow();
         int index = at.getIndex();
 
@@ -630,7 +630,7 @@ public class CcGameBoard implements GameBoard {
      * @param  i The iteration of the loop
      * @return returns the offset of the row.
      */
-    private int getOffsetRow(int location, int i) {
+    public int getOffsetRow(int location, int i) {
         switch (location) {
             case 1: return 16-i;
             case 2: return 9+i;
@@ -650,7 +650,7 @@ public class CcGameBoard implements GameBoard {
      * @param  j The iteration of the loop
      * @return returns the offset of the index.
      */
-    private int getOffsetIndex(int location, int j) {
+    public int getOffsetIndex(int location, int j) {
         if(location < 5) {
             return j;
         }
@@ -668,7 +668,7 @@ public class CcGameBoard implements GameBoard {
         }
         return true;
     }
-    private int[] generatePlayerList(int playerNum) {
+    public int[] generatePlayerList(int playerNum) {
         if(playerNum==2) {
             int[] playerList = {1,4};
             return playerList;
