@@ -651,6 +651,9 @@ public class CcGameBoard implements GameBoard {
     }
 
     private Position[] trimToGoal (Piece forPiece, Position[] possibleMoves) {
+        if(possibleMoves==null) {
+            return null;
+        }
         List<Position> trimmedPossibleMoves = new ArrayList<Position>();
         Position[] goalPositions = getGoalPositions(forPiece.getPlayerNumber());
         for(int i=0; i<goalPositions.length; i++) {
