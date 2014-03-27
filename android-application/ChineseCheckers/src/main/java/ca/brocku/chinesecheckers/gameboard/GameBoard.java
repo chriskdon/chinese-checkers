@@ -37,6 +37,14 @@ public interface GameBoard extends Parcelable, Serializable {
     public abstract void movePiece(Piece piece, Position to);
 
     /**
+     * MovePath a piece from one position to another.
+     *
+     * @param piece The piece to move.
+     * @param to    The new position of the piece.
+     */
+    public abstract void forceMove(GridPiece piece, Position to);
+
+    /**
      * Returns all the pieces on the board in no specified order.
      * Blank positions are not returned.
      *

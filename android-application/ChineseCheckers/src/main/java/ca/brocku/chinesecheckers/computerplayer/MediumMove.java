@@ -151,10 +151,10 @@ public class MediumMove {
         path.addToPath(movingTo);
         visited.add(movingTo);
 
-        tempBoard.movePiece(current, movingTo);
+        tempBoard.forceMove((GridPiece)current, movingTo);
 
         /* skip this recursive check if the piece moves backwards */
-        //if(cHeuristic.getDeltaDistanceHeuristic(path) < 0 && currentMove.getHeuristic() > 0){
+        if(cHeuristic.getDeltaDistanceHeuristic(path) < 0 && currentMove.getHeuristic() > 0){
             Position[] availableMoves = tempBoard.getPossibleHops(tempBoard.getPiece(movingTo));
 
             /* If the change in value from making this move is greater than the stored value, keep it */
@@ -179,8 +179,8 @@ public class MediumMove {
                         checkHops(tempBoard.getPiece(movingTo), newHop, tempBoard, startHeur);}
                 }
             }
-        //}
+        }
         path.removeEndPosition();
-        tempBoard.movePiece(tempBoard.getPiece(movingTo), path.getEndPosition());
+        tempBoard.forceMove((GridPiece)tempBoard.getPiece(movingTo), path.getEndPosition());
     }
 }

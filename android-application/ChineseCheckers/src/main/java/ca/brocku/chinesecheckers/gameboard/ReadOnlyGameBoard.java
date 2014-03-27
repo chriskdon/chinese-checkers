@@ -28,6 +28,17 @@ public class ReadOnlyGameBoard implements GameBoard {
     }
 
     /**
+     * MovePath a piece from one position to another.
+     *
+     * @param piece The piece to move.
+     * @param to    The new position of the piece.
+     */
+    @Override
+    public void forceMove(GridPiece piece, Position to) {
+        throw new UnsupportedOperationException("You can't modify the board.");
+    }
+
+    /**
      * Returns all the pieces on the board in no specified order.
      * Blank positions are not returned.
      *
