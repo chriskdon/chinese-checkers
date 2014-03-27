@@ -1,0 +1,1 @@
+To compile to `jar` run `mvn package`

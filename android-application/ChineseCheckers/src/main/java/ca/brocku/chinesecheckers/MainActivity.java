@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapp.UserRegistrationResult;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -29,8 +30,9 @@ import java.util.UUID;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
-import ca.brocku.chinesecheckers.network.spice.requests.FollowersRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.RegisterUserRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
  *
@@ -77,6 +79,8 @@ public class MainActivity extends SpicedGcmActivity {
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
+
+        //performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
     }
 
     @Override
@@ -149,21 +153,22 @@ public class MainActivity extends SpicedGcmActivity {
     private void performRequest(String user) {
         this.setProgressBarIndeterminateVisibility(true);
 
-        FollowersRequest request = new FollowersRequest(user);
+        RegisterUserRequest request = new RegisterUserRequest(user);
 
-        spiceManager.execute(request, new RequestListener<FollowerList>() {
+        spiceManager.execute(request, new ApiRequestListener<UserRegistrationResult>() {
             @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                Toast.makeText(MainActivity.this, "SPICE FAILED", Toast.LENGTH_SHORT).show();
+            public void onTaskFailure(int code, String message) {
+                Toast.makeText(MainActivity.this, "Task Error", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onRequestSuccess(FollowerList followers) {
-                if(followers.size() > 0) {
-                    Toast.makeText(MainActivity.this, "SPICE Result: " + followers.get(0).getLogin(), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "SPICE Worked", Toast.LENGTH_SHORT).show();
-                }
+            public void onTaskSuccess(UserRegistrationResult result) {
+                Toast.makeText(MainActivity.this, "User ID: " + result.userId, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                Toast.makeText(MainActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
             }
         });
     }
