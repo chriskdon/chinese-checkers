@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `mydb` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `mydb`;
+CREATE DATABASE  IF NOT EXISTS `ccdb` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ccdb`;
 -- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
 --
--- Host: 127.0.0.1    Database: mydb
+-- Host: 127.0.0.1    Database: ccdb
 -- ------------------------------------------------------
 -- Server version	5.6.16
 
@@ -329,7 +329,7 @@ INSERT INTO `users` VALUES (1,'Peter',0),(3,'Tim',0),(5,'Anonymous5',1),(6,'Anon
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'mydb'
+-- Dumping routines for database 'ccdb'
 --
 /*!50003 DROP PROCEDURE IF EXISTS `checkWinner` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
