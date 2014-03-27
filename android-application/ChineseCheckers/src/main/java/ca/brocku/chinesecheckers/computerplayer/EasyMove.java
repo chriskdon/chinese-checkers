@@ -94,7 +94,7 @@ public class EasyMove {
         path.addToPath(movingTo);
         visited.add(movingTo);
 
-        tempBoard.movePiece(current, movingTo);
+        tempBoard.forceMove((GridPiece)current, movingTo);
         Position[] availableMoves = tempBoard.getPossibleHops(tempBoard.getPiece(movingTo));
 
         if (cHeuristic.getDeltaDistanceHeuristic(path) > currentMove.getHeuristic() || currentMove.getHeuristic() == 0) {
@@ -119,6 +119,6 @@ public class EasyMove {
             }
         }
         path.removeEndPosition();
-        tempBoard.movePiece(tempBoard.getPiece(movingTo), path.getEndPosition());
+        tempBoard.forceMove((GridPiece)tempBoard.getPiece(movingTo), path.getEndPosition());
     }
 }
