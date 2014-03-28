@@ -3,6 +3,7 @@ package ca.brocku.chinesecheckers.gamestate;
 import java.io.Serializable;
 import android.os.Parcelable;
 
+import javajar.gamestate.MovePath;
 import javajar.gamestate.Player;
 
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
@@ -21,7 +22,7 @@ public abstract class AndroidPlayer extends Player implements Parcelable {
         super(playerColor);
     }
 
-    public void signalMove(AndroidMovePath movePath) {
-
+    public void signalMove(MovePath movePath) {
     }
+
 }

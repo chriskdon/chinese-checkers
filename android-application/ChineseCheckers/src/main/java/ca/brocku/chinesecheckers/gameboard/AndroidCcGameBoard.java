@@ -16,8 +16,8 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
     /**
      * Total number of spaces on the board
      */
-    private AndroidGridPiece[][] board;
-    private int numPlayers = 0;
+    //private AndroidGridPiece[][] board;
+    //private int numPlayers = 0;
 
     /**
      * Constructs an empty board, used for testing purposes
@@ -31,15 +31,7 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
      * @param numPlayers    The number of players in the game. {2,3,4,6}
      */
     public AndroidCcGameBoard(int numPlayers) {
-        // Check to make sure the numPlayers argument is in range.
-        if(!Arrays.asList(2, 3, 4, 6).contains(numPlayers)) {
-            throw new IllegalArgumentException("The number of players must be {2,3,4,6}.");
-        }
-
-        this.numPlayers = numPlayers;
-
-        board = constructBoard();
-        populateNewGame(numPlayers);
+        super(numPlayers);
     }
 
     /**
@@ -55,7 +47,7 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
      *
      * @param  playerNum Number of players playing.
      */
-    public void populateNewGame(int playerNum) {
+    /*public void populateNewGame(int playerNum) {
         int k, h, start;
         int[] playerList = generatePlayerList(playerNum);
         for(int x = 0; x<playerList.length; x++) {
@@ -68,20 +60,20 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Returns a constructed chinese checks board in the form of a ragged two dimensional AndroidPiece array
      *
      * @return  A ragged two dimensional AndroidPiece array representing a chinese checkers board
      */
-    public AndroidGridPiece[][] constructBoard() {
+    /*public AndroidGridPiece[][] constructBoard() {
         AndroidGridPiece[][] board = new AndroidGridPiece[17][];
         for(int i=0; i<board.length;i++) {
             board[i] = new AndroidGridPiece[ROW_POSITION_COUNT[i]];
         }
         return board;
-    }
+    }*/
 
     /**
      * Sets a piece at a given position for a given player. This method will mostly be used for
@@ -146,7 +138,7 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
         int i = 0;
         for(int row = 0; row < board.length; row++) {
             for(int col = 0; col < board[row].length; col++) {
-                single[i] = board[row][col];
+                single[i] = (AndroidPiece)board[row][col];
                 i++;
             }
         }

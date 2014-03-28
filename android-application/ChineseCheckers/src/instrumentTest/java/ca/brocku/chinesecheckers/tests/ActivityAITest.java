@@ -6,10 +6,11 @@ import ca.brocku.chinesecheckers.computerplayer.AndroidAiPlayer;
 import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
-import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
+//import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
 import javajar.computerplayer.HeuristicCalculator;
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
 import javajar.gamestate.Player;
+import javajar.gamestate.MovePath;
 
 /**
  * Created by Administrator on 10/03/14.
@@ -46,7 +47,7 @@ public class ActivityAITest extends AndroidTestCase  {
         board.setPiece(newPosition(9, 7), opponentNumber);
         board.setPiece(newPosition(11, 5), opponentNumber);
 
-        AndroidMovePath move = (AndroidMovePath)computerPlayer.getMove(new AndroidReadOnlyGameBoard((AndroidGameBoard)board));
+        MovePath move = computerPlayer.getMove(new AndroidReadOnlyGameBoard((AndroidGameBoard)board));
         AndroidPosition position = (AndroidPosition)move.getEndPosition();
 
         switch(playerNumber){
@@ -100,7 +101,7 @@ public class ActivityAITest extends AndroidTestCase  {
         board.setPiece(newPosition(15,1), 1);
         board.setPiece(newPosition(14,1), 1);
 
-        AndroidMovePath move = (AndroidMovePath)computerPlayer.getMove(new AndroidReadOnlyGameBoard((AndroidGameBoard)board));
+        MovePath move = computerPlayer.getMove(new AndroidReadOnlyGameBoard((AndroidGameBoard)board));
         AndroidPosition position = (AndroidPosition)move.getEndPosition();
         assertEquals("Final row should be 4", 4, position.getRow());
         assertEquals("Final index should be 6", 6, position.getIndex());

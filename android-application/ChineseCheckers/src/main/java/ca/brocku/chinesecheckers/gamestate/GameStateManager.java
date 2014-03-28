@@ -21,6 +21,8 @@ import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
 import javajar.gameboard.IllegalMoveException;
 
+import javajar.gamestate.MovePath;
+
 //import javajar.gamestate.Player;
 //import javajar.gameboard.Position;
 
@@ -184,7 +186,7 @@ public class GameStateManager implements Parcelable, Serializable {
                     // Get Move
                     long start = System.currentTimeMillis();
 
-                    final AndroidMovePath m = (AndroidMovePath)p.onTurn(getGameBoard());
+                    final MovePath m = p.onTurn(getGameBoard());
                     final AndroidGameBoard originalBoard = (AndroidGameBoard)gameBoard.getDeepCopy();
 
                     // Make AIs draw slower
@@ -246,7 +248,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param player   The player that made the move.
      * @param movePath The path the move took.
      */
-    private void writePathToBoard(AndroidPlayer player, AndroidMovePath movePath) {
+    private void writePathToBoard(AndroidPlayer player, MovePath movePath) {
         // Move the sequence of pieces
         Iterator<Position> it = movePath.getPath().iterator();
         AndroidPosition last = null;
@@ -276,7 +278,7 @@ public class GameStateManager implements Parcelable, Serializable {
     * checkKonamiCode
     * Sees if the player's name and path adds up to the Konami Code
     */
-    private void checkKonamiCode(AndroidPlayer p, AndroidMovePath m) {
+    private void checkKonamiCode(AndroidPlayer p, MovePath m) {
 //        Log.e("Holla", "Entered");
         if ((m.getPosition(0).getRow() > m.getPosition(1).getRow())) { // && //Up
 //            Log.e("Holla","Up");
@@ -432,7 +434,7 @@ public class GameStateManager implements Parcelable, Serializable {
          * @param currentBoard  The current game board.
          * @param movePath      The path describing the movePath.
          */
-        public void onBoardModified(AndroidPlayer player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath);
+        public void onBoardModified(AndroidPlayer player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, MovePath movePath);
 
         /**
          * Occurs when a player forfeit the game.

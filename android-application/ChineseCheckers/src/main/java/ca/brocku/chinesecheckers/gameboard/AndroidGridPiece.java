@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gameboard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import javajar.gameboard.Position;
+
 /**
  * The implementation of AndroidPiece used to represent the pieces players may use on a chinese checkers
  * board.
@@ -12,8 +14,8 @@ import android.os.Parcelable;
  * Date: 2/13/2014
  */
 public class AndroidGridPiece extends javajar.gameboard.GridPiece implements Parcelable,AndroidPiece {
-    private AndroidPosition position;
-    private int player;
+    //private AndroidPosition position;
+    //private int player;
 
     public AndroidGridPiece(AndroidPosition pos, int pl) {
         super(pos,pl);
@@ -24,7 +26,7 @@ public class AndroidGridPiece extends javajar.gameboard.GridPiece implements Par
      * @param p
      */
     private AndroidGridPiece(Parcel p) {
-        position = p.readParcelable(AndroidPosition.class.getClassLoader());
+        position = (Position) p.readParcelable(AndroidPosition.class.getClassLoader());
         player = p.readInt();
     }
 
@@ -49,7 +51,7 @@ public class AndroidGridPiece extends javajar.gameboard.GridPiece implements Par
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(position, 0);
+        dest.writeParcelable((AndroidPosition)position, 0);
         dest.writeInt(player);
     }
 

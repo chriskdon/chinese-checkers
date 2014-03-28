@@ -5,11 +5,10 @@ import android.os.Parcelable;
 
 import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
 
 import javajar.computerplayer.*;
 import javajar.gameboard.ReadOnlyGameBoard;
-//import javajar.gamestate.MovePath;
+import javajar.gamestate.MovePath;
 
 
 /**
@@ -46,18 +45,18 @@ public class AndroidAiPlayer extends AndroidPlayer implements Parcelable{
      * @param gameBoard The current game board.
      * @return The move that the AI chooses to make.
      */
-    public AndroidMovePath getMove(AndroidReadOnlyGameBoard gameBoard) {
-        AndroidMovePath move;
+    public MovePath getMove(AndroidReadOnlyGameBoard gameBoard) {
+        MovePath move;
         switch(this.difficulty){
             //case 3: hardMove myHardMove = new HardAIMove();
             //  move = myHardMove.getHardMove(getPlayerNumber(), gameBoard.getDeepCopy()
             case 2:
                 MediumMove myMediumMove = new MediumMove();
-                move = (AndroidMovePath)myMediumMove.getMediumMove(getPlayerNumber(), gameBoard.getDeepCopy());
+                move = myMediumMove.getMediumMove(getPlayerNumber(), gameBoard.getDeepCopy());
                 break;
             default:
                 EasyMove myEasyMove = new EasyMove();
-                move = (AndroidMovePath)myEasyMove.getEasyMove(getPlayerNumber(), gameBoard.getDeepCopy());
+                move = myEasyMove.getEasyMove(getPlayerNumber(), gameBoard.getDeepCopy());
                 break;
         }
         return move;
@@ -69,7 +68,7 @@ public class AndroidAiPlayer extends AndroidPlayer implements Parcelable{
      * @param board
      */
     @Override
-    public AndroidMovePath onTurn(ReadOnlyGameBoard board) {
+    public MovePath onTurn(ReadOnlyGameBoard board) {
         return getMove((AndroidReadOnlyGameBoard)board);
     }
 

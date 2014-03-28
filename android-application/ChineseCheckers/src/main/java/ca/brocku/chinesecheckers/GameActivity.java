@@ -25,9 +25,8 @@ import java.io.ObjectOutputStream;
 import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
 import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
-import ca.brocku.chinesecheckers.gamestate.AndroidMovePath;
 //import javajar.gameboard.Piece;
-//import javajar.gamestate.MovePath;
+import javajar.gamestate.MovePath;
 import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
@@ -215,7 +214,7 @@ public class GameActivity extends Activity {
         private AndroidPlayer currentPlayer;
 
         // Things for a human players turn
-        private AndroidMovePath movePath = new AndroidMovePath();
+        private MovePath movePath = new MovePath();
         private AndroidPiece currentPiece;
         private AndroidGameBoard board = null;
         private AndroidPosition[] possibleMoves;
@@ -410,7 +409,7 @@ public class GameActivity extends Activity {
             currentPiece = null;
             board = null;
             possibleMoves = null;
-            movePath = new AndroidMovePath();
+            movePath = new MovePath();
         }
 
         /**
@@ -451,7 +450,7 @@ public class GameActivity extends Activity {
                             resetHumanState();
                             currentPiece = piece;
                             possibleMoves = (AndroidPosition[])tempBoard.getPossibleMoves(currentPiece);
-                            movePath = new AndroidMovePath(new AndroidPosition(piece.getPosition().getRow(), piece.getPosition().getIndex()));
+                            movePath = new MovePath(new AndroidPosition(piece.getPosition().getRow(), piece.getPosition().getIndex()));
                         } else if(movePath.size() <= 1) {
                             resetHumanState();
                         }
@@ -521,7 +520,7 @@ public class GameActivity extends Activity {
              * @param movePath      The path describing the movePath.
              */
             @Override
-            public synchronized void onBoardModified(AndroidPlayer player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, AndroidMovePath movePath) {
+            public synchronized void onBoardModified(AndroidPlayer player, AndroidGameBoard originalBoard, AndroidReadOnlyGameBoard currentBoard, MovePath movePath) {
                 boardUiEngine.drawBoard(currentBoard);
                 boardUiEngine.showHintPositions(null);
                 boardUiEngine.highlightPiece(null);
