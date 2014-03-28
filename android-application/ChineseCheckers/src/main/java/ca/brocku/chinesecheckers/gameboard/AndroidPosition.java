@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.gameboard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import javajar.gameboard.Position;
+
 /**
  * The common interface that defines a position
  * on the board.
@@ -16,11 +18,18 @@ import android.os.Parcelable;
  * Student #: 4810800
  * Date: 2/1/2014
  */
-public class AndroidPosition extends javajar.gameboard.Position implements Parcelable{
-    int row, index;
+public class AndroidPosition extends Position implements Parcelable{
+    //int row, index;
 
     public AndroidPosition(int row, int index) {
         super(row,index);
+    }
+
+    public AndroidPosition(Position p){
+        if(p!=null){
+            row=p.getRow();
+            index=p.getIndex();
+        }
     }
 
     /**

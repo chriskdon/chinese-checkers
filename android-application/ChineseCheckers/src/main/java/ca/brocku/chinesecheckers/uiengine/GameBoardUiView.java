@@ -270,7 +270,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
      */
     private void loadBoardPieces(Piece[] pieces) {
         if(piecePositionSystem == null) {
-            throw new IllegalStateException("The AndroidPiece AndroidPosition System is not ready.");
+            throw new IllegalStateException("The Piece Position System is not ready.");
         }
 
         for(Piece p : pieces) {

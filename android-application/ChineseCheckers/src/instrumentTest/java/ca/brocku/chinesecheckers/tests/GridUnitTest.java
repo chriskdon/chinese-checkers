@@ -3,6 +3,8 @@ package ca.brocku.chinesecheckers.tests;
 import android.test.AndroidTestCase;
 
 import ca.brocku.chinesecheckers.gameboard.*;
+
+import javajar.gameboard.Position;
 /**
  * Grid Unit Test for AndroidCcGameBoard.java
  *
@@ -42,7 +44,7 @@ public class GridUnitTest extends AndroidTestCase  {
         AndroidGameBoard board = newBoard(6);
 
         try {
-            AndroidPosition[] possible = board.getPossibleMoves(board.getPiece(newPosition(row, index)));
+            Position[] possible = board.getPossibleMoves(board.getPiece(newPosition(row, index)));
 
             if(numPossibleMoves == 0) {
                 assertNull("There should be no possible moves for (" + row + ", " + index + ")", possible);
@@ -138,7 +140,7 @@ public class GridUnitTest extends AndroidTestCase  {
         AndroidCcGameBoard board = new AndroidCcGameBoard(2);
         board.setPiece(newPosition(8, 4), 4);
 
-        AndroidPosition[] possible = board.getPossibleMoves(board.getPiece(newPosition(8,4)));
+        Position[] possible = board.getPossibleMoves(board.getPiece(newPosition(8,4)));
 
         assertEquals("Possible moves should be 6", 6, possible.length);
     }
@@ -185,7 +187,7 @@ public class GridUnitTest extends AndroidTestCase  {
     	AndroidPosition temp = new AndroidPosition(5,5);
         board.setPiece(temp, 1);
         board.setPiece(temp, 2);
-    	AndroidPiece t = board.getPiece(temp);
+    	AndroidPiece t = (AndroidPiece)board.getPiece(temp);
     	assertEquals(t.getPlayerNumber(), 1);
     }
 //  Testing to see that all moves retrieved by getPossibleMoves is valid
@@ -193,7 +195,7 @@ public class GridUnitTest extends AndroidTestCase  {
     	AndroidCcGameBoard board = new AndroidCcGameBoard(2);
     	AndroidPosition temp = new AndroidPosition(5,5);
     	AndroidPiece t = new AndroidGridPiece(temp, 1);
-    	AndroidPosition[] possibleMoves = board.getPossibleMoves(t);
+    	Position[] possibleMoves = board.getPossibleMoves(t);
     	for(int i=0; i<possibleMoves.length; i++) {
     		if(possibleMoves[i]==null){
     			continue;
@@ -254,7 +256,7 @@ public class GridUnitTest extends AndroidTestCase  {
     	AndroidPiece t = new AndroidGridPiece(temp, 1);
     	board.setPiece(temp, 1);
     	board.movePiece(t, new AndroidPosition(5,6));
-    	AndroidPiece m = board.getPiece(new AndroidPosition(5,6));
+    	AndroidPiece m = (AndroidPiece)board.getPiece(new AndroidPosition(5,6));
     	assertEquals(m.getPosition().getRow(), 5);
     	assertEquals(m.getPosition().getIndex(), 6);
     	assertNull(board.getPiece(temp));

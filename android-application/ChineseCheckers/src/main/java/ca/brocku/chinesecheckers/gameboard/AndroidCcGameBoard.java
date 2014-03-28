@@ -3,7 +3,12 @@ package ca.brocku.chinesecheckers.gameboard;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import javajar.gameboard.Position;
+import javajar.gameboard.Piece;
 
 /**
  * The implementation of AndroidGameBoard - This board being specifically for chinese checkers.
@@ -40,6 +45,24 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
      */
     public AndroidCcGameBoard(AndroidPiece[] pieceList) {
         super(pieceList);
+    }
+
+    /**
+     * Return all the pieces that are on the board in no specific order.
+     *
+     * @return  All the pieces on the board.
+     */
+    @Override
+    public AndroidPiece[] getAllPieces() {
+        List<AndroidPiece> allPieces = new ArrayList<AndroidPiece>();
+        for(int i=0; i<board.length;i++) {
+            for(int j=0; j<board[i].length; j++) {
+                if(board[i][j]!=null) {
+                    allPieces.add((AndroidPiece)board[i][j]);
+                }
+            }
+        }
+        return allPieces.toArray(new AndroidPiece[allPieces.size()]);
     }
 
     /**
@@ -91,6 +114,23 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
     }
 
     /**
+     * Checks a given piece for any possible openings for that piece to move to. The process is
+     * static and done almost on a case basis.
+     *
+     * @param forPiece  The piece to check positions for.
+     *
+     * @return          The list of positions the piece can move to. Or an empty array if there
+     *                  is nowhere to move.
+     */
+    @Override
+    public AndroidPosition[] getPossibleMoves(Piece forPiece) {
+        AndroidPosition[] possibleMoves = new AndroidPosition[14];
+        Position[] pm = super.getPossibleMoves(forPiece);
+        for(int i=0;i<14;i++)possibleMoves[i]=(AndroidPosition)pm[i];
+        return possibleMoves;
+    }
+
+    /**
      * Constructor for the parcel.
      * @param parcel    The parcel to build from.
      */
@@ -138,7 +178,7 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
         int i = 0;
         for(int row = 0; row < board.length; row++) {
             for(int col = 0; col < board[row].length; col++) {
-                single[i] = (AndroidPiece)board[row][col];
+                single[i] = new AndroidGridPiece(board[row][col]);
                 i++;
             }
         }
