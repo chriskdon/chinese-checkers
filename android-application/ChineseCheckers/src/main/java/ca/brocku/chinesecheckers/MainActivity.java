@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ccapp.UserRegistrationResult;
+import com.ccapi.receivables.JoinGameReceivable;
+import com.ccapi.receivables.SuccessReceivable;
+import com.ccapi.receivables.UserRegistrationReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -32,6 +35,8 @@ import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
+import ca.brocku.chinesecheckers.network.spice.requests.ChangeUsernameRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.RegisterUserRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
@@ -47,9 +52,6 @@ public class MainActivity extends SpicedGcmActivity {
     private Button onlineActivityButton;
     private Button helpActivityButton;
     private Button settingsActivityButton;
-    private LinearLayout networkConnectivityContainer;
-
-    private NetworkStateReceiver networkStateReceiver; //for connectivity changes
 
     public static final String PREF_DONE_INITIAL_SETUP = "DONE_INITIAL_SETUP";
     public static final String PREF_SHOW_MOVES = "SHOW_MOVES";
@@ -63,16 +65,12 @@ public class MainActivity extends SpicedGcmActivity {
 
         setInitialPreferences(); //only sets the prefs on first launch
 
-        networkStateReceiver = new NetworkStateReceiver();
-
         //Bind Controls
         offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
         onlineNotificationIcon = (TextView)findViewById(R.id.onlineMoveNotificationTextView);
         onlineActivityButton = (Button)findViewById(R.id.onlineListActivityButton);
         helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
         settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
-        networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
-
 
         //Bind Handlers
         offlineActivityButton.setOnClickListener(new OfflineActivityButtonHandler());
@@ -80,14 +78,7 @@ public class MainActivity extends SpicedGcmActivity {
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
 
-        //performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        unregisterReceiver(networkStateReceiver); //for connectivity change
+        performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
     }
 
     @Override
@@ -103,8 +94,6 @@ public class MainActivity extends SpicedGcmActivity {
         } else {
             onlineNotificationIcon.setVisibility(View.INVISIBLE);
         }
-
-        registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
     }
 
     @Override
@@ -153,22 +142,23 @@ public class MainActivity extends SpicedGcmActivity {
     private void performRequest(String user) {
         this.setProgressBarIndeterminateVisibility(true);
 
-        RegisterUserRequest request = new RegisterUserRequest(user);
+        JoinGameRequest request = new JoinGameRequest(10, 3);
 
-        spiceManager.execute(request, new ApiRequestListener<UserRegistrationResult>() {
+        spiceManager.execute(request, new ApiRequestListener<JoinGameReceivable>() {
             @Override
             public void onTaskFailure(int code, String message) {
-                Toast.makeText(MainActivity.this, "Task Error", Toast.LENGTH_SHORT).show();
+                Log.e("SPICE_TASK", message);
+                Toast.makeText(MainActivity.this, "Task Error: " + message, Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onTaskSuccess(UserRegistrationResult result) {
-                Toast.makeText(MainActivity.this, "User ID: " + result.userId, Toast.LENGTH_SHORT).show();
+            public void onTaskSuccess(JoinGameReceivable result) {
+                Toast.makeText(MainActivity.this, "Task Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                Toast.makeText(MainActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -229,23 +219,6 @@ public class MainActivity extends SpicedGcmActivity {
         @Override
         public void onClick(View view) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-        }
-    }
-
-    private class NetworkStateReceiver extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getExtras()!=null) {
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                if((mobile!=null && mobile.isConnected()) || (wifi!=null && wifi.isConnected())) {
-                    networkConnectivityContainer.setVisibility(View.GONE);
-                } else {
-                    networkConnectivityContainer.setVisibility(View.VISIBLE);
-                }
-            }
         }
     }
 }

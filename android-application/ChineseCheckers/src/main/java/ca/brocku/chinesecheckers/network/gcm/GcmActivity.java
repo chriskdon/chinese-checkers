@@ -18,6 +18,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.io.IOException;
 
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.network.NetworkActivity;
 import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
 import de.greenrobot.event.EventBus;
 
@@ -29,7 +30,7 @@ import de.greenrobot.event.EventBus;
  * Student #: 4810800
  * Date: 3/11/2014
  */
-public class GcmActivity extends Activity {
+public class GcmActivity extends NetworkActivity {
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
