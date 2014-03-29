@@ -34,7 +34,7 @@ CREATE TABLE `games` (
   PRIMARY KEY (`gameID`),
   KEY `winnerlink_idx` (`winnerID`),
   CONSTRAINT `winnerlink` FOREIGN KEY (`winnerID`) REFERENCES `users` (`userID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -102,7 +102,7 @@ CREATE TABLE `gamesusers` (
   CONSTRAINT `gamelink` FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `gameslink` FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `userlink` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -122,6 +122,10 @@ BEGIN
     SIGNAL SQLSTATE '12345'
         SET MESSAGE_TEXT = 'check constraint on player number failed';
     END IF;
+	IF EXISTS(SELECT gameID FROM gamesusers WHERE gameID = new.gameID AND userID = new.userID) THEN
+	SIGNAL SQLSTATE '12345'
+        SET MESSAGE_TEXT = 'error. user is already a part of this game.';
+	END IF;
 
 END */;;
 DELIMITER ;
@@ -170,6 +174,11 @@ BEGIN
     SIGNAL SQLSTATE '12345'
         SET MESSAGE_TEXT = 'check constraint on player number failed';
     END IF;
+	IF EXISTS(SELECT gameID FROM gamesusers WHERE gameID = new.gameID AND userID = new.userID) THEN
+	SIGNAL SQLSTATE '12345'
+        SET MESSAGE_TEXT = 'error. user is already a part of this game.';
+	END IF;
+
 	
 END */;;
 DELIMITER ;
@@ -596,7 +605,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `matchMake`(IN uID INT, IN numPlayers INT)
 BEGIN
 	DECLARE gID, playerNum INT;
-	SELECT gameID into gID FROM games WHERE numPlayer = numPlayers AND isReady=0;
+	SELECT gameID into gID FROM games WHERE numPlayer = numPlayers AND isReady=0 AND NOT EXISTS(SELECT gameID FROM gamesusers WHERE userID = uID);
 	IF gID IS NULL THEN
 		INSERT INTO games (numPlayer, created) values (numPlayers, NOW());
 		SELECT LAST_INSERT_ID() into gID;
@@ -888,4 +897,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-27 14:52:12
+-- Dump completed on 2014-03-29 13:02:45
