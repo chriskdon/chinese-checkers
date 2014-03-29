@@ -45,9 +45,6 @@ public class MainActivity extends SpicedGcmActivity {
     private Button onlineActivityButton;
     private Button helpActivityButton;
     private Button settingsActivityButton;
-    private LinearLayout networkConnectivityContainer;
-
-    private NetworkStateReceiver networkStateReceiver; //for connectivity changes
 
     public static final String PREF_DONE_INITIAL_SETUP = "DONE_INITIAL_SETUP";
     public static final String PREF_SHOW_MOVES = "SHOW_MOVES";
@@ -61,29 +58,18 @@ public class MainActivity extends SpicedGcmActivity {
 
         setInitialPreferences(); //only sets the prefs on first launch
 
-        networkStateReceiver = new NetworkStateReceiver();
-
         //Bind Controls
         offlineActivityButton = (Button)findViewById(R.id.offlineConfigurationActivityButton);
         onlineNotificationIcon = (TextView)findViewById(R.id.onlineMoveNotificationTextView);
         onlineActivityButton = (Button)findViewById(R.id.onlineListActivityButton);
         helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
         settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
-        networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
-
 
         //Bind Handlers
         offlineActivityButton.setOnClickListener(new OfflineActivityButtonHandler());
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        unregisterReceiver(networkStateReceiver); //for connectivity change
     }
 
     @Override
@@ -99,8 +85,6 @@ public class MainActivity extends SpicedGcmActivity {
         } else {
             onlineNotificationIcon.setVisibility(View.INVISIBLE);
         }
-
-        registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
     }
 
     @Override
@@ -224,23 +208,6 @@ public class MainActivity extends SpicedGcmActivity {
         @Override
         public void onClick(View view) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-        }
-    }
-
-    private class NetworkStateReceiver extends BroadcastReceiver{
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getExtras()!=null) {
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                if((mobile!=null && mobile.isConnected()) || (wifi!=null && wifi.isConnected())) {
-                    networkConnectivityContainer.setVisibility(View.GONE);
-                } else {
-                    networkConnectivityContainer.setVisibility(View.VISIBLE);
-                }
-            }
         }
     }
 }
