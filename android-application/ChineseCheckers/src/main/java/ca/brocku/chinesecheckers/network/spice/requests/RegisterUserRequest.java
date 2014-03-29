@@ -11,7 +11,6 @@ import ca.brocku.chinesecheckers.network.spice.ApiRequest;
  * Student #: 4810800
  * Date: 3/11/2014
  */
-//Create a request in its own Java file, it should not an inner class of a Context
 public class RegisterUserRequest extends ApiRequest<UserRegistrationReceivable> {
 
     private String username;
@@ -23,7 +22,7 @@ public class RegisterUserRequest extends ApiRequest<UserRegistrationReceivable> 
 
     @Override
     public UserRegistrationReceivable loadDataFromNetwork() throws Exception {
-        String url = getApiUrlBuilder().build("/users/register/%s", username);
+        String url = apiUrl("/users/register/%s", username);
 
         return getRestTemplate().postForObject(url, null, UserRegistrationReceivable.class);
     }

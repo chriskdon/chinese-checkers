@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.receivables.SuccessReceivable;
 import com.ccapi.receivables.UserRegistrationReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -32,6 +33,7 @@ import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
+import ca.brocku.chinesecheckers.network.spice.requests.ChangeUsernameRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.RegisterUserRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
@@ -73,7 +75,7 @@ public class MainActivity extends SpicedGcmActivity {
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
 
-        //performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
+        performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
     }
 
     @Override
@@ -137,22 +139,22 @@ public class MainActivity extends SpicedGcmActivity {
     private void performRequest(String user) {
         this.setProgressBarIndeterminateVisibility(true);
 
-        RegisterUserRequest request = new RegisterUserRequest(user);
+        ChangeUsernameRequest request = new ChangeUsernameRequest(7, "NEW USER!!");
 
-        spiceManager.execute(request, new ApiRequestListener<UserRegistrationReceivable>() {
+        spiceManager.execute(request, new ApiRequestListener<SuccessReceivable>() {
             @Override
             public void onTaskFailure(int code, String message) {
                 Toast.makeText(MainActivity.this, "Task Error", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onTaskSuccess(UserRegistrationReceivable result) {
-                Toast.makeText(MainActivity.this, "User ID: " + result.userId, Toast.LENGTH_SHORT).show();
+            public void onTaskSuccess(SuccessReceivable result) {
+                Toast.makeText(MainActivity.this, "Task Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                Toast.makeText(MainActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
             }
         });
     }

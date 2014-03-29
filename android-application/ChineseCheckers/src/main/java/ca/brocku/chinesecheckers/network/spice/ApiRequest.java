@@ -2,8 +2,6 @@ package ca.brocku.chinesecheckers.network.spice;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
-import ca.brocku.chinesecheckers.network.spice.ApiUrlBuilder;
-
 /**
  * Author: Chris Kellendonk
  * Student #: 4810800
@@ -14,13 +12,18 @@ public abstract class ApiRequest<T> extends SpringAndroidSpiceRequest<T> {
         super(c);
     }
 
-    private ApiUrlBuilder builder;
-
-    protected ApiUrlBuilder getApiUrlBuilder() {
-        if(builder == null) {
-            builder = new ApiUrlBuilder();
+    /**
+     * Builds the API url.
+     *
+     * @param apiPath   The path of the request with param placeholders (i.e. %s).
+     * @param params    The params for the url.
+     * @return          The URL String.
+     */
+    public String apiUrl(String apiPath, Object... params) {
+        if(apiPath.length() > 0 && !apiPath.startsWith("/")) {
+            apiPath = "/" + apiPath;
         }
 
-        return builder;
+        return String.format("http://192.168.1.198:9000" + apiPath, params);
     }
 }
