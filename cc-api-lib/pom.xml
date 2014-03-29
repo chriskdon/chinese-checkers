@@ -13,14 +13,25 @@
   <build>
       <finalName>${project.artifactId}</finalName>
       <plugins>
-         <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                  <outputDirectory>../server/server-application/backend-api-server/lib/</outputDirectory>
-                </configuration>
-              </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+               <executions>
+                  <execution>
+                     <phase>package</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                    <configuration>
+                     <target name="Output to Server and Android">
+                         <copy file="./target/cc-api.jar" tofile="../server/server-application/backend-api-server/lib/cc-api.jar" />
+                         <copy file="./target/cc-api.jar" tofile="../android-application/ChineseCheckers/libs/cc-api.jar" />
+                      </target>
+                    </configuration>                       
+                  </execution>
+               </executions>
+           </plugin>
       </plugins>
   </build>
 </project>

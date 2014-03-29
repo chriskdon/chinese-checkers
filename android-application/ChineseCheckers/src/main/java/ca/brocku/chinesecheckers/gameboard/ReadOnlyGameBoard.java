@@ -175,4 +175,40 @@ public class ReadOnlyGameBoard implements GameBoard {
     public boolean hasPlayerWon(int playerNumber) {
         return gameBoard.hasPlayerWon(playerNumber);
     }
+
+    /**
+     * @param position The position being evaluated
+     * @param playerNumber The player who owns the piece at said position
+     * @return Whether that piece is at the edge of its goal zone
+     */
+    @Override
+    public boolean atGoalEdge(Position position, int playerNumber){
+        switch(playerNumber){
+            case 1:
+                if(position.getRow() == 4 && position.getIndex() > 3 && position.getIndex() < 9)
+                    return true;
+                break;
+            case 2:
+                if(position.getRow() > 3 && position.getRow() < 9 && position.getIndex() == 8)
+                    return true;
+                break;
+            case 3:
+                if(position.getRow() > 7 && position.getRow() < 13 && position.getIndex() == 8)
+                    return true;
+                break;
+            case 4:
+                if(position.getRow() == 12 && position.getIndex() > 3 && position.getIndex() < 9)
+                    return true;
+                break;
+            case 5:
+                if(position.getRow() > 7 && position.getRow() < 13 && (position.getRow() - position.getIndex()) == 8)
+                    return true;
+                break;
+            case 6:
+                if(position.getRow() < 9 && position.getRow() > 3 && (position.getRow() + position.getIndex()) == 8)
+                    return true;
+                break;
+        }
+        return false;
+    }
 }

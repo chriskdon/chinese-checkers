@@ -56,12 +56,18 @@ public class HeuristicCalculator {
             case 2:
                 distanceFromGoal += Math.abs(piece.getRow() - ((goalState[0]-3)))*16;
                 if(piece.getRow() > 12 || piece.getRow() < 4) distanceFromGoal += 48;
-                if(piece.getRow() > 8) distanceFromGoal = distanceFromGoal*2;
+                if(piece.getRow() >= 8){
+                    if(goalState[1] == 0 && piece.getIndex() < (((piece.getRow()-8)/2)+4)) distanceFromGoal = distanceFromGoal*2;
+                    if(goalState[1] == 9 && piece.getIndex() > (((piece.getRow()-8)/2)+4)) distanceFromGoal = distanceFromGoal*2;
+                }
                 break;
             case 3:
                 distanceFromGoal += Math.abs(piece.getRow() - (goalState[0]+3))*16;
                 if(piece.getRow() > 12 || piece.getRow() < 4) distanceFromGoal += 48;
-                if(piece.getRow() < 8) distanceFromGoal = distanceFromGoal*2;
+                if(piece.getRow() <= 8){
+                    if(goalState[1] == 0 && piece.getIndex() < (((piece.getRow()-8)/2)+4)) distanceFromGoal = distanceFromGoal*2;
+                    if(goalState[1] == 9 && piece.getIndex() > (((piece.getRow()-8)/2)+4)) distanceFromGoal = distanceFromGoal*2;
+                }
                 break;
             default:
                 break;

@@ -1,6 +1,6 @@
 package com.ccapp;
 
-public class UserRegistrationResult {
+public class UserRegistrationResult extends Result {
 	public String username;
 	public long userId;
 
