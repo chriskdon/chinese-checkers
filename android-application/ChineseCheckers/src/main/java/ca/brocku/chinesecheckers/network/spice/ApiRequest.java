@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.network.spice;
 
+import android.app.Activity;
+
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 /**
@@ -24,6 +26,7 @@ public abstract class ApiRequest<T> extends SpringAndroidSpiceRequest<T> {
             apiPath = "/" + apiPath;
         }
 
+        // Change to chinesecheckers.codecanister.com
         return String.format("http://192.168.1.198:9000" + apiPath, params);
     }
 }

@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.receivables.JoinGameReceivable;
 import com.ccapi.receivables.SuccessReceivable;
 import com.ccapi.receivables.UserRegistrationReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -34,6 +36,7 @@ import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
 import ca.brocku.chinesecheckers.network.spice.requests.ChangeUsernameRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.RegisterUserRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
@@ -139,16 +142,17 @@ public class MainActivity extends SpicedGcmActivity {
     private void performRequest(String user) {
         this.setProgressBarIndeterminateVisibility(true);
 
-        ChangeUsernameRequest request = new ChangeUsernameRequest(7, "NEW USER!!");
+        JoinGameRequest request = new JoinGameRequest(10, 3);
 
-        spiceManager.execute(request, new ApiRequestListener<SuccessReceivable>() {
+        spiceManager.execute(request, new ApiRequestListener<JoinGameReceivable>() {
             @Override
             public void onTaskFailure(int code, String message) {
-                Toast.makeText(MainActivity.this, "Task Error", Toast.LENGTH_SHORT).show();
+                Log.e("SPICE_TASK", message);
+                Toast.makeText(MainActivity.this, "Task Error: " + message, Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onTaskSuccess(SuccessReceivable result) {
+            public void onTaskSuccess(JoinGameReceivable result) {
                 Toast.makeText(MainActivity.this, "Task Success", Toast.LENGTH_SHORT).show();
             }
 

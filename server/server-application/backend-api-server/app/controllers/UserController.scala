@@ -40,10 +40,12 @@ object UserController extends ApiControllerBase {
    * 
    * @type {[type]}
    */
-  def change(id: Long, username: String) = Action { request =>
+  def change(userId: Long, username: String) = Action { request =>
     DB.withConnection { implicit c =>
       try {
-        SQL("CALL setUsername({userId}, {username})").on("userId" -> id, "username" -> username).execute()
+        SQL("CALL setUsername({userId}, {username})")
+            .on("userId" -> userId, "username" -> username)
+            .execute()
 
         okJson(new SuccessReceivable())
       } catch {
