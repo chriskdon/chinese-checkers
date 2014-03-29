@@ -1,9 +1,8 @@
 package ca.brocku.chinesecheckers.network.spice.requests;
 
-import com.ccapp.UserRegistrationResult;
+import com.ccapi.receivables.UserRegistrationReceivable;
 
 import ca.brocku.chinesecheckers.network.spice.ApiRequest;
-
 
 /**
  * Register a new user.
@@ -13,21 +12,19 @@ import ca.brocku.chinesecheckers.network.spice.ApiRequest;
  * Date: 3/11/2014
  */
 //Create a request in its own Java file, it should not an inner class of a Context
-public class RegisterUserRequest extends ApiRequest<UserRegistrationResult> {
+public class RegisterUserRequest extends ApiRequest<UserRegistrationReceivable> {
 
     private String username;
 
     public RegisterUserRequest(String username) {
-        super(UserRegistrationResult.class);
+        super(UserRegistrationReceivable.class);
         this.username = username;
     }
 
     @Override
-    public UserRegistrationResult loadDataFromNetwork() throws Exception {
-        // TODO: Make server url configurable
-
+    public UserRegistrationReceivable loadDataFromNetwork() throws Exception {
         String url = getApiUrlBuilder().build("/users/register/%s", username);
 
-        return getRestTemplate().postForObject(url, null, UserRegistrationResult.class);
+        return getRestTemplate().postForObject(url, null, UserRegistrationReceivable.class);
     }
 }

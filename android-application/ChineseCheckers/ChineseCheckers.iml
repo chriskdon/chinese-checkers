@@ -72,8 +72,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
     <orderEntry type="library" exported="" name="support-v4-19.0.1" level="project" />
-    <orderEntry type="library" exported="" name="cc-api" level="project" />
     <orderEntry type="library" exported="" name="robospice-spring-android-1.4.11" level="project" />
+    <orderEntry type="library" exported="" name="cc-api" level="project" />
     <orderEntry type="library" exported="" name="spring-android-rest-template-1.0.1.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="jackson-core-asl-1.9.13" level="project" />
     <orderEntry type="library" exported="" name="eventbus-2.2.0" level="project" />

@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ccapp.UserRegistrationResult;
+import com.ccapi.receivables.UserRegistrationReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -139,14 +139,14 @@ public class MainActivity extends SpicedGcmActivity {
 
         RegisterUserRequest request = new RegisterUserRequest(user);
 
-        spiceManager.execute(request, new ApiRequestListener<UserRegistrationResult>() {
+        spiceManager.execute(request, new ApiRequestListener<UserRegistrationReceivable>() {
             @Override
             public void onTaskFailure(int code, String message) {
                 Toast.makeText(MainActivity.this, "Task Error", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onTaskSuccess(UserRegistrationResult result) {
+            public void onTaskSuccess(UserRegistrationReceivable result) {
                 Toast.makeText(MainActivity.this, "User ID: " + result.userId, Toast.LENGTH_SHORT).show();
             }
 

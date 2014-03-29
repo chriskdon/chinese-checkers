@@ -1,17 +1,17 @@
-package com.ccapp;
+package com.ccapi.receivables;
 
-public class Result {
+public class Receivable {
 	public static final int CODE_SUCCESS = 0;
 	public static final int CODE_ERROR = -1;
 
 	public String message;
 	public int code;
 
-	public Result() {
+	public Receivable() {
 		code = CODE_SUCCESS;
 	}
 
-	public Result(int code, String message) {
+	public Receivable(int code, String message) {
 		this.code = code;
 		this.message = message;
 	}

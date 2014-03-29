@@ -1,6 +1,6 @@
 package ca.brocku.chinesecheckers.network.spice;
 
-import com.ccapp.Result;
+import com.ccapi.receivables.Receivable;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 /**
@@ -8,7 +8,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
  * Student #: 4810800
  * Date: 2014-03-27
  */
-public abstract class ApiRequestListener<T extends Result> implements RequestListener<T> {
+public abstract class ApiRequestListener<T extends Receivable> implements RequestListener<T> {
     /**
      * Called when the intended task that was requested could not be completed by the
      * server.
@@ -26,7 +26,7 @@ public abstract class ApiRequestListener<T extends Result> implements RequestLis
 
     @Override
     public void onRequestSuccess(T t) {
-        if(t.code != Result.CODE_SUCCESS) {
+        if(t.code != Receivable.CODE_SUCCESS) {
             onTaskFailure(t.code, t.message);
         } else {
             onTaskSuccess(t);
