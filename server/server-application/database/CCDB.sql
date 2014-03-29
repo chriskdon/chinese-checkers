@@ -102,7 +102,7 @@ CREATE TABLE `gamesusers` (
   CONSTRAINT `gamelink` FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `gameslink` FOREIGN KEY (`gameID`) REFERENCES `games` (`gameID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `userlink` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -615,7 +615,7 @@ BEGIN
 		) as c3
 		;
 	IF gID IS NULL THEN
-		SELECT gameID into gID from games WHERE isReady = 0 AND numPlayer = numPlayers ORDER BY created ASC LIMIT 1;
+		SELECT gameID into gID from games WHERE isReady = 0 AND numPlayer = numPlayers AND gameID NOT IN(SELECT gameID FROM gamesusers WHERE userID = uID) ORDER BY created ASC LIMIT 1;
 	END IF;
 
 	IF gID IS NULL THEN
@@ -909,4 +909,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-29 15:26:29
+-- Dump completed on 2014-03-29 15:29:56
