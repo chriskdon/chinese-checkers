@@ -615,6 +615,10 @@ BEGIN
 		) as c3
 		;
 	IF gID IS NULL THEN
+		SELECT gameID into gID from games WHERE isReady = 0 AND numPlayer = numPlayers ORDER BY created ASC LIMIT 1;
+	END IF;
+
+	IF gID IS NULL THEN
 		INSERT INTO games (numPlayer, created) values (numPlayers, NOW());
 		SELECT LAST_INSERT_ID() into gID;
 		CALL `userJoinGame`(uID, gID);
@@ -905,4 +909,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-29 15:20:13
+-- Dump completed on 2014-03-29 15:26:29
