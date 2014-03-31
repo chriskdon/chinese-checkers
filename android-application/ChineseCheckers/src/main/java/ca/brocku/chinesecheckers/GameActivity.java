@@ -188,7 +188,7 @@ public class GameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
-                        BoomBoomMusic.stopSP();
+                        BoomBoomMusic.stopSP(getApplicationContext());
                         GameActivity.this.finish();
                         startActivity(new Intent(GameActivity.this, OfflineConfigurationActivity.class));
                     }
@@ -198,7 +198,7 @@ public class GameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
-                        BoomBoomMusic.stopSP();
+                        BoomBoomMusic.stopSP(getApplicationContext());
                         GameActivity.this.finish();
                         startActivity(new Intent(GameActivity.this, MainActivity.class));
                     }

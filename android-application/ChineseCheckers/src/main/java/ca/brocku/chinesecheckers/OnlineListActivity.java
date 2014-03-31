@@ -63,7 +63,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
 
     @Override
-<<<<<<< HEAD
     protected void onResume() {
         super.onResume();
         BoomBoomMusic.start(this);
@@ -78,8 +77,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
     }
 
     @Override
-=======
->>>>>>> origin/develop
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main,menu);
         return true;

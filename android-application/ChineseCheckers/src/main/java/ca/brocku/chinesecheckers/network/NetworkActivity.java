@@ -19,7 +19,7 @@ import ca.brocku.chinesecheckers.R;
  * @date March 27, 2014
  */
 public class NetworkActivity extends Activity {
-    private NetworkStateReceiver networkStateReceiver = new NetworkStateReceiver();
+    public NetworkStateReceiver networkStateReceiver = new NetworkStateReceiver();
     private LinearLayout networkConnectivityContainer;
 
 

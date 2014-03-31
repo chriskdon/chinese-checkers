@@ -127,19 +127,22 @@ public class BoomBoomMusic {
 
     public static void onPlayerWin() {
         if (loaded) {
+            pause();
             curSPclip = sp.play(gamewin, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, 1, 0, 1f);
         }
     }
 
     public static void onPlayerLose() {
         if (loaded) {
+            pause();
             curSPclip = sp.play(gamelose, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, sharedPrefs.getInt(EFFCTSOUNDPREF, 100) / 100.0f, 1, 0, 1f);
         }
     }
 
-    public static void stopSP() {
+    public static void stopSP(Context c) {
         if(sp != null){
             sp.stop(curSPclip);
+            start(c);
         }
     }
 

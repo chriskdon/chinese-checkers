@@ -77,7 +77,6 @@ public class MainActivity extends SpicedGcmActivity {
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
-<<<<<<< HEAD
     }
 
     @Override
@@ -85,10 +84,7 @@ public class MainActivity extends SpicedGcmActivity {
         super.onPause();
         BoomBoomMusic.pause();
         unregisterReceiver(networkStateReceiver); //for connectivity change
-=======
-
         performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
->>>>>>> origin/develop
     }
 
     @Override
@@ -104,11 +100,8 @@ public class MainActivity extends SpicedGcmActivity {
         } else {
             onlineNotificationIcon.setVisibility(View.INVISIBLE);
         }
-<<<<<<< HEAD
         BoomBoomMusic.start(this);
         registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
-=======
->>>>>>> origin/develop
     }
 
     @Override
@@ -166,15 +159,14 @@ public class MainActivity extends SpicedGcmActivity {
                 Toast.makeText(MainActivity.this, "Task Error: " + message, Toast.LENGTH_LONG).show();
             }
 
-            @Override
-<<<<<<< HEAD
             public void onRequestSuccess(FollowerList followers) {
                 if (followers.size() > 0) {
                     Toast.makeText(MainActivity.this, "SPICE Result: " + followers.get(0).getLogin(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this, "SPICE Worked", Toast.LENGTH_SHORT).show();
                 }
-=======
+            }
+
             public void onTaskSuccess(JoinGameReceivable result) {
                 Toast.makeText(MainActivity.this, "Task Success", Toast.LENGTH_SHORT).show();
             }
@@ -182,7 +174,6 @@ public class MainActivity extends SpicedGcmActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 Toast.makeText(MainActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
->>>>>>> origin/develop
             }
         });
     }

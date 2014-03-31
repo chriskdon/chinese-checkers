@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -110,8 +111,6 @@ public class SettingsActivity extends SpicedActivity {
         return super.onOptionsItemSelected(item);
     }
 
-<<<<<<< HEAD
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -119,8 +118,6 @@ public class SettingsActivity extends SpicedActivity {
         registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for changes in connectivity
     }
 
-=======
->>>>>>> origin/develop
     /** Updates the preferences.
      */
     @Override
@@ -155,10 +152,8 @@ public class SettingsActivity extends SpicedActivity {
         editor.putBoolean(MainActivity.PREF_SHOW_MOVES, showMoves);
 
         editor.commit();
-<<<<<<< HEAD
         BoomBoomMusic.pause();
         unregisterReceiver(networkStateReceiver);
-=======
     }
 
     @Override
@@ -175,7 +170,6 @@ public class SettingsActivity extends SpicedActivity {
                 return false;
             }
         });
->>>>>>> origin/develop
     }
 
     @Override
