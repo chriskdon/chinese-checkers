@@ -44,8 +44,9 @@ public class AiPlayer extends Player {
     public MovePath getMove(ReadOnlyGameBoard gameBoard) {
         MovePath move;
         switch(this.difficulty){
-            //case 3: hardMove myHardMove = new HardAIMove();
-            //  move = myHardMove.getHardMove(getPlayerNumber(), gameBoard.getDeepCopy()
+            case 3: HardMove myHardMove = new HardMove();
+                move = myHardMove.getHardMove(getPlayerNumber(), gameBoard.getDeepCopy());
+                break;
             case 2:
                 MediumMove myMediumMove = new MediumMove();
                 move = myMediumMove.getMediumMove(getPlayerNumber(), gameBoard.getDeepCopy());

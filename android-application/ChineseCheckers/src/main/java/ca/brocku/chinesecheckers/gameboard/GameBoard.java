@@ -138,4 +138,11 @@ public interface GameBoard extends Parcelable, Serializable {
      * @return  True if they have won, false otherwise.
      */
     public abstract boolean hasPlayerWon(int playerNumber);
+
+    /**
+     * @param position The position being evaluated
+     * @param playerNumber The player who owns the piece at said position
+     * @return Whether that piece is at the edge of its goal zone
+     */
+    public abstract boolean atGoalEdge(Position position, int playerNumber);
 }

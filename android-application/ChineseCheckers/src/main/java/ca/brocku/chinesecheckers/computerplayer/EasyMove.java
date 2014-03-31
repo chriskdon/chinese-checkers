@@ -17,7 +17,7 @@ import ca.brocku.chinesecheckers.gamestate.MovePath;
  * Date: 2/24/2014
  */
 public class EasyMove {
-    private AiPlannedMove currentMove;
+    private AiPlannedMove currentBestMove;
     private HeuristicCalculator cHeuristic;
     MovePath path;
     ArrayList<Position> visited;
@@ -32,10 +32,9 @@ public class EasyMove {
     public MovePath getEasyMove(int player, GameBoard board) {
         int maximumPathLength = (int)(Math.random()*3) + 2;
         visited = new ArrayList<Position>();
-        currentMove = new AiPlannedMove();
+        currentBestMove = new AiPlannedMove();
         path = new MovePath();
         cHeuristic = new HeuristicCalculator(player, board);
-        currentMove.setHeuristic(0);
         GameBoard tempBoard = board.getDeepCopy();
 
         GridPiece[] AIPieces = getPlayerPieces(player, tempBoard);
@@ -59,7 +58,27 @@ public class EasyMove {
                 }
             }
         }
-        return new MovePath(currentMove.getPath());
+
+        //Helps prevent pieces getting locked near the goal state
+        if(board.atGoalEdge(currentBestMove.getPath().get(0), player) && board.atGoalEdge(currentBestMove.getPath().get(currentBestMove.getPath().size()-1), player)){
+            Position thisMove = currentBestMove.getPath().get(currentBestMove.getPath().size()-1), initialPosition = currentBestMove.getPath().get(0);
+            int tempHeuristic = 0;
+            Position[] initialPossible = board.getPossibleMoves(currentBestMove.getPieceMoved());
+
+            for(Position pos : initialPossible){
+                if(board.atGoalEdge(pos, player)){
+                    tempBoard.forceMove((GridPiece) currentBestMove.getPieceMoved(), pos);
+                    Position[] newPossible = tempBoard.getPossibleMoves(currentBestMove.getPieceMoved());
+
+                    for(Position checkNextTurn : newPossible)
+                        if(cHeuristic.getDeltaDistanceHeuristic(new MovePath(currentBestMove.getPath().get((0)), checkNextTurn)) > tempHeuristic)
+                            thisMove = pos;
+                    tempBoard.forceMove((GridPiece) currentBestMove.getPieceMoved(), initialPosition);
+                }
+            }
+            return new MovePath(initialPosition, thisMove);
+        }
+        return new MovePath(currentBestMove.getPath());
     }
 
     /**
@@ -97,15 +116,16 @@ public class EasyMove {
         tempBoard.forceMove((GridPiece)current, movingTo);
         Position[] availableMoves = tempBoard.getPossibleHops(tempBoard.getPiece(movingTo));
 
-        if (cHeuristic.getDeltaDistanceHeuristic(path) > currentMove.getHeuristic() || currentMove.getHeuristic() == 0) {
+        if (cHeuristic.getDeltaDistanceHeuristic(path) > currentBestMove.getHeuristic() || currentBestMove.getHeuristic() == 0) {
             Position[] toArrayList = path.getPath().toArray(new Position[path.size()]);
             ArrayList<Position>  newArrayList = new ArrayList<Position>();
             for(int i = 0 ; i < toArrayList.length ;  i++){
                 newArrayList.add(toArrayList[i]);
             }
-            currentMove.setHeuristic(cHeuristic.getDeltaDistanceHeuristic(path));
-            currentMove.setPath(newArrayList);
-            currentMove.setPieceMoved(current);
+
+            currentBestMove.setHeuristic(cHeuristic.getDeltaDistanceHeuristic(path));
+            currentBestMove.setPath(newArrayList);
+            currentBestMove.setPieceMoved(current);
         }
         if(availableMoves != null && path.size() < maxLength){
             for(Position newHop : availableMoves){

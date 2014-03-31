@@ -27,16 +27,14 @@ import android.widget.Toast;
 import java.util.LinkedList;
 
 import ca.brocku.chinesecheckers.gamestate.Player;
+import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 
 /**
  * Created by kubasub on 2014-03-06.
  */
-public class OnlineListActivity extends Activity {
+public class OnlineListActivity extends SpicedGcmActivity {
     private LinearLayout gameListContainer;
     private Button newGameButton;
-    private LinearLayout networkConnectivityContainer;
-
-    private NetworkStateReceiver networkStateReceiver;
 
     private ViewManager onlineGameViewManager;
 
@@ -46,12 +44,9 @@ public class OnlineListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_list);
 
-        networkStateReceiver = new NetworkStateReceiver(); //for connectivity change
-
         //Bind Controls
         newGameButton = (Button)findViewById(R.id.onlineNewGameButton);
         gameListContainer = (LinearLayout)findViewById(R.id.onlineGameListContainer);
-        networkConnectivityContainer = (LinearLayout)findViewById(R.id.networkConnectivityContainer);
 
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
@@ -68,6 +63,7 @@ public class OnlineListActivity extends Activity {
 
 
     @Override
+<<<<<<< HEAD
     protected void onResume() {
         super.onResume();
         BoomBoomMusic.start(this);
@@ -82,6 +78,8 @@ public class OnlineListActivity extends Activity {
     }
 
     @Override
+=======
+>>>>>>> origin/develop
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main,menu);
         return true;
@@ -381,23 +379,6 @@ public class OnlineListActivity extends Activity {
             deleteGameDialog.show();
 
             return true;
-        }
-    }
-
-    private class NetworkStateReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getExtras()!=null) {
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                if((mobile!=null && mobile.isConnected()) || (wifi!=null && wifi.isConnected())) {
-                    networkConnectivityContainer.setVisibility(View.GONE);
-                } else {
-                    networkConnectivityContainer.setVisibility(View.VISIBLE);
-                }
-            }
         }
     }
 

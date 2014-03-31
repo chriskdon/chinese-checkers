@@ -5,7 +5,12 @@
 # Home page
 GET     /                           		controllers.Application.index
 
-POST	/users/register/:username			controllers.UserController.register(username: String)
+# User Tasks
+POST	/users/register/:username			       controllers.UserController.register(username: String)
+POST	/users/change/:userId/:username				   controllers.UserController.change(userId: Long, username: String)
+
+# Game Setup Tasks
+POST  /game/join/:userId/:playerCount            controllers.GameSetupController.join(userId: Long, playerCount: Integer)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
