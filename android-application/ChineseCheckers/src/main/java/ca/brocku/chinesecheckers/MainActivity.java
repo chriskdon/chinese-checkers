@@ -1,11 +1,17 @@
 package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +53,6 @@ public class MainActivity extends SpicedGcmActivity {
     public static final String PREF_USER_ID = "USER_ID";
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +72,31 @@ public class MainActivity extends SpicedGcmActivity {
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
+
+//        int notificationId = 123456789;
+//
+//        //Build the notification
+//        NotificationCompat.Builder notificationBuilder =
+//                new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.drawable.logo_image)
+//                        .setContentTitle("My notification")
+//                        .setContentText("Hello World!")
+//                        .setDefaults(Notification.DEFAULT_ALL)
+//                        .setAutoCancel(true);
+//
+//        //Create backstack and add it as the notification's intent
+//        Intent resultIntent = new Intent(this, OnlineListActivity.class);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//        stackBuilder.addParentStack(MainActivity.class);
+//        stackBuilder.addNextIntent(resultIntent);
+//        PendingIntent resultPendingIntent =
+//                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//        notificationBuilder.setContentIntent(resultPendingIntent);
+//
+//        //Issue notification
+//        NotificationManager notificationManager =
+//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(notificationId, notificationBuilder.build());
     }
 
     @Override
