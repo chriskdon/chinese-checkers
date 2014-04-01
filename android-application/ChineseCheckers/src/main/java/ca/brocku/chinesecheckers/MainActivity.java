@@ -1,13 +1,8 @@
 package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -16,15 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ccapi.receivables.JoinGameReceivable;
-import com.ccapi.receivables.SuccessReceivable;
-import com.ccapi.receivables.UserRegistrationReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,10 +25,7 @@ import java.util.UUID;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
-import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
-import ca.brocku.chinesecheckers.network.spice.requests.ChangeUsernameRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
-import ca.brocku.chinesecheckers.network.spice.requests.RegisterUserRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
  *
@@ -55,7 +43,9 @@ public class MainActivity extends SpicedGcmActivity {
 
     public static final String PREF_DONE_INITIAL_SETUP = "DONE_INITIAL_SETUP";
     public static final String PREF_SHOW_MOVES = "SHOW_MOVES";
+    public static final String PREF_USERNAME = "USERNAME";
     public static final String PREF_USER_ID = "USER_ID";
+
 
 
     @Override
@@ -77,28 +67,18 @@ public class MainActivity extends SpicedGcmActivity {
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
-
-        performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        //set the icon which shows the number of games in which it is your turn
-        //TODO: make API call HERE to get number of "current move" games and set variable
-        int numberOfCurrentMoveGames = 1;
-        if(numberOfCurrentMoveGames > 0) {
-            onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
-            onlineNotificationIcon.setVisibility(View.VISIBLE);
-        } else {
-            onlineNotificationIcon.setVisibility(View.INVISIBLE);
-        }
+        displayOnlineGameNotification();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -133,34 +113,27 @@ public class MainActivity extends SpicedGcmActivity {
             editor
                 .putBoolean(PREF_DONE_INITIAL_SETUP, true)
                 .putBoolean(PREF_SHOW_MOVES, true)
-                .putString(PREF_USER_ID, UUID.randomUUID().toString())
+                .putString(PREF_USERNAME, UUID.randomUUID().toString())
                 .commit();
+
+            if(super.isConnected) registerUser(); //try to register the user on first launch
         }
     }
 
-    // TODO: PLACEHOLDER EXAMPLE -- DELETE WHEN THERE IS A REAL API
-    private void performRequest(String user) {
-        this.setProgressBarIndeterminateVisibility(true);
-
-        JoinGameRequest request = new JoinGameRequest(10, 3);
-
-        spiceManager.execute(request, new ApiRequestListener<JoinGameReceivable>() {
-            @Override
-            public void onTaskFailure(int code, String message) {
-                Log.e("SPICE_TASK", message);
-                Toast.makeText(MainActivity.this, "Task Error: " + message, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onTaskSuccess(JoinGameReceivable result) {
-                Toast.makeText(MainActivity.this, "Task Success", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                Toast.makeText(MainActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-            }
-        });
+    /** makes API request for number of games in which it is the user's turn and displays the
+     * notification icon with the number of moves to be made (if there are any).
+      
+     */
+    private void displayOnlineGameNotification() {
+        //set the icon which shows the number of games in which it is your turn
+        //TODO: make API call HERE to get number of "current move" games and set variable
+        int numberOfCurrentMoveGames = 1;
+        if(numberOfCurrentMoveGames > 0) {
+            onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
+            onlineNotificationIcon.setVisibility(View.VISIBLE);
+        } else {
+            onlineNotificationIcon.setVisibility(View.INVISIBLE);
+        }
     }
 
     /** Handles clicking on the "Offline" game button.

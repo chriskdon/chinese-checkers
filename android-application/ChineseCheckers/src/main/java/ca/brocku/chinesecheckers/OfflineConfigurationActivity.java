@@ -70,7 +70,7 @@ public class OfflineConfigurationActivity extends Activity {
 
         //Stores the username from the SharedPrefs file
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        username = sharedPreferences.getString(MainActivity.PREF_USER_ID, "");
+        username = sharedPreferences.getString(MainActivity.PREF_USERNAME, "");
         boolean isUuidUsername = username.matches("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
         if(!isUuidUsername) {
             redPlayerEditText.setText(username);
@@ -410,7 +410,7 @@ public class OfflineConfigurationActivity extends Activity {
      */
     private void setRedPlayerName() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String newUsername = sharedPreferences.getString(MainActivity.PREF_USER_ID, "");
+        String newUsername = sharedPreferences.getString(MainActivity.PREF_USERNAME, "");
         boolean isUuidUsername = newUsername.matches("^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$");
         if(!isUuidUsername && (redPlayerEditText.getText()!=null && (redPlayerEditText.getText().toString().equals("") || redPlayerEditText.getText().toString().equals(username)))) {
             //Update the username in case it was changed in settings

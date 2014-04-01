@@ -13,7 +13,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.receivables.SuccessReceivable;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import ca.brocku.chinesecheckers.network.spice.SpicedActivity;
+import ca.brocku.chinesecheckers.network.spice.requests.ChangeUsernameRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
 
 /**
  * Created by kubasub on 2014-03-06.
@@ -23,8 +29,6 @@ public class SettingsActivity extends SpicedActivity {
     private TextView usernameErrorTextView;
     private EditText usernameEditText;
     private SharedPreferences sharedPrefs;
-
-    private boolean isConnected;
 
 
     @Override
@@ -41,7 +45,7 @@ public class SettingsActivity extends SpicedActivity {
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean showMoves = sharedPrefs.getBoolean(MainActivity.PREF_SHOW_MOVES, true);
         showMovesRadio.check(showMoves ? R.id.settingsShowMoveOnButton : R.id.settingsShowMoveOffButton);
-        String username = sharedPrefs.getString(MainActivity.PREF_USER_ID, "");
+        String username = sharedPrefs.getString(MainActivity.PREF_USERNAME, "");
         usernameEditText.setText(username);
     }
 
@@ -67,27 +71,37 @@ public class SettingsActivity extends SpicedActivity {
     protected void onPause() {
         super.onPause();
 
-        SharedPreferences.Editor editor = sharedPrefs.edit();
+        final SharedPreferences.Editor editor = sharedPrefs.edit();
 
         //Get preferences from the UI
         View checkedChild = findViewById(showMovesRadio.getCheckedRadioButtonId());
         boolean showMoves = (showMovesRadio.indexOfChild(checkedChild) == 0);
-        String newUsername = usernameEditText.getText().toString();
+        final String newUsername = usernameEditText.getText().toString();
 
 
         //try to save username if it has changed
-        if(!newUsername.equals(sharedPrefs.getString(MainActivity.PREF_USER_ID, ""))) {
-            if(isConnected) {
-                //TODO: make server request to accept new username
+        if(!newUsername.equals(sharedPrefs.getString(MainActivity.PREF_USERNAME, ""))) {
+            if(super.isConnected) {
+                Toast.makeText(this, "Trying to send ChangeUsernameRequest", Toast.LENGTH_LONG).show(); //TODO: delete after testing
+                //Make request only if the user is registered
+                long userId = sharedPrefs.getLong(MainActivity.PREF_USER_ID, -1);
+                if(userId != -1) {
+                    ChangeUsernameRequest changeUsernameRequest = new ChangeUsernameRequest(userId, newUsername);
+                    spiceManager.execute(changeUsernameRequest, new RequestListener<SuccessReceivable>() {
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+                            Toast.makeText(SettingsActivity.this, spiceException.getMessage(), Toast.LENGTH_LONG).show();
+                        }
 
-                if(true) { //TODO: Change "true" to --> if server saved username
-                    editor.putString(MainActivity.PREF_USER_ID, newUsername);
-                } else {
-                    //TODO: add error message to toast
-                    Toast.makeText(this, "Some error message.", Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onRequestSuccess(SuccessReceivable successReceivable) {
+                            editor.putString(MainActivity.PREF_USERNAME, newUsername);
+                        }
+                    });
                 }
+
             } else {
-                Toast.makeText(this, "Couldn't save username.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Couldn't save username. No internet connection.", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -100,8 +114,6 @@ public class SettingsActivity extends SpicedActivity {
     @Override
     protected void onNetworkConnected() {
         super.onNetworkConnected();
-
-        isConnected = true;
 
         usernameErrorTextView.setVisibility(View.GONE);
 
@@ -116,8 +128,6 @@ public class SettingsActivity extends SpicedActivity {
     @Override
     protected void onNetworkDisconnected() {
         super.onNetworkDisconnected();
-
-        isConnected = false;
 
         usernameEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override

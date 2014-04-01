@@ -5,12 +5,10 @@ import android.app.Instrumentation;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import ca.brocku.chinesecheckers.HelpActivity;
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.SettingsActivity;
@@ -74,7 +72,7 @@ public class SettingsActivityUnitTest extends ActivityInstrumentationTestCase2<S
                     testHelper.RadioButtonTest(actInsTest, showMoveOn, true, true);
                     testHelper.RadioButtonTest(actInsTest, showMoveOff, true, false);
 
-                    String username = sharedPrefs.getString(MainActivity.PREF_USER_ID, "");
+                    String username = sharedPrefs.getString(MainActivity.PREF_USERNAME, "");
                     testHelper.EditTextTest(actInsTest, (EditText) curAct.findViewById(R.id.settingsUsernameEditText), true,username);
                 }
             });
