@@ -2,6 +2,8 @@ package ca.brocku.chinesecheckers.gameboard;
 
 import android.os.Parcel;
 
+import javajar.gameboard.CcGameBoard;
+
 /**
  * Creates a AndroidReadOnlyGameBoard out of a AndroidGameBoard
  *
@@ -10,18 +12,29 @@ import android.os.Parcel;
  * Date: 2/22/2014
  */
 public class AndroidReadOnlyGameBoard extends javajar.gameboard.ReadOnlyGameBoard implements AndroidGameBoard {
-    private AndroidGameBoard gameBoard;
+    //private AndroidGameBoard gameBoard;
 
     public AndroidReadOnlyGameBoard(AndroidGameBoard gameBoard) {
         super(gameBoard);
     }
 
     /**
+     * Returns a deep copied version of the gameboard.
+     *
+     * @return
+     */
+    @Override
+    public AndroidGameBoard getDeepCopy() {
+        return new AndroidCcGameBoard((CcGameBoard)gameBoard.getDeepCopy());
+    }
+
+
+    /**
      * Parcel constructor
      * @param p
      */
     private AndroidReadOnlyGameBoard(Parcel p) {
-        gameBoard = p.readParcelable(AndroidGameBoard.class.getClassLoader());
+        gameBoard = (AndroidGameBoard)p.readParcelable(AndroidGameBoard.class.getClassLoader());
     }
 
     /**
@@ -45,7 +58,7 @@ public class AndroidReadOnlyGameBoard extends javajar.gameboard.ReadOnlyGameBoar
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(gameBoard, 0);
+        dest.writeParcelable((AndroidGameBoard)gameBoard, 0);
     }
 
 }

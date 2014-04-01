@@ -33,7 +33,7 @@ import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
 import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
-import javajar.gamestate.Player;
+import ca.brocku.chinesecheckers.gamestate.AndroidPlayer;
 
 /**
  * Created by Main on 2/18/14.
@@ -63,9 +63,9 @@ public class OfflineGameActivityUnitTest extends ActivityInstrumentationTestCase
         super.setUp();
         testHelper = new TestHelpers();
         Intent intent = new Intent();
-        ArrayList<Player> players = new ArrayList<Player>(6);
-        players.add(new HumanPlayer("Red Bob", Player.PlayerColor.RED));
-        players.add(new HumanPlayer("Green Bob",Player.PlayerColor.GREEN));
+        ArrayList<AndroidPlayer> players = new ArrayList<AndroidPlayer>(6);
+        players.add(new HumanPlayer("Red Bob", AndroidPlayer.PlayerColor.RED));
+        players.add(new HumanPlayer("Green Bob",AndroidPlayer.PlayerColor.GREEN));
         AndroidCcGameBoard board = new AndroidCcGameBoard(players.size());
         intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager((AndroidGameBoard)board, players));
         setActivityIntent(intent);

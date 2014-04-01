@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javajar.gameboard.CcGameBoard;
 import javajar.gameboard.Position;
 import javajar.gameboard.Piece;
 
@@ -47,6 +48,16 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
         super(pieceList);
     }
 
+    public AndroidCcGameBoard(CcGameBoard bd){
+        //board = constructBoard();
+        for(int i=0;i<bd.board.length;i++){
+            for(int j=0;j<bd.board[i].length;j++){
+                board[i][j]=bd.board[i][j];
+            }
+        }
+        numPlayers=bd.getPlayerCount();
+    }
+
     /**
      * Return all the pieces that are on the board in no specific order.
      *
@@ -58,7 +69,7 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
         for(int i=0; i<board.length;i++) {
             for(int j=0; j<board[i].length; j++) {
                 if(board[i][j]!=null) {
-                    allPieces.add((AndroidPiece)board[i][j]);
+                    allPieces.add(new AndroidGridPiece(board[i][j]));
                 }
             }
         }
@@ -124,11 +135,87 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
      */
     @Override
     public AndroidPosition[] getPossibleMoves(Piece forPiece) {
-        AndroidPosition[] possibleMoves = new AndroidPosition[14];
         Position[] pm = super.getPossibleMoves(forPiece);
-        for(int i=0;i<14;i++)possibleMoves[i]=(AndroidPosition)pm[i];
-        return possibleMoves;
+        ArrayList<AndroidPosition> moves = new ArrayList<AndroidPosition>();
+        if(pm != null) {
+            for(Position p : pm) {
+                moves.add(new AndroidPosition(p));
+
+            }
+        }
+
+        return (moves.size() > 0 ? moves.toArray(new AndroidPosition[moves.size()]) : null);
     }
+
+    /**
+     * A list of valid positions that a piece can go to ONLY by hopping over another player.
+     *
+     * @param forPiece The piece to check positions for.
+     * @return The list of positions the piece can move to.
+     */
+    @Override
+    public AndroidPosition[] getPossibleHops(Piece forPiece) {
+        Position[] ap = super.getPossibleHops(forPiece);
+        ArrayList<AndroidPosition> hops = new ArrayList<AndroidPosition>();
+        if(ap != null) {
+            for(Position p : ap) {
+                hops.add(new AndroidPosition(p));
+
+            }
+        }
+
+        return (hops.size() > 0 ? hops.toArray(new AndroidPosition[hops.size()]) : null);
+    }
+
+    /**
+     * Create a deep copy of the game board that can be modified.
+     *
+     * @return
+     */
+    @Override
+    public AndroidGameBoard getDeepCopy() {
+        AndroidPiece[] pieces = getAllPieces();
+
+
+        AndroidCcGameBoard board = new AndroidCcGameBoard(); // Empty Board
+
+
+        // Construct board
+        for(final AndroidPiece p : pieces) {
+            board.addPiece(new AndroidPiece() {
+                @Override
+                public Position getPosition() {
+                    return p.getPosition();
+                }
+
+
+                @Override
+                public int getPlayerNumber() {
+                    return p.getPlayerNumber();
+                }
+
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+
+                @Override
+                public void writeToParcel(Parcel parcel, int i) {
+
+
+                }
+            });
+        }
+
+
+        board.numPlayers = pieces.length/10;
+
+
+        return board;
+    }
+
 
     /**
      * Constructor for the parcel.

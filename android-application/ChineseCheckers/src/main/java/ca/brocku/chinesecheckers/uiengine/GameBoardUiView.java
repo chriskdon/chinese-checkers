@@ -13,11 +13,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gameboard.AndroidPosition;
-import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
-import ca.brocku.chinesecheckers.gameboard.AndroidReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gameboard.AndroidPiece;
-import javajar.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.*;
+//import javajar.gameboard.GameBoard;
 import javajar.gameboard.Piece;
 import javajar.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
@@ -97,7 +94,7 @@ public class GameBoardUiView extends SurfaceView implements BoardUiEngine, Surfa
 
         if(init != null) {
             // Draw light home pieces
-            GameBoard temp = init.getDeepCopy();
+            AndroidGameBoard temp = init.getDeepCopy();
             temp.reset();
             for(Piece p : temp.getAllPieces()) {
                 gameBoard.addChild(new PieceVisual(piecePositionSystem.get((AndroidPosition)p.getPosition()),

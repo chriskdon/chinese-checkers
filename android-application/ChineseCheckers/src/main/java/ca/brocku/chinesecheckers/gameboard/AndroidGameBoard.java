@@ -15,6 +15,12 @@ import java.io.Serializable;
 public interface AndroidGameBoard extends Parcelable, javajar.gameboard.GameBoard {
 
     /**
+     * Returns a deep copied version of the gameboard.
+     * @return
+     */
+    public abstract AndroidGameBoard getDeepCopy();
+
+    /**
      * Describe the kinds of special objects contained in this Parcelable's
      * marshalled representation.
      *

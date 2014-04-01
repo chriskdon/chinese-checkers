@@ -17,7 +17,7 @@ public class CcGameBoard implements GameBoard {
      * Total number of spaces on the board
      */
     public GridPiece[][] board;
-    private int numPlayers = 0;
+    public int numPlayers = 0;
 
     /**
      * Constructs an empty board, used for testing purposes

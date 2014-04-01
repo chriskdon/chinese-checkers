@@ -8,7 +8,7 @@ package javajar.gameboard;
  * Date: 2/22/2014
  */
 public class ReadOnlyGameBoard implements GameBoard {
-    private GameBoard gameBoard;
+    public GameBoard gameBoard;
 
     public ReadOnlyGameBoard(){}
 
