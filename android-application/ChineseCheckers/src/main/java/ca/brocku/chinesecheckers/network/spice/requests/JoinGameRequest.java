@@ -25,7 +25,7 @@ public class JoinGameRequest extends ApiRequest<JoinGameReceivable> {
 
     @Override
     public JoinGameReceivable loadDataFromNetwork() throws Exception {
-        String url = apiUrl("/game/join/%s/%s", userId, playerCount);
+        String url = apiUrl("/games/join/%s/%s", playerCount, userId);
 
         return getRestTemplate().postForObject(url, null, JoinGameReceivable.class);
     }
