@@ -115,7 +115,6 @@ public class SettingsActivity extends SpicedActivity {
     protected void onResume() {
         super.onResume();
         BoomBoomMusic.start(this);
-        registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for changes in connectivity
     }
 
     /** Updates the preferences.
@@ -153,7 +152,6 @@ public class SettingsActivity extends SpicedActivity {
 
         editor.commit();
         BoomBoomMusic.pause();
-        unregisterReceiver(networkStateReceiver);
     }
 
     @Override

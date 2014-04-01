@@ -83,8 +83,6 @@ public class MainActivity extends SpicedGcmActivity {
     protected void onPause() {
         super.onPause();
         BoomBoomMusic.pause();
-        unregisterReceiver(networkStateReceiver); //for connectivity change
-        performRequest("MyNewTestUser"); // TODO: FOR TESTING -- REMOVE
     }
 
     @Override
@@ -101,7 +99,6 @@ public class MainActivity extends SpicedGcmActivity {
             onlineNotificationIcon.setVisibility(View.INVISIBLE);
         }
         BoomBoomMusic.start(this);
-        registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
     }
 
     @Override

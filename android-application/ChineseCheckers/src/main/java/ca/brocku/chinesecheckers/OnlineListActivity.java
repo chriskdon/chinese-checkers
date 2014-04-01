@@ -66,14 +66,12 @@ public class OnlineListActivity extends SpicedGcmActivity {
     protected void onResume() {
         super.onResume();
         BoomBoomMusic.start(this);
-        registerReceiver(networkStateReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")); //for connectivity change
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         BoomBoomMusic.pause();
-        unregisterReceiver(networkStateReceiver);
     }
 
     @Override
