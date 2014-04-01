@@ -98,31 +98,33 @@ object GameSetupController extends ApiControllerBase {
           case None => winnerId = null
         }
 
-        val gamestate = new GameState(gameStateResult[Int]("currentTurn"), winnerId);
-
-        
+        val gamestate = new GameState(gameStateResult[Int]("currentTurn"), 
+                                      winnerId, gameStateResult[Int]("isReady") == 1,
+                                      gameStateResult[Int]("numPlayer"));
 
         // Setup Pieces
-        var gamePiecesResult:List[(Int, Int, Int)] = {
-          SQL("CALL getGamePieces({gameId})").on("gameId" -> gameId).as(
-            int("playerNumber") ~ int("onRow") ~ int("onIndex") map(flatten) *
-          )
-        }
-
-        val pieces:Array[PieceInformation] = new Array[PieceInformation](gamePiecesResult.length)
-
-        i = 0;
-        for(p <- gamePiecesResult) {
-          p match {
-            case (playerNumber, row, index) => {
-              pieces(i) = new PieceInformation(playerNumber, row, index)
-            }
+        if(gamestate.isReady) { // Is the game ready?
+          var gamePiecesResult:List[(Int, Int, Int)] = {
+            SQL("CALL getGamePieces({gameId})").on("gameId" -> gameId).as(
+              int("playerNumber") ~ int("onRow") ~ int("onIndex") map(flatten) *
+            )
           }
 
-          i += 1
-        }
+          val pieces:Array[PieceInformation] = new Array[PieceInformation](gamePiecesResult.length)
 
-        gamestate.pieces = pieces;
+          i = 0;
+          for(p <- gamePiecesResult) {
+            p match {
+              case (playerNumber, row, index) => {
+                pieces(i) = new PieceInformation(playerNumber, row, index)
+              }
+            }
+
+            i += 1
+          }
+
+          gamestate.pieces = pieces;
+        }
 
         gamestateReceivable.gameState = gamestate;
 
