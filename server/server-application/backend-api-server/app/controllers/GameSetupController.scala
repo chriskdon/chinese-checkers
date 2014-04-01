@@ -66,7 +66,9 @@ object GameSetupController extends ApiControllerBase {
       try {
         val gamestateReceivable:GameStateReceivable = new GameStateReceivable(gameId)
 
+        // ======================================
         // Get Players
+        // ======================================
         val playerResult:List[(Long, String, Int)] = {
           SQL("CALL getGamePlayers({gameId})").on("gameId" -> gameId).as(
             long("userId") ~ str("username") ~ int("playerNumber") map(flatten) *
@@ -88,7 +90,9 @@ object GameSetupController extends ApiControllerBase {
 
         gamestateReceivable.players = players;
 
+        // ======================================
         // Setup GameState
+        // ======================================
         var gameStateResult = SQL("CALL getGameState({gameId})").on("gameId" -> gameId).apply().head
         var winnerIdResult = gameStateResult[Option[Long]]("winnerId")
         var winnerId:java.lang.Long = null;
@@ -102,7 +106,9 @@ object GameSetupController extends ApiControllerBase {
                                       winnerId, gameStateResult[Int]("isReady") == 1,
                                       gameStateResult[Int]("numPlayer"));
 
+        // ======================================
         // Setup Pieces
+        // ======================================
         if(gamestate.isReady) { // Is the game ready?
           var gamePiecesResult:List[(Int, Int, Int)] = {
             SQL("CALL getGamePieces({gameId})").on("gameId" -> gameId).as(
@@ -128,7 +134,9 @@ object GameSetupController extends ApiControllerBase {
 
         gamestateReceivable.gameState = gamestate;
 
+        // ======================================
         // Return JSON
+        // ======================================
         okJson(gamestateReceivable)
 
       } catch {
