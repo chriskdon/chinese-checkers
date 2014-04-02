@@ -1,1 +1,1 @@
-To compile to `jar` run `mvn package`
+To compile to `jar` run `mvn clean package`

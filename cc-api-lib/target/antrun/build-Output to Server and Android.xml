@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<project name="maven-antrun-" default="Output to Server and Android"  >
-<target name="Output to Server and Android">
-  <copy file="./target/cc-api.jar" tofile="../server/server-application/backend-api-server/lib/cc-api.jar"/>
-  <copy file="./target/cc-api.jar" tofile="../android-application/ChineseCheckers/libs/cc-api.jar"/>
-</target>
-</project>

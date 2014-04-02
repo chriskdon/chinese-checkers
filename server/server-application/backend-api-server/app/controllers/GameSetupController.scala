@@ -27,6 +27,7 @@ object GameSetupController extends ApiControllerBase {
                             .on("userId" -> userId, "playerCount" -> playerCount)
                             .as(scalar[Long].single)
 
+
         val joinReceivable = new JoinGameReceivable(gameId);
 
         // Is the game ready -- full of players
@@ -52,8 +53,56 @@ object GameSetupController extends ApiControllerBase {
    * 
    * @type {[type]}
    */
-  def forfeight(gameId: Long, userId: Long) = Action { request => 
+  def delete(gameId: Long, userId: Long) = Action { request => 
     Ok("NOT IMPLEMENTED") // TODO
+  }
+
+  /**
+   * List all the games that a user is a part of.
+   * @type {[type]}
+   */
+  def list(userId: Long) = Action { request =>
+    DB.withConnection { implicit c =>
+      try {
+        val gameListReceivable:GameListReceivable = new GameListReceivable();
+
+        val listResults = SQL("CALL getGameList({userId})")
+                            .on("userId" -> userId)
+                            .as(long("gameID") ~ int("numPlayer") ~ int("isReady") ~ int("currentTurn") ~ 
+                                get[Int]("playerNumber") ~ get[Option[String]]("winnerUsername") ~ 
+                                get[Option[Int]]("winnerPlayerNumber") map(flatten) *)
+
+        var games = new Array[GameListItem](listResults.length)
+
+        var i = 0
+        for(p <- listResults) {
+          p match {
+            case (gameId, numPlayers, isReady, currentTurnNumber, playerNumber, winnerUsername, winnerPlayerNumber) => {
+              var game = new GameListItem(gameId, isReady == 1, currentTurnNumber, playerNumber, 
+                                          winnerUsername.getOrElse(null).asInstanceOf[String], 
+                                          winnerPlayerNumber.getOrElse(null).asInstanceOf[Int],
+                                          numPlayers)
+
+              games(i) = game
+            }
+          }
+
+          i += 1;
+        }
+
+        gameListReceivable.gameListItems = games
+
+        // ======================================
+        // Submit Result
+        // ======================================
+        
+        okJson(gameListReceivable)
+      } catch {
+        case ex: Exception => {
+          okJson(new ErrorReceivable(ex.getMessage()))
+        }
+      }
+    }
   }
 
   /**
