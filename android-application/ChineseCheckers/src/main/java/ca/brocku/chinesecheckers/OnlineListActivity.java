@@ -1,23 +1,13 @@
 package ca.brocku.chinesecheckers;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -86,10 +76,11 @@ public class OnlineListActivity extends SpicedGcmActivity {
      */
     private void populateList() {
         //TODO: server request for current games array
-        GameItemData[] gameItemData = new GameItemData[2];
+        GameItemData[] gameItemData = new GameItemData[3];
 
-        gameItemData[0] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null);
-        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED);
+        gameItemData[0] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null, true);
+        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED, true);
+        gameItemData[2] = new GameItemData(5196, false, 6, Player.PlayerColor.GREEN, false, null, null, false);
 
         for (GameItemData aGameItemData : gameItemData) { //for each game received
 
@@ -116,6 +107,20 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
                 //Set Game ID
                 ((TextView) newGame.findViewById(R.id.onlineGameIdTextView)).setText("#"+Integer.toString(aGameItemData.getGameId()));
+
+                if(!aGameItemData.isReady()) {
+                    //Set all of the icons to white if the game is not ready yet
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_white);
+
+                    //Set the text view under the player icons
+                    newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
+                    ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText("Waiting for players...");
+                }
 
                 //Set Player icons
                 switch (aGameItemData.getNumberOfPlayers()) {
@@ -145,25 +150,27 @@ public class OnlineListActivity extends SpicedGcmActivity {
                 }
 
                 //Sets User's icon (with star)
-                switch (aGameItemData.getPlayerColor()) {
-                    case RED:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
-                        break;
-                    case PURPLE:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_star_purple);
-                        break;
-                    case BLUE:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_star_blue);
-                        break;
-                    case GREEN:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_star_green);
-                        break;
-                    case YELLOW:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_star_yellow);
-                        break;
-                    case ORANGE:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_star_orange);
-                        break;
+                if(aGameItemData.isReady()) {
+                    switch (aGameItemData.getPlayerColor()) {
+                        case RED:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
+                            break;
+                        case PURPLE:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_star_purple);
+                            break;
+                        case BLUE:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_star_blue);
+                            break;
+                        case GREEN:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_star_green);
+                            break;
+                        case YELLOW:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_star_yellow);
+                            break;
+                        case ORANGE:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_star_orange);
+                            break;
+                    }
                 }
 
                 //Set notification icon if this user's turn
@@ -378,8 +385,10 @@ public class OnlineListActivity extends SpicedGcmActivity {
         private boolean isWinner;
         private String winnerUsername;
         private Player.PlayerColor winnerColor;
+        private boolean isReady;
 
-        private GameItemData(int gameId, boolean isPlayerTurn, int numberOfPlayers, Player.PlayerColor playerColor, boolean isWinner, String winnerUsername, Player.PlayerColor winnerColor) {
+
+        private GameItemData(int gameId, boolean isPlayerTurn, int numberOfPlayers, Player.PlayerColor playerColor, boolean isWinner, String winnerUsername, Player.PlayerColor winnerColor, boolean isReady) {
             this.gameId = gameId;
             this.isPlayerTurn = isPlayerTurn;
             this.numberOfPlayers = numberOfPlayers;
@@ -387,6 +396,8 @@ public class OnlineListActivity extends SpicedGcmActivity {
             this.isWinner = isWinner;
             this.winnerUsername = winnerUsername;
             this.winnerColor = winnerColor;
+            this.isReady = isReady;
+
         }
 
         public int getGameId() {
@@ -415,6 +426,10 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
         public Player.PlayerColor getWinnerColor() {
             return winnerColor;
+        }
+
+        public boolean isReady() {
+            return isReady;
         }
     }
 }

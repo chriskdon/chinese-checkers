@@ -73,30 +73,32 @@ public class MainActivity extends SpicedGcmActivity {
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
 
-//        int notificationId = 123456789;
-//
-//        //Build the notification
-//        NotificationCompat.Builder notificationBuilder =
-//                new NotificationCompat.Builder(this)
-//                        .setSmallIcon(R.drawable.logo_image)
-//                        .setContentTitle("My notification")
-//                        .setContentText("Hello World!")
-//                        .setDefaults(Notification.DEFAULT_ALL)
-//                        .setAutoCancel(true);
-//
-//        //Create backstack and add it as the notification's intent
-//        Intent resultIntent = new Intent(this, OnlineListActivity.class);
-//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-//        stackBuilder.addParentStack(MainActivity.class);
-//        stackBuilder.addNextIntent(resultIntent);
-//        PendingIntent resultPendingIntent =
-//                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-//        notificationBuilder.setContentIntent(resultPendingIntent);
-//
-//        //Issue notification
-//        NotificationManager notificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(notificationId, notificationBuilder.build());
+        /*
+        int notificationId = 123456789;
+
+        //Build the notification
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo_image)
+                        .setContentTitle("My notification")
+                        .setContentText("Hello World!")
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true);
+
+        //Create backstack and add it as the notification's intent
+        Intent resultIntent = new Intent(this, OnlineListActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.setContentIntent(resultPendingIntent);
+
+        //Issue notification
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notificationId, notificationBuilder.build());
+        */
     }
 
     @Override
