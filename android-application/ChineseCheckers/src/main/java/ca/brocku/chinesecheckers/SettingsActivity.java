@@ -1,6 +1,7 @@
 package ca.brocku.chinesecheckers;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,6 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +31,11 @@ public class SettingsActivity extends SpicedActivity {
     private RadioGroup showMovesRadio;
     private TextView usernameErrorTextView;
     private EditText usernameEditText;
+    private SeekBar backgroundSlider, effectsSlider;
+    private TextView backPerText, effectPerText;
     private SharedPreferences sharedPrefs;
 
+    private boolean isConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,11 @@ public class SettingsActivity extends SpicedActivity {
         setContentView(R.layout.activity_settings);
 
         //Bind Controls
+        usernameEditText = (EditText) findViewById(R.id.settingsUsernameEditText);
+        backgroundSlider = (SeekBar) findViewById(R.id.settingsBackSoundSlider);
+        effectsSlider = (SeekBar) findViewById(R.id.settingsEffectSoundSlider);
+        backPerText = (TextView) findViewById(R.id.settingsBackSoundText);
+        effectPerText = (TextView) findViewById(R.id.settingsEffectSoundText);
         showMovesRadio = (RadioGroup)findViewById(R.id.settingsShowMovesRadioGroup);
         usernameErrorTextView = (TextView)findViewById(R.id.settingsUsernameErrorTextView);
         usernameEditText = (EditText)findViewById(R.id.settingsUsernameEditText);
@@ -47,25 +58,72 @@ public class SettingsActivity extends SpicedActivity {
         showMovesRadio.check(showMoves ? R.id.settingsShowMoveOnButton : R.id.settingsShowMoveOffButton);
         String username = sharedPrefs.getString(MainActivity.PREF_USERNAME, "");
         usernameEditText.setText(username);
+
+        backgroundSlider.setProgress(sharedPrefs.getInt(BoomBoomMusic.BACKSOUNDPREF, 100));
+        backPerText.setText(sharedPrefs.getInt(BoomBoomMusic.BACKSOUNDPREF, 100) + "%");
+        effectsSlider.setProgress(sharedPrefs.getInt(BoomBoomMusic.EFFCTSOUNDPREF, 100));
+        effectPerText.setText(sharedPrefs.getInt(BoomBoomMusic.EFFCTSOUNDPREF,100) + "%");
+
+        backgroundSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                backPerText.setText(i + "%");
+                BoomBoomMusic.setBackgroundVolume(i);
+                editor.putInt(BoomBoomMusic.BACKSOUNDPREF, i);
+                editor.commit();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        effectsSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                effectPerText.setText(i + "%");
+                editor.putInt(BoomBoomMusic.EFFCTSOUNDPREF, i);
+                editor.commit();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.settings,menu);
+        getMenuInflater().inflate(R.menu.settings, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_help) {
+        if (id == R.id.action_help) {
             startActivity(new Intent(SettingsActivity.this, HelpActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BoomBoomMusic.start(this);
+    }
+
     /** Updates the preferences.
-     *
      */
     @Override
     protected void onPause() {
@@ -109,6 +167,7 @@ public class SettingsActivity extends SpicedActivity {
         editor.putBoolean(MainActivity.PREF_SHOW_MOVES, showMoves);
 
         editor.commit();
+        BoomBoomMusic.pause();
     }
 
     @Override

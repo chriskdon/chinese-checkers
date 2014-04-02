@@ -61,6 +61,19 @@ public class OnlineListActivity extends SpicedGcmActivity {
         }
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BoomBoomMusic.start(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BoomBoomMusic.pause();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main,menu);

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,9 +61,8 @@ public class GameActivity extends Activity {
                     .add(R.id.container, offlineGameFragment, "OfflineGameFragment")
                     .commit();
         }
-
         //Show the Resume Game dialog box if we are loading a saves game
-        if(getIntent().getBooleanExtra("SAVED_GAME", false)) {
+        if (getIntent().getBooleanExtra("SAVED_GAME", false)) {
 
             resumeDialog = new Popup(this);
             resumeDialog.setTitleText(R.string.offline_resume_title)
@@ -74,7 +74,7 @@ public class GameActivity extends Activity {
                         public void onClick(View view) {
                             resumeDialog.dismiss();
 
-                            ((OfflineGameFragment)getFragmentManager().findFragmentByTag("OfflineGameFragment")).startGame(); //start the saved game after the resume game dialog is closed
+                            ((OfflineGameFragment) getFragmentManager().findFragmentByTag("OfflineGameFragment")).startGame(); //start the saved game after the resume game dialog is closed
                         }
                     })
                     .setCancelClickListener(new Button.OnClickListener() {
@@ -97,6 +97,7 @@ public class GameActivity extends Activity {
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -106,9 +107,9 @@ public class GameActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_help) {
+        if (id == R.id.action_help) {
             startActivity(new Intent(GameActivity.this, HelpActivity.class));
-        } else if(id == R.id.action_settings) {
+        } else if (id == R.id.action_settings) {
             startActivity(new Intent(GameActivity.this, SettingsActivity.class));
         }
         return super.onOptionsItemSelected(item);
@@ -118,9 +119,11 @@ public class GameActivity extends Activity {
     protected void onPause() {
         gameStateManager.stopGame();
 
+//        mMediaPlayer.pause();
+
         super.onPause();
 
-        if(!isGameOver) { //only save the state if Quit Game was not selected form dialog
+        if (!isGameOver) { //only save the state if Quit Game was not selected form dialog
 
             try { //try to serialize the GameStateManager
 
@@ -129,7 +132,7 @@ public class GameActivity extends Activity {
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
 
                 //Get the GameStateManager from the OfflineGameFragment
-                GameStateManager gameStateManager = ((OfflineGameFragment)getFragmentManager()
+                GameStateManager gameStateManager = ((OfflineGameFragment) getFragmentManager()
                         .findFragmentByTag("OfflineGameFragment"))
                         .getGameStateManager();
 
@@ -145,8 +148,14 @@ public class GameActivity extends Activity {
         }
     }
 
-    /** This function handles the end of game state.
-     *
+    protected void onResume() {
+        super.onResume();
+        BoomBoomMusic.start(this);
+    }
+
+    /**
+     * This function handles the end of game state.
+     * <p/>
      * It disables saving, deletes the currently saved game, and shows the end of game dialog.
      *
      * @param p the player who won
@@ -159,6 +168,15 @@ public class GameActivity extends Activity {
         File savedOfflineGame = getFileStreamPath(GameStateManager.SERIALIZED_FILENAME);
         savedOfflineGame.delete();
 
+        //Plays game over sound depending on if device owner won
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sharedPrefs.getString(MainActivity.PREF_USER_ID, "").equals(p.getName())){
+            BoomBoomMusic.onPlayerWin();
+        }
+        else{
+            BoomBoomMusic.onPlayerLose();
+        }
+
         //Show the end of game dialog
         final Popup endGameDialog = new Popup(this);
         endGameDialog.setTitleText(p.getName() + " Wins!!")
@@ -170,6 +188,7 @@ public class GameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
+                        BoomBoomMusic.stopSP(getApplicationContext());
                         GameActivity.this.finish();
                         startActivity(new Intent(GameActivity.this, OfflineConfigurationActivity.class));
                     }
@@ -179,6 +198,7 @@ public class GameActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         endGameDialog.dismiss();
+                        BoomBoomMusic.stopSP(getApplicationContext());
                         GameActivity.this.finish();
                         startActivity(new Intent(GameActivity.this, MainActivity.class));
                     }
@@ -186,7 +206,7 @@ public class GameActivity extends Activity {
                 .show();
 
         //disable the Reset and Done buttons
-        ((OfflineGameFragment)getFragmentManager()
+        ((OfflineGameFragment) getFragmentManager()
                 .findFragmentByTag("OfflineGameFragment")).disableButtons();
 
         return true;
@@ -197,7 +217,7 @@ public class GameActivity extends Activity {
     }
 
     /**
-     *  Fragment containing game board, controls, and player turn indicator
+     * Fragment containing game board, controls, and player turn indicator
      */
     @SuppressLint("ValidFragment")
     public static class OfflineGameFragment extends Fragment {
@@ -219,7 +239,8 @@ public class GameActivity extends Activity {
 
         public GameActivity activity;
 
-        public OfflineGameFragment() {}
+        public OfflineGameFragment() {
+        }
 
         public OfflineGameFragment(GameActivity activity) {
             this.activity = activity;
@@ -227,10 +248,11 @@ public class GameActivity extends Activity {
 
         /**
          * Get a modifiable version of the current game board.
+         *
          * @return
          */
         private GameBoard getModifiableBoard() {
-            if(board == null) {
+            if (board == null) {
                 board = gameStateManager.getGameBoard().getDeepCopy();
             }
 
@@ -250,7 +272,7 @@ public class GameActivity extends Activity {
             super.onResume();
 
             gameStateManager = getActivity().getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
-            
+
             gameStateManager.setGameStateEventsHandler(new GameStateEventsHandler());
 
             // Setup Game Board
@@ -264,9 +286,9 @@ public class GameActivity extends Activity {
             isShowMoves = sharedPrefs.getBoolean(MainActivity.PREF_SHOW_MOVES, true);
 
             // Bind Controls
-            titleBarButton = (Button)rootView.findViewById(R.id.gamePlayerListButton);
-            resetMove = (Button)rootView.findViewById(R.id.gameMoveResetButton);
-            doneMove = (Button)rootView.findViewById(R.id.gameMoveDoneButton);
+            titleBarButton = (Button) rootView.findViewById(R.id.gamePlayerListButton);
+            resetMove = (Button) rootView.findViewById(R.id.gameMoveResetButton);
+            doneMove = (Button) rootView.findViewById(R.id.gameMoveDoneButton);
 
             // Bind Handlers
             titleBarButton.setOnClickListener(new TitleBarButtonHandler());
@@ -276,27 +298,30 @@ public class GameActivity extends Activity {
             setTitleBar(gameStateManager.getCurrentPlayer());
 
             //start the game if the resume dialog is not showing
-            if(activity.resumeDialog == null || !activity.resumeDialog.isShowing()) {
+            if (activity.resumeDialog == null || !activity.resumeDialog.isShowing()) {
                 gameStateManager.startGame(activity);
             }
+
         }
 
         @Override
         public void onPause() {
             gameStateManager.stopGame();
-
             super.onPause();
+            BoomBoomMusic.pause();
         }
 
         /**
          * Is the current player who's turn it is a Human.
-         * @return  True if the turn is for a human.
+         *
+         * @return True if the turn is for a human.
          */
         private boolean isHumanTurn() {
             return (currentPlayer != null && currentPlayer instanceof HumanPlayer);
         }
 
-        /** This is a getter method for the fragment's GameStateManager
+        /**
+         * This is a getter method for the fragment's GameStateManager
          *
          * @return the GameStateManager
          */
@@ -306,7 +331,8 @@ public class GameActivity extends Activity {
 
         /**
          * Set the color and name for the title bar based on the player.
-         * @param player    The The player who's turn it is.
+         *
+         * @param player The The player who's turn it is.
          */
         private void setTitleBar(Player player) {
             titleBarButton.setText(player.getName());
@@ -357,7 +383,8 @@ public class GameActivity extends Activity {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {
                                 if (!activity.isGameOver()) {
-                                    gameStateManager.startGame(activity);                              }
+                                    gameStateManager.startGame(activity);
+                                }
                             }
                         })
                         .show();
@@ -370,7 +397,7 @@ public class GameActivity extends Activity {
         private class ResetMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                if(isHumanTurn()) { // It must be a humans turn
+                if (isHumanTurn()) { // It must be a humans turn
                     resetHumanState();
                     boardUiEngine.drawBoard(gameStateManager.getGameBoard());
                     boardUiEngine.showHintPositions(null);
@@ -385,17 +412,57 @@ public class GameActivity extends Activity {
         private class DoneMoveHandler implements View.OnClickListener {
             @Override
             public void onClick(View view) {
-                if(isHumanTurn()) { // Not a humans turn
-                    if(movePath.size() < 2) {
+                if (isHumanTurn()) { // Not a humans turn
+                    if (movePath.size() < 2) {
                         // TODO: REPLACE THIS WITH A REAL MESSAGE
                         Toast.makeText(getActivity(), "Make a move.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    ((HumanPlayer)currentPlayer)
+                    ((HumanPlayer) currentPlayer)
                             .signalMove(movePath);
 
+                    if (movePath.getPath().size() >= 9) {
+                        checkKonamiCode(currentPlayer, movePath);
+                    }
+
                     resetHumanState();
+                }
+            }
+        }
+
+        /*
+        * checkKonamiCode
+        * Sees if the player's name and path adds up to the Konami Code
+        */
+        private void checkKonamiCode(Player p, MovePath m) {
+//        Log.e("Holla", "Entered");
+            if ((m.getPosition(0).getRow() > m.getPosition(1).getRow())) { // && //Up
+//            Log.e("Holla","Up");
+                if (m.getPosition(1).getRow() > m.getPosition(2).getRow()) { // && //Up
+//                Log.e("Holla","Up");
+                    if (m.getPosition(2).getRow() < m.getPosition(3).getRow()) { //&& //Down
+//                    Log.e("Holla","Down");
+                        if (m.getPosition(3).getRow() < m.getPosition(4).getRow()) { //&& //Down
+//                        Log.e("Holla","Down");
+                            if (m.getPosition(4).getIndex() > m.getPosition(5).getIndex()) { // && //Left
+//                            Log.e("Holla","Left");
+                                if (m.getPosition(5).getIndex() < m.getPosition(6).getIndex()) { // && //Right
+//                                Log.e("Holla","Right");
+                                    if (m.getPosition(6).getIndex() > m.getPosition(7).getIndex()) { // && //Left
+//                                    Log.e("Holla","Left");
+                                        if (m.getPosition(7).getIndex() < m.getPosition(8).getIndex()) { // && //Right
+//                                        Log.e("Holla","Right");
+                                            if (p.getName().contains("ba")) {//){
+//                                              Log.e("Holla", "Winn");
+                                                BoomBoomMusic.konamiCodeEntered(getActivity().getApplicationContext());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -417,7 +484,9 @@ public class GameActivity extends Activity {
          */
         private void setCurrentPlayer(Player p) {
             currentPlayer = p;
-            if(isHumanTurn()) { resetHumanState(); }
+            if (isHumanTurn()) {
+                resetHumanState();
+            }
         }
 
         private void startGame() {
@@ -430,33 +499,35 @@ public class GameActivity extends Activity {
         private class BoardEventsHandler implements BoardUiEngine.BoardUiEventsHandler {
             @Override
             public void positionTouched(final Position position) {
-                if(!activity.isGameOver()) { //disable board events if game is over
+                if (!activity.isGameOver()) { //disable board events if game is over
                     if (isHumanTurn()) {
                         GameBoard tempBoard = getModifiableBoard();
                         Piece piece = tempBoard.getPiece(position);
 
-                        if(piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
-                            for(Position p : possibleMoves) {
-                                if(p != null && position.equals(p)) { // User Clicked a valid piece
+                        if (piece == null && possibleMoves != null && possibleMoves.length > 0) { // Moving to hint
+                            for (Position p : possibleMoves) {
+                                if (p != null && position.equals(p)) { // User Clicked a valid piece
+                                    BoomBoomMusic.onPieceTap();
                                     tempBoard.movePiece(currentPiece, p);
                                     currentPiece = tempBoard.getPiece(p);
                                     possibleMoves = tempBoard.getPossibleHops(currentPiece);
                                     movePath.addToPath(p);
                                 }
                             }
-                        } else if(piece != null && movePath.size() <= 1 && piece.getPlayerNumber() == currentPlayer.getPlayerNumber()) { // Selecting first valid piece
+                        } else if (piece != null && movePath.size() <= 1 && piece.getPlayerNumber() == currentPlayer.getPlayerNumber()) { // Selecting first valid piece
                             resetHumanState();
+                            BoomBoomMusic.onPieceTap();
                             currentPiece = piece;
                             possibleMoves = tempBoard.getPossibleMoves(currentPiece);
                             movePath = new MovePath(new Position(piece.getPosition().getRow(), piece.getPosition().getIndex()));
-                        } else if(movePath.size() <= 1) {
+                        } else if (movePath.size() <= 1) {
                             resetHumanState();
                         }
 
                         // Update Drawing
                         boardUiEngine.drawBoard(new ReadOnlyGameBoard(tempBoard));
                         boardUiEngine.highlightPiece(currentPiece);
-                        if(isShowMoves) { //show moves if enabled in preferences
+                        if (isShowMoves) { //show moves if enabled in preferences
                             boardUiEngine.showHintPositions(possibleMoves);
                         }
                     }
@@ -545,7 +616,7 @@ public class GameActivity extends Activity {
             @Override
             public synchronized void onPlayerWon(Player player, int position) {
                 setTitleBar(player);
-                ((GameActivity)getActivity()).onEndGame(player);
+                ((GameActivity) getActivity()).onEndGame(player);
             }
         }
     }
