@@ -1,108 +1,67 @@
-2014-04-02 16:33:57,492 - [INFO] - from play in pool-4-thread-1 
-Listening for HTTP on /0:0:0:0:0:0:0:0%0:9000
+2014-04-02 19:05:05,151 - [INFO] - from play in pool-4-thread-4 
+Listening for HTTP on /0:0:0:0:0:0:0:0:9000
 
-2014-04-02 16:34:22,141 - [ERROR] - from application in New I/O worker #1 
+2014-04-02 19:05:20,016 - [ERROR] - from application in New I/O worker #1 
 
 
-! @6hmebaip5 - Internal server error, for (POST) [/games/delete/123/10] ->
+! @6hmf56259 - Internal server error, for (POST) [/games/join/16/3] ->
 
-play.PlayExceptions$RoutesCompilationException: Compilation error[Controller method call expected]
-	at play.PlaySourceGenerators$$anonfun$2.apply(PlaySourceGenerators.scala:21) ~[na:na]
-	at play.PlaySourceGenerators$$anonfun$2.apply(PlaySourceGenerators.scala:9) ~[na:na]
-	at play.Settings$$anonfun$defaultSettings$18.apply(PlaySettings.scala:105) ~[na:na]
-	at play.Settings$$anonfun$defaultSettings$18.apply(PlaySettings.scala:104) ~[na:na]
-	at scala.Function6$$anonfun$tupled$1.apply(Function6.scala:35) ~[scala-library.jar:na]
-	at scala.Function6$$anonfun$tupled$1.apply(Function6.scala:34) ~[scala-library.jar:na]
-	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47) ~[scala-library.jar:na]
-	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:42) ~[na:na]
-	at sbt.std.Transform$$anon$4.work(System.scala:64) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:18) ~[na:na]
-	at sbt.Execute.work(Execute.scala:244) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.ConcurrentRestrictions$$anon$4$$anonfun$1.apply(ConcurrentRestrictions.scala:160) ~[na:na]
-	at sbt.CompletionService$$anon$2.call(CompletionService.scala:30) ~[na:na]
-	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask.run(FutureTask.java:138) ~[na:1.6.0_65]
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:439) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask.run(FutureTask.java:138) ~[na:1.6.0_65]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:895) [na:1.6.0_65]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:918) [na:1.6.0_65]
-	at java.lang.Thread.run(Thread.java:695) [na:1.6.0_65]
+play.PlayExceptions$CompilationException: Compilation error[overloaded method constructor JoinGameReceivable with alternatives:
+  (x$1: com.ccapi.GameListItem)com.ccapi.receivables.JoinGameReceivable <and>
+  ()com.ccapi.receivables.JoinGameReceivable
+ cannot be applied to (Long, Integer)]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14$$anonfun$apply$16.apply(PlayReloader.scala:304) ~[na:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14$$anonfun$apply$16.apply(PlayReloader.scala:304) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library.jar:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14.apply(PlayReloader.scala:304) ~[na:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14.apply(PlayReloader.scala:298) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library.jar:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2.apply(PlayReloader.scala:298) ~[na:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2.apply(PlayReloader.scala:296) ~[na:na]
+	at scala.util.Either$LeftProjection.map(Either.scala:377) ~[scala-library.jar:na]
+	at play.PlayReloader$$anon$1.reload(PlayReloader.scala:296) ~[na:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:104) ~[play_2.10.jar:2.2.2]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:102) ~[play_2.10.jar:2.2.2]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library.jar:na]
 
-2014-04-02 16:34:22,212 - [WARN] - from play in New I/O worker #1 
+2014-04-02 19:05:20,151 - [WARN] - from play in New I/O worker #1 
 No application found at invoker init
 
-2014-04-02 16:34:25,425 - [ERROR] - from application in New I/O worker #1 
+2014-04-02 19:05:45,188 - [ERROR] - from application in New I/O worker #1 
 
 
-! @6hmebanin - Internal server error, for (POST) [/games/delete/123/10] ->
+! @6hmf57dcf - Internal server error, for (POST) [/games/join/16/3] ->
 
-play.PlayExceptions$RoutesCompilationException: Compilation error[Controller method call expected]
-	at play.PlaySourceGenerators$$anonfun$2.apply(PlaySourceGenerators.scala:21) ~[na:na]
-	at play.PlaySourceGenerators$$anonfun$2.apply(PlaySourceGenerators.scala:9) ~[na:na]
-	at play.Settings$$anonfun$defaultSettings$18.apply(PlaySettings.scala:105) ~[na:na]
-	at play.Settings$$anonfun$defaultSettings$18.apply(PlaySettings.scala:104) ~[na:na]
-	at scala.Function6$$anonfun$tupled$1.apply(Function6.scala:35) ~[scala-library.jar:na]
-	at scala.Function6$$anonfun$tupled$1.apply(Function6.scala:34) ~[scala-library.jar:na]
-	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47) ~[scala-library.jar:na]
-	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:42) ~[na:na]
-	at sbt.std.Transform$$anon$4.work(System.scala:64) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:18) ~[na:na]
-	at sbt.Execute.work(Execute.scala:244) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.ConcurrentRestrictions$$anon$4$$anonfun$1.apply(ConcurrentRestrictions.scala:160) ~[na:na]
-	at sbt.CompletionService$$anon$2.call(CompletionService.scala:30) ~[na:na]
-	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask.run(FutureTask.java:138) ~[na:1.6.0_65]
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:439) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask.run(FutureTask.java:138) ~[na:1.6.0_65]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:895) [na:1.6.0_65]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:918) [na:1.6.0_65]
-	at java.lang.Thread.run(Thread.java:695) [na:1.6.0_65]
+play.PlayExceptions$CompilationException: Compilation error[value isReady is not a member of com.ccapi.receivables.JoinGameReceivable]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14$$anonfun$apply$16.apply(PlayReloader.scala:304) ~[na:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14$$anonfun$apply$16.apply(PlayReloader.scala:304) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library.jar:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14.apply(PlayReloader.scala:304) ~[na:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2$$anonfun$apply$14.apply(PlayReloader.scala:298) ~[na:na]
+	at scala.Option.map(Option.scala:145) ~[scala-library.jar:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2.apply(PlayReloader.scala:298) ~[na:na]
+	at play.PlayReloader$$anon$1$$anonfun$reload$2.apply(PlayReloader.scala:296) ~[na:na]
+	at scala.util.Either$LeftProjection.map(Either.scala:377) ~[scala-library.jar:na]
+	at play.PlayReloader$$anon$1.reload(PlayReloader.scala:296) ~[na:na]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:104) ~[play_2.10.jar:2.2.2]
+	at play.core.ReloadableApplication$$anonfun$get$1.apply(ApplicationProvider.scala:102) ~[play_2.10.jar:2.2.2]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.liftedTree1$1(Future.scala:24) ~[scala-library.jar:na]
+	at scala.concurrent.impl.Future$PromiseCompletingRunnable.run(Future.scala:24) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask$AdaptedRunnableAction.exec(ForkJoinTask.java:1361) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:260) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1339) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1979) ~[scala-library.jar:na]
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:107) ~[scala-library.jar:na]
 
-2014-04-02 16:34:28,187 - [ERROR] - from application in New I/O worker #1 
+2014-04-02 19:06:24,639 - [INFO] - from play in play-internal-execution-context-1 
+database [default] connected at jdbc:mysql://127.0.0.1/ccdb?autoReconnect=true&useOldAliasMetadataBehavior=true
 
-
-! @6hmebb1lo - Internal server error, for (POST) [/games/delete/123/10] ->
-
-play.PlayExceptions$RoutesCompilationException: Compilation error[Controller method call expected]
-	at play.PlaySourceGenerators$$anonfun$2.apply(PlaySourceGenerators.scala:21) ~[na:na]
-	at play.PlaySourceGenerators$$anonfun$2.apply(PlaySourceGenerators.scala:9) ~[na:na]
-	at play.Settings$$anonfun$defaultSettings$18.apply(PlaySettings.scala:105) ~[na:na]
-	at play.Settings$$anonfun$defaultSettings$18.apply(PlaySettings.scala:104) ~[na:na]
-	at scala.Function6$$anonfun$tupled$1.apply(Function6.scala:35) ~[scala-library.jar:na]
-	at scala.Function6$$anonfun$tupled$1.apply(Function6.scala:34) ~[scala-library.jar:na]
-	at scala.Function1$$anonfun$compose$1.apply(Function1.scala:47) ~[scala-library.jar:na]
-	at sbt.$tilde$greater$$anonfun$$u2219$1.apply(TypeFunctions.scala:42) ~[na:na]
-	at sbt.std.Transform$$anon$4.work(System.scala:64) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1$$anonfun$apply$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.ErrorHandling$.wideConvert(ErrorHandling.scala:18) ~[na:na]
-	at sbt.Execute.work(Execute.scala:244) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.Execute$$anonfun$submit$1.apply(Execute.scala:237) ~[na:na]
-	at sbt.ConcurrentRestrictions$$anon$4$$anonfun$1.apply(ConcurrentRestrictions.scala:160) ~[na:na]
-	at sbt.CompletionService$$anon$2.call(CompletionService.scala:30) ~[na:na]
-	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask.run(FutureTask.java:138) ~[na:1.6.0_65]
-	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:439) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303) ~[na:1.6.0_65]
-	at java.util.concurrent.FutureTask.run(FutureTask.java:138) ~[na:1.6.0_65]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:895) [na:1.6.0_65]
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:918) [na:1.6.0_65]
-	at java.lang.Thread.run(Thread.java:695) [na:1.6.0_65]
-
-2014-04-02 16:37:06,371 - [INFO] - from play in play-internal-execution-context-1 
-database [default] connected at jdbc:mysql://127.0.0.1/ccdb
-
-2014-04-02 16:37:06,497 - [INFO] - from play in play-internal-execution-context-1 
+2014-04-02 19:06:24,783 - [INFO] - from play in play-internal-execution-context-1 
 Application started (Dev)
 

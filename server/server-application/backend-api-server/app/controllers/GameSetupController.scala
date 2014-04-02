@@ -27,15 +27,17 @@ object GameSetupController extends ApiControllerBase {
                             .on("userId" -> userId, "playerCount" -> playerCount)
                             .as(scalar[Long].single)
 
+        val r = SQL("CALL getGameListItem({gameId}, {userId})")
+                            .on("gameId" -> gameId, "userId" -> userId)
+                            .apply().head
 
-        val joinReceivable = new JoinGameReceivable(gameId);
+        val gameListItem = new GameListItem(gameId, r[Int]("isReady") == 1, r[Int]("currentTurn"),
+                                            r[Int]("playerNumber"), 
+                                            r[Option[String]]("winnerUsername").getOrElse(null).asInstanceOf[String],
+                                            r[Option[Int]]("winnerPlayerNumber").getOrElse(null).asInstanceOf[Int],
+                                            r[Int]("numPlayer"))
 
-        // Is the game ready -- full of players
-        val isReady:Boolean = SQL("CALL isGameReady({gameId})")
-                                .on("gameId" -> gameId)
-                                .as(scalar[Int].single) == 1;
-
-        joinReceivable.isReady = isReady;                                
+        val joinReceivable = new JoinGameReceivable(gameListItem);
 
         // TODO: Send push notification
 
@@ -49,12 +51,32 @@ object GameSetupController extends ApiControllerBase {
   }
 
   /**
-   * Forfeight from a currently running game.
+   * Delete a game either running or waiting to start.
    * 
    * @type {[type]}
    */
   def delete(gameId: Long, userId: Long) = Action { request => 
-    Ok("NOT IMPLEMENTED") // TODO
+    DB.withConnection { implicit c =>
+      try {
+        val result = SQL("CALL userLeaveGame({userId}, {gameId})")
+                            .on("userId" -> userId, "gameId" -> gameId)
+                            .apply().head                            
+
+        // Make sure something was updated
+        if(result[Option[Long]]("Deleted").isEmpty) {
+          throw new Exception("No Game Deleted")
+        } else if(result[Int]("HumansLeftInGame") <= 0) {
+          // TODO: Handle game full of ai's
+          throw new Exception("No Humans In Game")
+        }
+
+        okJson(new SuccessReceivable("Game Deleted"))
+      } catch {
+        case ex: Exception => {
+          okJson(new ErrorReceivable(ex.getMessage()))
+        }
+      }
+    }
   }
 
   /**
@@ -143,13 +165,9 @@ object GameSetupController extends ApiControllerBase {
         // Setup GameState
         // ======================================
         var gameStateResult = SQL("CALL getGameState({gameId})").on("gameId" -> gameId).apply().head
-        var winnerIdResult = gameStateResult[Option[Long]]("winnerId")
         var winnerId:java.lang.Long = null;
 
-        winnerIdResult match {
-          case Some(value) => winnerId = value
-          case None => winnerId = null
-        }
+        winnerId = gameStateResult[Option[Long]]("winnerId").getOrElse(null).asInstanceOf[Long]
 
         val gamestate = new GameState(gameStateResult[Int]("currentTurn"), 
                                       winnerId, gameStateResult[Int]("isReady") == 1,

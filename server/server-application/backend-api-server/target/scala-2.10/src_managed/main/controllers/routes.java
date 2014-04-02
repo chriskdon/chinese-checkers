@@ -1,6 +1,6 @@
-// @SOURCE:/Users/kubasub/Dropbox/Code/chinese-checkers/server/server-application/backend-api-server/conf/routes
-// @HASH:337a9641dfe0b1bcfdc7e699b0f92e5115ac14cd
-// @DATE:Wed Apr 02 16:36:46 EDT 2014
+// @SOURCE:/Users/chriskellendonk/Development/School/COSC3F00/chinese-checkers/server/server-application/backend-api-server/conf/routes
+// @HASH:3044d738bf3da4064bd5f1c7f5ca79a3163f5bab
+// @DATE:Wed Apr 02 18:10:49 EDT 2014
 
 package controllers;
 

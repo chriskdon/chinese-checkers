@@ -12,7 +12,7 @@ public class GameListItem {
   public GameListItem(){}
 
   public GameListItem(long gameId, boolean isReady, int currentPlayerNumber, int playerNumber, String winnerUsername,
-                      int winnerNumber, int numberOfPlayers) {
+                      Integer winnerNumber, int numberOfPlayers) {
 
       this.gameId = gameId;
       this.isReady = isReady;

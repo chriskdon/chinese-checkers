@@ -1,6 +1,6 @@
-// @SOURCE:/Users/kubasub/Dropbox/Code/chinese-checkers/server/server-application/backend-api-server/conf/routes
-// @HASH:337a9641dfe0b1bcfdc7e699b0f92e5115ac14cd
-// @DATE:Wed Apr 02 16:36:46 EDT 2014
+// @SOURCE:/Users/chriskellendonk/Development/School/COSC3F00/chinese-checkers/server/server-application/backend-api-server/conf/routes
+// @HASH:3044d738bf3da4064bd5f1c7f5ca79a3163f5bab
+// @DATE:Wed Apr 02 18:10:49 EDT 2014
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -13,7 +13,8 @@ import play.api.mvc._
 import Router.queryString
 
 
-// @LINE:18
+// @LINE:19
+// @LINE:16
 // @LINE:15
 // @LINE:14
 // @LINE:13
@@ -22,11 +23,11 @@ import Router.queryString
 // @LINE:6
 package controllers {
 
-// @LINE:18
+// @LINE:19
 class ReverseAssets {
     
 
-// @LINE:18
+// @LINE:19
 def at(file:String): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[PathBindable[String]].unbind("file", file))
 }
@@ -55,6 +56,7 @@ def register(username:String): Call = {
 }
                           
 
+// @LINE:16
 // @LINE:15
 // @LINE:14
 // @LINE:13
@@ -63,7 +65,13 @@ class ReverseGameSetupController {
 
 // @LINE:15
 def gamestate(gameId:Long): Call = {
-   Call("GET", _prefix + { _defaultPrefix } + "games/" + implicitly[PathBindable[Long]].unbind("gameId", gameId) + "/gamestate")
+   Call("GET", _prefix + { _defaultPrefix } + "games/gamestate/" + implicitly[PathBindable[Long]].unbind("gameId", gameId))
+}
+                                                
+
+// @LINE:16
+def list(userId:Long): Call = {
+   Call("GET", _prefix + { _defaultPrefix } + "games/list/" + implicitly[PathBindable[Long]].unbind("userId", userId))
 }
                                                 
 
@@ -98,7 +106,8 @@ def index(): Call = {
                   
 
 
-// @LINE:18
+// @LINE:19
+// @LINE:16
 // @LINE:15
 // @LINE:14
 // @LINE:13
@@ -107,11 +116,11 @@ def index(): Call = {
 // @LINE:6
 package controllers.javascript {
 
-// @LINE:18
+// @LINE:19
 class ReverseAssets {
     
 
-// @LINE:18
+// @LINE:19
 def at : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Assets.at",
    """
@@ -155,6 +164,7 @@ def register : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
+// @LINE:16
 // @LINE:15
 // @LINE:14
 // @LINE:13
@@ -166,7 +176,18 @@ def gamestate : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.GameSetupController.gamestate",
    """
       function(gameId) {
-      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "games/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("gameId", gameId) + "/gamestate"})
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "games/gamestate/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("gameId", gameId)})
+      }
+   """
+)
+                        
+
+// @LINE:16
+def list : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.GameSetupController.list",
+   """
+      function(userId) {
+      return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "games/list/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("userId", userId)})
       }
    """
 )
@@ -218,7 +239,8 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
         
 
 
-// @LINE:18
+// @LINE:19
+// @LINE:16
 // @LINE:15
 // @LINE:14
 // @LINE:13
@@ -228,11 +250,11 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
 package controllers.ref {
 
 
-// @LINE:18
+// @LINE:19
 class ReverseAssets {
     
 
-// @LINE:18
+// @LINE:19
 def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]), "GET", """ Map static resources from the /public folder to the /assets URL path""", _prefix + """assets/$file<.+>""")
 )
@@ -261,6 +283,7 @@ def register(username:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.Han
 }
                           
 
+// @LINE:16
 // @LINE:15
 // @LINE:14
 // @LINE:13
@@ -269,7 +292,13 @@ class ReverseGameSetupController {
 
 // @LINE:15
 def gamestate(gameId:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.GameSetupController.gamestate(gameId), HandlerDef(this, "controllers.GameSetupController", "gamestate", Seq(classOf[Long]), "GET", """""", _prefix + """games/$gameId<[^/]+>/gamestate""")
+   controllers.GameSetupController.gamestate(gameId), HandlerDef(this, "controllers.GameSetupController", "gamestate", Seq(classOf[Long]), "GET", """""", _prefix + """games/gamestate/$gameId<[^/]+>""")
+)
+                      
+
+// @LINE:16
+def list(userId:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.GameSetupController.list(userId), HandlerDef(this, "controllers.GameSetupController", "list", Seq(classOf[Long]), "GET", """""", _prefix + """games/list/$userId<[^/]+>""")
 )
                       
 
