@@ -79,10 +79,15 @@ public class OfflineConfigurationActivity extends Activity {
         currentSelection = twoPlayerButton;
     }
 
+    protected void onPause(){
+        super.onPause();
+        BoomBoomMusic.pause();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-
+        BoomBoomMusic.start(this);
         setRedPlayerName();
     }
 

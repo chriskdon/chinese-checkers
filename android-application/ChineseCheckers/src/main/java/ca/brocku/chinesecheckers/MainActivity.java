@@ -104,8 +104,13 @@ public class MainActivity extends SpicedGcmActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        BoomBoomMusic.start(this);
         displayOnlineGameNotification();
+    }
+
+    protected void onPause(){
+        BoomBoomMusic.pause();
+        super.onPause();
     }
 
     @Override
@@ -143,10 +148,10 @@ public class MainActivity extends SpicedGcmActivity {
             SharedPreferences.Editor editor = sharedPref.edit(); //editor for the prefs
 
             editor
-                .putBoolean(PREF_DONE_INITIAL_SETUP, true)
-                .putBoolean(PREF_SHOW_MOVES, true)
-                .putString(PREF_USERNAME, UUID.randomUUID().toString())
-                .commit();
+                    .putBoolean(PREF_DONE_INITIAL_SETUP, true)
+                    .putBoolean(PREF_SHOW_MOVES, true)
+                    .putString(PREF_USERNAME, UUID.randomUUID().toString())
+                    .commit();
 
             if(super.isConnected) registerUser(); //try to register the user on first launch
         }
@@ -154,7 +159,7 @@ public class MainActivity extends SpicedGcmActivity {
 
     /** makes API request for number of games in which it is the user's turn and displays the
      * notification icon with the number of moves to be made (if there are any).
-      
+
      */
     private void displayOnlineGameNotification() {
         //set the icon which shows the number of games in which it is your turn
