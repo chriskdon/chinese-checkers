@@ -28,6 +28,6 @@ public abstract class ApiRequest<T> extends SpringAndroidSpiceRequest<T> {
         }
 
         // Change to chinesecheckers.codecanister.com
-        return String.format("http://10.100.168.17:9000" + apiPath, params);
+        return String.format("http://10.100.136.196:9000" + apiPath, params);
     }
 }
