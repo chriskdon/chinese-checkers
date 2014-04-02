@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.network.spice.requests;
 
+import android.util.Log;
+
 import com.ccapi.receivables.UserRegistrationReceivable;
 
 import ca.brocku.chinesecheckers.network.spice.ApiRequest;

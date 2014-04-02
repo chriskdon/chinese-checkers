@@ -23,6 +23,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import ca.brocku.chinesecheckers.MainActivity;
 import ca.brocku.chinesecheckers.R;
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.requests.RegisterUserRequest;
 
 /**
@@ -32,17 +33,14 @@ import ca.brocku.chinesecheckers.network.spice.requests.RegisterUserRequest;
 public class NetworkActivity extends Activity {
     private NetworkStateReceiver networkStateReceiver = new NetworkStateReceiver();
     private LinearLayout networkConnectivityContainer;
-    private long userId;
 
     protected boolean isConnected;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Stores the user ID
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        userId = sharedPrefs.getLong(MainActivity.PREF_USER_ID, -1);
     }
 
     @Override
@@ -72,9 +70,6 @@ public class NetworkActivity extends Activity {
     protected void onNetworkConnected() {
         isConnected = true;
         networkConnectivityContainer.setVisibility(View.GONE);
-
-        if (userId == -1) //if user ID hasn't been set yet
-            registerUser();
     }
 
     protected void onNetworkDisconnected() {
@@ -96,37 +91,6 @@ public class NetworkActivity extends Activity {
                     NetworkActivity.this.onNetworkDisconnected();
                 }
             }
-        }
-    }
-
-    protected void registerUser() {
-        Toast.makeText(NetworkActivity.this, "Trying to registerUser()", Toast.LENGTH_LONG).show(); //TODO: delete toast after testing
-        final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String username = sharedPrefs.getString(MainActivity.PREF_USERNAME, null);
-
-        //Flag to go through initial setup in MainActivity if username hasn't been generated
-        if(username == null) {
-            sharedPrefs.edit()
-                    .putBoolean(MainActivity.PREF_DONE_INITIAL_SETUP, false)
-                    .commit();
-        } else {
-            RegisterUserRequest registerUserRequest = new RegisterUserRequest(username);
-            SpiceManager spiceManager = new SpiceManager(JacksonSpringAndroidSpiceService.class);
-            spiceManager.execute(registerUserRequest, new RequestListener<UserRegistrationReceivable>() {
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    Toast.makeText(NetworkActivity.this, "ERROR REGISTERING USER", Toast.LENGTH_LONG).show(); //TODO: delete toast after testing
-                }
-
-                @Override
-                public void onRequestSuccess(UserRegistrationReceivable userRegistrationReceivable) {
-                    sharedPrefs.edit()
-                            .putLong(MainActivity.PREF_USER_ID, userRegistrationReceivable.userId)
-                            .commit();
-                    userId = userRegistrationReceivable.userId;
-                    Toast.makeText(NetworkActivity.this, "Successfully registered as user"+userId, Toast.LENGTH_LONG).show(); //TODO: delete toast after testing
-                }
-            });
         }
     }
 }

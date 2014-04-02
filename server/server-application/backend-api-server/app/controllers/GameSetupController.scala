@@ -52,7 +52,7 @@ object GameSetupController extends ApiControllerBase {
    * 
    * @type {[type]}
    */
-  def forfeight(gameId: Long, userId: Long) = Action { request => 
+  def delete(gameId: Long, userId: Long) = Action { request => 
     Ok("NOT IMPLEMENTED") // TODO
   }
 

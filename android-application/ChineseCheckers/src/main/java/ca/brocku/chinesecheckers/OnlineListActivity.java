@@ -14,10 +14,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.receivables.DeleteGameReceivable;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.util.LinkedList;
 
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
+import ca.brocku.chinesecheckers.network.spice.ApiRequest;
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
+import ca.brocku.chinesecheckers.network.spice.requests.DeleteGameRequest;
 
 /**
  * Created by kubasub on 2014-03-06.
@@ -86,9 +93,10 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
             //Inflate the game view
             View newGame = getLayoutInflater().inflate(R.layout.fragment_online_list_item, null);
-            onlineGameViewManager.addView(newGame, null);
 
             if (newGame != null) {
+                newGame.setTag(aGameItemData.getGameId());
+                onlineGameViewManager.addView(newGame, null);
 
                 //Set the margin at the bottom of the list item (in dp)
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -328,6 +336,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
         @Override
         public boolean onLongClick(View view) {
             final View listItem = view;
+            final long gameId = Long.parseLong(((TextView)view.findViewById(R.id.onlineGameIdTextView)).getText().toString().substring(1));
             final Popup deleteGameDialog = new Popup(OnlineListActivity.this);
 
             //Set mutual dialog settings
@@ -343,12 +352,28 @@ public class OnlineListActivity extends SpicedGcmActivity {
                         public void onClick(View view) {
                             deleteGameDialog.dismiss();
 
-                            //TODO: make API call to request removal from game
-                            boolean isDeletionProcessed = true;
-                            if (isDeletionProcessed) {
-                                onlineGameViewManager.removeView(listItem);
-                                gameListContainer.removeView(listItem);
-                            }
+                            DeleteGameRequest deleteGameRequest = new DeleteGameRequest(OnlineListActivity.super.userId, gameId);
+                            spiceManager.execute(deleteGameRequest, new ApiRequestListener<DeleteGameReceivable>() {
+                                @Override
+                                public void onTaskFailure(int code, String message) {
+                                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onTaskSuccess(DeleteGameReceivable result) {
+                                    if(result.isDeleted) {
+                                        onlineGameViewManager.removeView(listItem);
+                                        gameListContainer.removeView(listItem);
+                                    } else {
+                                        Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onRequestFailure(SpiceException spiceException) {
+
+                                }
+                            });
                         }
                     });
 
