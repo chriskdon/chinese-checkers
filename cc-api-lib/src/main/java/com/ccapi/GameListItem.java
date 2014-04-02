@@ -30,10 +30,14 @@ public class GameListItem {
     return winnerUsername != null && winnerUsername.length() > 0;
   }
 
+  public void setWinner(boolean value){}
+
   /**
    * Is is the requesting player's turn.
    */
   public boolean isPlayerTurn() {
     return currentPlayerNumber == playerNumber;
   }
+
+  public void setIsPlayerTurn() {}
 }
