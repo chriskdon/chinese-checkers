@@ -57,5 +57,7 @@
     <string name="help_answer_6">Tap the Online button, and then tap the game with an arrow next to it on the list.</string>
     <string name="help_question_7">How do I leave an online game?</string>
     <string name="help_answer_7">Tap the Online button, then press and hold the game you want to leave. You will be asked if you want to quit it. Tap Yes. You will be replaced by an AI, so the other players can keep playing.</string>
+    <string name="settings_sound_effects">Sound Effects</string>
+    <string name="settings_backgound_music">Background Music</string>
 
 </resources>
