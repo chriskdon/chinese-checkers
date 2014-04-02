@@ -5,6 +5,10 @@ import android.os.Parcelable;
 
 import java.util.Arrays;
 
+import javajar.gameboard.Piece;
+import javajar.gameboard.Position;
+import javajar.gamestate.Player;
+
 /**
  * The implementation of AndroidGameBoard - This board being specifically for chinese checkers.
  *
@@ -16,8 +20,8 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
     /**
      * Total number of spaces on the board
      */
-    private AndroidGridPiece[][] board;
-    private int numPlayers = 0;
+    //private AndroidGridPiece[][] board;
+    //private int numPlayers = 0;
 
     /**
      * Constructs an empty board, used for testing purposes
@@ -47,13 +51,13 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
      *
      * @return  A ragged two dimensional AndroidPiece array representing a chinese checkers board
      */
-    public AndroidGridPiece[][] constructBoard() {
+    /*public AndroidGridPiece[][] constructBoard() {
         AndroidGridPiece[][] board = new AndroidGridPiece[17][];
         for(int i=0; i<board.length;i++) {
             board[i] = new AndroidGridPiece[ROW_POSITION_COUNT[i]];
         }
         return board;
-    }
+    }*/
 
     /**
      * Constructor for the parcel.
@@ -98,12 +102,18 @@ public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         // Convert the piece board into a 1d array
-        AndroidPiece[] single = new AndroidPiece[AndroidGameBoard.TOTAL_PIECE_COUNT];
+        AndroidGridPiece[] single = new AndroidGridPiece[AndroidGameBoard.TOTAL_PIECE_COUNT];
 
         int i = 0;
         for(int row = 0; row < board.length; row++) {
             for(int col = 0; col < board[row].length; col++) {
-                single[i] = board[row][col];
+                Piece p = board[row][col];
+                if(p!=null){
+                    Position pos = p.getPosition();
+                    int pl = p.getPlayerNumber();
+                    single[i] = new AndroidGridPiece(pos,pl);
+                }
+                else single[i]=null;
                 i++;
             }
         }

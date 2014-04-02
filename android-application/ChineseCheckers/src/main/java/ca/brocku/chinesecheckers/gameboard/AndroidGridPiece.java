@@ -14,8 +14,8 @@ import javajar.gameboard.Position;
  * Date: 2/13/2014
  */
 public class AndroidGridPiece extends javajar.gameboard.GridPiece implements Parcelable,AndroidPiece {
-    private AndroidPosition position;
-    private int player;
+    //private AndroidPosition position;
+    //private int player;
 
     public AndroidGridPiece(Position pos, int pl) {
         super(pos,pl);
@@ -26,7 +26,7 @@ public class AndroidGridPiece extends javajar.gameboard.GridPiece implements Par
      * @param p
      */
     private AndroidGridPiece(Parcel p) {
-        position = p.readParcelable(AndroidPosition.class.getClassLoader());
+        position = (Position)p.readParcelable(AndroidPosition.class.getClassLoader());
         player = p.readInt();
     }
 
@@ -51,7 +51,7 @@ public class AndroidGridPiece extends javajar.gameboard.GridPiece implements Par
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(position, 0);
+        dest.writeParcelable(new AndroidPosition(position.getRow(),position.getIndex()), 0);
         dest.writeInt(player);
     }
 

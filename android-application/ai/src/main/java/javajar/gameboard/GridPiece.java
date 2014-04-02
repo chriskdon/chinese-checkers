@@ -11,8 +11,8 @@ import java.io.Serializable;
  * Date: 2/13/2014
  */
 public class GridPiece implements Piece, Serializable {
-    private Position position;
-    private int player;
+    public Position position;
+    public int player;
 
     public GridPiece(){}
 
