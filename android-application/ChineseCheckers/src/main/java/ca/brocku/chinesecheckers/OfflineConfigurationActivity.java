@@ -21,12 +21,13 @@ import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 
-import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import javajar.computerplayer.AiPlayer;
+import javajar.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
+import ca.brocku.chinesecheckers.gameboard.AndroidCcGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gamestate.Player;
 
 import static android.view.View.OnFocusChangeListener;
 
@@ -383,7 +384,7 @@ public class OfflineConfigurationActivity extends Activity {
                         players.add(new AiPlayer("HARD", Player.PlayerColor.ORANGE));
                 }
 
-                GameBoard board = new CcGameBoard(players.size());
+                AndroidGameBoard board = new AndroidCcGameBoard(players.size());
                 intent.putExtra("GAME_STATE_MANAGER", (Parcelable)new GameStateManager(board, players));
                 OfflineConfigurationActivity.this.finish();
                 startActivity(intent);

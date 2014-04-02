@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.gameboard.Position;
+import javajar.gameboard.Position;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
 import ca.brocku.chinesecheckers.uiengine.PiecePositionSystem;
 import ca.brocku.chinesecheckers.uiengine.PixelPosition;

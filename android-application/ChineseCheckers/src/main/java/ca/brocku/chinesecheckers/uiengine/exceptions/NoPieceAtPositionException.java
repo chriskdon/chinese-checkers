@@ -1,6 +1,6 @@
 package ca.brocku.chinesecheckers.uiengine.exceptions;
 
-import ca.brocku.chinesecheckers.gameboard.Position;
+import javajar.gameboard.Position;
 
 /**
  * Thrown when something tries to get a <code>Piece</code> from a <code>BoardPositions</code>

@@ -12,12 +12,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gameboard.IllegalMoveException;
+import javajar.computerplayer.AiPlayer;
+import javajar.gameboard.GameBoard;
+import javajar.gameboard.Piece;
+import javajar.gameboard.Position;
+import javajar.gameboard.ReadOnlyGameBoard;
+import javajar.gameboard.IllegalMoveException;
+import javajar.gamestate.MovePath;
+import javajar.gamestate.Player;
+
+import ca.brocku.chinesecheckers.gameboard.AndroidGameBoard;
 
 /**
  * Handles coordinating the game between multiple players and keeping the game
@@ -31,7 +35,7 @@ public class GameStateManager implements Parcelable, Serializable {
     public static final String SERIALIZED_FILENAME = "OfflineGame.ser";
     private static final int MIN_AI_MOVE_SPEED = 500; // The minimum speed an AI can move at
 
-    private GameBoard gameBoard;
+    private AndroidGameBoard gameBoard;
     private Map<Player.PlayerColor, Player> players;    // Players in the game
     private Player.PlayerColor currentPlayer;           // The current players turn
 
@@ -44,7 +48,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param gameBoard The game board to use to manage the rules and state of the game.
      * @param players   The players in the game.
      */
-    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players) {
+    public GameStateManager(AndroidGameBoard gameBoard, ArrayList<Player> players) {
         this(gameBoard, players, null);
     }
 
@@ -55,7 +59,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param players       The players in the game.
      * @param currentPlayer The current player's turn.
      */
-    public GameStateManager(GameBoard gameBoard, ArrayList<Player> players, Player.PlayerColor currentPlayer) {
+    public GameStateManager(AndroidGameBoard gameBoard, ArrayList<Player> players, Player.PlayerColor currentPlayer) {
         if (gameBoard == null) {
             throw new IllegalArgumentException("Board must be defined.");
         }
@@ -351,7 +355,7 @@ public class GameStateManager implements Parcelable, Serializable {
      * @param parcel The parcel instance to generate the instance from.
      */
     private GameStateManager(Parcel parcel) {
-        this((GameBoard) parcel.readParcelable(GameBoard.class.getClassLoader()),
+        this((AndroidGameBoard) parcel.readParcelable(AndroidGameBoard.class.getClassLoader()),
                 parcel.readArrayList(Player.class.getClassLoader()),
                 Player.PlayerColor.valueOf(parcel.readString()));
     }

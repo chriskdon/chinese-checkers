@@ -1,7 +1,7 @@
 package ca.brocku.chinesecheckers.uiengine.handlers;
 
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
+import javajar.gameboard.Piece;
+import javajar.gameboard.Position;
 
 /**
  * Occurs when the drawing engine has finished the animation

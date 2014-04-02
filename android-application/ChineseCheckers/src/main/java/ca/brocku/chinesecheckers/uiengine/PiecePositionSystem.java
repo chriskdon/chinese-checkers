@@ -10,8 +10,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Position;
+import javajar.gameboard.GameBoard;
+import javajar.gameboard.Position;
 
 /**
  * Handles all the location of items drawn for the game board.

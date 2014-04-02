@@ -23,14 +23,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import ca.brocku.chinesecheckers.gameboard.GameBoard;
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import javajar.gameboard.GameBoard;
+import javajar.gameboard.Piece;
+import javajar.gameboard.Position;
+import javajar.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
-import ca.brocku.chinesecheckers.gamestate.MovePath;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gamestate.MovePath;
+import javajar.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 @SuppressLint("All")

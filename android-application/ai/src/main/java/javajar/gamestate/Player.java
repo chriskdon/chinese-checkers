@@ -24,7 +24,9 @@ public abstract class Player implements Serializable {
 
     public static final PlayerColor FIRST_PLAYER = PlayerColor.RED;
 
-    private PlayerColor playerColor;
+    public PlayerColor playerColor;
+
+    public Player(){}
 
     public Player(PlayerColor playerColor) {
         this.playerColor = playerColor;
@@ -32,7 +34,7 @@ public abstract class Player implements Serializable {
 
     /**
      * Executed when it is this players turn to act.
-     * @param state The current state.
+     * @param //state The current state.
      */
     public abstract MovePath onTurn(ReadOnlyGameBoard board);
 

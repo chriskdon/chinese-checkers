@@ -4,7 +4,7 @@ import android.os.Parcel;
 
 import junit.framework.TestCase;
 
-import ca.brocku.chinesecheckers.gameboard.Position;
+import javajar.gameboard.Position;
 import ca.brocku.chinesecheckers.uiengine.PieceDrawingDetails;
 
 /**

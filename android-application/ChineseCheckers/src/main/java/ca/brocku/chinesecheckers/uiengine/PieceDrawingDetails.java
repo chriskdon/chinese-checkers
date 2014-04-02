@@ -2,7 +2,7 @@ package ca.brocku.chinesecheckers.uiengine;
 
 import java.io.Serializable;
 
-import ca.brocku.chinesecheckers.gameboard.Position;
+import javajar.gameboard.Position;
 
 /**
  * Store information about where a piece is on the board, and how big it is.

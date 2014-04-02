@@ -1,10 +1,10 @@
 package ca.brocku.chinesecheckers.uiengine;
 
-import ca.brocku.chinesecheckers.gameboard.Piece;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.MovePath;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gameboard.Piece;
+import javajar.gameboard.Position;
+import javajar.gameboard.ReadOnlyGameBoard;
+import javajar.gamestate.MovePath;
+import javajar.gamestate.Player;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedMovingPieceHandler;
 import ca.brocku.chinesecheckers.uiengine.handlers.FinishedRotatingBoardHandler;
 

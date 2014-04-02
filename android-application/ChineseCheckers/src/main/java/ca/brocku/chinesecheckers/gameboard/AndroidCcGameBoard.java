@@ -12,7 +12,7 @@ import java.util.Arrays;
  * Student #: 4528311
  * Date: 2/13/2014
  */
-public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements Parcelable{
+public class AndroidCcGameBoard extends javajar.gameboard.CcGameBoard implements AndroidGameBoard,Parcelable{
     /**
      * Total number of spaces on the board
      */

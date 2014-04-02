@@ -2,13 +2,13 @@ package ca.brocku.chinesecheckers.tests;
 
 import android.test.AndroidTestCase;
 
-import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
-import ca.brocku.chinesecheckers.computerplayer.HeuristicCalculator;
-import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
-import ca.brocku.chinesecheckers.gameboard.Position;
-import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
-import ca.brocku.chinesecheckers.gamestate.MovePath;
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.computerplayer.AiPlayer;
+import javajar.computerplayer.HeuristicCalculator;
+import javajar.gameboard.CcGameBoard;
+import javajar.gameboard.Position;
+import javajar.gameboard.ReadOnlyGameBoard;
+import javajar.gamestate.MovePath;
+import javajar.gamestate.Player;
 
 /**
  * Created by Administrator on 10/03/14.

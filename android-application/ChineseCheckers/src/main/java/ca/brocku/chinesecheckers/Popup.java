@@ -11,7 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ca.brocku.chinesecheckers.gamestate.Player;
+import javajar.gamestate.Player;
 
 /** This dialog is used system-wide as the default dialog.
  *

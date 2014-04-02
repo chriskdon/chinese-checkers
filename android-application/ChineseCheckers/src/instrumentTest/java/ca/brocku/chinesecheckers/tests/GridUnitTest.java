@@ -2,7 +2,7 @@ package ca.brocku.chinesecheckers.tests;
 
 import android.test.AndroidTestCase;
 
-import ca.brocku.chinesecheckers.gameboard.*;
+import javajar.gameboard.*;
 /**
  * Grid Unit Test for CcGameBoard.java
  *
