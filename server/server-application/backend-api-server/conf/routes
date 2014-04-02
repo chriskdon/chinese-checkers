@@ -11,7 +11,7 @@ POST	/users/change/:userId/:username			 controllers.UserController.change(userId
 
 # Game Setup Tasks
 POST  /games/join/:playerCount/:userId     controllers.GameSetupController.join(playerCount: Integer, userId: Long)
-POST  /games/forfeight/:gameId/:userId     controllers.GameSetupController.forfeight(gameId: Long, userId: Long)
+POST  /games/delete/:gameId/:userId     controllers.GameSetupController.forfeight(gameId: Long, userId: Long)
 GET   /games/:gameId/gamestate             controllers.GameSetupController.gamestate(gameId: Long)
 
 # Map static resources from the /public folder to the /assets URL path
