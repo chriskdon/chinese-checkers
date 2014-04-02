@@ -35,10 +35,7 @@ public class SettingsActivity extends SpicedActivity {
     private TextView backPerText, effectPerText;
     private SharedPreferences sharedPrefs;
 
-<<<<<<< HEAD
     private boolean isConnected;
-=======
->>>>>>> origin/develop
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
