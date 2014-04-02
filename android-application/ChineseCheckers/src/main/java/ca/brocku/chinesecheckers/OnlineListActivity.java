@@ -1,33 +1,30 @@
 package ca.brocku.chinesecheckers;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.receivables.DeleteGameReceivable;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
+
 import java.util.LinkedList;
 
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
+import ca.brocku.chinesecheckers.network.spice.ApiRequest;
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
+import ca.brocku.chinesecheckers.network.spice.requests.DeleteGameRequest;
 
 /**
  * Created by kubasub on 2014-03-06.
@@ -99,18 +96,20 @@ public class OnlineListActivity extends SpicedGcmActivity {
      */
     private void populateList() {
         //TODO: server request for current games array
-        GameItemData[] gameItemData = new GameItemData[2];
+        GameItemData[] gameItemData = new GameItemData[3];
 
-        gameItemData[0] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null);
-        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED);
+        gameItemData[0] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null, true);
+        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED, true);
+        gameItemData[2] = new GameItemData(5196, false, 6, Player.PlayerColor.GREEN, false, null, null, false);
 
         for (GameItemData aGameItemData : gameItemData) { //for each game received
 
             //Inflate the game view
             View newGame = getLayoutInflater().inflate(R.layout.fragment_online_list_item, null);
-            onlineGameViewManager.addView(newGame, null);
 
             if (newGame != null) {
+                newGame.setTag(aGameItemData.getGameId());
+                onlineGameViewManager.addView(newGame, null);
 
                 //Set the margin at the bottom of the list item (in dp)
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -129,6 +128,20 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
                 //Set Game ID
                 ((TextView) newGame.findViewById(R.id.onlineGameIdTextView)).setText("#"+Integer.toString(aGameItemData.getGameId()));
+
+                if(!aGameItemData.isReady()) {
+                    //Set all of the icons to white if the game is not ready yet
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                    ((ImageView)newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_white);
+
+                    //Set the text view under the player icons
+                    newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
+                    ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText("Waiting for players...");
+                }
 
                 //Set Player icons
                 switch (aGameItemData.getNumberOfPlayers()) {
@@ -158,25 +171,27 @@ public class OnlineListActivity extends SpicedGcmActivity {
                 }
 
                 //Sets User's icon (with star)
-                switch (aGameItemData.getPlayerColor()) {
-                    case RED:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
-                        break;
-                    case PURPLE:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_star_purple);
-                        break;
-                    case BLUE:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_star_blue);
-                        break;
-                    case GREEN:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_star_green);
-                        break;
-                    case YELLOW:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_star_yellow);
-                        break;
-                    case ORANGE:
-                        ((ImageView) newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_star_orange);
-                        break;
+                if(aGameItemData.isReady()) {
+                    switch (aGameItemData.getPlayerColor()) {
+                        case RED:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
+                            break;
+                        case PURPLE:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_star_purple);
+                            break;
+                        case BLUE:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_star_blue);
+                            break;
+                        case GREEN:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_star_green);
+                            break;
+                        case YELLOW:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_star_yellow);
+                            break;
+                        case ORANGE:
+                            ((ImageView) newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_star_orange);
+                            break;
+                    }
                 }
 
                 //Set notification icon if this user's turn
@@ -334,6 +349,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
         @Override
         public boolean onLongClick(View view) {
             final View listItem = view;
+            final long gameId = Long.parseLong(((TextView)view.findViewById(R.id.onlineGameIdTextView)).getText().toString().substring(1));
             final Popup deleteGameDialog = new Popup(OnlineListActivity.this);
 
             //Set mutual dialog settings
@@ -349,12 +365,28 @@ public class OnlineListActivity extends SpicedGcmActivity {
                         public void onClick(View view) {
                             deleteGameDialog.dismiss();
 
-                            //TODO: make API call to request removal from game
-                            boolean isDeletionProcessed = true;
-                            if (isDeletionProcessed) {
-                                onlineGameViewManager.removeView(listItem);
-                                gameListContainer.removeView(listItem);
-                            }
+                            DeleteGameRequest deleteGameRequest = new DeleteGameRequest(OnlineListActivity.super.userId, gameId);
+                            spiceManager.execute(deleteGameRequest, new ApiRequestListener<DeleteGameReceivable>() {
+                                @Override
+                                public void onTaskFailure(int code, String message) {
+                                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onTaskSuccess(DeleteGameReceivable result) {
+                                    if(result.isDeleted) {
+                                        onlineGameViewManager.removeView(listItem);
+                                        gameListContainer.removeView(listItem);
+                                    } else {
+                                        Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onRequestFailure(SpiceException spiceException) {
+
+                                }
+                            });
                         }
                     });
 
@@ -391,8 +423,10 @@ public class OnlineListActivity extends SpicedGcmActivity {
         private boolean isWinner;
         private String winnerUsername;
         private Player.PlayerColor winnerColor;
+        private boolean isReady;
 
-        private GameItemData(int gameId, boolean isPlayerTurn, int numberOfPlayers, Player.PlayerColor playerColor, boolean isWinner, String winnerUsername, Player.PlayerColor winnerColor) {
+
+        private GameItemData(int gameId, boolean isPlayerTurn, int numberOfPlayers, Player.PlayerColor playerColor, boolean isWinner, String winnerUsername, Player.PlayerColor winnerColor, boolean isReady) {
             this.gameId = gameId;
             this.isPlayerTurn = isPlayerTurn;
             this.numberOfPlayers = numberOfPlayers;
@@ -400,6 +434,8 @@ public class OnlineListActivity extends SpicedGcmActivity {
             this.isWinner = isWinner;
             this.winnerUsername = winnerUsername;
             this.winnerColor = winnerColor;
+            this.isReady = isReady;
+
         }
 
         public int getGameId() {
@@ -428,6 +464,10 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
         public Player.PlayerColor getWinnerColor() {
             return winnerColor;
+        }
+
+        public boolean isReady() {
+            return isReady;
         }
     }
 }

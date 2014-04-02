@@ -20,14 +20,18 @@ import com.ccapi.receivables.SuccessReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.SpicedActivity;
 import ca.brocku.chinesecheckers.network.spice.requests.ChangeUsernameRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
 
 /**
- * Created by kubasub on 2014-03-06.
+ *
+ * @author  Jakub Subczynski
+ * @date    April 02, 2014
  */
-public class SettingsActivity extends SpicedActivity {
+public class SettingsActivity extends SpicedGcmActivity {
     private RadioGroup showMovesRadio;
     private TextView usernameErrorTextView;
     private EditText usernameEditText;
@@ -129,8 +133,6 @@ public class SettingsActivity extends SpicedActivity {
     protected void onPause() {
         super.onPause();
 
-        final SharedPreferences.Editor editor = sharedPrefs.edit();
-
         //Get preferences from the UI
         View checkedChild = findViewById(showMovesRadio.getCheckedRadioButtonId());
         boolean showMoves = (showMovesRadio.indexOfChild(checkedChild) == 0);
@@ -140,20 +142,26 @@ public class SettingsActivity extends SpicedActivity {
         //try to save username if it has changed
         if(!newUsername.equals(sharedPrefs.getString(MainActivity.PREF_USERNAME, ""))) {
             if(super.isConnected) {
-                Toast.makeText(this, "Trying to send ChangeUsernameRequest", Toast.LENGTH_LONG).show(); //TODO: delete after testing
                 //Make request only if the user is registered
-                long userId = sharedPrefs.getLong(MainActivity.PREF_USER_ID, -1);
-                if(userId != -1) {
-                    ChangeUsernameRequest changeUsernameRequest = new ChangeUsernameRequest(userId, newUsername);
-                    spiceManager.execute(changeUsernameRequest, new RequestListener<SuccessReceivable>() {
+                if(super.userId != -1) {
+                    ChangeUsernameRequest changeUsernameRequest = new ChangeUsernameRequest(super.userId, newUsername);
+                    spiceManager.execute(changeUsernameRequest, new ApiRequestListener<SuccessReceivable>() {
                         @Override
-                        public void onRequestFailure(SpiceException spiceException) {
-                            Toast.makeText(SettingsActivity.this, spiceException.getMessage(), Toast.LENGTH_LONG).show();
+                        public void onTaskFailure(int code, String message) {
+                            Toast.makeText(SettingsActivity.this, "Error. Username exists.", Toast.LENGTH_LONG).show();
                         }
 
                         @Override
-                        public void onRequestSuccess(SuccessReceivable successReceivable) {
-                            editor.putString(MainActivity.PREF_USERNAME, newUsername);
+                        public void onTaskSuccess(SuccessReceivable result) {
+                            sharedPrefs.edit()
+                                    .putString(MainActivity.PREF_USERNAME, newUsername)
+                                    .commit();
+                            Toast.makeText(SettingsActivity.this, "Username updated.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onRequestFailure(SpiceException spiceException) {
+
                         }
                     });
                 }
@@ -164,9 +172,10 @@ public class SettingsActivity extends SpicedActivity {
         }
 
         //save the show possible moves setting
-        editor.putBoolean(MainActivity.PREF_SHOW_MOVES, showMoves);
+        sharedPrefs.edit()
+                .putBoolean(MainActivity.PREF_SHOW_MOVES, showMoves)
+                .commit();
 
-        editor.commit();
         BoomBoomMusic.pause();
     }
 

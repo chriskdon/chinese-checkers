@@ -14,9 +14,9 @@ import ca.brocku.chinesecheckers.network.spice.ApiRequest;
  */
 public class JoinGameRequest extends ApiRequest<JoinGameReceivable> {
     private int playerCount;
-    private int userId;
+    private long userId;
 
-    public JoinGameRequest(int userId, int playerCount) {
+    public JoinGameRequest(long userId, int playerCount) {
         super(JoinGameRequest.class);
 
         this.userId = userId;
