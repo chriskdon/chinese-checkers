@@ -12,7 +12,7 @@ public class GameListItem {
   public GameListItem(){}
 
   public GameListItem(long gameId, boolean isReady, int currentPlayerNumber, int playerNumber, String winnerUsername,
-                      int winnerNumber, int numberOfPlayers) {
+                      Integer winnerNumber, int numberOfPlayers) {
 
       this.gameId = gameId;
       this.isReady = isReady;
@@ -30,10 +30,14 @@ public class GameListItem {
     return winnerUsername != null && winnerUsername.length() > 0;
   }
 
+  public void setWinner(boolean value){}
+
   /**
    * Is is the requesting player's turn.
    */
   public boolean isPlayerTurn() {
     return currentPlayerNumber == playerNumber;
   }
+
+  public void setIsPlayerTurn() {}
 }
