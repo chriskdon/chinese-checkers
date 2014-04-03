@@ -80,7 +80,7 @@ public class SpicedGcmActivity extends GcmActivity {
             spiceManager.execute(registerUserRequest, new ApiRequestListener<UserRegistrationReceivable>() {
                 @Override
                 public void onTaskFailure(int code, String message) {
-                    Toast.makeText(SpicedGcmActivity.this, message, Toast.LENGTH_LONG).show(); //TODO: delete toast after testing
+                    Toast.makeText(SpicedGcmActivity.this, "HERE", Toast.LENGTH_LONG).show(); //TODO: delete toast after testing
                 }
 
                 @Override

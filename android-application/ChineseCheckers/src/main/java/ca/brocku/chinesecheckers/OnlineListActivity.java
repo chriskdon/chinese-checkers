@@ -122,6 +122,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     newGameButton.performClick();
 
                 } else {
+                    gameListContainer.removeAllViews();
                     for(GameListItem game : result.gameListItems) { //for each game received
                         View listItem = createListItemView(game);
                         onlineGameViewManager.addView(listItem, null);
@@ -268,12 +269,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
         return newGame;
     }
 
-    private void refreshList() {
-        gameListContainer.removeAllViews();
-
-        populateList();
-    }
-
     /**
      * Update the board if a game has become ready while looking at it.
      *
@@ -283,7 +278,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                refreshList();
+                populateList();
             }
         });
     }
@@ -524,68 +519,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
             deleteGameDialog.show();
 
             return true;
-        }
-    }
-
-
-    //TODO: delete
-    /** THIS IS A TEMP CLASS WHICH IS TO BE DELETE WHEN WE CAN MAKE AN API CALL AND GET A LIST OF
-     * EACH GAME ITEM'S DATA.
-     *
-     */
-    private class GameItemData {
-        private long gameId;
-        private boolean isPlayerTurn;
-        private int numberOfPlayers;
-        private Player.PlayerColor playerColor;
-        private boolean isWinner;
-        private String winnerUsername;
-        private Player.PlayerColor winnerColor;
-        private boolean isReady;
-
-
-        private GameItemData(int gameId, boolean isPlayerTurn, int numberOfPlayers, Player.PlayerColor playerColor, boolean isWinner, String winnerUsername, Player.PlayerColor winnerColor, boolean isReady) {
-            this.gameId = gameId;
-            this.isPlayerTurn = isPlayerTurn;
-            this.numberOfPlayers = numberOfPlayers;
-            this.playerColor = playerColor;
-            this.isWinner = isWinner;
-            this.winnerUsername = winnerUsername;
-            this.winnerColor = winnerColor;
-            this.isReady = isReady;
-
-        }
-
-        public long getGameId() {
-            return gameId;
-        }
-
-        public boolean isPlayerTurn() {
-            return isPlayerTurn;
-        }
-
-        public int getNumberOfPlayers() {
-            return numberOfPlayers;
-        }
-
-        public Player.PlayerColor getPlayerColor() {
-            return playerColor;
-        }
-
-        public boolean isWinner() {
-            return isWinner;
-        }
-
-        public String getWinnerUsername() {
-            return winnerUsername;
-        }
-
-        public Player.PlayerColor getWinnerColor() {
-            return winnerColor;
-        }
-
-        public boolean isReady() {
-            return isReady;
         }
     }
 }
