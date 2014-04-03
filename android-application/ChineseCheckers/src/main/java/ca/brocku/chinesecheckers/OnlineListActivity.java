@@ -53,8 +53,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
     private LinearLayout gameListContainer;
     private Button newGameButton;
 
-    private ViewManager onlineGameViewManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +66,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
 
-        //Creates a ViewManager for the list of games and populates the list
-        onlineGameViewManager = new OnlineListViewManager();
+        //Populates the list of online games
         populateList();
     }
 
@@ -126,7 +123,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     gameListContainer.removeAllViews();
                     for(GameListItem game : result.gameListItems) { //for each game received
                         View listItem = createListItemView(game);
-                        onlineGameViewManager.addView(listItem, null);
                         gameListContainer.addView(listItem);
                     }
                 }
@@ -284,58 +280,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
         });
     }
 
-
-    //TODO: see if this can be deleted after updating the list has been put in place
-    /** This class manages the list of online game views.
-     *
-     */
-    private class OnlineListViewManager implements ViewManager {
-        LinkedList<View> listItems = new LinkedList<View>();
-
-        @Override
-        public void addView(View view, ViewGroup.LayoutParams layoutParams) {
-            listItems.add(view);
-        }
-
-        @Override
-        public void updateViewLayout(View view, ViewGroup.LayoutParams layoutParams) {
-            int index = listItems.indexOf(view); //get index of view to be updated
-            listItems.get(index).setLayoutParams(layoutParams); //get the view and set layout params
-        }
-
-        @Override
-        public void removeView(View view) {
-            gameListContainer.removeView(view);
-            listItems.remove(view);
-        }
-
-        /** Removes a list item based on it's tag.
-         *
-         * @param gameIdTag the list items tag (it's game ID)
-         */
-        public void removeView(int gameIdTag) {
-            for(View view : listItems) {
-                if((Integer)view.getTag() == gameIdTag) { //delete the view with the given gameIdTag
-                    removeView(view);
-                }
-            }
-        }
-
-        /** Gets a list item based on it's tag. Returns null if it cannot find the specified view.
-         *
-         * @param gameIdTag the list items tag (it's game ID)
-         * @return the list item
-         */
-        public View getView(int gameIdTag) {
-            for(View view : listItems) {
-                if((Integer)view.getTag() == gameIdTag) {
-                    return view;
-                }
-            }
-            return null;
-        }
-    }
-
     /** This handler starts one of the online games.
      *
      * It makes a call to the server to gather the required state information, bundles any data that
@@ -450,7 +394,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
                 @Override
                 public void onTaskSuccess(JoinGameReceivable result) {
                     View newGameListItem = createListItemView(result.gameListItem);
-                    onlineGameViewManager.addView(newGameListItem, null);
                     gameListContainer.addView(newGameListItem);
                 }
 
@@ -500,7 +443,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
                                 @Override
                                 public void onTaskSuccess(SuccessReceivable result) {
-                                    onlineGameViewManager.removeView(listItem);
                                     gameListContainer.removeView(listItem);
                                 }
 

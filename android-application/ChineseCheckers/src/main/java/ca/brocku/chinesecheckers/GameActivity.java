@@ -160,6 +160,16 @@ public class GameActivity extends SpicedGcmActivity {
         BoomBoomMusic.start(this);
     }
 
+    /** Only display the No network connectivity banner if it's an online game
+     *
+     */
+    @Override
+    protected void onNetworkDisconnected() {
+        if(isOnlineGame) {
+            super.onNetworkDisconnected();
+        }
+    }
+
     /**
      * This function handles the end of game state.
      * <p/>
