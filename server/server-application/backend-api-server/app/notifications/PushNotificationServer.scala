@@ -11,7 +11,7 @@ class PushNotificationServer {
 
   private implicit val context = scala.concurrent.ExecutionContext.Implicits.global
 
-  def send(notification: PushNotification): Unit = {
+  def send[T <: Receivable](notification: PushNotification[T]): Unit = {
     val response = WS.url("https://android.googleapis.com/gcm/send")
                     .withHeaders("Authorization" -> "key=AIzaSyBW_VOWo5A7j-qTd7CZXJvAd6Yt6DhuxNI",
                                  "Content-Type" -> "application/json")

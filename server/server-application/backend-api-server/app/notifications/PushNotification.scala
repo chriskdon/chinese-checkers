@@ -7,14 +7,15 @@ import scala.collection.mutable._
 import org.codehaus.jackson.map.ObjectMapper
 
 import play.api.libs.json._
+import scala.reflect._
 
-class PushNotification {
+class PushNotification[T <: Receivable : ClassTag] {
   private val mapper = new ObjectMapper()
 
   private var sendTo:MutableList[User] = new MutableList[User]()
-  private var receivable:Option[Receivable] = _
+  private var receivable:Option[T] = _
 
-  def this(sendTo:List[User], receivable: Option[Receivable]) = {
+  def this(sendTo:List[User], receivable: Option[T]) = {
     this()
 
     this.sendTo ++= sendTo
@@ -33,7 +34,7 @@ class PushNotification {
     sendTo += user
   }
 
-  def set(receivable: Option[Receivable]):Unit = {
+  def set(receivable: Option[T]):Unit = {
     this.receivable = receivable
   }
 
@@ -45,12 +46,16 @@ class PushNotification {
     }
 
     val registrationIds:String = Json.stringify(Json.toJson(regIdList))
-    val data:String = mapper.writeValueAsString(receivable)
+    val classname:String = classTag[T].runtimeClass.getCanonicalName()
+    val data:String = mapper.writeValueAsString(receivable.getOrElse(null).asInstanceOf[T])
 
     s"""
       { 
         "registration_ids": $registrationIds,
-        "data": $data
+        "data": {
+          "classname": "$classname",
+          "receivable": $data
+        }
       }
     """
   }

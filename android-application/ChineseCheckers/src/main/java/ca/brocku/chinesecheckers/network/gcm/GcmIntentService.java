@@ -36,7 +36,7 @@ public class GcmIntentService extends IntentService {
                 // Message collapsed/deleted
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // Received message - get data from extras
-                processor.push(new GcmMessage(intent.getExtras()));
+                processor.push(new GcmReceivableBuilder(intent.getExtras()).build());
             }
         }
 

@@ -1,6 +1,9 @@
 package ca.brocku.chinesecheckers.network.gcm;
 
-import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
+import com.ccapi.receivables.Receivable;
+
+import java.util.Objects;
+
 import de.greenrobot.event.EventBus;
 
 /**
@@ -16,25 +19,12 @@ public class PushMessageProcessor {
      *
      * @param message   The message to handle.
      */
-    public void push(GcmMessage message) {
-        postToEventBus(filter(message));
+    public void push(Object message) {
+        postToEventBus(message);
     }
 
-    /**
-     * Filter GCM Messages so that they are typed correctly.
-     * @param message   The message to filter.
-     * @return          The real typed version of the message.
-     */
-    protected GcmMessage filter(GcmMessage message) {
-        // TODO: Come up with a better filtering mechanism
-        if(message.isMessageTypeName(TestMessage.TYPE_NAME)) {
-            return new TestMessage(message);
-        }
 
-        throw new NoMessageTypeException();
-    }
-
-    private void postToEventBus(GcmMessage message) {
+    private void postToEventBus(Object message) {
         EventBus.getDefault().post(message);
     }
 }

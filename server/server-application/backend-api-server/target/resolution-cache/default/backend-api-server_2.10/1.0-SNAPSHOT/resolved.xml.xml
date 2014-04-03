@@ -4,7 +4,7 @@
 		module="backend-api-server_2.10"
 		revision="1.0-SNAPSHOT"
 		status="integration"
-		publication="20140402214144"
+		publication="20140403011111"
 	>
 		<description>
 		backend-api-server

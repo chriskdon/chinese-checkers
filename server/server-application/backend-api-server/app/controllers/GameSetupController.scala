@@ -11,6 +11,10 @@ import play.api.db.DB
 import play.api.Play.current
 import anorm.SqlParser._
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
+import scala.collection.mutable._
+import models._
+
+import notifications._
 
 object GameSetupController extends ApiControllerBase {
 
@@ -39,7 +43,29 @@ object GameSetupController extends ApiControllerBase {
 
         val joinReceivable = new JoinGameReceivable(gameListItem);
 
-        // TODO: Send push notification
+        // Send push notification
+        if(gameListItem.isReady) {
+          val needsNotification = SQL("CALL getGamePlayersNeedNotification({gameId})")
+                                    .on("gameId" -> gameId)
+                                    .as(int("userId") ~ str("gcmRegistrationId") map(flatten) *)
+
+          // Get users to send to                                    
+          var sendTo:MutableList[User] = new MutableList[User]()
+          for(u <- needsNotification) {
+            u match {
+              case (userId, gcmRegistrationId) => {
+                  sendTo += new User(userId, gcmRegistrationId)
+              }
+            }
+          }  
+
+          val gameReadyNotificationReceivable = new GameReadyNotificationReceivable(gameId)
+          
+          var p = new PushNotification[GameReadyNotificationReceivable](sendTo.toList, 
+                                          Some(gameReadyNotificationReceivable))
+
+          pushServer.send(p)
+        }                       
 
         okJson(joinReceivable)
       } catch {

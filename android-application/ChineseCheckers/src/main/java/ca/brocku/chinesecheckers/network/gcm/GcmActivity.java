@@ -11,6 +11,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ccapi.receivables.GameReadyNotificationReceivable;
+import com.ccapi.receivables.Receivable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -19,7 +21,6 @@ import java.io.IOException;
 
 import ca.brocku.chinesecheckers.R;
 import ca.brocku.chinesecheckers.network.NetworkActivity;
-import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -242,7 +243,7 @@ public class GcmActivity extends NetworkActivity {
     }
 
     // TODO: PLACEHOLDER METHOD FOR DEV -- DELETE WHEN THERE IS A REAL API
-    public void onEvent(TestMessage event) {
-        Log.d("EVENT", event.getTestData());
+    public void onEvent(Object event) {
+        Log.d("EVENT", "IT WORKED");
     }
 }
