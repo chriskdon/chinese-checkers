@@ -272,7 +272,6 @@ public class GameStateManager implements Parcelable, Serializable {
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry) it.next();
             playerArray[counter++] = (Player) pairs.getValue();
-            //it.remove();
         }
 
         return playerArray;

@@ -37,6 +37,7 @@
     <string name="online">Online</string>
     <string name="online_new_game">New Game</string>
     <string name="online_games">Online Games</string>
+    <string name="waiting_for_players">Waiting for players...</string>
     <string name="settings_show_possible_moves">Show possible moves</string>
     <string name="settings_your_username">Your username</string>
     <string name="cancel">Cancel</string>

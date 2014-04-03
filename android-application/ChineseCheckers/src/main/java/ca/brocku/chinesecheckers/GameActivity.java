@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.octo.android.robospice.SpiceManager;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,13 +33,17 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.HumanPlayer;
 import ca.brocku.chinesecheckers.gamestate.MovePath;
+import ca.brocku.chinesecheckers.gamestate.OnlineHumanPlayer;
 import ca.brocku.chinesecheckers.gamestate.Player;
+import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
+import ca.brocku.chinesecheckers.network.spice.SpicedActivity;
 import ca.brocku.chinesecheckers.uiengine.BoardUiEngine;
 
 @SuppressLint("All")
-public class GameActivity extends Activity {
+public class GameActivity extends SpicedGcmActivity {
     private GameStateManager gameStateManager;  // Manages everything in the game
     private Boolean isGameOver; //a boolean which can prevent saving the state
+    private boolean isOnlineGame; //flag whether or not this is an online game
 
     private Popup resumeDialog; //dialog that appears when there is a saved game
 
@@ -49,9 +55,10 @@ public class GameActivity extends Activity {
 
         gameStateManager = getIntent().getExtras().getParcelable("GAME_STATE_MANAGER");
         isGameOver = false;
+        isOnlineGame = getIntent().getExtras().getBoolean("IS_ONLINE_GAME", false);
 
         //passes player array to the offline game fragment
-        Fragment offlineGameFragment = new OfflineGameFragment(this);
+        Fragment offlineGameFragment = new OfflineGameFragment(this, spiceManager);
         Bundle offlineGameFragmentBundle = new Bundle();
         offlineGameFragmentBundle.putParcelable("GAME_STATE_MANAGER", gameStateManager);
         offlineGameFragment.setArguments(offlineGameFragmentBundle);
@@ -123,7 +130,7 @@ public class GameActivity extends Activity {
 
         super.onPause();
 
-        if (!isGameOver) { //only save the state if Quit Game was not selected form dialog
+        if (!isOnlineGame && !isGameOver) { //don't save if game is over or if it's an online game
 
             try { //try to serialize the GameStateManager
 
@@ -238,12 +245,15 @@ public class GameActivity extends Activity {
         private Position[] possibleMoves;
 
         public GameActivity activity;
+        private SpiceManager spiceManager;
+
 
         public OfflineGameFragment() {
         }
 
-        public OfflineGameFragment(GameActivity activity) {
+        public OfflineGameFragment(GameActivity activity, SpiceManager spiceManager) {
             this.activity = activity;
+            this.spiceManager = spiceManager;
         }
 
         /**
@@ -419,8 +429,15 @@ public class GameActivity extends Activity {
                         return;
                     }
 
-                    ((HumanPlayer) currentPlayer)
-                            .signalMove(movePath);
+                    if (currentPlayer instanceof OnlineHumanPlayer) {
+                        ((OnlineHumanPlayer) currentPlayer)
+                                .signalMove(spiceManager, movePath);
+                    } else if(currentPlayer instanceof HumanPlayer) {
+                        ((HumanPlayer) currentPlayer)
+                                .signalMove(movePath);
+                    } else {
+                        throw new RuntimeException("Invalid Player");
+                    }
 
                     if (movePath.getPath().size() >= 9) {
                         checkKonamiCode(currentPlayer, movePath);
