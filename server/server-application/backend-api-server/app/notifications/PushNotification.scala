@@ -41,7 +41,7 @@ class PushNotification {
     var regIdList:MutableList[String] = new MutableList[String]()
 
     for(p <- sendTo) {
-      regIdList += p.registrationId
+      regIdList += p.gcmRegistrationId
     }
 
     val registrationIds:String = Json.stringify(Json.toJson(regIdList))

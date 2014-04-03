@@ -1,5 +1,5 @@
 package models
 
-class User(val userId: Long, val registrationId: String) {
+class User(val userId: Long, val gcmRegistrationId: String) {
 
 }
