@@ -13,3 +13,9 @@ database [default] connected at jdbc:mysql://127.0.0.1/ccdb?autoReconnect=true&u
 2014-04-02 22:10:34,115 - [INFO] - from play in play-internal-execution-context-4 
 Application started (Dev)
 
+2014-04-03 03:37:55,423 - [INFO] - from play in play-internal-execution-context-6 
+database [default] connected at jdbc:mysql://127.0.0.1/ccdb?autoReconnect=true&useOldAliasMetadataBehavior=true
+
+2014-04-03 03:37:55,430 - [INFO] - from play in play-internal-execution-context-6 
+Application started (Dev)
+

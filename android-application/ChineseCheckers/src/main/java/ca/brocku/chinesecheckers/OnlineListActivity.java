@@ -2,6 +2,8 @@ package ca.brocku.chinesecheckers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,18 +17,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ccapi.GameListItem;
+import com.ccapi.PieceInformation;
+import com.ccapi.PlayerInformation;
 import com.ccapi.receivables.GameListReceivable;
+import com.ccapi.receivables.GameStateReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
 import com.ccapi.receivables.SuccessReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.GridPiece;
+import ca.brocku.chinesecheckers.gameboard.Piece;
+import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.NetworkPlayer;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.requests.DeleteGameRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.GameListRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.GameStateRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
 
 /**
@@ -312,12 +326,53 @@ public class OnlineListActivity extends SpicedGcmActivity {
     private class startOnlineGameHandler implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            //TODO: Make API call to get game state, set up Parcelable stuff and then start the activity
+            long gameId = (Long)view.getTag();
 
+            GameStateRequest gameStateRequest = new GameStateRequest(gameId);
+            spiceManager.execute(gameStateRequest, new ApiRequestListener<GameStateReceivable>() {
+                @Override
+                public void onTaskFailure(int code, String message) {
+                    Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
 
+                @Override
+                public void onTaskSuccess(GameStateReceivable result) {
+                    //Create all of the players
+                    ArrayList<Player> players = new ArrayList<Player>();
+                    for(PlayerInformation player: result.players) {
+                        players.add(
+                                new NetworkPlayer(player.userId, player.username, player.number));
+                    }
 
-            //OnlineListActivity.this.finish();
-            //OnlineListActivity.this.startActivity(new Intent(OnlineListActivity.this, GameActivity.class));
+                    //Create all of the pieces
+                    Piece[] pieces = new Piece[result.gameState.pieces.length];
+                    int piecesParced = 0;
+                    for(PieceInformation piece: result.gameState.pieces) {
+                        Position position = new Position(piece.row, piece.index);
+                        pieces[piecesParced++] = new GridPiece(position, piece.playerNumber);
+                    }
+
+                    //Create the game board
+                    GameBoard gameBoard = new CcGameBoard(pieces);
+
+                    //Create the GameStateManager
+                    Player.PlayerColor currentPlayerColor =
+                            Player.getPlayerColor(result.gameState.currentPlayerNumber);
+                    GameStateManager gameStateManager =
+                            new GameStateManager(gameBoard, players, currentPlayerColor);
+
+                    //Bundle information and start the GameActivity
+                    Intent intent = new Intent(OnlineListActivity.this, GameActivity.class);
+                    intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
+                    intent.putExtra("SAVED_GAME", true); //Store flag that this is a saved game
+                    OnlineListActivity.this.startActivity(intent);
+                }
+
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
