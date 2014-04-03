@@ -3,6 +3,7 @@ package controllers
 import play.api._
 import play.api.mvc._
 
+import com.ccapi.postdata._
 import com.ccapi.receivables._
 import anorm._ 
 import play.api.db.DB
@@ -17,16 +18,17 @@ object UserController extends ApiControllerBase {
    * 
    * @type {[type]}
    */
-  def register(username: String) = Action { request =>
-    //var user = parseRequest[UserRegistrationResult](request)
+  def register() = Action { request =>
+    var userPostData = parseRequest[RegisterUserPostData](request)
 
     DB.withConnection { implicit c =>
       try {
-        val userId: Long = SQL("CALL createUser({username})")
-                              .on("username" -> username)
+        val userId: Long = SQL("CALL createUser({username}, {gcmRegistrationId})")
+                              .on("username" -> userPostData.username, 
+                                  "gcmRegistrationId" -> userPostData.gcmRegistrationId)
                               .as(scalar[Long].single)
 
-        okJson(new UserRegistrationReceivable(username, userId))
+        okJson(new UserRegistrationReceivable(userPostData.username, userId))
       } catch {
         case ex: MySQLIntegrityConstraintViolationException => {
           okJson(new ErrorReceivable("Username Already Exists"))

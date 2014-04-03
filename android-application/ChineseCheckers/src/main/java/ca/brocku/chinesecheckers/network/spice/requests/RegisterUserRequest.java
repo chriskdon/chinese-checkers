@@ -1,8 +1,9 @@
 package ca.brocku.chinesecheckers.network.spice.requests;
 
-import android.util.Log;
+
 
 import com.ccapi.receivables.UserRegistrationReceivable;
+import com.ccapi.postdata.RegisterUserPostData;
 
 import ca.brocku.chinesecheckers.network.spice.ApiRequest;
 
@@ -14,18 +15,17 @@ import ca.brocku.chinesecheckers.network.spice.ApiRequest;
  * Date: 3/11/2014
  */
 public class RegisterUserRequest extends ApiRequest<UserRegistrationReceivable> {
+    private RegisterUserPostData postData = null;
 
-    private String username;
-
-    public RegisterUserRequest(String username) {
+    public RegisterUserRequest(RegisterUserPostData postData) {
         super(UserRegistrationReceivable.class);
-        this.username = username;
+        this.postData = postData;
     }
 
     @Override
     public UserRegistrationReceivable loadDataFromNetwork() throws Exception {
-        String url = apiUrl("/users/register/%s", username);
+        String url = apiUrl("/users/register");
 
-        return getRestTemplate().postForObject(url, null, UserRegistrationReceivable.class);
+        return getRestTemplate().postForObject(url, postData, UserRegistrationReceivable.class);
     }
 }

@@ -2,13 +2,17 @@ package controllers;
 
 import play.api._
 import play.api.mvc._
+import play.api.libs.json._
 
 import scala.reflect._
 
 import org.codehaus.jackson.map.ObjectMapper
 
+import notifications._
+
 abstract class ApiControllerBase extends Controller {
-  protected val mapper = new ObjectMapper()
+  private val mapper = new ObjectMapper()
+  protected val pushServer = new PushNotificationServer()
 
   /**
    * Return a JSON String based on the object.
@@ -18,8 +22,12 @@ abstract class ApiControllerBase extends Controller {
     Ok(mapper.writeValueAsString(obj)).as("application/json")
   }
 
+  /**
+   * Parse a JSON request to get the POJO
+   * @type {[type]}
+   */
   protected def parseRequest[T: ClassTag](request: Request[AnyContent]):T = {
-    mapper.readValue(request.body.asText.get, classTag[T].runtimeClass) match {
+    mapper.readValue(Json.stringify(request.body.asJson.getOrElse(null)), classTag[T].runtimeClass) match {
       case x:T => x
       case _ => throw new ClassCastException
     }

@@ -1,6 +1,6 @@
-// @SOURCE:/Users/kubasub/Dropbox/Code/chinese-checkers/server/server-application/backend-api-server/conf/routes
-// @HASH:3044d738bf3da4064bd5f1c7f5ca79a3163f5bab
-// @DATE:Wed Apr 02 17:59:38 EDT 2014
+// @SOURCE:/Users/chriskellendonk/Development/School/COSC3F00/chinese-checkers/server/server-application/backend-api-server/conf/routes
+// @HASH:b4f5ba22fbe4c739abb20be41daf5401afc89e6b
+// @DATE:Thu Apr 03 00:21:19 EDT 2014
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -48,8 +48,8 @@ def change(userId:Long, username:String): Call = {
                                                 
 
 // @LINE:9
-def register(username:String): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "users/register/" + implicitly[PathBindable[String]].unbind("username", dynamicString(username)))
+def register(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "users/register")
 }
                                                 
     
@@ -154,8 +154,8 @@ def change : JavascriptReverseRoute = JavascriptReverseRoute(
 def register : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.UserController.register",
    """
-      function(username) {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "users/register/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("username", encodeURIComponent(username))})
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "users/register"})
       }
    """
 )
@@ -275,8 +275,8 @@ def change(userId:Long, username:String): play.api.mvc.HandlerRef[_] = new play.
                       
 
 // @LINE:9
-def register(username:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.UserController.register(username), HandlerDef(this, "controllers.UserController", "register", Seq(classOf[String]), "POST", """ User Tasks""", _prefix + """users/register/$username<[^/]+>""")
+def register(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.UserController.register(), HandlerDef(this, "controllers.UserController", "register", Seq(), "POST", """ User Tasks""", _prefix + """users/register""")
 )
                       
     

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.ccapi.postdata.RegisterUserPostData;
 import com.ccapi.receivables.UserRegistrationReceivable;
 import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -74,7 +75,8 @@ public class SpicedGcmActivity extends GcmActivity {
                     .putBoolean(MainActivity.PREF_DONE_INITIAL_SETUP, false)
                     .commit();
         } else {
-            RegisterUserRequest registerUserRequest = new RegisterUserRequest(username);
+            RegisterUserPostData postData = new RegisterUserPostData(username, getRegistrationId(this));
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest(postData);
             spiceManager.execute(registerUserRequest, new ApiRequestListener<UserRegistrationReceivable>() {
                 @Override
                 public void onTaskFailure(int code, String message) {

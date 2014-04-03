@@ -1,6 +1,6 @@
-// @SOURCE:/Users/kubasub/Dropbox/Code/chinese-checkers/server/server-application/backend-api-server/conf/routes
-// @HASH:3044d738bf3da4064bd5f1c7f5ca79a3163f5bab
-// @DATE:Wed Apr 02 17:59:38 EDT 2014
+// @SOURCE:/Users/chriskellendonk/Development/School/COSC3F00/chinese-checkers/server/server-application/backend-api-server/conf/routes
+// @HASH:b4f5ba22fbe4c739abb20be41daf5401afc89e6b
+// @DATE:Thu Apr 03 00:21:19 EDT 2014
 
 
 import play.core._
@@ -33,7 +33,7 @@ private[this] lazy val controllers_Application_index0 = Route("GET", PathPattern
         
 
 // @LINE:9
-private[this] lazy val controllers_UserController_register1 = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("users/register/"),DynamicPart("username", """[^/]+""",true))))
+private[this] lazy val controllers_UserController_register1 = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("users/register"))))
         
 
 // @LINE:10
@@ -59,7 +59,7 @@ private[this] lazy val controllers_GameSetupController_list6 = Route("GET", Path
 // @LINE:19
 private[this] lazy val controllers_Assets_at7 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("assets/"),DynamicPart("file", """.+""",false))))
         
-def documentation = List(("""GET""", prefix,"""controllers.Application.index"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/register/$username<[^/]+>""","""controllers.UserController.register(username:String)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/change/$userId<[^/]+>/$username<[^/]+>""","""controllers.UserController.change(userId:Long, username:String)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/join/$playerCount<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.join(playerCount:Integer, userId:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/delete/$gameId<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.delete(gameId:Long, userId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/gamestate/$gameId<[^/]+>""","""controllers.GameSetupController.gamestate(gameId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/list/$userId<[^/]+>""","""controllers.GameSetupController.list(userId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
+def documentation = List(("""GET""", prefix,"""controllers.Application.index"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/register""","""controllers.UserController.register()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/change/$userId<[^/]+>/$username<[^/]+>""","""controllers.UserController.change(userId:Long, username:String)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/join/$playerCount<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.join(playerCount:Integer, userId:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/delete/$gameId<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.delete(gameId:Long, userId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/gamestate/$gameId<[^/]+>""","""controllers.GameSetupController.gamestate(gameId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/list/$userId<[^/]+>""","""controllers.GameSetupController.list(userId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
   case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
   case l => s ++ l.asInstanceOf[List[(String,String,String)]] 
 }}
@@ -77,8 +77,8 @@ case controllers_Application_index0(params) => {
 
 // @LINE:9
 case controllers_UserController_register1(params) => {
-   call(params.fromPath[String]("username", None)) { (username) =>
-        invokeHandler(controllers.UserController.register(username), HandlerDef(this, "controllers.UserController", "register", Seq(classOf[String]),"POST", """ User Tasks""", Routes.prefix + """users/register/$username<[^/]+>"""))
+   call { 
+        invokeHandler(controllers.UserController.register(), HandlerDef(this, "controllers.UserController", "register", Nil,"POST", """ User Tasks""", Routes.prefix + """users/register"""))
    }
 }
         

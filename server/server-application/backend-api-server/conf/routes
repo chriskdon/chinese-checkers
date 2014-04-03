@@ -6,7 +6,7 @@
 GET     /                           		   controllers.Application.index
 
 # User Tasks
-POST	/users/register/:username			       controllers.UserController.register(username: String)
+POST	/users/register			                 controllers.UserController.register()
 POST	/users/change/:userId/:username			 controllers.UserController.change(userId: Long, username: String)
 
 # Game Setup Tasks
