@@ -286,7 +286,12 @@ public class OnlineListActivity extends SpicedGcmActivity {
      *
      * @param event
      */
-    public void onEvent(GameOverNotificationReceivable event) {
+    public void onEvent(final GameOverNotificationReceivable event) {
+        OnlineListActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+        Log.e("TESTESASFASF", "ere");
         for(int i=0; i<gameListContainer.getChildCount(); i++) {
             View gameItem  = gameListContainer.getChildAt(i);
             long gameId = (Long)gameItem.getTag();
@@ -318,6 +323,10 @@ public class OnlineListActivity extends SpicedGcmActivity {
                 gameItem.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
             }
         }
+
+
+            }
+        });
     }
 
     /** This handler starts one of the online games.

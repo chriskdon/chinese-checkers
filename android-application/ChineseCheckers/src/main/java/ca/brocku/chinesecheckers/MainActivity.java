@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.receivables.GameOverNotificationReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
@@ -111,6 +112,10 @@ public class MainActivity extends SpicedGcmActivity {
     protected void onPause(){
         BoomBoomMusic.pause();
         super.onPause();
+    }
+
+    public void onEvent(GameOverNotificationReceivable event) {
+
     }
 
     @Override
