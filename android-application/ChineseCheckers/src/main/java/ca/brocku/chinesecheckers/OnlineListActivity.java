@@ -287,7 +287,37 @@ public class OnlineListActivity extends SpicedGcmActivity {
      * @param event
      */
     public void onEvent(GameOverNotificationReceivable event) {
-        // TODO: Game Over Do something
+        for(int i=0; i<gameListContainer.getChildCount(); i++) {
+            View gameItem  = gameListContainer.getChildAt(i);
+            long gameId = (Long)gameItem.getTag();
+            if(gameId == event.gameId) {
+
+                ((TextView)gameItem.findViewById(R.id.onlineWinnerTextView)).setText(event.username);
+
+                switch (Player.getPlayerColor(event.playerNumber)) {
+                    case RED:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_red);
+                        break;
+                    case PURPLE:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_purple);
+                        break;
+                    case BLUE:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_blue);
+                        break;
+                    case GREEN:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_green);
+                        break;
+                    case YELLOW:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_yellow);
+                        break;
+                    case ORANGE:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_orange);
+                        break;
+                }
+
+                gameItem.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     /** This handler starts one of the online games.

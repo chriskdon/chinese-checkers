@@ -162,8 +162,9 @@ public class MainActivity extends SpicedGcmActivity {
 
      */
     private void displayOnlineGameNotification() {
-        //set the icon which shows the number of games in which it is your turn
-        //TODO: make API call HERE to get number of "current move" games and set variable
+
+
+
         int numberOfCurrentMoveGames = 1;
         if(numberOfCurrentMoveGames > 0) {
             onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
