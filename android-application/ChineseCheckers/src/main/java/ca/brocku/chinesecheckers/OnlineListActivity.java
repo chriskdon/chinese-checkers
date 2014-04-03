@@ -104,7 +104,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
             public void onTaskSuccess(GameListReceivable result) {
                 if(result.gameListItems.length == 0) { //Opens the new game dialog if there are no games
                     newGameButton.performClick();
-                    
+
                 } else {
                     for(GameListItem game : result.gameListItems) { //for each game received
                         View listItem = createListItemView(game);
@@ -313,6 +313,9 @@ public class OnlineListActivity extends SpicedGcmActivity {
         @Override
         public void onClick(View view) {
             //TODO: Make API call to get game state, set up Parcelable stuff and then start the activity
+
+
+
             //OnlineListActivity.this.finish();
             //OnlineListActivity.this.startActivity(new Intent(OnlineListActivity.this, GameActivity.class));
         }
