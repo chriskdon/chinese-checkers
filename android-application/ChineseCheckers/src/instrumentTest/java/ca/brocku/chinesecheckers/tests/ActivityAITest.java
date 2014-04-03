@@ -16,12 +16,12 @@ import ca.brocku.chinesecheckers.gamestate.Player;
 public class ActivityAITest extends AndroidTestCase  {
 
     public void testCorrectDirection(){
-        directionEvaluation("EASY", 1, Player.PlayerColor.RED);
-        directionEvaluation("EASY", 2, Player.PlayerColor.PURPLE);
-        directionEvaluation("EASY", 3, Player.PlayerColor.BLUE);
-        directionEvaluation("EASY", 4, Player.PlayerColor.GREEN);
-        directionEvaluation("EASY", 5, Player.PlayerColor.YELLOW);
-        directionEvaluation("EASY", 6, Player.PlayerColor.ORANGE);
+        directionEvaluation("MEDIUM", 1, Player.PlayerColor.RED);
+        directionEvaluation("MEDIUM", 2, Player.PlayerColor.PURPLE);
+        directionEvaluation("MEDIUM", 3, Player.PlayerColor.BLUE);
+        directionEvaluation("MEDIUM", 4, Player.PlayerColor.GREEN);
+        directionEvaluation("MEDIUM", 5, Player.PlayerColor.YELLOW);
+        directionEvaluation("MEDIUM", 6, Player.PlayerColor.ORANGE);
     }
 
     public void directionEvaluation(String AILevel, int playerNumber, Player.PlayerColor color) {
@@ -79,9 +79,7 @@ public class ActivityAITest extends AndroidTestCase  {
     }
 
     public void testChainHopping(){
-        hoppingEvaluation("EASY", Player.PlayerColor.RED);
         hoppingEvaluation("MEDIUM", Player.PlayerColor.RED);
-        hoppingEvaluation("HARD", Player.PlayerColor.RED);
     }
 
     public void hoppingEvaluation(String AILevel, Player.PlayerColor color){
@@ -104,15 +102,6 @@ public class ActivityAITest extends AndroidTestCase  {
         assertEquals("Final row should be 4", 4, position.getRow());
         assertEquals("Final index should be 6", 6, position.getIndex());
     }
-
-//    public void testHeuristics(){
-//        testDistanceHeuristic(1);
-//        testDistanceHeuristic(2);
-//        testDistanceHeuristic(3);
-//        testDistanceHeuristic(4);
-//        testDistanceHeuristic(5);
-//        testDistanceHeuristic(6);
-//    }
 
     public void testDistanceHeuristic(int playerNumber){
         CcGameBoard board = new CcGameBoard();
