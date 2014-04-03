@@ -67,7 +67,7 @@ public class GcmActivity extends NetworkActivity {
         super.onPause();
 
         if(EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this); 
+            EventBus.getDefault().unregister(this);
         }
     }
 

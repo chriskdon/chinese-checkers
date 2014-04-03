@@ -651,8 +651,10 @@ public class GameActivity extends SpicedGcmActivity {
              */
             @Override
             public synchronized void onPlayerWon(Player player, int position) {
-                setTitleBar(player);
-                ((GameActivity) getActivity()).onEndGame(player);
+                try {
+                    setTitleBar(player);
+                    ((GameActivity) getActivity()).onEndGame(player);
+                } catch(Exception ex) {}
             }
         }
     }
