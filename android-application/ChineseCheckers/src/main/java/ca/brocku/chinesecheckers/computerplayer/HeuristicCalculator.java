@@ -27,6 +27,9 @@ public class HeuristicCalculator {
      * @return The difference in distance to the goal the piece attains from this move
      */
     public int getDeltaDistanceHeuristic(MovePath path){
+        if(path.getStartPosition() == null)
+            return -100;
+
         int initialPosition = getDistanceHeuristic(path.getStartPosition());
         int finalPosition = getDistanceHeuristic(path.getEndPosition());
 
