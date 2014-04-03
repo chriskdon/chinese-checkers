@@ -1,6 +1,6 @@
 package ca.brocku.chinesecheckers.network.spice.requests;
 
-import com.ccapi.receivables.DeleteGameReceivable;
+import com.ccapi.receivables.SuccessReceivable;
 
 import ca.brocku.chinesecheckers.network.spice.ApiRequest;
 
@@ -8,7 +8,7 @@ import ca.brocku.chinesecheckers.network.spice.ApiRequest;
  * @author kubasub
  * @date April 02, 2014
  */
-public class DeleteGameRequest extends ApiRequest<DeleteGameReceivable> {
+public class DeleteGameRequest extends ApiRequest<SuccessReceivable> {
     private long userId;
     private long gameId;
 
@@ -20,9 +20,9 @@ public class DeleteGameRequest extends ApiRequest<DeleteGameReceivable> {
     }
 
     @Override
-    public DeleteGameReceivable loadDataFromNetwork() throws Exception {
+    public SuccessReceivable loadDataFromNetwork() throws Exception {
         String url = apiUrl("/games/delete/%s/%s", gameId, userId);
 
-        return getRestTemplate().postForObject(url, null, DeleteGameReceivable.class);
+        return getRestTemplate().postForObject(url, null, SuccessReceivable.class);
     }
 }

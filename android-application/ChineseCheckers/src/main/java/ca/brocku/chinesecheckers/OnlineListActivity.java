@@ -15,9 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ccapi.GameListItem;
-import com.ccapi.receivables.DeleteGameReceivable;
 import com.ccapi.receivables.GameListReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
+import com.ccapi.receivables.SuccessReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import java.util.LinkedList;
@@ -407,20 +407,16 @@ public class OnlineListActivity extends SpicedGcmActivity {
                             deleteGameDialog.dismiss();
 
                             DeleteGameRequest deleteGameRequest = new DeleteGameRequest(OnlineListActivity.super.userId, gameId);
-                            spiceManager.execute(deleteGameRequest, new ApiRequestListener<DeleteGameReceivable>() {
+                            spiceManager.execute(deleteGameRequest, new ApiRequestListener<SuccessReceivable>() {
                                 @Override
                                 public void onTaskFailure(int code, String message) {
                                     Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
-                                public void onTaskSuccess(DeleteGameReceivable result) {
-                                    if(result.isDeleted) {
-                                        onlineGameViewManager.removeView(listItem);
-                                        gameListContainer.removeView(listItem);
-                                    } else {
-                                        Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
-                                    }
+                                public void onTaskSuccess(SuccessReceivable result) {
+                                    onlineGameViewManager.removeView(listItem);
+                                    gameListContainer.removeView(listItem);
                                 }
 
                                 @Override
