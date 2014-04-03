@@ -54,11 +54,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
         //Creates a ViewManager for the list of games and populates the list
         onlineGameViewManager = new OnlineListViewManager();
         populateList();
-
-        //Opens the new game dialog if there are no games
-        if(gameListContainer.getChildCount() == 0) {
-            newGameButton.performClick();
-        }
     }
 
 
@@ -107,10 +102,15 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
             @Override
             public void onTaskSuccess(GameListReceivable result) {
-                for(GameListItem game : result.gameListItems) { //for each game received
-                    View listItem = createListItemView(game);
-                    onlineGameViewManager.addView(listItem, null);
-                    gameListContainer.addView(listItem);
+                if(result.gameListItems.length == 0) { //Opens the new game dialog if there are no games
+                    newGameButton.performClick();
+                    
+                } else {
+                    for(GameListItem game : result.gameListItems) { //for each game received
+                        View listItem = createListItemView(game);
+                        onlineGameViewManager.addView(listItem, null);
+                        gameListContainer.addView(listItem);
+                    }
                 }
             }
 
