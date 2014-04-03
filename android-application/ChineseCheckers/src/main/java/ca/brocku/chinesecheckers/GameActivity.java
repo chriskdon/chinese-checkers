@@ -187,7 +187,7 @@ public class GameActivity extends SpicedGcmActivity {
 
         //Plays game over sound depending on if device owner won
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if(sharedPrefs.getString(MainActivity.PREF_USER_ID, "").equals(p.getName())){
+        if(sharedPrefs.getString(MainActivity.PREF_USERNAME, "").equals(p.getName())){
             BoomBoomMusic.onPlayerWin();
         }
         else{

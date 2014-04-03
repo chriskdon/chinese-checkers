@@ -1,5 +1,7 @@
 package ca.brocku.chinesecheckers.gamestate;
 
+import com.ccapi.Move;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +52,10 @@ public class MovePath {
 
     public MovePath() {
         this(new ArrayList<Position>());
+    }
+
+    public MovePath(Move move) {
+        this(new Position(move.startRow, move.startIndex), new Position(move.endRow, move.endIndex));
     }
 
     /**

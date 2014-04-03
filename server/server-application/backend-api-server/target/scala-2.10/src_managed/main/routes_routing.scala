@@ -1,6 +1,6 @@
-// @SOURCE:/Users/kubasub/Dropbox/Code/chinese-checkers/server/server-application/backend-api-server/conf/routes
-// @HASH:b4f5ba22fbe4c739abb20be41daf5401afc89e6b
-// @DATE:Thu Apr 03 03:59:17 EDT 2014
+// @SOURCE:/Users/chriskellendonk/Development/School/COSC3F00/chinese-checkers/server/server-application/backend-api-server/conf/routes
+// @HASH:e8a5739157bd31f91fb9b3875f8e34086f8f2314
+// @DATE:Thu Apr 03 05:41:35 EDT 2014
 
 
 import play.core._
@@ -57,9 +57,13 @@ private[this] lazy val controllers_GameSetupController_list6 = Route("GET", Path
         
 
 // @LINE:19
-private[this] lazy val controllers_Assets_at7 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("assets/"),DynamicPart("file", """.+""",false))))
+private[this] lazy val controllers_GamePlayController_move7 = Route("POST", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("gameplay/move"))))
         
-def documentation = List(("""GET""", prefix,"""controllers.Application.index"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/register""","""controllers.UserController.register()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/change/$userId<[^/]+>/$username<[^/]+>""","""controllers.UserController.change(userId:Long, username:String)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/join/$playerCount<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.join(playerCount:Integer, userId:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/delete/$gameId<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.delete(gameId:Long, userId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/gamestate/$gameId<[^/]+>""","""controllers.GameSetupController.gamestate(gameId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/list/$userId<[^/]+>""","""controllers.GameSetupController.list(userId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
+
+// @LINE:22
+private[this] lazy val controllers_Assets_at8 = Route("GET", PathPattern(List(StaticPart(Routes.prefix),StaticPart(Routes.defaultPrefix),StaticPart("assets/"),DynamicPart("file", """.+""",false))))
+        
+def documentation = List(("""GET""", prefix,"""controllers.Application.index"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/register""","""controllers.UserController.register()"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """users/change/$userId<[^/]+>/$username<[^/]+>""","""controllers.UserController.change(userId:Long, username:String)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/join/$playerCount<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.join(playerCount:Integer, userId:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/delete/$gameId<[^/]+>/$userId<[^/]+>""","""controllers.GameSetupController.delete(gameId:Long, userId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/gamestate/$gameId<[^/]+>""","""controllers.GameSetupController.gamestate(gameId:Long)"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """games/list/$userId<[^/]+>""","""controllers.GameSetupController.list(userId:Long)"""),("""POST""", prefix + (if(prefix.endsWith("/")) "" else "/") + """gameplay/move""","""controllers.GamePlayController.move()"""),("""GET""", prefix + (if(prefix.endsWith("/")) "" else "/") + """assets/$file<.+>""","""controllers.Assets.at(path:String = "/public", file:String)""")).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
   case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
   case l => s ++ l.asInstanceOf[List[(String,String,String)]] 
 }}
@@ -124,7 +128,15 @@ case controllers_GameSetupController_list6(params) => {
         
 
 // @LINE:19
-case controllers_Assets_at7(params) => {
+case controllers_GamePlayController_move7(params) => {
+   call { 
+        invokeHandler(controllers.GamePlayController.move(), HandlerDef(this, "controllers.GamePlayController", "move", Nil,"POST", """ Game Play Tasks""", Routes.prefix + """gameplay/move"""))
+   }
+}
+        
+
+// @LINE:22
+case controllers_Assets_at8(params) => {
    call(Param[String]("path", Right("/public")), params.fromPath[String]("file", None)) { (path, file) =>
         invokeHandler(controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]),"GET", """ Map static resources from the /public folder to the /assets URL path""", Routes.prefix + """assets/$file<.+>"""))
    }

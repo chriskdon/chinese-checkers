@@ -45,23 +45,9 @@ object GameSetupController extends ApiControllerBase {
 
         // Send push notification
         if(gameListItem.isReady) {
-          val needsNotification = SQL("CALL getGamePlayersNeedNotification({gameId})")
-                                    .on("gameId" -> gameId)
-                                    .as(int("userId") ~ str("gcmRegistrationId") map(flatten) *)
-
-          // Get users to send to                                    
-          var sendTo:MutableList[User] = new MutableList[User]()
-          for(u <- needsNotification) {
-            u match {
-              case (userId, gcmRegistrationId) => {
-                  sendTo += new User(userId, gcmRegistrationId)
-              }
-            }
-          }  
-
           val gameReadyNotificationReceivable = new GameReadyNotificationReceivable(gameId)
           
-          var p = new PushNotification[GameReadyNotificationReceivable](sendTo.toList, 
+          var p = new PushNotification[GameReadyNotificationReceivable](pushServer.getNotfiableUsers(gameId), 
                                           Some(gameReadyNotificationReceivable))
 
           pushServer.send(p)

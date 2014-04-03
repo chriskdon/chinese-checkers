@@ -3,47 +3,68 @@ package ca.brocku.chinesecheckers.gamestate;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ccapi.receivables.PlayerMoveReceivable;
+
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
+import de.greenrobot.event.EventBus;
 
 /**
  * @author Jakub Subczynski
  * @date April 03, 2014
  */
 public class NetworkPlayer extends Player {
+    private long gameId;
     private long userId;
     private String username;
     private int playerNumber;
+    private MovePath m;
 
-    public NetworkPlayer(long userId, String username, int playerNumber) {
+    public NetworkPlayer(long userId, long gameId, String username, int playerNumber) {
         super(getPlayerColor(playerNumber));
 
         this.userId = userId;
+        this.gameId = gameId;
         this.username = username;
         this.playerNumber = playerNumber;
+
+        EventBus.getDefault().register(this);
     }
 
     public NetworkPlayer(Parcel parcel) {
-        this(parcel.readLong(), parcel.readString(), parcel.readInt());
+        this(parcel.readLong(), parcel.readLong(), parcel.readString(), parcel.readInt());
+    }
+
+    /**
+     * Received move from the network.
+     * @param event
+     */
+    public void onEvent(PlayerMoveReceivable event) {
+        if(event.userId != this.userId || event.gameId != this.gameId) {
+            return; // Not our event
+        }
+
+        m = new MovePath(event.move);
     }
 
     @Override
     public MovePath onTurn(ReadOnlyGameBoard board) {
-        int i = 1;
-        while(2>i){
+        while(m == null){
             try {
-                Thread.sleep(100);
+                Thread.sleep(THREAD_SLEEP_TIME);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex); // Rethrow at runtime
             }
 
         }
 
-        return null;
+        MovePath temp = m;
+        m = null;
+        return temp;
     }
 
     @Override
     public String getName() {
-        return username;
+        return null;
     }
 
     @Override
@@ -61,6 +82,7 @@ public class NetworkPlayer extends Player {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(userId);
+        dest.writeLong(gameId);
         dest.writeString(username);
         dest.writeInt(playerNumber);
     }

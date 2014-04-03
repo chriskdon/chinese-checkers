@@ -20,6 +20,7 @@ import com.ccapi.GameListItem;
 import com.ccapi.PieceInformation;
 import com.ccapi.PlayerInformation;
 import com.ccapi.receivables.GameListReceivable;
+import com.ccapi.receivables.GameOverNotificationReceivable;
 import com.ccapi.receivables.GameReadyNotificationReceivable;
 import com.ccapi.receivables.GameStateReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
@@ -36,7 +37,6 @@ import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.NetworkPlayer;
-import ca.brocku.chinesecheckers.gamestate.OnlineHumanPlayer;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
@@ -174,7 +174,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
                 //Set the text view under the player icons
                 newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
-                ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText(R.string.waiting_for_players);
+                ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText("Waiting for players...");
             }
 
             //Set Player icons
@@ -204,8 +204,8 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     break;
             }
 
+            //Sets User's icon (with star)
             if(gameListItem.isReady) {
-                //Sets User's icon (with star)
                 switch (Player.getPlayerColor(gameListItem.playerNumber)) {
                     case RED:
                         ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
@@ -226,11 +226,11 @@ public class OnlineListActivity extends SpicedGcmActivity {
                         ((ImageView) newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_star_orange);
                         break;
                 }
+            }
 
-                //Set notification icon if this user's turn
-                if (gameListItem.isPlayerTurn()) {
-                    newGame.findViewById(R.id.onlineListItemNotificationIcon).setVisibility(View.VISIBLE);
-                }
+            //Set notification icon if this user's turn
+            if (gameListItem.isPlayerTurn()) {
+                newGame.findViewById(R.id.onlineListItemNotificationIcon).setVisibility(View.VISIBLE);
             }
 
             //Set winner section (if game has a winner)
@@ -290,60 +290,52 @@ public class OnlineListActivity extends SpicedGcmActivity {
         @Override
         public void onClick(View view) {
             long gameId = (Long)view.getTag();
-            CharSequence charSequence = ((TextView)view.findViewById(R.id.onlineWinnerTextView)).getText();
-            if(charSequence!=null && charSequence.toString().equals("Waiting for players...")) {
-                Toast.makeText(OnlineListActivity.this, "Still looking for players.", Toast.LENGTH_SHORT).show();
-            } else {
-                GameStateRequest gameStateRequest = new GameStateRequest(gameId);
-                spiceManager.execute(gameStateRequest, new ApiRequestListener<GameStateReceivable>() {
-                    @Override
-                    public void onTaskFailure(int code, String message) {
-                        Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_SHORT).show();
+
+            GameStateRequest gameStateRequest = new GameStateRequest(gameId);
+            spiceManager.execute(gameStateRequest, new ApiRequestListener<GameStateReceivable>() {
+                @Override
+                public void onTaskFailure(int code, String message) {
+                    Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onTaskSuccess(GameStateReceivable result) {
+                    //Create all of the players
+                    ArrayList<Player> players = new ArrayList<Player>();
+                    for(PlayerInformation player: result.players) {
+                        players.add(new NetworkPlayer(player.userId,result.gameId,
+                                                      player.username, player.number));
                     }
 
-                    @Override
-                    public void onTaskSuccess(GameStateReceivable result) {
-                        //Create all of the players
-                        ArrayList<Player> players = new ArrayList<Player>();
-                        for(PlayerInformation player: result.players) {
-
-                            if(player.userId == OnlineListActivity.super.userId) {
-                                players.add(new OnlineHumanPlayer(result.gameId, player.userId, player.username, player.number));
-                            } else {
-                                players.add(new NetworkPlayer(player.userId, player.username, player.number));
-                            }
-                        }
-
-                        //Create all of the pieces
-                        Piece[] pieces = new Piece[result.gameState.pieces.length];
-                        int piecesParced = 0;
-                        for(PieceInformation piece: result.gameState.pieces) {
-                            Position position = new Position(piece.row, piece.index);
-                            pieces[piecesParced++] = new GridPiece(position, piece.playerNumber);
-                        }
-
-                        //Create the game board
-                        GameBoard gameBoard = new CcGameBoard(pieces);
-
-                        //Create the GameStateManager
-                        Player.PlayerColor currentPlayerColor =
-                                Player.getPlayerColor(result.gameState.currentPlayerNumber);
-                        GameStateManager gameStateManager =
-                                new GameStateManager(gameBoard, players, currentPlayerColor);
-
-                        //Bundle information and start the GameActivity
-                        Intent intent = new Intent(OnlineListActivity.this, GameActivity.class);
-                        intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
-                        intent.putExtra("IS_ONLINE_GAME", true); //sets flag for the GameActivity
-                        OnlineListActivity.this.startActivity(intent);
+                    //Create all of the pieces
+                    Piece[] pieces = new Piece[result.gameState.pieces.length];
+                    int piecesParced = 0;
+                    for(PieceInformation piece: result.gameState.pieces) {
+                        Position position = new Position(piece.row, piece.index);
+                        pieces[piecesParced++] = new GridPiece(position, piece.playerNumber);
                     }
 
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                    //Create the game board
+                    GameBoard gameBoard = new CcGameBoard(pieces);
+
+                    //Create the GameStateManager
+                    Player.PlayerColor currentPlayerColor =
+                            Player.getPlayerColor(result.gameState.currentPlayerNumber);
+                    GameStateManager gameStateManager =
+                            new GameStateManager(gameBoard, players, currentPlayerColor);
+
+                    //Bundle information and start the GameActivity
+                    Intent intent = new Intent(OnlineListActivity.this, GameActivity.class);
+                    intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
+                    intent.putExtra("SAVED_GAME", true); //Store flag that this is a saved game
+                    OnlineListActivity.this.startActivity(intent);
+                }
+
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

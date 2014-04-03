@@ -61,8 +61,19 @@ public class SpicedGcmActivity extends GcmActivity {
     protected void onNetworkConnected() {
         super.onNetworkConnected();
 
+        tryRegister();
+    }
+
+    private void tryRegister() {
         if (userId == -1) //if user ID hasn't been set yet
             registerUser();
+    }
+
+    @Override
+    protected void onHasGcmRegistrationId(String id) {
+        super.onHasGcmRegistrationId(id);
+
+        tryRegister();
     }
 
     protected void registerUser() {
@@ -75,12 +86,16 @@ public class SpicedGcmActivity extends GcmActivity {
                     .putBoolean(MainActivity.PREF_DONE_INITIAL_SETUP, false)
                     .commit();
         } else {
+            if(getRegistrationId(this) == null || getRegistrationId(this).isEmpty()) {
+                return;
+            }
+
             RegisterUserPostData postData = new RegisterUserPostData(username, getRegistrationId(this));
             RegisterUserRequest registerUserRequest = new RegisterUserRequest(postData);
             spiceManager.execute(registerUserRequest, new ApiRequestListener<UserRegistrationReceivable>() {
                 @Override
                 public void onTaskFailure(int code, String message) {
-                    Toast.makeText(SpicedGcmActivity.this, "HERE", Toast.LENGTH_LONG).show(); //TODO: delete toast after testing
+                    Toast.makeText(SpicedGcmActivity.this, message, Toast.LENGTH_LONG).show(); //TODO: delete toast after testing
                 }
 
                 @Override

@@ -1,18 +1,13 @@
 package ca.brocku.chinesecheckers.network.gcm;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.ccapi.receivables.GameReadyNotificationReceivable;
-import com.ccapi.receivables.Receivable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -159,7 +154,7 @@ public class GcmActivity extends NetworkActivity {
                     // so it can use GCM/HTTP or CCS to send messages to your app.
                     // The request to your server should be authenticated if your app
                     // is using accounts.
-                    sendRegistrationIdToBackend();
+                    onHasGcmRegistrationId(gcmRegistrationId);
 
                     // For this demo: we don't need to send it because the device
                     // will send upstream messages to a server that echo back the
@@ -191,7 +186,7 @@ public class GcmActivity extends NetworkActivity {
      * device sends upstream messages to a server that echoes back the message
      * using the 'from' address in the message.
      */
-    private void sendRegistrationIdToBackend() {
+    protected void onHasGcmRegistrationId(String id) {
         // TODO: HANDLE THIS
     }
 
