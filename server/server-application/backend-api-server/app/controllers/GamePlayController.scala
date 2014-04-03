@@ -40,7 +40,12 @@ object GamePlayController extends ApiControllerBase {
                 .on("userId" -> movePostData.userId)
                 .as(scalar[String].single)
 
-          val gameOver = new GameOverNotificationReceivable(movePostData.gameId, movePostData.userId, username)
+          val playerNumber = SQL("SELECT playerNumber FROM gamesUsers WHERE gameId = {gameId} AND userId = {userId}")
+                              .on("gameId" -> movePostData.gameId, "userId" -> movePostData.userId)
+                              .as(scalar[Int].single)
+
+          val gameOver = new GameOverNotificationReceivable(movePostData.gameId, movePostData.userId, playerNumber, 
+                                                            username)
 
           var g = new PushNotification[GameOverNotificationReceivable](pushServer.getNotfiableUsers(movePostData.gameId), 
                                                             Some(gameOver))
