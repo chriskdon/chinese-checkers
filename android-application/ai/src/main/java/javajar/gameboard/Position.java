@@ -16,7 +16,7 @@ import java.io.Serializable;
  * Date: 2/1/2014
  */
 public class Position implements Serializable {
-    int row, index;
+    public int row, index;
 
     public Position(){}
 

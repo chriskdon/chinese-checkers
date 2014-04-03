@@ -17,7 +17,7 @@ import android.os.Parcelable;
  * Date: 2/1/2014
  */
 public class AndroidPosition extends javajar.gameboard.Position implements Parcelable{
-    int row, index;
+    //int row, index;
 
     public AndroidPosition(int row, int index) {
         super(row,index);
