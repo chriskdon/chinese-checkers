@@ -2,6 +2,7 @@ package ca.brocku.chinesecheckers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.ccapi.GameListItem;
 import com.ccapi.receivables.GameListReceivable;
+import com.ccapi.receivables.GameReadyNotificationReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
 import com.ccapi.receivables.SuccessReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -28,6 +30,7 @@ import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
 import ca.brocku.chinesecheckers.network.spice.requests.DeleteGameRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.GameListRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by kubasub on 2014-03-06.
@@ -251,6 +254,27 @@ public class OnlineListActivity extends SpicedGcmActivity {
         }
         return newGame;
     }
+
+    private void refreshList() {
+        gameListContainer.removeAllViews();
+
+        populateList();
+    }
+
+    /**
+     * Update the board if a game has become ready while looking at it.
+     *
+     * @param event
+     */
+    public void onEvent(GameReadyNotificationReceivable event) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                refreshList();
+            }
+        });
+    }
+
 
     //TODO: see if this can be deleted after updating the list has been put in place
     /** This class manages the list of online game views.

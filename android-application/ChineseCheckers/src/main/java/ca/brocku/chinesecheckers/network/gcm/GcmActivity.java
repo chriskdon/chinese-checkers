@@ -242,8 +242,11 @@ public class GcmActivity extends NetworkActivity {
         Toast.makeText(this, "Could Not Register GCM", Toast.LENGTH_SHORT).show();
     }
 
-    // TODO: PLACEHOLDER METHOD FOR DEV -- DELETE WHEN THERE IS A REAL API
+    /**
+     * Listen to all events.
+     * @param event
+     */
     public void onEvent(Object event) {
-        Log.d("EVENT", "IT WORKED");
+        // Do Nothing
     }
 }
