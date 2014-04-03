@@ -20,6 +20,7 @@ import com.ccapi.GameListItem;
 import com.ccapi.PieceInformation;
 import com.ccapi.PlayerInformation;
 import com.ccapi.receivables.GameListReceivable;
+import com.ccapi.receivables.GameOverNotificationReceivable;
 import com.ccapi.receivables.GameReadyNotificationReceivable;
 import com.ccapi.receivables.GameStateReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
@@ -288,6 +289,16 @@ public class OnlineListActivity extends SpicedGcmActivity {
         });
     }
 
+    /**
+     * Fired when a game ends.
+     *
+     * @param event
+     */
+    public void onEvent(GameOverNotificationReceivable event) {
+        // TODO: Do something here -- run in UI thread
+        Log.e("ONLINE LIST","Game Over");
+    }
+
 
     //TODO: see if this can be deleted after updating the list has been put in place
     /** This class manages the list of online game views.
@@ -363,8 +374,8 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     //Create all of the players
                     ArrayList<Player> players = new ArrayList<Player>();
                     for(PlayerInformation player: result.players) {
-                        players.add(
-                                new NetworkPlayer(player.userId, player.username, player.number));
+                        players.add(new NetworkPlayer(player.userId,result.gameId,
+                                                      player.username, player.number));
                     }
 
                     //Create all of the pieces

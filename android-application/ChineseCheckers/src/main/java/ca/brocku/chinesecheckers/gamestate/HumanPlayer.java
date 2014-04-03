@@ -14,10 +14,8 @@ import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
  */
 public class HumanPlayer extends Player {
     private String name;
+    private MovePath m;
 
-    // This needs to be small enough that a human can't detect the difference between tapping
-    // the screen and seeing their piece move;
-    private static final int THREAD_SLEEP_TIME = 100;
 
     /**
      * Create a new player.
@@ -48,8 +46,6 @@ public class HumanPlayer extends Player {
     public String getName() {
         return name;
     }
-
-    private MovePath m;
 
     /**
      * Executed when it is this players turn to act.

@@ -1,6 +1,6 @@
 // @SOURCE:/Users/chriskellendonk/Development/School/COSC3F00/chinese-checkers/server/server-application/backend-api-server/conf/routes
-// @HASH:b4f5ba22fbe4c739abb20be41daf5401afc89e6b
-// @DATE:Thu Apr 03 00:21:19 EDT 2014
+// @HASH:e8a5739157bd31f91fb9b3875f8e34086f8f2314
+// @DATE:Thu Apr 03 05:41:35 EDT 2014
 
 import Routes.{prefix => _prefix, defaultPrefix => _defaultPrefix}
 import play.core._
@@ -13,6 +13,7 @@ import play.api.mvc._
 import Router.queryString
 
 
+// @LINE:22
 // @LINE:19
 // @LINE:16
 // @LINE:15
@@ -23,33 +24,13 @@ import Router.queryString
 // @LINE:6
 package controllers {
 
-// @LINE:19
+// @LINE:22
 class ReverseAssets {
     
 
-// @LINE:19
+// @LINE:22
 def at(file:String): Call = {
    Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[PathBindable[String]].unbind("file", file))
-}
-                                                
-    
-}
-                          
-
-// @LINE:10
-// @LINE:9
-class ReverseUserController {
-    
-
-// @LINE:10
-def change(userId:Long, username:String): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "users/change/" + implicitly[PathBindable[Long]].unbind("userId", userId) + "/" + implicitly[PathBindable[String]].unbind("username", dynamicString(username)))
-}
-                                                
-
-// @LINE:9
-def register(): Call = {
-   Call("POST", _prefix + { _defaultPrefix } + "users/register")
 }
                                                 
     
@@ -90,6 +71,39 @@ def join(playerCount:Integer, userId:Long): Call = {
 }
                           
 
+// @LINE:19
+class ReverseGamePlayController {
+    
+
+// @LINE:19
+def move(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "gameplay/move")
+}
+                                                
+    
+}
+                          
+
+// @LINE:10
+// @LINE:9
+class ReverseUserController {
+    
+
+// @LINE:10
+def change(userId:Long, username:String): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "users/change/" + implicitly[PathBindable[Long]].unbind("userId", userId) + "/" + implicitly[PathBindable[String]].unbind("username", dynamicString(username)))
+}
+                                                
+
+// @LINE:9
+def register(): Call = {
+   Call("POST", _prefix + { _defaultPrefix } + "users/register")
+}
+                                                
+    
+}
+                          
+
 // @LINE:6
 class ReverseApplication {
     
@@ -106,6 +120,7 @@ def index(): Call = {
                   
 
 
+// @LINE:22
 // @LINE:19
 // @LINE:16
 // @LINE:15
@@ -116,46 +131,16 @@ def index(): Call = {
 // @LINE:6
 package controllers.javascript {
 
-// @LINE:19
+// @LINE:22
 class ReverseAssets {
     
 
-// @LINE:19
+// @LINE:22
 def at : JavascriptReverseRoute = JavascriptReverseRoute(
    "controllers.Assets.at",
    """
       function(file) {
       return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "assets/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("file", file)})
-      }
-   """
-)
-                        
-    
-}
-              
-
-// @LINE:10
-// @LINE:9
-class ReverseUserController {
-    
-
-// @LINE:10
-def change : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.UserController.change",
-   """
-      function(userId,username) {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "users/change/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("userId", userId) + "/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("username", encodeURIComponent(username))})
-      }
-   """
-)
-                        
-
-// @LINE:9
-def register : JavascriptReverseRoute = JavascriptReverseRoute(
-   "controllers.UserController.register",
-   """
-      function() {
-      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "users/register"})
       }
    """
 )
@@ -218,6 +203,54 @@ def join : JavascriptReverseRoute = JavascriptReverseRoute(
 }
               
 
+// @LINE:19
+class ReverseGamePlayController {
+    
+
+// @LINE:19
+def move : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.GamePlayController.move",
+   """
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "gameplay/move"})
+      }
+   """
+)
+                        
+    
+}
+              
+
+// @LINE:10
+// @LINE:9
+class ReverseUserController {
+    
+
+// @LINE:10
+def change : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.UserController.change",
+   """
+      function(userId,username) {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "users/change/" + (""" + implicitly[PathBindable[Long]].javascriptUnbind + """)("userId", userId) + "/" + (""" + implicitly[PathBindable[String]].javascriptUnbind + """)("username", encodeURIComponent(username))})
+      }
+   """
+)
+                        
+
+// @LINE:9
+def register : JavascriptReverseRoute = JavascriptReverseRoute(
+   "controllers.UserController.register",
+   """
+      function() {
+      return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "users/register"})
+      }
+   """
+)
+                        
+    
+}
+              
+
 // @LINE:6
 class ReverseApplication {
     
@@ -239,6 +272,7 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
         
 
 
+// @LINE:22
 // @LINE:19
 // @LINE:16
 // @LINE:15
@@ -250,33 +284,13 @@ def index : JavascriptReverseRoute = JavascriptReverseRoute(
 package controllers.ref {
 
 
-// @LINE:19
+// @LINE:22
 class ReverseAssets {
     
 
-// @LINE:19
+// @LINE:22
 def at(path:String, file:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.Assets.at(path, file), HandlerDef(this, "controllers.Assets", "at", Seq(classOf[String], classOf[String]), "GET", """ Map static resources from the /public folder to the /assets URL path""", _prefix + """assets/$file<.+>""")
-)
-                      
-    
-}
-                          
-
-// @LINE:10
-// @LINE:9
-class ReverseUserController {
-    
-
-// @LINE:10
-def change(userId:Long, username:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.UserController.change(userId, username), HandlerDef(this, "controllers.UserController", "change", Seq(classOf[Long], classOf[String]), "POST", """""", _prefix + """users/change/$userId<[^/]+>/$username<[^/]+>""")
-)
-                      
-
-// @LINE:9
-def register(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
-   controllers.UserController.register(), HandlerDef(this, "controllers.UserController", "register", Seq(), "POST", """ User Tasks""", _prefix + """users/register""")
 )
                       
     
@@ -311,6 +325,39 @@ def delete(gameId:Long, userId:Long): play.api.mvc.HandlerRef[_] = new play.api.
 // @LINE:13
 def join(playerCount:Integer, userId:Long): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
    controllers.GameSetupController.join(playerCount, userId), HandlerDef(this, "controllers.GameSetupController", "join", Seq(classOf[Integer], classOf[Long]), "POST", """ Game Setup Tasks""", _prefix + """games/join/$playerCount<[^/]+>/$userId<[^/]+>""")
+)
+                      
+    
+}
+                          
+
+// @LINE:19
+class ReverseGamePlayController {
+    
+
+// @LINE:19
+def move(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.GamePlayController.move(), HandlerDef(this, "controllers.GamePlayController", "move", Seq(), "POST", """ Game Play Tasks""", _prefix + """gameplay/move""")
+)
+                      
+    
+}
+                          
+
+// @LINE:10
+// @LINE:9
+class ReverseUserController {
+    
+
+// @LINE:10
+def change(userId:Long, username:String): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.UserController.change(userId, username), HandlerDef(this, "controllers.UserController", "change", Seq(classOf[Long], classOf[String]), "POST", """""", _prefix + """users/change/$userId<[^/]+>/$username<[^/]+>""")
+)
+                      
+
+// @LINE:9
+def register(): play.api.mvc.HandlerRef[_] = new play.api.mvc.HandlerRef(
+   controllers.UserController.register(), HandlerDef(this, "controllers.UserController", "register", Seq(), "POST", """ User Tasks""", _prefix + """users/register""")
 )
                       
     

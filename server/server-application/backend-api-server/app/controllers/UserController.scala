@@ -19,7 +19,7 @@ object UserController extends ApiControllerBase {
    * @type {[type]}
    */
   def register() = Action { request =>
-    var userPostData = parseRequest[RegisterUserPostData](request)
+    val userPostData = parseRequest[RegisterUserPostData](request)
 
     DB.withConnection { implicit c =>
       try {
