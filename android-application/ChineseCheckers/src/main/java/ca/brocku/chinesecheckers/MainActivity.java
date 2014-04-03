@@ -17,12 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.GameListItem;
+import com.ccapi.receivables.GameListReceivable;
 import com.ccapi.receivables.GameOverNotificationReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,8 +34,10 @@ import java.io.ObjectInputStream;
 import java.util.UUID;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
+import ca.brocku.chinesecheckers.network.spice.requests.GameListRequest;
 import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
@@ -114,10 +120,6 @@ public class MainActivity extends SpicedGcmActivity {
         super.onPause();
     }
 
-    public void onEvent(GameOverNotificationReceivable event) {
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -168,15 +170,40 @@ public class MainActivity extends SpicedGcmActivity {
      */
     private void displayOnlineGameNotification() {
 
+        GameListRequest gameListRequest = new GameListRequest(userId);
+        spiceManager.execute(gameListRequest, new RequestListener<GameListReceivable>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
 
+            }
 
-        int numberOfCurrentMoveGames = 1;
-        if(numberOfCurrentMoveGames > 0) {
-            onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
-            onlineNotificationIcon.setVisibility(View.VISIBLE);
-        } else {
-            onlineNotificationIcon.setVisibility(View.INVISIBLE);
-        }
+            @Override
+            public void onRequestSuccess(GameListReceivable gameListReceivable) {
+                int num = 0;
+                for(GameListItem gameListItem: gameListReceivable.gameListItems) {
+                    if(gameListItem.isPlayerTurn() && gameListItem.isReady) {
+                        num++;
+                    }
+                }
+                if(num > 0) {
+                    onlineNotificationIcon.setText(Integer.toString(num));
+                    onlineNotificationIcon.setVisibility(View.VISIBLE);
+                } else {
+                    onlineNotificationIcon.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+    }
+
+    public void onEvent(final GameOverNotificationReceivable event) {
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                displayOnlineGameNotification();
+            }
+
+        });
     }
 
     /** Handles clicking on the "Offline" game button.
