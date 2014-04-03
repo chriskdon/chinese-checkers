@@ -62,6 +62,15 @@ public class GcmActivity extends NetworkActivity {
         checkPlayServices();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this); // Messages will be sent on the event bus
+        }
+    }
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
