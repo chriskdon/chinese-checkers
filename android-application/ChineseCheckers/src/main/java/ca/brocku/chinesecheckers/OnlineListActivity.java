@@ -65,9 +65,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
-
-        //Populates the list of online games
-        populateList();
     }
 
 
@@ -75,6 +72,9 @@ public class OnlineListActivity extends SpicedGcmActivity {
     protected void onResume() {
         super.onResume();
         BoomBoomMusic.start(this);
+        
+        //Populates the list of online games
+        populateList();
     }
 
     @Override
