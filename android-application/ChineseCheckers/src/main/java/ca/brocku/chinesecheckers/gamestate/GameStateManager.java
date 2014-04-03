@@ -15,6 +15,7 @@ import java.util.Map;
 import ca.brocku.chinesecheckers.BoomBoomMusic;
 import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.GridPiece;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
@@ -249,7 +250,7 @@ public class GameStateManager implements Parcelable, Serializable {
 
             Position current = it.next();
 
-            Piece piece = gameBoard.getPiece(last);
+            GridPiece piece = gameBoard.getPiece(last);
 
             // Check for illegal moves
             if (piece == null) {
@@ -258,7 +259,7 @@ public class GameStateManager implements Parcelable, Serializable {
                 throw new IllegalMoveException("Player<" + player.getName() + "> cannot move that piece.");
             }
 
-            gameBoard.movePiece(piece, current);
+            gameBoard.forceMove(piece, current);
 
             last = current;
         }

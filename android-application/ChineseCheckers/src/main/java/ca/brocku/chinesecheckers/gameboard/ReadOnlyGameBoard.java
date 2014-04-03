@@ -56,7 +56,7 @@ public class ReadOnlyGameBoard implements GameBoard {
      * @return The piece that was at the position specified.
      */
     @Override
-    public Piece getPiece(Position at) {
+    public GridPiece getPiece(Position at) {
         return gameBoard.getPiece(at);
     }
 

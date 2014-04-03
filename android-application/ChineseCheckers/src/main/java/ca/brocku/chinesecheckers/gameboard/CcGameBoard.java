@@ -305,7 +305,7 @@ public class CcGameBoard implements GameBoard {
      *               empty or out of bounds.
      */
     @Override
-    public Piece getPiece(Position at) {
+    public GridPiece getPiece(Position at) {
         int row = at.getRow();
         int index = at.getIndex();
 

@@ -59,7 +59,7 @@ public interface GameBoard extends Parcelable, Serializable {
      *
      * @return      The piece that was at the position specified.
      */
-    public abstract Piece getPiece(Position at);
+    public abstract GridPiece getPiece(Position at);
 
     /**
      * A list of valid positions that the specified piece could move to.
