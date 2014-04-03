@@ -20,6 +20,7 @@ import com.ccapi.GameListItem;
 import com.ccapi.PieceInformation;
 import com.ccapi.PlayerInformation;
 import com.ccapi.receivables.GameListReceivable;
+import com.ccapi.receivables.GameOverNotificationReceivable;
 import com.ccapi.receivables.GameReadyNotificationReceivable;
 import com.ccapi.receivables.GameStateReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
@@ -278,6 +279,15 @@ public class OnlineListActivity extends SpicedGcmActivity {
                 populateList();
             }
         });
+    }
+
+    /**
+     * A game has ended.
+     *
+     * @param event
+     */
+    public void onEvent(GameOverNotificationReceivable event) {
+        // TODO: Game Over Do something
     }
 
     /** This handler starts one of the online games.

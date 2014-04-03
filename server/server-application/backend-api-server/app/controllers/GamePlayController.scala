@@ -35,17 +35,24 @@ object GamePlayController extends ApiControllerBase {
           throw new Exception("Move could not be made.")
         }
 
-        SQL("CALL nextTurn({gameId})").on("gameId" -> movePostData.gameId).execute();
+        if(!new Game(movePostData.gameId).hasWinner) { // Has Winner
+          val username = SQL("CALL getUsername({userId})")
+                .on("userId" -> movePostData.userId)
+                .as(scalar[String].single)
 
+          val gameOver = new GameOverNotificationReceivable(movePostData.gameId, movePostData.userId, username)
 
-        var winnerId:Option[Long] = None;
-        if(movePostData.isWinner) {
-          winnerId = Some(movePostData.userId)
+          var g = new PushNotification[GameOverNotificationReceivable](pushServer.getNotfiableUsers(movePostData.gameId), 
+                                                            Some(gameOver))
+
+          pushServer.send(g)
+        } else { // Next Turn
+          SQL("CALL nextTurn({gameId})").on("gameId" -> movePostData.gameId).execute()
         }
 
         // Send Move Push to players indicating move was made
         val playerMoveRecievable = new PlayerMoveReceivable(movePostData.gameId, movePostData.userId, 
-                                                            winnerId.getOrElse(null).asInstanceOf[Long], 
+                                                            null, 
                                                             movePostData.move)
         
 

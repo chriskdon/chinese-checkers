@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ccapi.receivables.GameOverNotificationReceivable;
 import com.octo.android.robospice.SpiceManager;
 
 import java.io.File;
@@ -46,7 +47,6 @@ public class GameActivity extends SpicedGcmActivity {
     private boolean isOnlineGame; //flag whether or not this is an online game
 
     private Popup resumeDialog; //dialog that appears when there is a saved game
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,15 @@ public class GameActivity extends SpicedGcmActivity {
                     .disableBackButton(true)
                     .show();
         }
+    }
+
+    /**
+     * A game has ended.
+     *
+     * @param event
+     */
+    public void onEvent(GameOverNotificationReceivable event) {
+
     }
 
 
