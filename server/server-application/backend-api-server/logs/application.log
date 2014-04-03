@@ -1,9 +1,15 @@
-2014-04-02 20:56:38,840 - [INFO] - from play in pool-4-thread-5 
+2014-04-02 21:46:39,160 - [INFO] - from play in pool-4-thread-4 
 Listening for HTTP on /0:0:0:0:0:0:0:0%0:9000
 
-2014-04-02 20:57:00,120 - [INFO] - from play in play-internal-execution-context-1 
+2014-04-02 21:47:01,814 - [INFO] - from play in play-internal-execution-context-1 
 database [default] connected at jdbc:mysql://127.0.0.1/ccdb?autoReconnect=true&useOldAliasMetadataBehavior=true
 
-2014-04-02 20:57:00,240 - [INFO] - from play in play-internal-execution-context-1 
+2014-04-02 21:47:02,017 - [INFO] - from play in play-internal-execution-context-1 
+Application started (Dev)
+
+2014-04-02 22:10:34,107 - [INFO] - from play in play-internal-execution-context-4 
+database [default] connected at jdbc:mysql://127.0.0.1/ccdb?autoReconnect=true&useOldAliasMetadataBehavior=true
+
+2014-04-02 22:10:34,115 - [INFO] - from play in play-internal-execution-context-4 
 Application started (Dev)
 

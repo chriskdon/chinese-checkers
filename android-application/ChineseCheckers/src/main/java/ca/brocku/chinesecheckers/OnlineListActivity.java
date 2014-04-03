@@ -344,7 +344,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     .setAcceptClickListener(new Button.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //requestNewGame(newGameDialog.getNumberOfPlayers()); //make the server call
+                            requestNewGame(newGameDialog.getNumberOfPlayers()); //make the server call
 
                             newGameDialog.dismiss();
                         }
@@ -352,29 +352,29 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     .show();
         }
 
-//        private void requestNewGame(int numberOfPlayers) {
-//            JoinGameRequest joinGameRequest =
-//                    new JoinGameRequest(OnlineListActivity.super.userId, numberOfPlayers);
-//
-//            spiceManager.execute(joinGameRequest, new ApiRequestListener<GameDataItem>() {
-//                @Override
-//                public void onTaskFailure(int code, String message) {
-//                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
-//                }
-//
-//                @Override
-//                public void onTaskSuccess(GameListItem gameListItem) {
-//                    View newGameListItem = createListItemView(gameListItem);
-//                    onlineGameViewManager.addView(newGameListItem, null);
-//                    gameListContainer.addView(newGameListItem);
-//                }
-//
-//                @Override
-//                public void onRequestFailure(SpiceException spiceException) {
-//                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
-//                }
-//            });
-//        }
+        private void requestNewGame(int numberOfPlayers) {
+            JoinGameRequest joinGameRequest =
+                    new JoinGameRequest(OnlineListActivity.super.userId, numberOfPlayers);
+
+            spiceManager.execute(joinGameRequest, new ApiRequestListener<JoinGameReceivable>() {
+                @Override
+                public void onTaskFailure(int code, String message) {
+                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onTaskSuccess(JoinGameReceivable result) {
+                    View newGameListItem = createListItemView(result.gameListItem);
+                    onlineGameViewManager.addView(newGameListItem, null);
+                    gameListContainer.addView(newGameListItem);
+                }
+
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     /** This class handles deleting a game from the online list of games.
@@ -410,7 +410,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
                             spiceManager.execute(deleteGameRequest, new ApiRequestListener<SuccessReceivable>() {
                                 @Override
                                 public void onTaskFailure(int code, String message) {
-                                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
@@ -421,7 +421,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
                                 @Override
                                 public void onRequestFailure(SpiceException spiceException) {
-                                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
                         }

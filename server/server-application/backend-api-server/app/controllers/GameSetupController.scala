@@ -67,7 +67,7 @@ object GameSetupController extends ApiControllerBase {
           throw new Exception("No Game Deleted")
         } else if(result[Int]("HumansLeftInGame") <= 0) {
           // TODO: Handle game full of ai's
-          throw new Exception("No Humans In Game")
+          // throw new Exception("No Humans In Game")
         }
 
         okJson(new SuccessReceivable("Game Deleted"))
