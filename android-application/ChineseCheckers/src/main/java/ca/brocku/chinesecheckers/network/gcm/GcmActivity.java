@@ -66,8 +66,8 @@ public class GcmActivity extends NetworkActivity {
     protected void onPause() {
         super.onPause();
 
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this); // Messages will be sent on the event bus
+        if(EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this); 
         }
     }
 
