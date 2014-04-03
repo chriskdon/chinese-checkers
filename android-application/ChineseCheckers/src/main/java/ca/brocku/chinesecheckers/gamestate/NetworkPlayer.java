@@ -28,12 +28,22 @@ public class NetworkPlayer extends Player {
 
     @Override
     public MovePath onTurn(ReadOnlyGameBoard board) {
+        int i = 1;
+        while(2>i){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex); // Rethrow at runtime
+            }
+
+        }
+
         return null;
     }
 
     @Override
     public String getName() {
-        return null;
+        return username;
     }
 
     @Override
