@@ -31,7 +31,7 @@ object UserController extends ApiControllerBase {
         okJson(new UserRegistrationReceivable(userPostData.username, userId))
       } catch {
         case ex: MySQLIntegrityConstraintViolationException => {
-          okJson(new ErrorReceivable("Username Already Exists"))
+          okJson(new ErrorReceivable(ex.getMessage()))
         }
       }
     } 
