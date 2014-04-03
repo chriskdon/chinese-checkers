@@ -66,26 +66,6 @@ public class HardMove {
                 }
             }
         }
-
-        //Helps prevent pieces getting locked near the goal state
-        if(board.atGoalEdge(currentBestMove.getPath().get(0), player) && board.atGoalEdge(currentBestMove.getPath().get(currentBestMove.getPath().size()-1), player)){
-            Position thisMove = currentBestMove.getPath().get(currentBestMove.getPath().size()-1), initialPosition = currentBestMove.getPath().get(0);
-            int tempHeuristic = 0;
-            Position[] initialPossible = board.getPossibleMoves(currentBestMove.getPieceMoved());
-
-            for(Position pos : initialPossible){
-                if(board.atGoalEdge(pos, player)){
-                    tempBoard.forceMove((GridPiece) currentBestMove.getPieceMoved(), pos);
-                    Position[] newPossible = tempBoard.getPossibleMoves(currentBestMove.getPieceMoved());
-
-                    for(Position checkNextTurn : newPossible)
-                        if(cHeuristic.getDeltaDistanceHeuristic(new MovePath(currentBestMove.getPath().get((0)), checkNextTurn)) > tempHeuristic)
-                            thisMove = pos;
-                    tempBoard.forceMove((GridPiece) currentBestMove.getPieceMoved(), initialPosition);
-                }
-            }
-            return new MovePath(initialPosition, thisMove);
-        }
         return new MovePath(currentBestMove.getPath());
     }
 
@@ -123,39 +103,39 @@ public class HardMove {
         Position[] availableMoves = tempBoard.getPossibleHops(tempBoard.getPiece(movingTo));
 
         if(isThisTurn){
-            checkNextTurnMoves(tempBoard);
-            if ((cHeuristic.getDeltaDistanceHeuristic(path) + nextTurnHeuristic) > currentBestMove.getHeuristic() || currentBestMove.getHeuristic() == 0) {
-                Position[] toArrayList = path.getPath().toArray(new Position[path.size()]);
-                ArrayList<Position>  newArrayList = new ArrayList<Position>();
-                for(int i = 0 ; i < toArrayList.length ;  i++){
-                    newArrayList.add(toArrayList[i]);
+            if(cHeuristic.getDeltaDistanceHeuristic(path) >= -20){
+                checkNextTurnMoves(tempBoard);
+                if ((2*(cHeuristic.getDeltaDistanceHeuristic(path)) + nextTurnHeuristic) > currentBestMove.getHeuristic() || currentBestMove.getHeuristic() == 0) {
+                    Position[] toArrayList = path.getPath().toArray(new Position[path.size()]);
+                    ArrayList<Position>  newArrayList = new ArrayList<Position>();
+                    for(int i = 0 ; i < toArrayList.length ;  i++){
+                        newArrayList.add(toArrayList[i]);
+                    }
+                    currentBestMove.setHeuristic(cHeuristic.getDeltaDistanceHeuristic(path) + nextTurnHeuristic);
+                    currentBestMove.setPath(newArrayList);
+                    currentBestMove.setPieceMoved(current);
                 }
-                currentBestMove.setHeuristic(cHeuristic.getDeltaDistanceHeuristic(path) + nextTurnHeuristic);
-                currentBestMove.setPath(newArrayList);
-                currentBestMove.setPieceMoved(current);
             }
         }
         else {
             if(cHeuristic.getDeltaDistanceHeuristic(nextPath) > nextTurnHeuristic)
                 nextTurnHeuristic = cHeuristic.getDeltaDistanceHeuristic(nextPath);
         }
-        //Log.wtf("myApp", "Current best move is (" + currentBestMove.getPath().get(0).getRow() + "," + currentBestMove.getPath().get(0).getIndex() + ") to (" + currentBestMove.getPath().get(currentBestMove.getPath().size()-1).getRow() + "," + currentBestMove.getPath().get(currentBestMove.getPath().size()-1).getIndex() + ")");
         if(availableMoves != null){
             for(Position newHop : availableMoves){
                 alreadyVisited = false;
-                if(isThisTurn){
+                if(isThisTurn)
                     for(Position hasBeenVisited : visited){ //checks if the position has been visited by this piece in a previous move
-                        if(newHop.equals(hasBeenVisited))
+                        if(newHop.equals(hasBeenVisited) || cHeuristic.getDeltaDistanceHeuristic(new MovePath(path.getStartPosition(), newHop)) < -20)
                             alreadyVisited = true;
                     }
-                }
                 else{
                     for(Position hasBeenVisited : visitedNextTurn){
-                        if(newHop.equals(hasBeenVisited))
+                        if(newHop.equals(hasBeenVisited)|| cHeuristic.getDeltaDistanceHeuristic(new MovePath(nextPath.getStartPosition(), newHop)) < -20)
                             alreadyVisited = true;
                     }
                 }
-                if(alreadyVisited == false){
+                if(!alreadyVisited){
                     calculatePossibleMoves(tempBoard.getPiece(movingTo), newHop, tempBoard, isThisTurn);}
             }
         }
@@ -171,6 +151,7 @@ public class HardMove {
 
     private void checkNextTurnMoves(GameBoard board){
         Piece piece;
+        nextTurnHeuristic = 0;
         for (int i = 0 ; i < AIPieces.length ; i++) {
             piece = AIPieces[i];
             if(piece != null){
@@ -186,9 +167,8 @@ public class HardMove {
                     nextPath.addToPath(piece.getPosition());        //nextPath = starting position
                     visitedNextTurn.add(piece.getPosition());       //visitedNextTurn = starting position
                     for(Position pos : initialPossible)
-                        if(pos != null){
+                        if(pos != null)
                             calculatePossibleMoves(piece, pos, board, false);
-                        }
                 }
             }
         }
