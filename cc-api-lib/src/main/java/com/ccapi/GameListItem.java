@@ -39,5 +39,5 @@ public class GameListItem {
     return currentPlayerNumber == playerNumber;
   }
 
-  public void setIsPlayerTurn() {}
+  public void setPlayerTurn(boolean value) {}
 }
