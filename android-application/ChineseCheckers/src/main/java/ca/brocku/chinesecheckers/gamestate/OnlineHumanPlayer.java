@@ -2,10 +2,18 @@ package ca.brocku.chinesecheckers.gamestate;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import com.ccapi.postdata.PlayerMovePostData;
+import com.ccapi.receivables.SuccessReceivable;
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import org.apache.commons.lang3.NotImplementedException;
+
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
+import ca.brocku.chinesecheckers.network.spice.requests.ChangeUsernameRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.SendPlayerMoveRequest;
 
 /**
  * @author Jakub Subczynski
@@ -41,10 +49,42 @@ public class OnlineHumanPlayer extends HumanPlayer {
         throw new NotImplementedException("Used the spiced one.");
     }
 
-    public void signalMove(SpiceManager spiceManager, MovePath movePath) {
-        super.signalMove(movePath);
+    public void signalMove(SpiceManager spiceManager, final MovePath movePath) {
+        // TODO: Handle move failures and notify and reset the board
 
-        // TODO: Network
+        // Handle win condition
+        PlayerMovePostData postData = new PlayerMovePostData(gameId, userId, false, movePath.toMove());
+        SendPlayerMoveRequest sendPlayerMoveRequest = new SendPlayerMoveRequest(postData);
+        spiceManager.execute(sendPlayerMoveRequest, new ApiRequestListener<SuccessReceivable>() {
+            /**
+             * Called when the intended task that was requested could not be completed by the
+             * server.
+             *
+             * @param code    The error code of the result.
+             * @param message The error message.
+             */
+            @Override
+            public void onTaskFailure(int code, String message) {
+                // TODO Handle
+                Log.e("FAIL", message);
+            }
+
+            /**
+             * Called when the intended task that was requested was completed without error.
+             *
+             * @param result The resulting object of the request.
+             */
+            @Override
+            public void onTaskSuccess(SuccessReceivable result) {
+                OnlineHumanPlayer.super.signalMove(movePath);
+            }
+
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                // TODO: Handle
+                Log.e("FAIL_2", spiceException.getMessage());
+            }
+        });
     }
 
 

@@ -35,6 +35,8 @@ object GamePlayController extends ApiControllerBase {
           throw new Exception("Move could not be made.")
         }
 
+        SQL("CALL nextTurn({gameId})").on("gameId" -> movePostData.gameId).execute();
+
 
         var winnerId:Option[Long] = None;
         if(movePostData.isWinner) {

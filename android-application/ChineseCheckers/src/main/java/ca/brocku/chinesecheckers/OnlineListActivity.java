@@ -20,7 +20,6 @@ import com.ccapi.GameListItem;
 import com.ccapi.PieceInformation;
 import com.ccapi.PlayerInformation;
 import com.ccapi.receivables.GameListReceivable;
-import com.ccapi.receivables.GameOverNotificationReceivable;
 import com.ccapi.receivables.GameReadyNotificationReceivable;
 import com.ccapi.receivables.GameStateReceivable;
 import com.ccapi.receivables.JoinGameReceivable;
@@ -37,6 +36,7 @@ import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
 import ca.brocku.chinesecheckers.gamestate.NetworkPlayer;
+import ca.brocku.chinesecheckers.gamestate.OnlineHumanPlayer;
 import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
 import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
@@ -53,8 +53,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
     private LinearLayout gameListContainer;
     private Button newGameButton;
 
-    private ViewManager onlineGameViewManager;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +66,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
 
-        //Creates a ViewManager for the list of games and populates the list
-        onlineGameViewManager = new OnlineListViewManager();
+        //Populates the list of online games
         populateList();
     }
 
@@ -126,7 +123,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     gameListContainer.removeAllViews();
                     for(GameListItem game : result.gameListItems) { //for each game received
                         View listItem = createListItemView(game);
-                        onlineGameViewManager.addView(listItem, null);
                         gameListContainer.addView(listItem);
                     }
                 }
@@ -178,7 +174,7 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
                 //Set the text view under the player icons
                 newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
-                ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText("Waiting for players...");
+                ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText(R.string.waiting_for_players);
             }
 
             //Set Player icons
@@ -208,8 +204,8 @@ public class OnlineListActivity extends SpicedGcmActivity {
                     break;
             }
 
-            //Sets User's icon (with star)
             if(gameListItem.isReady) {
+                //Sets User's icon (with star)
                 switch (Player.getPlayerColor(gameListItem.playerNumber)) {
                     case RED:
                         ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
@@ -230,11 +226,11 @@ public class OnlineListActivity extends SpicedGcmActivity {
                         ((ImageView) newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_star_orange);
                         break;
                 }
-            }
 
-            //Set notification icon if this user's turn
-            if (gameListItem.isPlayerTurn()) {
-                newGame.findViewById(R.id.onlineListItemNotificationIcon).setVisibility(View.VISIBLE);
+                //Set notification icon if this user's turn
+                if (gameListItem.isPlayerTurn()) {
+                    newGame.findViewById(R.id.onlineListItemNotificationIcon).setVisibility(View.VISIBLE);
+                }
             }
 
             //Set winner section (if game has a winner)
@@ -284,68 +280,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
         });
     }
 
-    /**
-     * Fired when a game ends.
-     *
-     * @param event
-     */
-    public void onEvent(GameOverNotificationReceivable event) {
-        // TODO: Do something here -- run in UI thread
-        Log.e("ONLINE LIST","Game Over");
-    }
-
-
-    //TODO: see if this can be deleted after updating the list has been put in place
-    /** This class manages the list of online game views.
-     *
-     */
-    private class OnlineListViewManager implements ViewManager {
-        LinkedList<View> listItems = new LinkedList<View>();
-
-        @Override
-        public void addView(View view, ViewGroup.LayoutParams layoutParams) {
-            listItems.add(view);
-        }
-
-        @Override
-        public void updateViewLayout(View view, ViewGroup.LayoutParams layoutParams) {
-            int index = listItems.indexOf(view); //get index of view to be updated
-            listItems.get(index).setLayoutParams(layoutParams); //get the view and set layout params
-        }
-
-        @Override
-        public void removeView(View view) {
-            gameListContainer.removeView(view);
-            listItems.remove(view);
-        }
-
-        /** Removes a list item based on it's tag.
-         *
-         * @param gameIdTag the list items tag (it's game ID)
-         */
-        public void removeView(int gameIdTag) {
-            for(View view : listItems) {
-                if((Integer)view.getTag() == gameIdTag) { //delete the view with the given gameIdTag
-                    removeView(view);
-                }
-            }
-        }
-
-        /** Gets a list item based on it's tag. Returns null if it cannot find the specified view.
-         *
-         * @param gameIdTag the list items tag (it's game ID)
-         * @return the list item
-         */
-        public View getView(int gameIdTag) {
-            for(View view : listItems) {
-                if((Integer)view.getTag() == gameIdTag) {
-                    return view;
-                }
-            }
-            return null;
-        }
-    }
-
     /** This handler starts one of the online games.
      *
      * It makes a call to the server to gather the required state information, bundles any data that
@@ -355,53 +289,61 @@ public class OnlineListActivity extends SpicedGcmActivity {
     private class startOnlineGameHandler implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            long gameId = (Long)view.getTag();
-
-            GameStateRequest gameStateRequest = new GameStateRequest(gameId);
-            spiceManager.execute(gameStateRequest, new ApiRequestListener<GameStateReceivable>() {
-                @Override
-                public void onTaskFailure(int code, String message) {
-                    Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onTaskSuccess(GameStateReceivable result) {
-                    //Create all of the players
-                    ArrayList<Player> players = new ArrayList<Player>();
-                    for(PlayerInformation player: result.players) {
-                        players.add(new NetworkPlayer(player.userId,result.gameId,
-                                                      player.username, player.number));
+            final long gameId = (Long)view.getTag();
+            CharSequence charSequence = ((TextView)view.findViewById(R.id.onlineWinnerTextView)).getText();
+            if(charSequence!=null && charSequence.toString().equals("Waiting for players...")) {
+                Toast.makeText(OnlineListActivity.this, "Still looking for players.", Toast.LENGTH_SHORT).show();
+            } else {
+                GameStateRequest gameStateRequest = new GameStateRequest(gameId);
+                spiceManager.execute(gameStateRequest, new ApiRequestListener<GameStateReceivable>() {
+                    @Override
+                    public void onTaskFailure(int code, String message) {
+                        Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
 
-                    //Create all of the pieces
-                    Piece[] pieces = new Piece[result.gameState.pieces.length];
-                    int piecesParced = 0;
-                    for(PieceInformation piece: result.gameState.pieces) {
-                        Position position = new Position(piece.row, piece.index);
-                        pieces[piecesParced++] = new GridPiece(position, piece.playerNumber);
+                    @Override
+                    public void onTaskSuccess(GameStateReceivable result) {
+                        //Create all of the players
+                        ArrayList<Player> players = new ArrayList<Player>();
+                        for(PlayerInformation player: result.players) {
+
+                            if(player.userId == OnlineListActivity.super.userId) {
+                                players.add(new OnlineHumanPlayer(result.gameId, player.userId, player.username, player.number));
+                            } else {
+                                players.add(new NetworkPlayer(player.userId, gameId, player.username, player.number));
+                            }
+                        }
+
+                        //Create all of the pieces
+                        Piece[] pieces = new Piece[result.gameState.pieces.length];
+                        int piecesParced = 0;
+                        for(PieceInformation piece: result.gameState.pieces) {
+                            Position position = new Position(piece.row, piece.index);
+                            pieces[piecesParced++] = new GridPiece(position, piece.playerNumber);
+                        }
+
+                        //Create the game board
+                        GameBoard gameBoard = new CcGameBoard(pieces);
+
+                        //Create the GameStateManager
+                        Player.PlayerColor currentPlayerColor =
+                                Player.getPlayerColor(result.gameState.currentPlayerNumber);
+                        GameStateManager gameStateManager =
+                                new GameStateManager(gameBoard, players, currentPlayerColor);
+
+                        //Bundle information and start the GameActivity
+                        Intent intent = new Intent(OnlineListActivity.this, GameActivity.class);
+                        intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
+                        intent.putExtra("IS_ONLINE_GAME", true); //sets flag for the GameActivity
+                        OnlineListActivity.this.startActivity(intent);
                     }
 
-                    //Create the game board
-                    GameBoard gameBoard = new CcGameBoard(pieces);
-
-                    //Create the GameStateManager
-                    Player.PlayerColor currentPlayerColor =
-                            Player.getPlayerColor(result.gameState.currentPlayerNumber);
-                    GameStateManager gameStateManager =
-                            new GameStateManager(gameBoard, players, currentPlayerColor);
-
-                    //Bundle information and start the GameActivity
-                    Intent intent = new Intent(OnlineListActivity.this, GameActivity.class);
-                    intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
-                    intent.putExtra("SAVED_GAME", true); //Store flag that this is a saved game
-                    OnlineListActivity.this.startActivity(intent);
-                }
-
-                @Override
-                public void onRequestFailure(SpiceException spiceException) {
-                    Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
     }
 
@@ -452,7 +394,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
                 @Override
                 public void onTaskSuccess(JoinGameReceivable result) {
                     View newGameListItem = createListItemView(result.gameListItem);
-                    onlineGameViewManager.addView(newGameListItem, null);
                     gameListContainer.addView(newGameListItem);
                 }
 
@@ -502,7 +443,6 @@ public class OnlineListActivity extends SpicedGcmActivity {
 
                                 @Override
                                 public void onTaskSuccess(SuccessReceivable result) {
-                                    onlineGameViewManager.removeView(listItem);
                                     gameListContainer.removeView(listItem);
                                 }
 

@@ -133,4 +133,11 @@ public class MovePath {
     public int size() {
         return path.size();
     }
+
+    public Move toMove() {
+        Position start = getStartPosition();
+        Position end = getEndPosition();
+
+        return new Move(start.getRow(), start.getIndex(), end.getRow(), end.getIndex());
+    }
 }
