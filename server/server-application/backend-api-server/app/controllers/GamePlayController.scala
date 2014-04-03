@@ -35,7 +35,7 @@ object GamePlayController extends ApiControllerBase {
           throw new Exception("Move could not be made.")
         }
 
-        if(!new Game(movePostData.gameId).hasWinner) { // Has Winner
+        if(new Game(movePostData.gameId).hasWinner) { // Has Winner
           val username = SQL("CALL getUsername({userId})")
                 .on("userId" -> movePostData.userId)
                 .as(scalar[String].single)
