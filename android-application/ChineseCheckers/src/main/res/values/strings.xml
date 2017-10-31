@@ -15,6 +15,7 @@
     <string name="title_activity_help">Help</string>
     <string name="title_activity_settings">Settings</string>
     <string name="network_unavailable">Network currently unavailable</string>
+    <string name="connect_to_edit_username">Please connect to change your username.</string>
     <string name="waiting_title_bar">Waiting for players...</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut dapibus feugiat ullamcorper. Fusce lacinia tellus ac tortor dignissim molestie vel eu augue. Donec porttitor quis tellus vitae tristique. Duis aliquet laoreet fermentum. Ut vitae tempus sapien, quis pulvinar magna. Quisque congue eros at sapien sollicitudin, ut pretium ipsum placerat. Morbi euismod aliquam auctor. Nullam ac congue purus. Pellentesque ultricies mollis sollicitudin.</string>
@@ -36,6 +37,7 @@
     <string name="online">Online</string>
     <string name="online_new_game">New Game</string>
     <string name="online_games">Online Games</string>
+    <string name="waiting_for_players">Waiting for players...</string>
     <string name="settings_show_possible_moves">Show possible moves</string>
     <string name="settings_your_username">Your username</string>
     <string name="cancel">Cancel</string>
@@ -56,5 +58,7 @@
     <string name="help_answer_6">Tap the Online button, and then tap the game with an arrow next to it on the list.</string>
     <string name="help_question_7">How do I leave an online game?</string>
     <string name="help_answer_7">Tap the Online button, then press and hold the game you want to leave. You will be asked if you want to quit it. Tap Yes. You will be replaced by an AI, so the other players can keep playing.</string>
+    <string name="settings_sound_effects">Sound Effects</string>
+    <string name="settings_backgound_music">Background Music</string>
 
 </resources>

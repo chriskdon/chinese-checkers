@@ -1,0 +1,37 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ccapp</groupId>
+  <artifactId>cc-api</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0</version>
+  <name>cc-api</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <jdk.version>version>1.7</jdk.version>
+  </properties>
+  <build>
+      <finalName>${project.artifactId}</finalName>
+      <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+               <executions>
+                  <execution>
+                     <phase>package</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                    <configuration>
+                     <target name="Output to Server and Android">
+                         <copy file="./target/cc-api.jar" tofile="../server/server-application/backend-api-server/lib/cc-api.jar" />
+                         <copy file="./target/cc-api.jar" tofile="../android-application/ChineseCheckers/libs/cc-api.jar" />
+                      </target>
+                    </configuration>                       
+                  </execution>
+               </executions>
+           </plugin>
+      </plugins>
+  </build>
+</project>

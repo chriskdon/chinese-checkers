@@ -1,36 +1,58 @@
 package ca.brocku.chinesecheckers;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.os.Parcelable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.GameListItem;
+import com.ccapi.PieceInformation;
+import com.ccapi.PlayerInformation;
+import com.ccapi.receivables.GameListReceivable;
+import com.ccapi.receivables.GameOverNotificationReceivable;
+import com.ccapi.receivables.GameReadyNotificationReceivable;
+import com.ccapi.receivables.GameStateReceivable;
+import com.ccapi.receivables.JoinGameReceivable;
+import com.ccapi.receivables.SuccessReceivable;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 
+import ca.brocku.chinesecheckers.gameboard.CcGameBoard;
+import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.GridPiece;
+import ca.brocku.chinesecheckers.gameboard.Piece;
+import ca.brocku.chinesecheckers.gameboard.Position;
+import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.NetworkPlayer;
+import ca.brocku.chinesecheckers.gamestate.OnlineHumanPlayer;
 import ca.brocku.chinesecheckers.gamestate.Player;
+import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
+import ca.brocku.chinesecheckers.network.spice.requests.DeleteGameRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.GameListRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.GameStateRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by kubasub on 2014-03-06.
  */
-public class OnlineListActivity extends Activity {
+public class OnlineListActivity extends SpicedGcmActivity {
     private LinearLayout gameListContainer;
     private Button newGameButton;
-
-    private ViewManager onlineGameViewManager;
 
 
     @Override
@@ -44,15 +66,22 @@ public class OnlineListActivity extends Activity {
 
         //Bind Handlers
         newGameButton.setOnClickListener(new NewGameHandler());
+    }
 
-        //Creates a ViewManager for the list of games and populates the list
-        onlineGameViewManager = new OnlineListViewManager();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BoomBoomMusic.start(this);
+        
+        //Populates the list of online games
         populateList();
+    }
 
-        //Opens the new game dialog if there are no games
-        if(gameListContainer.getChildCount() == 0) {
-            newGameButton.performClick();
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BoomBoomMusic.pause();
     }
 
     @Override
@@ -79,67 +108,106 @@ public class OnlineListActivity extends Activity {
      *
      */
     private void populateList() {
-        //TODO: server request for current games array
-        GameItemData[] gameItemData = new GameItemData[2];
+        GameListRequest gameListRequest = new GameListRequest(super.userId);
+        spiceManager.execute(gameListRequest, new ApiRequestListener<GameListReceivable>() {
+            @Override
+            public void onTaskFailure(int code, String message) {
+                Toast.makeText(OnlineListActivity.this, "Failed to load list of games.", Toast.LENGTH_LONG).show();
+            }
 
-        gameItemData[0] = new GameItemData(15024, true, 2, Player.PlayerColor.RED, false, null, null);
-        gameItemData[1] = new GameItemData(123, false, 4, Player.PlayerColor.GREEN, true, "randoGuy", Player.PlayerColor.RED);
+            @Override
+            public void onTaskSuccess(GameListReceivable result) {
+                if(result.gameListItems.length == 0) { //Opens the new game dialog if there are no games
+                    newGameButton.performClick();
 
-        for (GameItemData aGameItemData : gameItemData) { //for each game received
-
-            //Inflate the game view
-            View newGame = getLayoutInflater().inflate(R.layout.fragment_online_list_item, null);
-            onlineGameViewManager.addView(newGame, null);
-
-            if (newGame != null) {
-
-                //Set the margin at the bottom of the list item (in dp)
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                        (float) 18, getResources().getDisplayMetrics());
-                layoutParams.bottomMargin = value;
-                newGame.setLayoutParams(layoutParams);
-
-                newGame.setOnClickListener(new startOnlineGameHandler());
-                newGame.setOnLongClickListener(new DeleteGameHandler());
-
-                //Set view tag as game ID
-                newGame.setTag(aGameItemData.getGameId());
-
-                //Set Game ID
-                ((TextView) newGame.findViewById(R.id.onlineGameIdTextView)).setText("#"+Integer.toString(aGameItemData.getGameId()));
-
-                //Set Player icons
-                switch (aGameItemData.getNumberOfPlayers()) {
-                    case 2:
-                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
-                        break;
-                    case 3:
-                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemYellowIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
-                        break;
-                    case 4:
-                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemOrangeIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
-                        break;
-                    case 6:
-                        newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemOrangeIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemYellowIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
-                        newGame.findViewById(R.id.onlineListItemPurpleIcon).setVisibility(View.VISIBLE);
-                        break;
+                } else {
+                    gameListContainer.removeAllViews();
+                    for(GameListItem game : result.gameListItems) { //for each game received
+                        View listItem = createListItemView(game);
+                        gameListContainer.addView(listItem);
+                    }
                 }
+            }
 
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                Toast.makeText(OnlineListActivity.this, "Failed to load list of games.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    /** Sets all of the elements of a game list item View.
+     *
+     * @param gameListItem The object containing the data for the view
+     * @return The list item view
+     */
+    private View createListItemView(GameListItem gameListItem) {
+        //Inflate the game view
+        View newGame = getLayoutInflater().inflate(R.layout.fragment_online_list_item, null);
+
+        if (newGame != null) {
+
+            //Set the margin at the bottom of the list item (in dp)
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.bottomMargin = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, (float) 18, getResources().getDisplayMetrics());
+            newGame.setLayoutParams(layoutParams);
+
+            //Set click listeners
+            newGame.setOnClickListener(new startOnlineGameHandler());
+            newGame.setOnLongClickListener(new DeleteGameHandler());
+
+            newGame.setTag(gameListItem.gameId);
+
+            //Set Game ID
+            ((TextView) newGame.findViewById(R.id.onlineGameIdTextView)).setText("#"+Long.toString(gameListItem.gameId));
+
+            if(!gameListItem.isReady) {
+                //Set all of the icons to white if the game is not ready yet
+                ((ImageView)newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                ((ImageView)newGame.findViewById(R.id.onlineListItemOrangeIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                ((ImageView)newGame.findViewById(R.id.onlineListItemYellowIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                ((ImageView)newGame.findViewById(R.id.onlineListItemGreenIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                ((ImageView)newGame.findViewById(R.id.onlineListItemBlueIcon)).setImageResource(R.drawable.ic_player_peg_white);
+                ((ImageView)newGame.findViewById(R.id.onlineListItemPurpleIcon)).setImageResource(R.drawable.ic_player_peg_white);
+
+                //Set the text view under the player icons
+                newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
+                ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText(R.string.waiting_for_players);
+            }
+
+            //Set Player icons
+            switch (gameListItem.numberOfPlayers) {
+                case 2:
+                    newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemYellowIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
+                    break;
+                case 4:
+                    newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemOrangeIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
+                    break;
+                case 6:
+                    newGame.findViewById(R.id.onlineListItemRedIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemOrangeIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemYellowIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemGreenIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemBlueIcon).setVisibility(View.VISIBLE);
+                    newGame.findViewById(R.id.onlineListItemPurpleIcon).setVisibility(View.VISIBLE);
+                    break;
+            }
+
+            if(gameListItem.isReady) {
                 //Sets User's icon (with star)
-                switch (aGameItemData.getPlayerColor()) {
+                switch (Player.getPlayerColor(gameListItem.playerNumber)) {
                     case RED:
                         ((ImageView) newGame.findViewById(R.id.onlineListItemRedIcon)).setImageResource(R.drawable.ic_player_peg_star_red);
                         break;
@@ -161,91 +229,170 @@ public class OnlineListActivity extends Activity {
                 }
 
                 //Set notification icon if this user's turn
-                if (aGameItemData.isPlayerTurn()) {
+                if (gameListItem.isPlayerTurn()) {
                     newGame.findViewById(R.id.onlineListItemNotificationIcon).setVisibility(View.VISIBLE);
                 }
-
-                //Set winner section (if game has a winner)
-                if (aGameItemData.isWinner()) {
-                    ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText(aGameItemData.getWinnerUsername());
-
-                    //Sets the trophy colour
-                    switch (aGameItemData.getWinnerColor()) {
-                        case RED:
-                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_red);
-                            break;
-                        case PURPLE:
-                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_purple);
-                            break;
-                        case BLUE:
-                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_blue);
-                            break;
-                        case GREEN:
-                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_green);
-                            break;
-                        case YELLOW:
-                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_yellow);
-                            break;
-                        case ORANGE:
-                            ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_orange);
-                            break;
-                    }
-
-                    newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
-                }
-                gameListContainer.addView(newGame);
             }
+
+            //Set winner section (if game has a winner)
+            if (gameListItem.isWinner()) {
+                ((TextView) newGame.findViewById(R.id.onlineWinnerTextView)).setText(gameListItem.winnerUsername);
+
+                //Sets the trophy colour
+                switch (Player.getPlayerColor(gameListItem.winnerNumber)) {
+                    case RED:
+                        ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_red);
+                        break;
+                    case PURPLE:
+                        ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_purple);
+                        break;
+                    case BLUE:
+                        ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_blue);
+                        break;
+                    case GREEN:
+                        ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_green);
+                        break;
+                    case YELLOW:
+                        ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_yellow);
+                        break;
+                    case ORANGE:
+                        ((ImageView) newGame.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_orange);
+                        break;
+                }
+
+                newGame.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
+            }
+
         }
+        return newGame;
     }
 
-    //TODO: see if this can be deleted after updating the list has been put in place
-    /** This class manages the list of online game views.
+    /**
+     * Update the board if a game has become ready while looking at it.
+     *
+     * @param event
+     */
+    public void onEvent(GameReadyNotificationReceivable event) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                populateList();
+            }
+        });
+    }
+
+    /**
+     * A game has ended.
+     *
+     * @param event
+     */
+    public void onEvent(final GameOverNotificationReceivable event) {
+        OnlineListActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+        Log.e("TESTESASFASF", "ere");
+        for(int i=0; i<gameListContainer.getChildCount(); i++) {
+            View gameItem  = gameListContainer.getChildAt(i);
+            long gameId = (Long)gameItem.getTag();
+            if(gameId == event.gameId) {
+
+                ((TextView)gameItem.findViewById(R.id.onlineWinnerTextView)).setText(event.username);
+
+                switch (Player.getPlayerColor(event.playerNumber)) {
+                    case RED:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_red);
+                        break;
+                    case PURPLE:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_purple);
+                        break;
+                    case BLUE:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_blue);
+                        break;
+                    case GREEN:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_green);
+                        break;
+                    case YELLOW:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_yellow);
+                        break;
+                    case ORANGE:
+                        ((ImageView) gameItem.findViewById(R.id.onlineWinnerIcon)).setImageResource(R.drawable.ic_player_trophy_orange);
+                        break;
+                }
+
+                gameItem.findViewById(R.id.onlineWinnerContainer).setVisibility(View.VISIBLE);
+            }
+        }
+
+
+            }
+        });
+    }
+
+    /** This handler starts one of the online games.
+     *
+     * It makes a call to the server to gather the required state information, bundles any data that
+     * needs to be sent to the GameActivity, and then starts that activity.
      *
      */
-    private class OnlineListViewManager implements ViewManager {
-        LinkedList<View> listItems = new LinkedList<View>();
-
+    private class startOnlineGameHandler implements View.OnClickListener {
         @Override
-        public void addView(View view, ViewGroup.LayoutParams layoutParams) {
-            listItems.add(view);
-        }
+        public void onClick(View view) {
+            final long gameId = (Long)view.getTag();
+            CharSequence charSequence = ((TextView)view.findViewById(R.id.onlineWinnerTextView)).getText();
+            if(charSequence!=null && charSequence.toString().equals("Waiting for players...")) {
+                Toast.makeText(OnlineListActivity.this, "Still looking for players.", Toast.LENGTH_SHORT).show();
+            } else {
+                GameStateRequest gameStateRequest = new GameStateRequest(gameId);
+                spiceManager.execute(gameStateRequest, new ApiRequestListener<GameStateReceivable>() {
+                    @Override
+                    public void onTaskFailure(int code, String message) {
+                        Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
 
-        @Override
-        public void updateViewLayout(View view, ViewGroup.LayoutParams layoutParams) {
-            int index = listItems.indexOf(view); //get index of view to be updated
-            listItems.get(index).setLayoutParams(layoutParams); //get the view and set layout params
-        }
+                    @Override
+                    public void onTaskSuccess(GameStateReceivable result) {
+                        //Create all of the players
+                        ArrayList<Player> players = new ArrayList<Player>();
+                        for(PlayerInformation player: result.players) {
 
-        @Override
-        public void removeView(View view) {
-            gameListContainer.removeView(view);
-            listItems.remove(view);
-        }
+                            if(player.userId == OnlineListActivity.super.userId) {
+                                players.add(new OnlineHumanPlayer(result.gameId, player.userId, player.username, player.number));
+                            } else {
+                                players.add(new NetworkPlayer(player.userId, gameId, player.username, player.number));
+                            }
+                        }
 
-        /** Removes a list item based on it's tag.
-         *
-         * @param gameIdTag the list items tag (it's game ID)
-         */
-        public void removeView(int gameIdTag) {
-            for(View view : listItems) {
-                if((Integer)view.getTag() == gameIdTag) { //delete the view with the given gameIdTag
-                    removeView(view);
-                }
+                        //Create all of the pieces
+                        Piece[] pieces = new Piece[result.gameState.pieces.length];
+                        int piecesParced = 0;
+                        for(PieceInformation piece: result.gameState.pieces) {
+                            Position position = new Position(piece.row, piece.index);
+                            pieces[piecesParced++] = new GridPiece(position, piece.playerNumber);
+                        }
+
+                        //Create the game board
+                        GameBoard gameBoard = new CcGameBoard(pieces);
+
+                        //Create the GameStateManager
+                        Player.PlayerColor currentPlayerColor =
+                                Player.getPlayerColor(result.gameState.currentPlayerNumber);
+                        GameStateManager gameStateManager =
+                                new GameStateManager(gameBoard, players, currentPlayerColor);
+
+                        //Bundle information and start the GameActivity
+                        Intent intent = new Intent(OnlineListActivity.this, GameActivity.class);
+                        intent.putExtra("GAME_STATE_MANAGER", (Parcelable) gameStateManager); //Store GameStateManager
+                        intent.putExtra("IS_ONLINE_GAME", true); //sets flag for the GameActivity
+                        OnlineListActivity.this.startActivity(intent);
+                    }
+
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        }
-
-        /** Gets a list item based on it's tag. Returns null if it cannot find the specified view.
-         *
-         * @param gameIdTag the list items tag (it's game ID)
-         * @return the list item
-         */
-        public View getView(int gameIdTag) {
-            for(View view : listItems) {
-                if((Integer)view.getTag() == gameIdTag) {
-                    return view;
-                }
-            }
-            return null;
         }
     }
 
@@ -275,30 +422,35 @@ public class OnlineListActivity extends Activity {
                     .setAcceptClickListener(new Button.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            int numberOfPlayers = newGameDialog.getNumberOfPlayers();
-
-                            //TODO: make server call to join game, remove Toast
-                            Toast.makeText(OnlineListActivity.this, Integer.toString(numberOfPlayers), Toast.LENGTH_LONG).show();
+                            requestNewGame(newGameDialog.getNumberOfPlayers()); //make the server call
 
                             newGameDialog.dismiss();
                         }
                     })
                     .show();
         }
-    }
 
-    /** This handler starts one of the online games.
-     *
-     * It makes a call to the server to gather the required state information, bundles any data that
-     * needs to be sent to the GameActivity, and then starts that activity.
-     *
-     */
-    private class startOnlineGameHandler implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            //TODO: Make API call to get game state, set up Parcelable stuff and then start the activity
-            //OnlineListActivity.this.finish();
-            //OnlineListActivity.this.startActivity(new Intent(OnlineListActivity.this, GameActivity.class));
+        private void requestNewGame(int numberOfPlayers) {
+            JoinGameRequest joinGameRequest =
+                    new JoinGameRequest(OnlineListActivity.super.userId, numberOfPlayers);
+
+            spiceManager.execute(joinGameRequest, new ApiRequestListener<JoinGameReceivable>() {
+                @Override
+                public void onTaskFailure(int code, String message) {
+                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onTaskSuccess(JoinGameReceivable result) {
+                    View newGameListItem = createListItemView(result.gameListItem);
+                    gameListContainer.addView(newGameListItem);
+                }
+
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    Toast.makeText(OnlineListActivity.this, "Error. Please try again later.", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
@@ -315,6 +467,7 @@ public class OnlineListActivity extends Activity {
         @Override
         public boolean onLongClick(View view) {
             final View listItem = view;
+            final long gameId = Long.parseLong(((TextView)view.findViewById(R.id.onlineGameIdTextView)).getText().toString().substring(1));
             final Popup deleteGameDialog = new Popup(OnlineListActivity.this);
 
             //Set mutual dialog settings
@@ -330,12 +483,23 @@ public class OnlineListActivity extends Activity {
                         public void onClick(View view) {
                             deleteGameDialog.dismiss();
 
-                            //TODO: make API call to request removal from game
-                            boolean isDeletionProcessed = true;
-                            if (isDeletionProcessed) {
-                                onlineGameViewManager.removeView(listItem);
-                                gameListContainer.removeView(listItem);
-                            }
+                            DeleteGameRequest deleteGameRequest = new DeleteGameRequest(OnlineListActivity.super.userId, gameId);
+                            spiceManager.execute(deleteGameRequest, new ApiRequestListener<SuccessReceivable>() {
+                                @Override
+                                public void onTaskFailure(int code, String message) {
+                                    Toast.makeText(OnlineListActivity.this, message, Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onTaskSuccess(SuccessReceivable result) {
+                                    gameListContainer.removeView(listItem);
+                                }
+
+                                @Override
+                                public void onRequestFailure(SpiceException spiceException) {
+                                    Toast.makeText(OnlineListActivity.this, spiceException.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     });
 
@@ -355,60 +519,6 @@ public class OnlineListActivity extends Activity {
             deleteGameDialog.show();
 
             return true;
-        }
-    }
-
-
-    //TODO: delete
-    /** THIS IS A TEMP CLASS WHICH IS TO BE DELETE WHEN WE CAN MAKE AN API CALL AND GET A LIST OF
-     * EACH GAME ITEM'S DATA.
-     *
-     */
-    private class GameItemData {
-        private int gameId;
-        private boolean isPlayerTurn;
-        private int numberOfPlayers;
-        private Player.PlayerColor playerColor;
-        private boolean isWinner;
-        private String winnerUsername;
-        private Player.PlayerColor winnerColor;
-
-        private GameItemData(int gameId, boolean isPlayerTurn, int numberOfPlayers, Player.PlayerColor playerColor, boolean isWinner, String winnerUsername, Player.PlayerColor winnerColor) {
-            this.gameId = gameId;
-            this.isPlayerTurn = isPlayerTurn;
-            this.numberOfPlayers = numberOfPlayers;
-            this.playerColor = playerColor;
-            this.isWinner = isWinner;
-            this.winnerUsername = winnerUsername;
-            this.winnerColor = winnerColor;
-        }
-
-        public int getGameId() {
-            return gameId;
-        }
-
-        public boolean isPlayerTurn() {
-            return isPlayerTurn;
-        }
-
-        public int getNumberOfPlayers() {
-            return numberOfPlayers;
-        }
-
-        public Player.PlayerColor getPlayerColor() {
-            return playerColor;
-        }
-
-        public boolean isWinner() {
-            return isWinner;
-        }
-
-        public String getWinnerUsername() {
-            return winnerUsername;
-        }
-
-        public Player.PlayerColor getWinnerColor() {
-            return winnerColor;
         }
     }
 }

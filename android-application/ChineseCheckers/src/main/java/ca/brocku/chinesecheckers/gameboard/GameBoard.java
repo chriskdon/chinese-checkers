@@ -37,6 +37,14 @@ public interface GameBoard extends Parcelable, Serializable {
     public abstract void movePiece(Piece piece, Position to);
 
     /**
+     * MovePath a piece from one position to another.
+     *
+     * @param piece The piece to move.
+     * @param to    The new position of the piece.
+     */
+    public abstract void forceMove(GridPiece piece, Position to);
+
+    /**
      * Returns all the pieces on the board in no specified order.
      * Blank positions are not returned.
      *
@@ -51,7 +59,7 @@ public interface GameBoard extends Parcelable, Serializable {
      *
      * @return      The piece that was at the position specified.
      */
-    public abstract Piece getPiece(Position at);
+    public abstract GridPiece getPiece(Position at);
 
     /**
      * A list of valid positions that the specified piece could move to.
@@ -130,4 +138,11 @@ public interface GameBoard extends Parcelable, Serializable {
      * @return  True if they have won, false otherwise.
      */
     public abstract boolean hasPlayerWon(int playerNumber);
+
+    /**
+     * @param position The position being evaluated
+     * @param playerNumber The player who owns the piece at said position
+     * @return Whether that piece is at the edge of its goal zone
+     */
+    public abstract boolean atGoalEdge(Position position, int playerNumber);
 }

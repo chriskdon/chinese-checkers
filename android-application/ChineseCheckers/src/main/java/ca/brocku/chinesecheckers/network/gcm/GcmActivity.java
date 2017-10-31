@@ -1,14 +1,11 @@
 package ca.brocku.chinesecheckers.network.gcm;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,7 +15,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.io.IOException;
 
 import ca.brocku.chinesecheckers.R;
-import ca.brocku.chinesecheckers.network.gcm.messages.TestMessage;
+import ca.brocku.chinesecheckers.network.NetworkActivity;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -29,7 +26,7 @@ import de.greenrobot.event.EventBus;
  * Student #: 4810800
  * Date: 3/11/2014
  */
-public class GcmActivity extends Activity {
+public class GcmActivity extends NetworkActivity {
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -65,6 +62,15 @@ public class GcmActivity extends Activity {
         checkPlayServices();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this); // Messages will be sent on the event bus
+        }
+    }
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -92,7 +98,7 @@ public class GcmActivity extends Activity {
      * @return registration ID, or empty string if there is no existing
      *         registration ID.
      */
-    private String getRegistrationId(Context context) {
+    protected String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
@@ -157,7 +163,7 @@ public class GcmActivity extends Activity {
                     // so it can use GCM/HTTP or CCS to send messages to your app.
                     // The request to your server should be authenticated if your app
                     // is using accounts.
-                    sendRegistrationIdToBackend();
+                    onHasGcmRegistrationId(gcmRegistrationId);
 
                     // For this demo: we don't need to send it because the device
                     // will send upstream messages to a server that echo back the
@@ -189,7 +195,7 @@ public class GcmActivity extends Activity {
      * device sends upstream messages to a server that echoes back the message
      * using the 'from' address in the message.
      */
-    private void sendRegistrationIdToBackend() {
+    protected void onHasGcmRegistrationId(String id) {
         // TODO: HANDLE THIS
     }
 
@@ -240,8 +246,11 @@ public class GcmActivity extends Activity {
         Toast.makeText(this, "Could Not Register GCM", Toast.LENGTH_SHORT).show();
     }
 
-    // TODO: PLACEHOLDER METHOD FOR DEV -- DELETE WHEN THERE IS A REAL API
-    public void onEvent(TestMessage event) {
-        Log.d("EVENT", event.getTestData());
+    /**
+     * Listen to all events.
+     * @param event
+     */
+    public void onEvent(Object event) {
+        // Do Nothing
     }
 }

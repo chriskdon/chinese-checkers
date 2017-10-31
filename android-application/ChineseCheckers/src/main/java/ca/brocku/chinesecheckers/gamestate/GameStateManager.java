@@ -12,8 +12,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import ca.brocku.chinesecheckers.BoomBoomMusic;
 import ca.brocku.chinesecheckers.computerplayer.AiPlayer;
 import ca.brocku.chinesecheckers.gameboard.GameBoard;
+import ca.brocku.chinesecheckers.gameboard.GridPiece;
 import ca.brocku.chinesecheckers.gameboard.Piece;
 import ca.brocku.chinesecheckers.gameboard.Position;
 import ca.brocku.chinesecheckers.gameboard.ReadOnlyGameBoard;
@@ -208,10 +210,6 @@ public class GameStateManager implements Parcelable, Serializable {
                                 if (hasPlayerWon) {
                                     gameStateEventsHandler.onPlayerWon(p, 1);
                                 }
-
-                                if (m.getPath().size() >= 9) {
-                                    checkKonamiCode(p, m);
-                                }
                             }
                         });
                     }
@@ -252,7 +250,7 @@ public class GameStateManager implements Parcelable, Serializable {
 
             Position current = it.next();
 
-            Piece piece = gameBoard.getPiece(last);
+            GridPiece piece = gameBoard.getPiece(last);
 
             // Check for illegal moves
             if (piece == null) {
@@ -261,46 +259,9 @@ public class GameStateManager implements Parcelable, Serializable {
                 throw new IllegalMoveException("Player<" + player.getName() + "> cannot move that piece.");
             }
 
-            gameBoard.movePiece(piece, current);
+            gameBoard.forceMove(piece, current);
 
             last = current;
-        }
-    }
-
-    /*
-    * checkKonamiCode
-    * Sees if the player's name and path adds up to the Konami Code
-    */
-    private void checkKonamiCode(Player p, MovePath m) {
-//        Log.e("Holla", "Entered");
-        if ((m.getPosition(0).getRow() > m.getPosition(1).getRow())) { // && //Up
-//            Log.e("Holla","Up");
-            if (m.getPosition(1).getRow() > m.getPosition(2).getRow()) { // && //Up
-//                Log.e("Holla","Up");
-                if (m.getPosition(2).getRow() < m.getPosition(3).getRow()) { //&& //Down
-//                    Log.e("Holla","Down");
-                    if (m.getPosition(3).getRow() < m.getPosition(4).getRow()) { //&& //Down
-//                        Log.e("Holla","Down");
-                        if (m.getPosition(4).getIndex() > m.getPosition(5).getIndex()) { // && //Left
-//                            Log.e("Holla","Left");
-                            if (m.getPosition(5).getIndex() < m.getPosition(6).getIndex()) { // && //Right
-//                                Log.e("Holla","Right");
-                                if (m.getPosition(6).getIndex() > m.getPosition(7).getIndex()) { // && //Left
-//                                    Log.e("Holla","Left");
-                                    if (m.getPosition(7).getIndex() < m.getPosition(8).getIndex()) { // && //Right
-//                                        Log.e("Holla","Right");
-                                        if (p.getName().contains("ba")) {//){
-//                                          Log.e("Holla", "Winn");
-                                            gameStateEventsHandler.onPlayerWon(p, p.getPlayerNumber());
-                                            stopGame();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -312,7 +273,6 @@ public class GameStateManager implements Parcelable, Serializable {
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry) it.next();
             playerArray[counter++] = (Player) pairs.getValue();
-            //it.remove();
         }
 
         return playerArray;

@@ -22,6 +22,10 @@ public abstract class Player implements Serializable, Parcelable {
         ORANGE
     };
 
+    // This needs to be small enough that a human can't detect the difference between tapping
+    // the screen and seeing their piece move;
+    protected static final int THREAD_SLEEP_TIME = 100;
+
     public static final PlayerColor FIRST_PLAYER = PlayerColor.RED;
 
     private PlayerColor playerColor;

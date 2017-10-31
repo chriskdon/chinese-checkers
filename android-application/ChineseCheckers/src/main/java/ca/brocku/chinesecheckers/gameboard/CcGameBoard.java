@@ -171,7 +171,33 @@ public class CcGameBoard implements GameBoard {
         else throw new BoardNotEmptyException("Board is not empty, game cannot be loaded.");
 
     }
-
+    public Position[] getGoalPositions(int playerNumber) {
+        int k, h, winArea;
+        List<Position> goalPositions = new ArrayList<Position>();
+        if(playerNumber < 4) {
+            winArea = playerNumber + 3;
+        }
+        else {
+            winArea = playerNumber + 3 - 6;
+        }
+        for(int i=0; i<4;i++) {
+            for(int j=0; j<i+1; j++) {
+                k = getOffsetRow(winArea, i);
+                h = getOffsetIndex(winArea, j);
+                goalPositions.add(new Position(k,h));
+            }
+        }
+        return goalPositions.toArray(new Position[goalPositions.size()]);
+    }
+    public boolean isInGoal(Piece forPiece) {
+        Position[] goalPositions = getGoalPositions(forPiece.getPlayerNumber());
+        for(int i=0; i<goalPositions.length; i++) {
+            if(forPiece.getPosition().getRow()==goalPositions[i].getRow() && forPiece.getPosition().getIndex()==goalPositions[i].getIndex()) {
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * Checks to see if a player satisfies the win condition by checking that all positions in their
      * goal area have one of their pieces in that position.
@@ -262,7 +288,7 @@ public class CcGameBoard implements GameBoard {
      * @param piece Piece to be moved
      * @param to Location that the piece is moving to
      */
-    private void forceMove(GridPiece piece, Position to) {
+    public void forceMove(GridPiece piece, Position to) {
         int oldRow = piece.getPosition().getRow();
         int oldIndex = piece.getPosition().getIndex();
         piece.setPosition(to);
@@ -279,7 +305,7 @@ public class CcGameBoard implements GameBoard {
      *               empty or out of bounds.
      */
     @Override
-    public Piece getPiece(Position at) {
+    public GridPiece getPiece(Position at) {
         int row = at.getRow();
         int index = at.getIndex();
 
@@ -595,7 +621,9 @@ public class CcGameBoard implements GameBoard {
                 possibleMoves[posindex] = checkPosition(new Position(row, index+2));
             }
         } // end leftAndRight
-
+        if(isInGoal(forPiece)) {
+            return trimToGoal(forPiece, assistPossibleMoves(possibleMoves));
+        }
         return assistPossibleMoves(possibleMoves);
     }
 
@@ -608,7 +636,6 @@ public class CcGameBoard implements GameBoard {
     @Override
     public Position[] getPossibleHops(Piece forPiece) {
         Position[] allPossible = getPossibleMoves(forPiece);
-
         ArrayList<Position> hops = new ArrayList<Position>();
         if(allPossible != null) {
             for(Position p : allPossible) {
@@ -623,6 +650,24 @@ public class CcGameBoard implements GameBoard {
         return (hops.size() > 0 ? hops.toArray(new Position[hops.size()]) : null);
     }
 
+    private Position[] trimToGoal (Piece forPiece, Position[] possibleMoves) {
+        if(possibleMoves==null) {
+            return null;
+        }
+        List<Position> trimmedPossibleMoves = new ArrayList<Position>();
+        Position[] goalPositions = getGoalPositions(forPiece.getPlayerNumber());
+        for(int i=0; i<goalPositions.length; i++) {
+            for(int j=0; j<possibleMoves.length; j++) {
+                if(goalPositions[i].getRow()==possibleMoves[j].getRow() && goalPositions[i].getIndex()==possibleMoves[j].getIndex()) {
+                    trimmedPossibleMoves.add(possibleMoves[j]);
+                }
+            }
+        }
+
+        Position[] temp = trimmedPossibleMoves.toArray(new Position[trimmedPossibleMoves.size()]);
+
+        return (temp.length <= 0 ? null : temp);
+    }
     /*
         Assistance function, removes all nulls from the getPossibleMoves array, may seem unecessary but it's neater
         than the alternative.
@@ -822,6 +867,42 @@ public class CcGameBoard implements GameBoard {
     public void reset() {
         board = constructBoard();
         populateNewGame(getPlayerCount());
+    }
+
+    /**
+     * @param position The position being evaluated
+     * @param playerNumber The player who owns the piece at said position
+     * @return Whether that piece is at the edge of its goal zone
+     */
+    @Override
+    public boolean atGoalEdge(Position position, int playerNumber){
+        switch(playerNumber){
+            case 1:
+                if(position.getRow() == 4 && position.getIndex() > 3 && position.getIndex() < 9)
+                    return true;
+                break;
+            case 2:
+                if(position.getRow() > 3 && position.getRow() < 9 && position.getIndex() == 8)
+                    return true;
+                break;
+            case 3:
+                if(position.getRow() > 7 && position.getRow() < 13 && position.getIndex() == 8)
+                    return true;
+                break;
+            case 4:
+                if(position.getRow() == 12 && position.getIndex() > 3 && position.getIndex() < 9)
+                    return true;
+                break;
+            case 5:
+                if(position.getRow() > 7 && position.getRow() < 13 && (position.getRow() - position.getIndex()) == 8)
+                    return true;
+                break;
+            case 6:
+                if(position.getRow() < 9 && position.getRow() > 3 && (position.getRow() + position.getIndex()) == 8)
+                    return true;
+                break;
+        }
+        return false;
     }
 }
 

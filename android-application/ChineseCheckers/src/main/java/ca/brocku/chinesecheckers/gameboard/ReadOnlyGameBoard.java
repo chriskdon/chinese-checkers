@@ -28,6 +28,17 @@ public class ReadOnlyGameBoard implements GameBoard {
     }
 
     /**
+     * MovePath a piece from one position to another.
+     *
+     * @param piece The piece to move.
+     * @param to    The new position of the piece.
+     */
+    @Override
+    public void forceMove(GridPiece piece, Position to) {
+        throw new UnsupportedOperationException("You can't modify the board.");
+    }
+
+    /**
      * Returns all the pieces on the board in no specified order.
      * Blank positions are not returned.
      *
@@ -45,7 +56,7 @@ public class ReadOnlyGameBoard implements GameBoard {
      * @return The piece that was at the position specified.
      */
     @Override
-    public Piece getPiece(Position at) {
+    public GridPiece getPiece(Position at) {
         return gameBoard.getPiece(at);
     }
 
@@ -163,5 +174,41 @@ public class ReadOnlyGameBoard implements GameBoard {
     @Override
     public boolean hasPlayerWon(int playerNumber) {
         return gameBoard.hasPlayerWon(playerNumber);
+    }
+
+    /**
+     * @param position The position being evaluated
+     * @param playerNumber The player who owns the piece at said position
+     * @return Whether that piece is at the edge of its goal zone
+     */
+    @Override
+    public boolean atGoalEdge(Position position, int playerNumber){
+        switch(playerNumber){
+            case 1:
+                if(position.getRow() == 4 && position.getIndex() > 3 && position.getIndex() < 9)
+                    return true;
+                break;
+            case 2:
+                if(position.getRow() > 3 && position.getRow() < 9 && position.getIndex() == 8)
+                    return true;
+                break;
+            case 3:
+                if(position.getRow() > 7 && position.getRow() < 13 && position.getIndex() == 8)
+                    return true;
+                break;
+            case 4:
+                if(position.getRow() == 12 && position.getIndex() > 3 && position.getIndex() < 9)
+                    return true;
+                break;
+            case 5:
+                if(position.getRow() > 7 && position.getRow() < 13 && (position.getRow() - position.getIndex()) == 8)
+                    return true;
+                break;
+            case 6:
+                if(position.getRow() < 9 && position.getRow() > 3 && (position.getRow() + position.getIndex()) == 8)
+                    return true;
+                break;
+        }
+        return false;
     }
 }

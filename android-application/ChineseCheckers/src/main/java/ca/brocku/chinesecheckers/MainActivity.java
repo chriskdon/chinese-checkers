@@ -1,18 +1,30 @@
 package ca.brocku.chinesecheckers;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ccapi.GameListItem;
+import com.ccapi.receivables.GameListReceivable;
+import com.ccapi.receivables.GameOverNotificationReceivable;
+import com.ccapi.receivables.JoinGameReceivable;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -22,9 +34,11 @@ import java.io.ObjectInputStream;
 import java.util.UUID;
 
 import ca.brocku.chinesecheckers.gamestate.GameStateManager;
+import ca.brocku.chinesecheckers.gamestate.Player;
 import ca.brocku.chinesecheckers.network.SpicedGcmActivity;
-import ca.brocku.chinesecheckers.network.spice.pojos.FollowerList;
-import ca.brocku.chinesecheckers.network.spice.requests.FollowersRequest;
+import ca.brocku.chinesecheckers.network.spice.ApiRequestListener;
+import ca.brocku.chinesecheckers.network.spice.requests.GameListRequest;
+import ca.brocku.chinesecheckers.network.spice.requests.JoinGameRequest;
 
 /** This is the activity for the home screen of Chinese Checkers.
  *
@@ -42,6 +56,7 @@ public class MainActivity extends SpicedGcmActivity {
 
     public static final String PREF_DONE_INITIAL_SETUP = "DONE_INITIAL_SETUP";
     public static final String PREF_SHOW_MOVES = "SHOW_MOVES";
+    public static final String PREF_USERNAME = "USERNAME";
     public static final String PREF_USER_ID = "USER_ID";
 
 
@@ -59,33 +74,55 @@ public class MainActivity extends SpicedGcmActivity {
         helpActivityButton = (Button)findViewById(R.id.helpActivityButton);
         settingsActivityButton = (Button)findViewById(R.id.settingsActivityButton);
 
-
         //Bind Handlers
         offlineActivityButton.setOnClickListener(new OfflineActivityButtonHandler());
         onlineActivityButton.setOnClickListener(new OnlineActivityButtonHandler());
         helpActivityButton.setOnClickListener(new HelpActivityButtonHandler());
         settingsActivityButton.setOnClickListener(new SettingsActivityButtonHandler());
 
+        /*
+        int notificationId = 123456789;
+
+        //Build the notification
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.logo_image)
+                        .setContentTitle("My notification")
+                        .setContentText("Hello World!")
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true);
+
+        //Create backstack and add it as the notification's intent
+        Intent resultIntent = new Intent(this, OnlineListActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        notificationBuilder.setContentIntent(resultPendingIntent);
+
+        //Issue notification
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notificationId, notificationBuilder.build());
+        */
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        BoomBoomMusic.start(this);
+        displayOnlineGameNotification();
+    }
 
-        //set the icon which shows the number of games in which it is your turn
-        //TODO: make API call HERE to get number of "current move" games and set variable
-        int numberOfCurrentMoveGames = 1;
-        if(numberOfCurrentMoveGames > 0) {
-            onlineNotificationIcon.setText(Integer.toString(numberOfCurrentMoveGames));
-            onlineNotificationIcon.setVisibility(View.VISIBLE);
-        } else {
-            onlineNotificationIcon.setVisibility(View.INVISIBLE);
-        }
+    protected void onPause(){
+        BoomBoomMusic.pause();
+        super.onPause();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -118,33 +155,54 @@ public class MainActivity extends SpicedGcmActivity {
             SharedPreferences.Editor editor = sharedPref.edit(); //editor for the prefs
 
             editor
-                .putBoolean(PREF_DONE_INITIAL_SETUP, true)
-                .putBoolean(PREF_SHOW_MOVES, true)
-                .putString(PREF_USER_ID, UUID.randomUUID().toString())
-                .commit();
+                    .putBoolean(PREF_DONE_INITIAL_SETUP, true)
+                    .putBoolean(PREF_SHOW_MOVES, true)
+                    .putString(PREF_USERNAME, UUID.randomUUID().toString())
+                    .commit();
+
+            if(super.isConnected) registerUser(); //try to register the user on first launch
         }
     }
 
-    // TODO: PLACEHOLDER EXAMPLE -- DELETE WHEN THERE IS A REAL API
-    private void performRequest(String user) {
-        this.setProgressBarIndeterminateVisibility(true);
+    /** makes API request for number of games in which it is the user's turn and displays the
+     * notification icon with the number of moves to be made (if there are any).
 
-        FollowersRequest request = new FollowersRequest(user);
+     */
+    private void displayOnlineGameNotification() {
 
-        spiceManager.execute(request, new RequestListener<FollowerList>() {
+        GameListRequest gameListRequest = new GameListRequest(userId);
+        spiceManager.execute(gameListRequest, new RequestListener<GameListReceivable>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                Toast.makeText(MainActivity.this, "SPICE FAILED", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
-            public void onRequestSuccess(FollowerList followers) {
-                if(followers.size() > 0) {
-                    Toast.makeText(MainActivity.this, "SPICE Result: " + followers.get(0).getLogin(), Toast.LENGTH_SHORT).show();
+            public void onRequestSuccess(GameListReceivable gameListReceivable) {
+                int num = 0;
+                for(GameListItem gameListItem: gameListReceivable.gameListItems) {
+                    if(gameListItem.isPlayerTurn() && gameListItem.isReady) {
+                        num++;
+                    }
+                }
+                if(num > 0) {
+                    onlineNotificationIcon.setText(Integer.toString(num));
+                    onlineNotificationIcon.setVisibility(View.VISIBLE);
                 } else {
-                    Toast.makeText(MainActivity.this, "SPICE Worked", Toast.LENGTH_SHORT).show();
+                    onlineNotificationIcon.setVisibility(View.INVISIBLE);
                 }
             }
+        });
+
+    }
+
+    public void onEvent(final GameOverNotificationReceivable event) {
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                displayOnlineGameNotification();
+            }
+
         });
     }
 
